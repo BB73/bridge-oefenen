@@ -1,6 +1,6 @@
 # Bridge conventies oefenen
 
-Oefenapp voor biedconventies. Eerste onderdeel: Stayman na 1SA.
+Oefenapp voor biedconventies. Onderdelen: Stayman en Jacoby na 1SA.
 
 ## Bestanden
 

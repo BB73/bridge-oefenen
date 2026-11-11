@@ -8,7 +8,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Stayman na 1SA oefenen</title>
+<title>Bridge: bieden na 1SA oefenen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
@@ -49,7 +49,11 @@ h1{font-family:var(--display);font-weight:700;font-size:1.75rem;line-height:1.1;
 .score{color:var(--muted);font-size:.95rem;margin:0}
 .score b{color:var(--ink)}
 
-.modes{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 1.25rem}
+.modes{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.modes.conv{margin-top:1rem}
+.modes.steps{margin-bottom:1.25rem}
+.modes.conv button{font-weight:700}
+.modes.conv button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
 .modes button{font:inherit;font-size:.95rem;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
@@ -108,11 +112,12 @@ summary{cursor:pointer;font-weight:700}
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>Stayman na 1SA</h1>
+    <h1>Bieden na 1SA</h1>
     <p class="score" id="score" aria-live="polite"></p>
   </header>
 
-  <nav class="modes" id="modes" aria-label="Kies wat je oefent"></nav>
+  <nav class="modes conv" id="convs" aria-label="Kies de conventie"></nav>
+  <nav class="modes steps" id="steps" aria-label="Kies wat je oefent"></nav>
 
   <main>
     <section class="table" aria-label="Oefening">
@@ -141,27 +146,29 @@ summary{cursor:pointer;font-weight:700}
       <ul>
         <li>1SA belooft 15–17 punten en een evenwichtige hand.</li>
         <li>Punten: aas 4, heer 3, vrouw 2, boer 1.</li>
+        <li>Zonder vier- of vijfkaart hoog: pas met 0–7 punten, 2SA met 8–9, 3SA met 10 of meer.</li>
       </ul>
-      <h2>Na 1SA van partner</h2>
+      <h2>Stayman: je hebt een vierkaart hoog</h2>
       <ul>
-        <li>0–7 punten: pas.</li>
-        <li>8 of meer punten met een vierkaart harten of schoppen: 2<span class="C">♣︎</span> (Stayman).</li>
-        <li>Geen vierkaart hoog: 2SA met 8–9 punten, 3SA met 10 of meer.</li>
-      </ul>
-      <h2>Antwoord van de openaar op 2<span class="C">♣︎</span></h2>
-      <ul>
-        <li>2<span class="D">♦︎</span>: geen vierkaart hoog.</li>
-        <li>2<span class="H">♥︎</span>: vierkaart harten (misschien ook vier schoppen).</li>
-        <li>2<span class="S">♠︎</span>: vierkaart schoppen, geen vier harten.</li>
-      </ul>
-      <h2>Daarna</h2>
-      <ul>
+        <li>8 of meer punten met een vierkaart harten of schoppen: 2<span class="C">♣︎</span>. Met minder punten pas je.</li>
+        <li>De openaar antwoordt 2<span class="D">♦︎</span> (geen vierkaart hoog), 2<span class="H">♥︎</span> (vier harten, misschien ook vier schoppen) of 2<span class="S">♠︎</span> (vier schoppen, geen vier harten).</li>
         <li>Fit gevonden: 3 in de kleur met 8–9 punten, 4 in de kleur met 10 of meer.</li>
         <li>Geen fit: 2SA met 8–9 punten, 3SA met 10 of meer.</li>
-        <li>De openaar neemt een uitnodiging aan met 16–17 punten en past met 15.</li>
         <li>Antwoordde de openaar 2<span class="H">♥︎</span> en biedt partner daarna SA, dan heeft partner vier schoppen. Met ook vier schoppen biedt de openaar alsnog schoppen.</li>
       </ul>
-      <p>Handen met een vijfkaart harten of schoppen komen hier niet voor; die horen bij Jacoby.</p>
+      <h2>Jacoby: je hebt een vijfkaart hoog of langer</h2>
+      <ul>
+        <li>Bied de kleur onder je lange kleur: 2<span class="D">♦︎</span> met harten, 2<span class="H">♥︎</span> met schoppen. Dat doe je met elke kracht, ook met 0 punten.</li>
+        <li>De openaar biedt altijd de kleur erboven: 2<span class="H">♥︎</span> na 2<span class="D">♦︎</span>, 2<span class="S">♠︎</span> na 2<span class="H">♥︎</span>.</li>
+        <li>Daarna met een vijfkaart: pas met 0–7 punten, 2SA met 8–9, 3SA met 10 of meer.</li>
+        <li>Daarna met een zeskaart: pas met 0–7 punten, 3 in de kleur met 8–9, 4 in de kleur met 10 of meer.</li>
+        <li>Na 2SA of 3SA kiest de openaar: met drie of meer kaarten mee speelt hij de hoge kleur, met een tweekaart SA.</li>
+      </ul>
+      <h2>Uitnodigingen</h2>
+      <ul>
+        <li>De openaar neemt een uitnodiging aan met 16–17 punten en past (of biedt zo laag mogelijk) met 15.</li>
+      </ul>
+      <p>Handen met een vijfkaart én een vierkaart hoog komen hier niet voor.</p>
     </div>
   </details>
 
@@ -177,6 +184,8 @@ const SUITS = ['S','H','D','C'];
 const SYM = {S:'♠\uFE0E', H:'♥\uFE0E', D:'♦\uFE0E', C:'♣\uFE0E'};
 const RANK = {14:'A',13:'H',12:'V',11:'B'};
 const DEN = ['C','D','H','S','N'];
+const M_IDX = {S:0, H:1};
+const NAME = {S:'schoppen', H:'harten'};
 
 function makeHand(cards){
   const suits = [[],[],[],[]];
@@ -196,9 +205,14 @@ function isOpener(h){
   if(Math.min(s,hh,d,c)<2) return false;
   return h.len.filter(n=>n===2).length<=1;
 }
-function respOK(h){
+// 'flat' = geen vijfkaart hoog; 'S' of 'H' = vijf- of zeskaart in die kleur (Jacoby)
+function respKind(h){
   const [s,hh,d,c] = h.len;
-  return h.hcp<=15 && s<=4 && hh<=4 && d<=5 && c<=5;
+  if(h.hcp>15 || d>5 || c>5) return null;
+  if(s<=4 && hh<=4) return 'flat';
+  if(s>=5 && s<=6 && hh<=3) return 'S';
+  if(hh>=5 && hh<=6 && s<=3) return 'H';
+  return null;
 }
 function resp1(h){
   if(h.hcp<8) return 'pas';
@@ -225,6 +239,19 @@ function open3(o, ans, r2){
   if(r2==='3S') return max ? '4S' : 'pas';
   return 'pas';
 }
+function jResp2(r, m){
+  if(r.hcp<8) return 'pas';
+  const inv = r.hcp<=9;
+  if(r.len[M_IDX[m]]===5) return inv ? '2N' : '3N';
+  return (inv ? '3' : '4') + m;
+}
+function jOpen3(o, m, r2){
+  const max = o.hcp>=16, sup = o.len[M_IDX[m]]>=3;
+  if(r2==='2N') return sup ? (max?'4':'3')+m : (max?'3N':'pas');
+  if(r2==='3N') return sup ? '4'+m : 'pas';
+  if(r2==='3'+m) return max ? '4'+m : 'pas';
+  return 'pas';
+}
 function randomDeal(){
   const deck = Array.from({length:52},(_,i)=>i);
   for(let i=0;i<26;i++){
@@ -234,37 +261,53 @@ function randomDeal(){
   const o = makeHand(deck.slice(0,13));
   if(!isOpener(o)) return null;
   const r = makeHand(deck.slice(13,26));
-  if(!respOK(r)) return null;
-  const seq = ['1N', resp1(r)];
-  if(seq[1]==='2C'){
-    const a = open2(o), b = resp2(r,a);
-    seq.push(a, b, open3(o,a,b));
+  const k = respKind(r);
+  if(!k) return null;
+  let seq, conv = 'geen';
+  if(k==='flat'){
+    seq = ['1N', resp1(r)];
+    if(seq[1]==='2C'){
+      conv = 'stayman';
+      const a = open2(o), b = resp2(r,a);
+      seq.push(a, b, open3(o,a,b));
+    }
+  }else{
+    conv = 'jacoby';
+    const r2 = jResp2(r,k);
+    seq = ['1N', k==='H' ? '2D' : '2H', '2'+k, r2];
+    if(r2!=='pas') seq.push(jOpen3(o,k,r2));
   }
-  return {o, r, seq};
+  return {o, r, seq, conv, major: k==='flat' ? null : k};
 }
-const TYPES = {
-  eerste:  {label:'Wel of geen Stayman', idx:1, targets:['pas','2C','2C','2C','2N','3N']},
-  antwoord:{label:'Antwoord op 2♣\uFE0E', idx:2, targets:['2D','2H','2S']},
-  vervolg: {label:'Na het antwoord',     idx:3, targets:['2N','3N','3H','3S','4H','4S']},
-  slot:    {label:'Openaar maakt af',    idx:4, targets:['pas','pas','3N','4H','4S','4S','3S']}
+const TARGETS = {
+  stayman:{1:['pas','2C','2C','2C','2N','3N'], 2:['2D','2H','2S'],
+           3:['2N','3N','3H','3S','4H','4S'], 4:['pas','pas','3N','4H','4S','4S','3S']},
+  jacoby: {1:['2D','2D','2H','2H','pas','2N','3N'], 2:['2H','2S'],
+           3:['pas','2N','3N','3H','3S','4H','4S'], 4:['pas','pas','3N','3H','3S','4H','4S']},
+  beide:  {1:['pas','2C','2C','2D','2D','2H','2H','2N','3N']}
 };
-function newQuestion(type){
-  const t = TYPES[type];
-  const target = t.targets[Math.floor(Math.random()*t.targets.length)];
+function newQuestion(conv, idx){
+  let c = conv;
+  if(c==='beide' && idx>1) c = Math.random()<0.5 ? 'stayman' : 'jacoby';
+  const targets = TARGETS[c][idx];
+  const target = targets[Math.floor(Math.random()*targets.length)];
+  const fits = d => d.seq.length>idx && (
+    idx>1 ? d.conv===c :
+    c==='beide' ? true :
+    c==='stayman' ? d.conv!=='jacoby' : d.seq[1]!=='2C');
   let fallback = null;
   for(let n=0; n<60000 || !fallback; n++){
     const d = randomDeal();
-    if(!d || d.seq.length<=t.idx) continue;
+    if(!d || !fits(d)) continue;
     if(!fallback) fallback = d;
-    if(d.seq[t.idx]===target){ fallback = d; break; }
+    if(d.seq[idx]===target){ fallback = d; break; }
   }
-  return makeQ(fallback, t.idx);
+  return makeQ(fallback, idx);
 }
-const TYPE_AT = {1:'eerste',2:'antwoord',3:'vervolg',4:'slot'};
 function makeQ(d, idx){
   const iAmOpener = idx%2===0;
-  return {type:TYPE_AT[idx], idx, d, seq:d.seq, answer:d.seq[idx],
-          me: iAmOpener ? d.o : d.r, partner: iAmOpener ? d.r : d.o, iAmOpener, o:d.o, r:d.r,
+  return {idx, d, conv:d.conv, major:d.major, seq:d.seq, answer:d.seq[idx],
+          me: iAmOpener ? d.o : d.r, partner: iAmOpener ? d.r : d.o, iAmOpener,
           hasNext: d.seq.length > idx+2};
 }
 function bidRank(b){ return b==='pas' ? -1 : (+b[0])*5 + DEN.indexOf(b[1]); }
@@ -278,13 +321,46 @@ function majorsText(h){
   if(s && hh) return 'een vierkaart in beide hoge kleuren';
   return s ? 'een vierkaart schoppen' : 'een vierkaart harten';
 }
-function explain(q){
-  const B = bidHTML, me = q.me, p = me.hcp, seq = q.seq;
+function explainJacoby(q){
+  const B = bidHTML, me = q.me, p = me.hcp, m = q.major, suit = NAME[m], seq = q.seq;
+  const punten = p===1 ? '1 punt' : p+' punten';
   if(q.idx===1){
-    if(q.answer==='pas') return 'Je hebt '+p+' punten. Samen met partner kom je hooguit aan '+(p+17)+', te weinig voor een manche. Pas.';
-    if(q.answer==='2C') return 'Je hebt '+p+' punten en '+majorsText(me)+'. Vraag met '+B('2C')+' of partner ook een vierkaart hoog heeft.';
-    if(q.answer==='2N') return 'Je hebt '+p+' punten, maar geen vierkaart harten of schoppen. Stayman heeft dan geen zin: nodig uit met 2SA.';
-    return 'Je hebt '+p+' punten en geen vierkaart harten of schoppen. Genoeg voor de manche: 3SA.';
+    const n = me.len[M_IDX[m]]===6 ? 'zeskaart' : 'vijfkaart';
+    let t = 'Je hebt een '+n+' '+suit+'. Met Jacoby bied je de kleur eronder: '+B(q.answer)+'. Partner biedt dan '+B('2'+m)+'.';
+    if(p<8) t += ' Dat doe je ook met maar '+punten+': 2 in je lange kleur speelt beter dan 1SA.';
+    return t;
+  }
+  if(q.idx===2) return 'Partner biedt '+B(seq[1])+' en belooft daarmee minstens vijf '+suit+'. Jij biedt altijd de kleur erboven, hoe je hand er ook uitziet: '+B(q.answer)+'.';
+  if(q.idx===3){
+    if(q.answer==='pas') return 'Met '+punten+' is er geen manche. '+B('2'+m)+' is het eindcontract: pas.';
+    if(q.answer==='2N') return 'Je hebt '+punten+' en precies vijf '+suit+'. Nodig uit met 2SA; partner kiest daarna tussen SA en '+suit+'.';
+    if(q.answer==='3N') return 'Je hebt '+punten+' en precies vijf '+suit+': genoeg voor de manche. Bied 3SA; met drie of meer '+suit+' verbetert partner naar '+B('4'+m)+'.';
+    if(q.answer[0]==='3') return 'Je hebt een zeskaart '+suit+', dus er is altijd fit: partner heeft er minstens twee. Met '+punten+' nodig je uit: '+B(q.answer)+'.';
+    return 'Je hebt een zeskaart '+suit+', dus er is altijd fit: partner heeft er minstens twee. Met '+punten+' is er genoeg voor de manche: '+B(q.answer)+'.';
+  }
+  const r2 = seq[3], max = p>=16, n = me.len[M_IDX[m]], sup = n>=3;
+  const kracht = max ? 'Met '+p+' punten ben je niet minimaal' : 'Met 15 punten ben je minimaal';
+  const telling = ['','','twee','drie','vier'][n];
+  if(r2==='2N'){
+    if(sup) return 'Partner heeft vijf '+suit+' en 8–9 punten. Jij hebt er '+telling+', dus er is fit. '+kracht+': '+B(q.answer)+'.';
+    return 'Partner heeft vijf '+suit+' en 8–9 punten. Jij hebt er maar twee, dus geen fit. '+kracht+': '+B(q.answer)+'.';
+  }
+  if(r2==='3N'){
+    if(sup) return 'Partner heeft vijf '+suit+' en genoeg voor de manche. Jij hebt er '+telling+', dus er is fit: verbeter naar '+B(q.answer)+'.';
+    return 'Partner heeft vijf '+suit+' en genoeg voor de manche. Jij hebt er maar twee, dus 3SA is het eindcontract: pas.';
+  }
+  if(r2[0]==='3') return 'Partner heeft een zeskaart '+suit+' en nodigt uit met 8–9 punten. '+kracht+': '+B(q.answer)+'.';
+  return 'Partner heeft de manche geboden. Je hebt alles al verteld: pas.';
+}
+function explain(q){
+  if(q.conv==='jacoby') return explainJacoby(q);
+  const B = bidHTML, me = q.me, p = me.hcp, seq = q.seq;
+  const punten = p===1 ? '1 punt' : p+' punten';
+  if(q.idx===1){
+    if(q.answer==='pas') return 'Je hebt '+punten+' en geen vijfkaart harten of schoppen. Samen met partner kom je hooguit aan '+(p+17)+', te weinig voor een manche. Pas.';
+    if(q.answer==='2C') return 'Je hebt '+punten+' en '+majorsText(me)+'. Vraag met '+B('2C')+' of partner ook een vierkaart hoog heeft.';
+    if(q.answer==='2N') return 'Je hebt '+punten+', maar geen vierkaart of langer in harten of schoppen. Een conventie heeft dan geen zin: nodig uit met 2SA.';
+    return 'Je hebt '+punten+' en geen vierkaart of langer in harten of schoppen. Genoeg voor de manche: 3SA.';
   }
   if(q.idx===2){
     if(q.answer==='2D') return 'Je hebt geen vierkaart harten en geen vierkaart schoppen. Dat vertel je met '+B('2D')+'.';
@@ -318,21 +394,27 @@ function explain(q){
   return 'Partner heeft de manche geboden. Je hebt alles al verteld: pas.';
 }
 function promptText(q){
+  const B = bidHTML, s = q.seq;
   if(q.idx===1) return 'Partner opent 1SA. Wat bied je?';
-  if(q.idx===2) return 'Je opende 1SA en partner vraagt met 2♣\uFE0E naar je hoge kleuren. Wat antwoord je?';
-  if(q.idx===3) return 'Je vroeg met '+bidHTML('2C')+' en partner antwoordt '+bidHTML(q.seq[2])+'. Wat bied je nu?';
-  return 'Je antwoordde '+bidHTML(q.seq[2])+' en partner biedt nu '+bidHTML(q.seq[3])+'. Wat doe je?';
+  if(q.idx===2) return 'Je opende 1SA en partner biedt '+B(s[1])+'. Wat antwoord je?';
+  if(q.idx===3) return 'Je bood '+B(s[1])+' en partner antwoordt '+B(s[2])+'. Wat bied je nu?';
+  return 'Je antwoordde '+B(s[2])+' en partner biedt nu '+B(s[3])+'. Wat doe je?';
 }
 // ENGINE-END
 
 const $ = id => document.getElementById(id);
-const STORE = 'stayman-trainer-v1';
-let state = {mode:'alles', stats:{}, streak:0};
+const STORE = 'bridge-na-1sa-v2';
+const CONVS = {stayman:'Stayman', jacoby:'Jacoby', beide:'Beide'};
+const STEPS = {alles:'Alles door elkaar', 1:'Eerste bod', 2:'Antwoord van openaar', 3:'Tweede bod', 4:'Openaar maakt af'};
+const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie'};
+let state = {conv:'beide', step:'alles', stats:{}, streak:0};
 try{
   const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
   if(saved && typeof saved==='object') state = Object.assign(state, saved);
 }catch(e){}
-if(state.mode!=='alles' && !TYPES[state.mode]) state.mode = 'alles';
+if(!CONVS[state.conv]) state.conv = 'beide';
+if(!STEPS[state.step]) state.step = 'alles';
+if(!state.stats || typeof state.stats!=='object') state.stats = {};
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
 
 let q = null, answered = false;
@@ -374,25 +456,27 @@ function renderBox(){
 function renderScore(){
   let good = 0, total = 0;
   const parts = [];
-  for(const k in TYPES){
+  for(const k in STAT_LABEL){
     const s = state.stats[k] || [0,0];
     good += s[0]; total += s[1];
-    if(s[1]) parts.push(TYPES[k].label+': '+s[0]+' van '+s[1]);
+    if(s[1]) parts.push(STAT_LABEL[k]+': '+s[0]+' van '+s[1]);
   }
   $('score').innerHTML = total ? '<b>'+good+' van '+total+'</b> goed, reeks '+state.streak : 'Nog geen handen gespeeld';
   $('detailscore').textContent = parts.join(' | ');
 }
+function chips(el, items, current, attr){
+  el.innerHTML = Object.keys(items).map(k=>'<button data-'+attr+'="'+k+'" aria-pressed="'+(String(current)===k)+'">'+items[k]+'</button>').join('');
+}
 function renderModes(){
-  const items = [['alles','Alles door elkaar']].concat(Object.keys(TYPES).map(k=>[k,TYPES[k].label]));
-  $('modes').innerHTML = items.map(([k,l])=>'<button data-mode="'+k+'" aria-pressed="'+(state.mode===k)+'">'+l+'</button>').join('');
+  chips($('convs'), CONVS, state.conv, 'conv');
+  chips($('steps'), STEPS, state.step, 'step');
 }
 function next(fresh){
   if(!fresh && q && answered && q.hasNext){
     q = makeQ(q.d, q.idx+2);
   }else{
-    const keys = Object.keys(TYPES);
-    const type = state.mode==='alles' ? keys[Math.floor(Math.random()*keys.length)] : state.mode;
-    q = newQuestion(type);
+    const idx = state.step==='alles' ? 1+Math.floor(Math.random()*4) : +state.step;
+    q = newQuestion(state.conv, idx);
   }
   answered = false;
   $('prompt').innerHTML = promptText(q);
@@ -405,9 +489,9 @@ function answer(bid, btn){
   if(answered) return;
   answered = true;
   const ok = bid===q.answer;
-  const s = state.stats[q.type] || [0,0];
+  const s = state.stats[q.conv] || [0,0];
   s[1]++; if(ok) s[0]++;
-  state.stats[q.type] = s;
+  state.stats[q.conv] = s;
   state.streak = ok ? state.streak+1 : 0;
   save();
   document.querySelectorAll('#box .bid').forEach(b=>{
@@ -434,16 +518,22 @@ $('box').addEventListener('click', e=>{
   const b = e.target.closest('.bid');
   if(b && !b.disabled) answer(b.dataset.bid, b);
 });
-$('modes').addEventListener('click', e=>{
+$('convs').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
-  state.mode = b.dataset.mode; save();
+  state.conv = b.dataset.conv; save();
+  renderModes(); next(true);
+});
+$('steps').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.step = b.dataset.step; save();
   renderModes(); next(true);
 });
 $('next').addEventListener('click', ()=>{ next(false); window.scrollTo({top:0, behavior:'smooth'}); });
 $('reset').addEventListener('click', ()=>{ state.stats = {}; state.streak = 0; save(); renderScore(); });
 
-renderModes(); renderScore(); next();
+renderModes(); renderScore(); next(true);
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
