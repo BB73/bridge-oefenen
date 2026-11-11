@@ -146,29 +146,40 @@ summary{cursor:pointer;font-weight:700}
       <ul>
         <li>1SA belooft 15–17 punten en een evenwichtige hand.</li>
         <li>Punten: aas 4, heer 3, vrouw 2, boer 1.</li>
-        <li>Zonder vier- of vijfkaart hoog: pas met 0–7 punten, 2SA met 8–9, 3SA met 10 of meer.</li>
+        <li>Zonder vier- of vijfkaart hoog: pas met 0–7 punten, 2SA met 8–9, 3SA met 10–14.</li>
       </ul>
       <h2>Stayman: je hebt een vierkaart hoog</h2>
       <ul>
         <li>8 of meer punten met een vierkaart harten of schoppen: 2<span class="C">♣︎</span>. Met minder punten pas je.</li>
         <li>De openaar antwoordt 2<span class="D">♦︎</span> (geen vierkaart hoog), 2<span class="H">♥︎</span> (vier harten, misschien ook vier schoppen) of 2<span class="S">♠︎</span> (vier schoppen, geen vier harten).</li>
-        <li>Fit gevonden: 3 in de kleur met 8–9 punten, 4 in de kleur met 10 of meer.</li>
-        <li>Geen fit: 2SA met 8–9 punten, 3SA met 10 of meer.</li>
+        <li>Fit gevonden: 3 in de kleur met 8–9 punten, 4 in de kleur met 10–14.</li>
+        <li>Geen fit: 2SA met 8–9 punten, 3SA met 10–14.</li>
         <li>Antwoordde de openaar 2<span class="H">♥︎</span> en biedt partner daarna SA, dan heeft partner vier schoppen. Met ook vier schoppen biedt de openaar alsnog schoppen.</li>
+        <li>Zwak (0–5 punten) met een vijfkaart en een vierkaart hoog: toch 2<span class="C">♣︎</span>, geen transfer. Pas als de openaar een hoge kleur biedt; bied na 2<span class="D">♦︎</span> je vijfkaart. De openaar past daarop altijd.</li>
       </ul>
       <h2>Jacoby: je hebt een vijfkaart hoog of langer</h2>
       <ul>
         <li>Bied de kleur onder je lange kleur: 2<span class="D">♦︎</span> met harten, 2<span class="H">♥︎</span> met schoppen. Dat doe je met elke kracht, ook met 0 punten.</li>
         <li>De openaar biedt altijd de kleur erboven: 2<span class="H">♥︎</span> na 2<span class="D">♦︎</span>, 2<span class="S">♠︎</span> na 2<span class="H">♥︎</span>.</li>
-        <li>Daarna met een vijfkaart: pas met 0–7 punten, 2SA met 8–9, 3SA met 10 of meer.</li>
-        <li>Daarna met een zeskaart: pas met 0–7 punten, 3 in de kleur met 8–9, 4 in de kleur met 10 of meer.</li>
+      </ul>
+      <h2>Jacoby: je tweede bod</h2>
+      <ul>
+        <li>Pas: geen manche-interesse (0–7 punten).</li>
+        <li>2SA: vijfkaart, inviterend (8–9).</li>
+        <li>3SA: vijfkaart, partner kiest het contract (10–14).</li>
+        <li>3 in je kleur: zeskaart, inviterend (8–9).</li>
+        <li>4 in je kleur: zeskaart, om te spelen (10–14).</li>
+        <li>3<span class="H">♥︎</span> na een transfer naar schoppen: 5-5 in de hoge kleuren, mancheforcing (10–14).</li>
+        <li>3<span class="C">♣︎</span> of 3<span class="D">♦︎</span>: tweede kleur, natuurlijk en forcing, sleminteresse (15–17).</li>
+        <li>4SA: kwantitatief, partner mag passen (15–17, evenwichtig).</li>
         <li>Na 2SA of 3SA kiest de openaar: met drie of meer kaarten mee speelt hij de hoge kleur, met een tweekaart SA.</li>
       </ul>
+      <p>De betekenis van de biedingen volgt de Stayman- en de Jacoby-pagina van pecona.nl. De puntengrenzen zijn een eigen invulling.</p>
       <h2>Uitnodigingen</h2>
       <ul>
         <li>De openaar neemt een uitnodiging aan met 16–17 punten en past (of biedt zo laag mogelijk) met 15.</li>
       </ul>
-      <p>Handen met een vijfkaart én een vierkaart hoog komen hier niet voor.</p>
+      <p>Handen met een vijfkaart én een vierkaart hoog komen alleen in de zwakke Stayman-variant voor. De tegenpartij past altijd.</p>
     </div>
   </details>
 
@@ -208,11 +219,18 @@ function isOpener(h){
 // 'flat' = geen vijfkaart hoog; 'S' of 'H' = vijf- of zeskaart in die kleur (Jacoby)
 function respKind(h){
   const [s,hh,d,c] = h.len;
-  if(h.hcp>15 || d>5 || c>5) return null;
-  if(s<=4 && hh<=4) return 'flat';
-  if(s>=5 && s<=6 && hh<=3) return 'S';
-  if(hh>=5 && hh<=6 && s<=3) return 'H';
-  return null;
+  if(h.hcp>17 || d>5 || c>5) return null;
+  if(s<=4 && hh<=4) return h.hcp<=14 ? 'flat' : null;
+  if(s+hh===9 && s>=4 && hh>=4) return h.hcp<=5 ? '54w' : null;        // zwak met 5-4 hoog: Stayman
+  if(s===5 && hh===5) return (h.hcp>=10 && h.hcp<=14) ? '55' : null;   // 5-5 hoog, mancheforcing
+  let m = null;
+  if(s>=5 && s<=6 && hh<=3) m = 'S';
+  else if(hh>=5 && hh<=6 && s<=3) m = 'H';
+  if(!m) return null;
+  if(h.hcp<=14) return m;
+  // 15-17 punten: sleminteresse, alleen met een vijfkaart en hooguit een lage nevenkleur
+  if(h.len[M_IDX[m]]!==5 || (d>=4 && c>=4)) return null;
+  return m;
 }
 function resp1(h){
   if(h.hcp<8) return 'pas';
@@ -239,7 +257,9 @@ function open3(o, ans, r2){
   if(r2==='3S') return max ? '4S' : 'pas';
   return 'pas';
 }
-function jResp2(r, m){
+function jResp2(r, m, kind){
+  if(kind==='55') return '3H';
+  if(r.hcp>=15) return r.len[2]>=4 ? '3D' : r.len[3]>=4 ? '3C' : '4N';
   if(r.hcp<8) return 'pas';
   const inv = r.hcp<=9;
   if(r.len[M_IDX[m]]===5) return inv ? '2N' : '3N';
@@ -264,7 +284,11 @@ function randomDeal(){
   const k = respKind(r);
   if(!k) return null;
   let seq, conv = 'geen';
-  if(k==='flat'){
+  if(k==='54w'){
+    conv = 'stayman';
+    const a = open2(o);
+    seq = a==='2D' ? ['1N','2C','2D', r.len[0]===5 ? '2S' : '2H', 'pas'] : ['1N','2C',a,'pas'];
+  }else if(k==='flat'){
     seq = ['1N', resp1(r)];
     if(seq[1]==='2C'){
       conv = 'stayman';
@@ -273,24 +297,26 @@ function randomDeal(){
     }
   }else{
     conv = 'jacoby';
-    const r2 = jResp2(r,k);
-    seq = ['1N', k==='H' ? '2D' : '2H', '2'+k, r2];
-    if(r2!=='pas') seq.push(jOpen3(o,k,r2));
+    const m = k==='55' ? 'S' : k;
+    const r2 = jResp2(r,m,k);
+    seq = ['1N', m==='H' ? '2D' : '2H', '2'+m, r2];
+    if(k!=='55' && ['2N','3N','3'+m,'4'+m].includes(r2)) seq.push(jOpen3(o,m,r2));
+    return {o, r, seq, conv, major:m, kind:k};
   }
-  return {o, r, seq, conv, major: k==='flat' ? null : k};
+  return {o, r, seq, conv, major:null, kind:k};
 }
 const TARGETS = {
-  stayman:{1:['pas','2C','2C','2C','2N','3N'], 2:['2D','2H','2S'],
-           3:['2N','3N','3H','3S','4H','4S'], 4:['pas','pas','3N','4H','4S','4S','3S']},
+  stayman:{1:['pas','2C','2C','2C','2C!54w','2N','3N'], 2:['2D','2H','2S'],
+           3:['2N','2N','3N','3N','3H','3S','4H','4S','pas','2H','2S'], 4:['pas','pas','3N','4H','4S','4S','3S']},
   jacoby: {1:['2D','2D','2H','2H','pas','2N','3N'], 2:['2H','2S'],
-           3:['pas','2N','3N','3H','3S','4H','4S'], 4:['pas','pas','3N','3H','3S','4H','4S']},
-  beide:  {1:['pas','2C','2C','2D','2D','2H','2H','2N','3N']}
+           3:['pas','2N','3N','3H','3H','3S','4H','4S','3C','3D','4N'], 4:['pas','pas','3N','3H','3S','4H','4S']},
+  beide:  {1:['pas','2C','2C','2C!54w','2D','2D','2H','2H','2N','3N']}
 };
 function newQuestion(conv, idx){
   let c = conv;
   if(c==='beide' && idx>1) c = Math.random()<0.5 ? 'stayman' : 'jacoby';
   const targets = TARGETS[c][idx];
-  const target = targets[Math.floor(Math.random()*targets.length)];
+  const [target, wantKind] = targets[Math.floor(Math.random()*targets.length)].split('!');
   const fits = d => d.seq.length>idx && (
     idx>1 ? d.conv===c :
     c==='beide' ? true :
@@ -300,7 +326,7 @@ function newQuestion(conv, idx){
     const d = randomDeal();
     if(!d || !fits(d)) continue;
     if(!fallback) fallback = d;
-    if(d.seq[idx]===target){ fallback = d; break; }
+    if(d.seq[idx]===target && (!wantKind || d.kind===wantKind)){ fallback = d; break; }
   }
   return makeQ(fallback, idx);
 }
@@ -324,6 +350,14 @@ function majorsText(h){
 function explainJacoby(q){
   const B = bidHTML, me = q.me, p = me.hcp, m = q.major, suit = NAME[m], seq = q.seq;
   const punten = p===1 ? '1 punt' : p+' punten';
+  const kind = q.d.kind;
+  if(q.idx===1 && kind==='55') return 'Je hebt vijf schoppen en vijf harten met '+punten+': genoeg voor de manche. Transfereer eerst naar schoppen met '+B('2H')+'. Daarna toon je met '+B('3H')+' je tweede vijfkaart.';
+  if(q.idx===3 && kind==='55') return 'Je hebt 5-5 in de hoge kleuren en '+punten+'. '+B('3H')+' toont de tweede vijfkaart en is mancheforcing; partner kiest de troefkleur.';
+  if(q.idx===3 && (q.answer==='3C' || q.answer==='3D')){
+    const x = q.answer[1], nx = me.len[x==='D'?2:3]===5 ? 'vijfkaart' : 'vierkaart';
+    return 'Je hebt vijf '+suit+', een '+nx+' '+(x==='D'?'ruiten':'klaveren')+' en '+punten+': sleminteresse. Bied je tweede kleur, '+B(q.answer)+'. Dat is natuurlijk en forcing.';
+  }
+  if(q.idx===3 && q.answer==='4N') return 'Je hebt '+punten+' en een evenwichtige hand met vijf '+suit+'. 4SA is kwantitatief: partner mag passen met een minimum en biedt slem met een maximum.';
   if(q.idx===1){
     const n = me.len[M_IDX[m]]===6 ? 'zeskaart' : 'vijfkaart';
     let t = 'Je hebt een '+n+' '+suit+'. Met Jacoby bied je de kleur eronder: '+B(q.answer)+'. Partner biedt dan '+B('2'+m)+'.';
@@ -356,6 +390,19 @@ function explain(q){
   if(q.conv==='jacoby') return explainJacoby(q);
   const B = bidHTML, me = q.me, p = me.hcp, seq = q.seq;
   const punten = p===1 ? '1 punt' : p+' punten';
+  if(q.d.kind==='54w' && q.idx!==2){
+    // Zwakke hand met een vijfkaart en een vierkaart hoog
+    const r = q.d.r, five = r.len[0]===5 ? 'S' : 'H', four = five==='S' ? 'H' : 'S';
+    if(q.idx===1) return 'Je hebt maar '+punten+', maar wel een vijfkaart '+NAME[five]+' en een vierkaart '+NAME[four]+'. 1SA speelt dan slecht. Bied '+B('2C')+' en geen transfer, anders mis je een 4-4 fit. Biedt partner een hoge kleur, dan pas je; biedt hij '+B('2D')+', dan bied je je vijfkaart.';
+    if(q.idx===3){
+      if(q.answer==='pas'){
+        const m = seq[2][1];
+        return 'Partner heeft een vierkaart '+NAME[m]+' en jij hebt er '+(m===five?'vijf':'vier')+': fit. Met '+punten+' zit er niet meer in: pas.';
+      }
+      return 'Partner heeft geen vierkaart hoog. Bied nu je vijfkaart: '+B(q.answer)+'. Dat is om te spelen; partner hoort te passen.';
+    }
+    return 'Partner bood eerst '+B('2C')+' en biedt nu een hoge kleur op 2-niveau. Dat toont een zwakke hand met een vijfkaart en een vierkaart hoog, en is om te spelen. Pas, ook met een maximum.';
+  }
   if(q.idx===1){
     if(q.answer==='pas') return 'Je hebt '+punten+' en geen vijfkaart harten of schoppen. Samen met partner kom je hooguit aan '+(p+17)+', te weinig voor een manche. Pas.';
     if(q.answer==='2C') return 'Je hebt '+punten+' en '+majorsText(me)+'. Vraag met '+B('2C')+' of partner ook een vierkaart hoog heeft.';
