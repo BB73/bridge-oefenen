@@ -41,114 +41,129 @@
   --good:#62D0A0; --good-bg:#173A2C; --bad:#FF8A80; --bad-bg:#43201D;
 }
 *,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.0625rem;line-height:1.5}
-.wrap{max-width:34rem;margin:0 auto;padding:1.25rem 1rem 3rem}
-h1{font-family:var(--display);font-weight:700;font-size:1.75rem;line-height:1.1;margin:0}
-.top{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.score{color:var(--muted);font-size:.95rem;margin:0}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.35;overflow:hidden}
+[hidden]{display:none !important}
+.wrap{height:100%;max-width:34rem;max-height:54rem;margin:0 auto;padding:.5rem .75rem .75rem;display:flex;flex-direction:column;gap:.5rem}
+
+.top{flex:none;display:flex;align-items:center;gap:.5rem}
+h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;margin:0;white-space:nowrap}
+.score{flex:1;min-width:0;margin:0;text-align:center;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .score b{color:var(--ink)}
+.menu{flex:none;font:inherit;font-size:.85rem;font-weight:700;padding:.45rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap;cursor:pointer}
 
-.modes{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
-.modes.conv{margin-top:1rem}
-.modes.steps{margin-bottom:1.25rem}
-.modes.conv button{font-weight:700}
-.modes.conv button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
-.modes button{font:inherit;font-size:.95rem;padding:.4rem .75rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-.modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.table{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.7rem .75rem}
+.prompt{flex:none;font-family:var(--display);font-weight:500;font-size:1.05rem;font-size:clamp(.95rem,2.5dvh,1.2rem);line-height:1.25;margin:0 0 .4rem}
 
-.table{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1rem}
-.prompt{font-family:var(--display);font-weight:500;font-size:1.2rem;line-height:1.3;margin:0 0 .75rem}
-
-.auction{width:100%;border-collapse:collapse;table-layout:fixed;text-align:center;margin-bottom:1rem}
-.auction th{font-weight:400;font-size:.85rem;color:var(--muted);padding:.15rem 0 .35rem;border-bottom:1px solid var(--line)}
+.auction{flex:none;width:100%;border-collapse:collapse;table-layout:fixed;text-align:center;margin-bottom:.4rem}
+.auction th{font-weight:400;font-size:.78rem;color:var(--muted);padding:0 0 .2rem;border-bottom:1px solid var(--line)}
 .auction th.me{color:var(--ink);font-weight:700}
-.auction td{padding:.35rem 0;font-size:1.1rem;font-weight:700}
+.auction td{padding:.2rem 0;padding:clamp(.1rem,.55dvh,.35rem) 0;font-size:1rem;font-size:clamp(.95rem,2.5dvh,1.1rem);font-weight:700}
 .auction td.opp{font-weight:400;color:var(--muted)}
-.auction td.ask span{display:inline-block;min-width:2.2rem;padding:.05rem .4rem;border-radius:6px;border:2px dashed var(--felt);color:var(--felt)}
+.auction td.ask span{display:inline-block;min-width:2.2rem;padding:0 .4rem;border-radius:6px;border:2px dashed var(--felt);color:var(--felt)}
 .auction td.ask.done span{border-style:solid;background:var(--felt);color:var(--on-felt)}
 .auction td.ask.done .S,.auction td.ask.done .H,.auction td.ask.done .D,.auction td.ask.done .C{color:inherit}
 
 .S{color:var(--s)} .H{color:var(--h)} .D{color:var(--d)} .C{color:var(--c)}
 
-.hand{list-style:none;margin:0;padding:0}
-.hand li{display:flex;align-items:baseline;gap:.75rem;font-size:1.6rem;font-weight:700;line-height:1.45}
+.hand{flex:none;list-style:none;margin:0;padding:0}
+.hand li{display:flex;align-items:baseline;gap:.75rem;font-size:1.35rem;font-size:clamp(1.2rem,3.5dvh,1.7rem);font-weight:700;line-height:1.3}
 .hand .sym{width:1.4rem;text-align:center;flex:none}
 .hand .ranks{letter-spacing:.14em}
 .hand .void{color:var(--muted);font-weight:400}
-.hand.small li{font-size:1.15rem}
-.handlabel{font-size:.9rem;color:var(--muted);margin:0 0 .15rem}
+.hand.small{display:grid;grid-template-columns:1fr 1fr;column-gap:.75rem}
+.hand.small li{font-size:1rem;gap:.35rem}
+.hand.small .ranks{letter-spacing:.06em}
+.handlabel{font-size:.8rem;color:var(--muted);margin:0 0 .1rem}
 
-.box{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;margin-top:1rem}
-.bid{font:inherit;font-weight:700;font-size:1.15rem;padding:.6rem 0;border-radius:8px;border:1px solid var(--line);border-top:4px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.action{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;margin-top:.5rem}
+.box{display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem}
+.bid{font:inherit;font-weight:700;font-size:1.1rem;height:2.6rem;height:clamp(2.4rem,6.5dvh,3.2rem);padding:0;border-radius:8px;border:1px solid var(--line);border-top:4px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 .bid:hover:not(:disabled){border-color:var(--ink);border-top-color:var(--ink)}
 .bid:disabled{cursor:default;opacity:.38}
-.bid.pas{grid-column:1 / -1;background:var(--felt);border-color:var(--felt);color:var(--on-felt);border-top-width:1px;padding:.7rem 0}
-.bid.right{opacity:1;background:var(--good-bg);border-color:var(--good);color:var(--ink)}
-.bid.wrong{opacity:1;background:var(--bad-bg);border-color:var(--bad);color:var(--ink)}
+.bid.pas{grid-column:1 / -1;background:var(--felt);border-color:var(--felt);color:var(--on-felt);border-top-width:1px}
 button:focus-visible,summary:focus-visible{outline:3px solid var(--felt);outline-offset:2px}
 
-.feedback{margin-top:1rem;border-radius:14px;padding:1rem;border:1px solid var(--line);background:var(--surface)}
-.feedback[hidden]{display:none}
+.feedback{flex:1;min-height:0;display:flex;flex-direction:column;border-radius:10px;padding:.55rem .7rem .6rem;border:1px solid var(--line)}
 .feedback.ok{border-color:var(--good);background:var(--good-bg)}
 .feedback.no{border-color:var(--bad);background:var(--bad-bg)}
-.verdict{font-family:var(--display);font-weight:700;font-size:1.2rem;margin:0 0 .35rem}
-.why{margin:0 0 .9rem}
-.partner[hidden]{display:none}
-.partner{border-top:1px solid var(--line);padding-top:.75rem;margin-bottom:1rem}
-.next{font:inherit;font-weight:700;width:100%;padding:.8rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.fbtext{flex:1;min-height:0;overflow-y:auto}
+.verdict{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0 0 .2rem}
+.why{margin:0 0 .4rem;font-size:.92rem;line-height:1.35}
+.partner{border-top:1px solid var(--line);padding-top:.35rem}
+.next{flex:none;margin-top:.5rem;font:inherit;font-weight:700;width:100%;height:2.9rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 
-details{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:.9rem}
+dialog{border:1px solid var(--line);border-radius:14px;padding:1rem;background:var(--surface);color:var(--ink);width:min(32rem,92vw);max-height:88vh;max-height:88dvh;overflow-y:auto}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
+.lbl{font-size:.85rem;color:var(--muted);margin:.75rem 0 .3rem}
+.modes{display:flex;flex-wrap:wrap;gap:.4rem}
+.modes button{font:inherit;font-size:.95rem;padding:.45rem .8rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.modes.conv button{font-weight:700}
+.modes.conv button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
+.scorebox{margin:.9rem 0 0;font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.reset{font:inherit;font-size:.9rem;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
+details{margin-top:.9rem;border-top:1px solid var(--line);padding-top:.7rem}
 summary{cursor:pointer;font-weight:700}
-.rules{overflow-x:auto}
-.rules h2{font-family:var(--display);font-size:1.05rem;margin:1.1rem 0 .3rem}
+.rules{font-size:.95rem}
+.rules h3{font-family:var(--display);font-size:1rem;margin:.9rem 0 .25rem}
 .rules ul{margin:.2rem 0 0;padding-left:1.2rem}
 .rules li{margin:.2rem 0}
-.foot{margin-top:1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem}
-.reset{font:inherit;font-size:.9rem;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
-@media (max-width:22rem){.hand li{font-size:1.35rem}.bid{font-size:1rem}}
+.close{margin-top:1rem;font:inherit;font-weight:700;width:100%;height:2.9rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>Bieden na 1SA</h1>
+    <h1>Na 1SA</h1>
     <p class="score" id="score" aria-live="polite"></p>
+    <button class="menu" id="menu" aria-haspopup="dialog"></button>
   </header>
 
-  <nav class="modes conv" id="convs" aria-label="Kies de conventie"></nav>
-  <nav class="modes steps" id="steps" aria-label="Kies wat je oefent"></nav>
-
-  <main>
-    <section class="table" aria-label="Oefening">
-      <p class="prompt" id="prompt"></p>
-      <table class="auction" id="auction" aria-label="Biedverloop"></table>
-      <p class="handlabel">Jouw hand (Zuid)</p>
-      <ul class="hand" id="hand"></ul>
+  <main class="table" aria-label="Oefening">
+    <p class="prompt" id="prompt"></p>
+    <table class="auction" id="auction" aria-label="Biedverloop"></table>
+    <ul class="hand" id="hand" aria-label="Jouw hand"></ul>
+    <div class="action">
       <div class="box" id="box" role="group" aria-label="Kies je bod"></div>
-    </section>
-
-    <section class="feedback" id="feedback" hidden aria-live="polite">
-      <p class="verdict" id="verdict"></p>
-      <p class="why" id="why"></p>
-      <div class="partner" id="partner">
-        <p class="handlabel" id="partnerlabel"></p>
-        <ul class="hand small" id="partnerhand"></ul>
-      </div>
-      <button class="next" id="next">Volgende hand</button>
-    </section>
+      <section class="feedback" id="feedback" hidden aria-live="polite">
+        <div class="fbtext">
+          <p class="verdict" id="verdict"></p>
+          <p class="why" id="why"></p>
+          <div class="partner" id="partner">
+            <p class="handlabel" id="partnerlabel"></p>
+            <ul class="hand small" id="partnerhand"></ul>
+          </div>
+        </div>
+        <button class="next" id="next">Volgende hand</button>
+      </section>
+    </div>
   </main>
+</div>
+
+<dialog id="settings" aria-labelledby="settitle">
+  <h2 id="settitle">Wat wil je oefenen?</h2>
+  <p class="lbl">Conventie</p>
+  <nav class="modes conv" id="convs" aria-label="Kies de conventie"></nav>
+  <p class="lbl">Moment in het bieden</p>
+  <nav class="modes steps" id="steps" aria-label="Kies het moment in het bieden"></nav>
+  <div class="scorebox">
+    <span id="detailscore"></span>
+    <button class="reset" id="reset">Score wissen</button>
+  </div>
 
   <details>
     <summary>De afspraken waarmee deze app rekent</summary>
-    <div class="rules">
-      <h2>Opening</h2>
+<div class="rules">
+      <h3>Opening</h3>
       <ul>
         <li>1SA belooft 15–17 punten en een evenwichtige hand.</li>
         <li>Punten: aas 4, heer 3, vrouw 2, boer 1.</li>
         <li>Zonder vier- of vijfkaart hoog: pas met 0–7 punten, 2SA met 8–9, 3SA met 10–14.</li>
       </ul>
-      <h2>Stayman: je hebt een vierkaart hoog</h2>
+      <h3>Stayman: je hebt een vierkaart hoog</h3>
       <ul>
         <li>8 of meer punten met een vierkaart harten of schoppen: 2<span class="C">♣︎</span>. Met minder punten pas je.</li>
         <li>De openaar antwoordt 2<span class="D">♦︎</span> (geen vierkaart hoog), 2<span class="H">♥︎</span> (vier harten, misschien ook vier schoppen) of 2<span class="S">♠︎</span> (vier schoppen, geen vier harten).</li>
@@ -157,12 +172,12 @@ summary{cursor:pointer;font-weight:700}
         <li>Antwoordde de openaar 2<span class="H">♥︎</span> en biedt partner daarna SA, dan heeft partner vier schoppen. Met ook vier schoppen biedt de openaar alsnog schoppen.</li>
         <li>Zwak (0–5 punten) met een vijfkaart en een vierkaart hoog: toch 2<span class="C">♣︎</span>, geen transfer. Pas als de openaar een hoge kleur biedt; bied na 2<span class="D">♦︎</span> je vijfkaart. De openaar past daarop altijd.</li>
       </ul>
-      <h2>Jacoby: je hebt een vijfkaart hoog of langer</h2>
+      <h3>Jacoby: je hebt een vijfkaart hoog of langer</h3>
       <ul>
         <li>Bied de kleur onder je lange kleur: 2<span class="D">♦︎</span> met harten, 2<span class="H">♥︎</span> met schoppen. Dat doe je met elke kracht, ook met 0 punten.</li>
         <li>De openaar biedt altijd de kleur erboven: 2<span class="H">♥︎</span> na 2<span class="D">♦︎</span>, 2<span class="S">♠︎</span> na 2<span class="H">♥︎</span>.</li>
       </ul>
-      <h2>Jacoby: je tweede bod</h2>
+      <h3>Jacoby: je tweede bod</h3>
       <ul>
         <li>Pas: geen manche-interesse (0–7 punten).</li>
         <li>2SA: vijfkaart, inviterend (8–9).</li>
@@ -175,19 +190,15 @@ summary{cursor:pointer;font-weight:700}
         <li>Na 2SA of 3SA kiest de openaar: met drie of meer kaarten mee speelt hij de hoge kleur, met een tweekaart SA.</li>
       </ul>
       <p>De betekenis van de biedingen volgt de Stayman- en de Jacoby-pagina van pecona.nl. De puntengrenzen zijn een eigen invulling.</p>
-      <h2>Uitnodigingen</h2>
+      <h3>Uitnodigingen</h3>
       <ul>
         <li>De openaar neemt een uitnodiging aan met 16–17 punten en past (of biedt zo laag mogelijk) met 15.</li>
       </ul>
       <p>Handen met een vijfkaart én een vierkaart hoog komen alleen in de zwakke Stayman-variant voor. De tegenpartij past altijd.</p>
     </div>
-  </details>
-
-  <div class="foot">
-    <span id="detailscore"></span>
-    <button class="reset" id="reset">Score wissen</button>
-  </div>
-</div>
+    </details>
+  <button class="close" id="close">Klaar</button>
+</dialog>
 
 <script>
 // ENGINE-START
@@ -453,6 +464,7 @@ const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
 const CONVS = {stayman:'Stayman', jacoby:'Jacoby', beide:'Beide'};
 const STEPS = {alles:'Alles door elkaar', 1:'Eerste bod', 2:'Antwoord van openaar', 3:'Tweede bod', 4:'Openaar maakt af'};
+const STEP_SHORT = {alles:'alles', 1:'1e bod', 2:'antwoord', 3:'2e bod', 4:'afmaken'};
 const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie'};
 let state = {conv:'beide', step:'alles', stats:{}, streak:0};
 try{
@@ -486,7 +498,7 @@ function renderAuction(done){
   while(cells.length%4) cells.push('<td></td>');
   let rows = '';
   for(let i=0;i<cells.length;i+=4) rows += '<tr>'+cells.slice(i,i+4).join('')+'</tr>';
-  $('auction').innerHTML = '<thead><tr><th>West</th><th>Noord</th><th>Oost</th><th class="me">Zuid</th></tr></thead><tbody>'+rows+'</tbody>';
+  $('auction').innerHTML = '<thead><tr><th>West</th><th>Noord</th><th>Oost</th><th class="me">Zuid (jij)</th></tr></thead><tbody>'+rows+'</tbody>';
 }
 function renderBox(){
   const last = bidRank(q.seq[q.idx-1]);
@@ -508,8 +520,8 @@ function renderScore(){
     good += s[0]; total += s[1];
     if(s[1]) parts.push(STAT_LABEL[k]+': '+s[0]+' van '+s[1]);
   }
-  $('score').innerHTML = total ? '<b>'+good+' van '+total+'</b> goed, reeks '+state.streak : 'Nog geen handen gespeeld';
-  $('detailscore').textContent = parts.join(' | ');
+  $('score').innerHTML = total ? '<b>'+good+'/'+total+'</b> goed · reeks '+state.streak : '';
+  $('detailscore').textContent = parts.length ? parts.join(' | ') : 'Nog geen handen gespeeld';
 }
 function chips(el, items, current, attr){
   el.innerHTML = Object.keys(items).map(k=>'<button data-'+attr+'="'+k+'" aria-pressed="'+(String(current)===k)+'">'+items[k]+'</button>').join('');
@@ -517,6 +529,7 @@ function chips(el, items, current, attr){
 function renderModes(){
   chips($('convs'), CONVS, state.conv, 'conv');
   chips($('steps'), STEPS, state.step, 'step');
+  $('menu').textContent = CONVS[state.conv]+' · '+STEP_SHORT[state.step]+' ▾';
 }
 function next(fresh){
   if(!fresh && q && answered && q.hasNext){
@@ -531,8 +544,9 @@ function next(fresh){
   $('hand').innerHTML = handHTML(q.me);
   renderBox();
   $('feedback').hidden = true;
+  $('box').hidden = false;
 }
-function answer(bid, btn){
+function answer(bid){
   if(answered) return;
   answered = true;
   const ok = bid===q.answer;
@@ -541,29 +555,29 @@ function answer(bid, btn){
   state.stats[q.conv] = s;
   state.streak = ok ? state.streak+1 : 0;
   save();
-  document.querySelectorAll('#box .bid').forEach(b=>{
-    b.disabled = true;
-    if(b.dataset.bid===q.answer) b.classList.add('right');
-  });
-  if(!ok) btn.classList.add('wrong');
   renderAuction(true);
   const fb = $('feedback');
   fb.className = 'feedback '+(ok?'ok':'no');
-  $('verdict').innerHTML = ok ? 'Goed' : 'Niet goed, het juiste bod is '+bidHTML(q.answer);
+  $('verdict').innerHTML = ok ? 'Goed: '+bidHTML(q.answer) : 'Niet goed. Jij bood '+bidHTML(bid)+', juist is '+bidHTML(q.answer);
   $('why').innerHTML = explain(q);
   $('partnerlabel').textContent = 'Hand van partner (Noord), '+q.partner.hcp+' punten';
   $('partnerhand').innerHTML = handHTML(q.partner);
   $('partner').hidden = q.hasNext;
   $('next').textContent = q.hasNext ? 'Verder met deze hand' : 'Volgende hand';
+  $('box').hidden = true;
   fb.hidden = false;
+  fb.querySelector('.fbtext').scrollTop = 0;
   renderScore();
   $('next').focus({preventScroll:true});
-  fb.scrollIntoView({block:'nearest', behavior:'smooth'});
 }
 
+const dlg = $('settings');
+$('menu').addEventListener('click', ()=>{ if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); });
+$('close').addEventListener('click', ()=>{ if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); });
+dlg.addEventListener('click', e=>{ if(e.target===dlg && dlg.close) dlg.close(); });
 $('box').addEventListener('click', e=>{
   const b = e.target.closest('.bid');
-  if(b && !b.disabled) answer(b.dataset.bid, b);
+  if(b && !b.disabled) answer(b.dataset.bid);
 });
 $('convs').addEventListener('click', e=>{
   const b = e.target.closest('button');
@@ -577,7 +591,7 @@ $('steps').addEventListener('click', e=>{
   state.step = b.dataset.step; save();
   renderModes(); next(true);
 });
-$('next').addEventListener('click', ()=>{ next(false); window.scrollTo({top:0, behavior:'smooth'}); });
+$('next').addEventListener('click', ()=>next(false));
 $('reset').addEventListener('click', ()=>{ state.stats = {}; state.streak = 0; save(); renderScore(); });
 
 renderModes(); renderScore(); next(true);
