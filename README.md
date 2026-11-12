@@ -1,6 +1,6 @@
 # Bridge conventies oefenen
 
-Oefenapp voor biedconventies. Onderdelen: Stayman en Jacoby na 1SA.
+Oefenapp voor bieden en spelen (biedconventies en slagen tellen). Onderdelen: Stayman en Jacoby na 1SA, het informatiedoublet en openingen.
 
 ## Bestanden
 
