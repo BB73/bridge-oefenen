@@ -188,7 +188,7 @@ main.table > .action{flex:1 0 auto}
   .bsq{width:12.5rem;height:12.5rem}
   .hand li{font-size:1.5rem}
   .table.play .hand:not(.small) li, .table.sd .hand:not(.small) li{font-size:1.3rem}
-  .nsq{width:6.5rem;height:6.5rem}
+  .nsq{width:6.5rem;height:6.5rem;justify-self:center}
   #game{max-width:40rem;width:100%;margin:0 auto;overflow-y:auto}
   .gtip, .gend{max-width:38rem}
 }
@@ -441,6 +441,10 @@ summary{cursor:pointer;font-weight:700}
   <div id="sigbox">
     <h3 class="grp">Jullie signalen</h3>
     <nav class="modes" id="sig" aria-label="Kies jullie manier van signaleren"></nav>
+  </div>
+  <div id="muidbox">
+    <p class="lbl">Muiderberg: antwoorden op het 2SA-vraagbod</p>
+    <nav class="modes" id="muid" aria-label="Kies jullie antwoorden op 2SA"></nav>
   </div>
   <div id="rkcbox">
     <p class="lbl">RKCB-antwoorden</p>
@@ -702,8 +706,12 @@ summary{cursor:pointer;font-weight:700}
         <li>Zonder lage kleur ernaast pas je; met meer punten open je op 1-niveau.</li>
         <li>Antwoorden: pas met twee of drie kaarten mee, 3 in partners kleur met vier kaarten mee (storend).</li>
         <li>3<span class="C">♣︎</span>: je speelt liever in partners lage kleur. Hij past met klaveren en biedt 3<span class="D">♦︎</span> met ruiten.</li>
-        <li>2SA: sterk en forcing, vraagt naar de lage kleur en de kracht.</li>
+        <li>3<span class="D">♦︎</span>: uitnodiging voor de manche in partners hoge kleur, met drie of meer kaarten mee en 13–15 punten. De openaar biedt 3 in zijn kleur met een minimum en 4 met een maximum.</li>
+        <li>2SA: sterk en forcing, vraagt naar de lage kleur.</li>
+        <li>Na 2SA zijn er twee gangbare afspraken; je stelt in welke jullie spelen. Minimum of maximum: 3<span class="C">♣︎</span> en 3<span class="D">♦︎</span> tonen die kleur met een minimum, 3<span class="H">♥︎</span> toont klaveren en 3<span class="S">♠︎</span> ruiten met een maximum. Vier- of vijfkaart: 3<span class="C">♣︎</span> en 3<span class="D">♦︎</span> tonen een vierkaart, 3<span class="H">♥︎</span> een vijfkaart klaveren en 3<span class="S">♠︎</span> een vijfkaart ruiten.</li>
+        <li>Na een storende verhoging past de openaar altijd.</li>
       </ul>
+      <p>In de app is de openaar minimaal met 6–7 punten en maximaal met 8–10.</p>
       <p>Muiderberg vervangt de zwakke twee in harten en schoppen uit het onderdeel Openen.</p>
       <h3>Antwoorden op de zwakke twee</h3>
       <ul>
@@ -2725,8 +2733,9 @@ function muiderberg(h){
   if(!m) return null;
   return {m, minor: Math.max(D,C)>=4 && Math.max(D,C)<=5 && Math.min(D,C)<=3};
 }
+let MUID = 'minmax';      // antwoorden op het 2SA-vraagbod: 'minmax' (minimum of maximum) of 'lengte' (vier- of vijfkaart)
 function newMUQ(stepKey){
-  const B = bidHTML, step = sk12(stepKey, 0.55);
+  const B = bidHTML, step = [1,2,3].includes(+stepKey) ? +stepKey : 1+rnd(3);
   for(;;){
     if(step===1){
       const want = ['muid','muid','muid','sterk','geenlaag'][rnd(5)];
@@ -2745,13 +2754,52 @@ function newMUQ(stepKey){
       else { answer = 'pas'; why = 'Je hebt een vijfkaart '+SNAME[m]+' en '+pts(p)+', maar geen vierkaart in een lage kleur. Een Muiderberg belooft altijd een tweede kleur. Pas.'; }
       return mkQ('muiderberg', 1, {why, kind:want, prompt:'Jullie spelen Muiderberg. Jij bent gever. Wat open je?'}, me.h, null, answer, 'open', null, {start:3, calls:[]});
     }
+    if(step===3){
+      // vervolg van de openaar na het antwoord van partner
+      const resp = ['vraag','vraag','vraag','pc','pc','inv','inv','drie'][rnd(8)];
+      const me = drawHand(fullDeck(), h=>{ const r = muiderberg(h); return (r && r.minor && h.hcp>=6 && h.hcp<=10) ? r : null; }, 60000);
+      if(!me) continue;
+      const m = me.r.m, mi = SI[m], open = '2'+m, suit = SNAME[m];
+      const n = drawHand(me.rest, h=>{
+        const p = h.hcp, sup = h.len[mi];
+        if(Math.max(...h.len)>6) return false;
+        if(resp==='vraag') return p>=16 && p<=20 && sup<=2;
+        if(resp==='inv') return p>=13 && p<=15 && sup>=3;
+        if(p>12) return false;
+        return resp==='drie' ? sup>=4 : (sup<=1 && h.len[2]>=3 && h.len[3]>=3);
+      }, 30000);
+      if(!n) continue;
+      const p = me.h.hcp, mn = me.h.len[2]>me.h.len[3] ? 'D' : 'C', ml = me.h.len[SI[mn]], max = p>=8;
+      const pb = resp==='vraag' ? '2N' : resp==='pc' ? '3C' : resp==='inv' ? '3D' : '3'+m;
+      let answer, why;
+      if(resp==='vraag'){
+        if(MUID==='lengte'){
+          answer = ml===4 ? '3'+mn : (mn==='C' ? '3H' : '3S');
+          why = 'Partner vraagt met 2SA naar je lage kleur. Jullie geven de lengte aan: '+B('3C')+' en '+B('3D')+' tonen een vierkaart in die kleur, '+B('3H')+' een vijfkaart klaveren en '+B('3S')+' een vijfkaart ruiten. Je hebt een '+NKAART[ml]+' '+SNAME[mn]+': '+B(answer)+'.';
+        }else{
+          answer = !max ? '3'+mn : (mn==='C' ? '3H' : '3S');
+          why = 'Partner vraagt met 2SA naar je lage kleur. Jullie geven ook de kracht aan: met een minimum bied je je lage kleur, met een maximum '+B('3H')+' voor klaveren en '+B('3S')+' voor ruiten. Je hebt '+SNAME[mn]+' en met '+pts(p)+' een '+(max ? 'maximum' : 'minimum')+': '+B(answer)+'.';
+        }
+      }else if(resp==='pc'){
+        answer = mn==='C' ? 'pas' : '3D';
+        why = 'Partners '+B('3C')+' zegt: ik speel liever in jouw lage kleur. '+(mn==='C' ? 'Jouw lage kleur is klaveren, dus dit is het eindcontract: pas.' : 'Jouw lage kleur is ruiten, dus verbeter je naar '+B('3D')+'.');
+      }else if(resp==='inv'){
+        answer = (max ? '4' : '3')+m;
+        why = 'Partners '+B('3D')+' nodigt uit voor de manche in '+suit+'. Met '+pts(p)+' heb je een '+(max ? 'maximum: neem de uitnodiging aan met '+B(answer)+'.' : 'minimum: wijs de uitnodiging af met '+B(answer)+'.');
+      }else{
+        answer = 'pas';
+        why = 'Partners '+B(pb)+' is storend bedoeld en geen uitnodiging. Je hebt je hand al precies omschreven: pas, ook met een maximum.';
+      }
+      return mkQ('muiderberg', 3, {why, kind:'o-'+resp, prompt:'Je opende '+B(open)+' (Muiderberg) en partner biedt '+B(pb)+'. Wat bied je?'}, me.h, n.h, answer, 'open', pb, {start:3, calls:[open,'pas',pb,'pas']});
+    }
     const pa = drawHand(fullDeck(), h=>{ const r = muiderberg(h); return (r && r.minor && h.hcp>=6 && h.hcp<=10) ? r : null; }, 60000);
     if(!pa) continue;
-    const m = pa.r.m, mi = SI[m], open = '2'+m, want = ['pas','pas','drie','pc','pc','vraag'][rnd(6)];
+    const m = pa.r.m, mi = SI[m], open = '2'+m, want = ['pas','pas','drie','pc','pc','vraag','inv'][rnd(7)];
     const me = drawHand(pa.rest, h=>{
       const p = h.hcp, sup = h.len[mi];
       if(Math.max(...h.len)>6) return false;
       if(want==='vraag') return p>=16 && p<=20 && sup<=2;
+      if(want==='inv') return p>=13 && p<=15 && sup>=3;
       if(p>12) return false;
       return want==='pas' ? (sup===2 || sup===3) : want==='drie' ? sup>=4 : (sup<=1 && h.len[2]>=3 && h.len[3]>=3);
     }, 20000);
@@ -2761,6 +2809,7 @@ function newMUQ(stepKey){
     if(want==='pas'){ answer = 'pas'; why += 'Jij hebt '+NTAL[sup]+' '+suit+' mee en '+pts(p)+': geen manche, en '+B(open)+' is een prima contract. Pas.'; }
     else if(want==='drie'){ answer = '3'+m; why += 'Jij hebt '+NTAL[sup]+' '+suit+' mee: samen minstens negen troeven. Met '+pts(p)+' verhoog je storend naar '+B(answer)+'.'; }
     else if(want==='pc'){ answer = '3C'; why += 'Jij hebt maar '+NTAL[sup]+' '+suit+' en '+pts(p)+': je speelt liever in partners lage kleur. Bied '+B('3C')+'. Partner past met klaveren en verbetert naar '+B('3D')+' met ruiten.'; }
+    else if(want==='inv'){ answer = '3D'; why += 'Jij hebt '+NTAL[sup]+' '+suit+' mee en '+pts(p)+': tegenover een maximum zit er een manche in. Nodig uit met '+B('3D')+'. Partner biedt '+B('3'+m)+' met een minimum en '+B('4'+m)+' met een maximum.'; }
     else { answer = '2N'; why += 'Jij hebt '+pts(p)+': er kan een manche in zitten. Vraag met '+B('2N')+' naar partners lage kleur en zijn kracht. Dat is het enige forcing bod.'; }
     return mkQ('muiderberg', 2, {why, kind:want, prompt:'Partner opent '+B(open)+' (Muiderberg) en Oost past. Wat bied je?'}, me.h, pa.h, answer, 'open', open, {start:1, calls:[open,'pas']});
   }
@@ -3156,10 +3205,11 @@ const STEP_SHORT = {alles:'alles', 1:'1e bod', 2:'antwoord', 3:'2e bod', 4:'afma
 const STEPS_2N = {alles:'Alles door elkaar', 1:'Je eerste antwoord', 2:'Antwoord van de openaar'};
 const STEPS_SG = {alles:'Alles door elkaar', 1:'Bijspelen op partners uitkomst', 2:'Niet bekennen'};
 const STEPS_BA = {alles:'Alles door elkaar', 1:'Antwoord van de openaar', 2:'Vervolg van de vrager', 3:'Openaar na 2♦\uFE0E – 2♥\uFE0E'};
+const STEPS_MU = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden', 3:'Vervolg van de openaar'};
 const STEPS_G2 = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden'};
 const STEPS_TS = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt het'};
 const STEPS_BY = {doublet:STEPS_DBL, openen:STEPS_OPEN, volgbod:STEPS_VOLG, wet:STEPS_WET, rkcb:STEPS_RKC, bijbod:STEPS_BIJ, uitkomst:STEPS_UIT,
-  doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_G2, muiderberg:STEPS_G2, uppercue:STEPS_TS, unusual:STEPS_TS,
+  doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_G2, muiderberg:STEPS_MU, uppercue:STEPS_TS, unusual:STEPS_TS,
   negatief:STEPS_ONE, tellen:STEPS_ONE, snijden:STEPS_ONE, ontwikkel:STEPS_ONE, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE,
   signaal:STEPS_SG, ballumer:STEPS_BA, inverted:STEPS_ONE, rubensohl:STEPS_ONE, dont:STEPS_ONE, na2sa:STEPS_2N};
 const CONV_GROUPS = {
@@ -3186,6 +3236,8 @@ if(!STEPS[state.step]) state.step = 'alles';
 if(!state.stats || typeof state.stats!=='object') state.stats = {};
 if(state.rkc!=='1430' && state.rkc!=='3014') state.rkc = '1430';
 RKC = state.rkc;
+if(state.muid!=='minmax' && state.muid!=='lengte') state.muid = 'minmax';
+MUID = state.muid;
 if(!['4','35','rom'].includes(state.leadLen)) state.leadLen = '4';
 if(!state.sigChosen || (state.sig!=='std' && state.sig!=='rom')) state.sig = 'rom';     // Romeins-Lavinthal is de standaard, tot je zelf iets anders kiest
 SIG = state.sig;
@@ -3368,9 +3420,10 @@ function renderModes(){
   $('paneB').hidden = tab!=='bieden';
   $('paneS').hidden = tab!=='spelen';
   $('stepsbox').hidden = !here || Object.keys(steps).length<2;
-  const anyOpt = () => ['stepsbox','leadbox','sigbox','rkcbox'].some(id=>!$(id).hidden);
+  const anyOpt = () => ['stepsbox','leadbox','sigbox','muidbox','rkcbox'].some(id=>!$(id).hidden);
   $('leadbox').hidden = !here || !(state.conv==='uitkomst' || (state.conv==='spelmix' && state.playSet.includes('uitkomst')));
   $('sigbox').hidden = !here || !(state.conv==='signaal' || (state.conv==='spelmix' && state.playSet.includes('signaal')));
+  $('muidbox').hidden = !here || state.conv!=='muiderberg';
   $('rkcbox').hidden = !here || (state.conv!=='rkcb' && state.conv!=='alles');
   $('optbox').hidden = !here || !anyOpt() || anchor!==openAcc;
   $('close').textContent = 'Aan de slag: '+(state.conv==='alles' ? 'bieden, alles door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' oefeningen door elkaar' : CONVS[state.conv]);
@@ -3379,6 +3432,7 @@ function renderModes(){
   chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
   chips($('leadsuit'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadSuit, 'v');
   chips($('sig'), {'rom':'Romeins-Lavinthal', 'std':'Hoog is aan, Lavinthal bij niet bekennen'}, state.sig, 'v');
+  chips($('muid'), {'minmax':'Minimum of maximum', 'lengte':'Vier- of vijfkaart'}, state.muid, 'v');
   chips($('leadak'), {'A':'De aas', 'K':'De heer'}, state.leadAK, 'v');
   $('menu').textContent = CONVS[state.conv]+(state.step==='alles' ? '' : ' · deel '+state.step)+' ▾';
 }
@@ -3637,6 +3691,12 @@ $('leadsuit').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
   state.leadSuit = b.dataset.v; LEAD_SUIT = state.leadSuit; save();
+  renderModes(); next(true);
+});
+$('muid').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.muid = b.dataset.v; MUID = state.muid; save();
   renderModes(); next(true);
 });
 $('leadak').addEventListener('click', e=>{
