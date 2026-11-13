@@ -172,6 +172,26 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .bt.dbl{background:#C4202B;color:#FFFFFF}
 .bt.ask{background:transparent;color:#FFFFFF;border:2px dashed rgba(255,255,255,.85);box-shadow:none}
 .bt.ans{box-shadow:0 0 0 3px #FFD166}
+/* Vangnet: past de inhoud niet, dan schuift het kader zelf in plaats van dat onderdelen over elkaar vallen */
+main.table{overflow-y:auto}
+main.table > .action{flex:1 0 auto}
+/* Brede schermen (laptop, tablet liggend): tafel en hand links, biedbakje en uitleg rechts */
+@media (min-width: 760px){
+  .wrap{max-width:64rem;max-height:none}
+  main.table{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:2rem;align-content:start;grid-auto-rows:min-content;padding:1rem 1.5rem 1.25rem}
+  main.table > *{grid-column:1}
+  main.table > .prompt{grid-column:1 / -1;font-size:1.25rem;margin-bottom:.75rem}
+  main.table > .action{grid-column:2;grid-row:2 / span 7;align-self:center;justify-content:center;margin-top:0}
+  .feedback{flex:none}
+  .fbtext{overflow:visible}
+  .bid{height:3rem}
+  .bsq{width:12.5rem;height:12.5rem}
+  .hand li{font-size:1.5rem}
+  .table.play .hand:not(.small) li, .table.sd .hand:not(.small) li{font-size:1.3rem}
+  .nsq{width:6.5rem;height:6.5rem}
+  #game{max-width:40rem;width:100%;margin:0 auto;overflow-y:auto}
+  .gtip, .gend{max-width:38rem}
+}
 .gend{flex:none;margin-top:.4rem}
 .gtip, .gend{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom, 0px));z-index:20;max-width:32.5rem;margin:0 auto;max-height:70vh;max-height:70dvh;overflow-y:auto;box-shadow:0 6px 24px rgba(0,0,0,.45)}
 .gend{padding:.7rem .75rem;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
@@ -236,11 +256,38 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--felt);outline
 .partner{border-top:1px solid var(--line);padding-top:.35rem}
 .next{flex:none;margin-top:.5rem;font:inherit;font-weight:700;width:100%;height:2.9rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 
-dialog{border:1px solid var(--line);border-radius:14px;padding:1rem;background:var(--surface);color:var(--ink);width:min(32rem,92vw);max-height:88vh;max-height:88dvh;overflow-y:auto}
+dialog{border:1px solid var(--line);border-radius:14px;padding:0;background:var(--surface);color:var(--ink);width:min(32rem,94vw);max-height:92vh;max-height:92dvh;overflow:hidden}
+dialog[open]{display:flex;flex-direction:column}
+.dhead{flex:none;padding:.9rem 1rem 0}
+.dbody{flex:1;min-height:0;overflow-y:auto;padding:0 1rem .6rem}
+.dfoot{flex:none;padding:.6rem 1rem .9rem;border-top:1px solid var(--line)}
+.dfoot .close{margin-top:0}
+#theory{padding:1rem}
+#theory .rules{flex:1;min-height:0;overflow-y:auto}
+#theory .close{flex:none;margin-top:.75rem}
+.stepl{margin:.5rem 0 .35rem;font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.4rem}
+.stepl b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border-radius:50%;background:var(--ink);color:var(--bg);font-size:.75rem}
+.accitem{border:1px solid var(--line);border-radius:12px;margin:.45rem 0;overflow:hidden;background:var(--surface)}
+.accitem.open{border-color:var(--felt);box-shadow:0 0 0 1px var(--felt)}
+.accitem.has:not(.open){border-color:var(--felt)}
+.accitem.open .acc{background:color-mix(in srgb, var(--felt) 14%, var(--surface))}
+.accitem nav{padding:.65rem .75rem .2rem}
+.accitem #optbox{margin:.5rem .75rem .75rem}
+.acc{display:flex;align-items:center;gap:.5rem;width:100%;font:inherit;font-weight:700;font-size:1rem;text-align:left;padding:.75rem .8rem;background:none;border:0;color:var(--ink);cursor:pointer}
+.acc span{flex:none}
+.acc small{flex:1;min-width:0;font-weight:400;font-size:.85rem;color:var(--felt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc::after{content:"▾";flex:none;color:var(--muted)}
+.acc[aria-expanded="true"]::after{content:"▴"}
+#paneB .acc:first-child{border-top:0}
+.acc + nav{margin-bottom:.5rem}
+#optbox .stepl{margin-top:.6rem}
+#optbox{margin:.1rem 0 .7rem;padding:.1rem .7rem .7rem;border-radius:10px;background:var(--bg)}
+#optbox .grp{border-top:0;padding-top:0;margin:.6rem 0 .35rem;font-size:.95rem}
+#optbox .lbl{margin:.5rem 0 .25rem}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.25rem 0 .9rem}
-.tabs button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.15rem;height:3.2rem;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.25rem 0 .6rem}
+.tabs button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.1rem;height:2.7rem;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .tabs button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
 .hint{margin:0 0 .5rem;font-size:.9rem;color:var(--muted)}
 #paneB .lbl:first-child{margin-top:0}
@@ -333,34 +380,53 @@ summary{cursor:pointer;font-weight:700}
 </div>
 
 <dialog id="settings" aria-labelledby="settitle">
-  <h2 id="settitle">Wat wil je oefenen?</h2>
-  <div class="tabs" id="tabs">
-    <button data-tab="bieden">Bieden</button>
-    <button data-tab="spelen">Spelen</button>
+  <div class="dhead">
+    <h2 id="settitle">Wat wil je oefenen?</h2>
+    <p class="stepl"><b>1</b> Kies bieden of spelen</p>
+    <div class="tabs" id="tabs">
+      <button data-tab="bieden">Bieden</button>
+      <button data-tab="spelen">Spelen</button>
+    </div>
   </div>
+  <div class="dbody" id="dbody">
+  <p class="stepl"><b>2</b> Open een groep en kies een oefening</p>
   <div id="convs">
     <div id="paneB">
-      <p class="lbl">Basis</p>
-      <nav class="modes conv" id="convsB1" aria-label="Basis van het bieden"></nav>
-      <p class="lbl">Na een SA-opening van partner</p>
-      <nav class="modes conv" id="convsB2" aria-label="Na 1SA van partner"></nav>
-      <p class="lbl">Als de tegenpartij opent</p>
-      <nav class="modes conv" id="convsB3" aria-label="Als de tegenpartij opent"></nav>
-      <p class="lbl">Bijzondere openingen en afspraken</p>
-      <nav class="modes conv" id="convsB4" aria-label="Bijzondere openingen en afspraken"></nav>
+      <div class="accitem">
+        <button class="acc" data-acc="convsB1" aria-expanded="false"><span>Basis</span><small></small></button>
+        <nav class="modes conv" id="convsB1" aria-label="Basis van het bieden"></nav>
+      </div>
+      <div class="accitem">
+        <button class="acc" data-acc="convsB2" aria-expanded="false"><span>Na een SA-opening van partner</span><small></small></button>
+        <nav class="modes conv" id="convsB2" aria-label="Na 1SA van partner"></nav>
+      </div>
+      <div class="accitem">
+        <button class="acc" data-acc="convsB3" aria-expanded="false"><span>Als de tegenpartij opent</span><small></small></button>
+        <nav class="modes conv" id="convsB3" aria-label="Als de tegenpartij opent"></nav>
+      </div>
+      <div class="accitem">
+        <button class="acc" data-acc="convsB4" aria-expanded="false"><span>Bijzondere openingen en afspraken</span><small></small></button>
+        <nav class="modes conv" id="convsB4" aria-label="Bijzondere openingen en afspraken"></nav>
+      </div>
     </div>
     <div id="paneS">
-      <p class="hint">Je kunt meerdere oefeningen tegelijk aanzetten; ze komen dan door elkaar. Waar je meer fouten maakt, krijg je vaker.</p>
+      <p class="hint">Meerdere tegelijk mag; waar je meer fouten maakt, krijg je vaker.</p>
       <p class="hint" id="mixinfo" hidden></p>
       <nav class="modes conv" id="convsA" aria-label="Alle speeloefeningen"><button data-conv="spelalles" aria-pressed="false">Alles door elkaar</button></nav>
-      <p class="lbl">Als leider</p>
-      <nav class="modes conv" id="convsL" aria-label="Speeloefeningen als leider"></nav>
-      <p class="lbl">Als tegenspeler</p>
-      <nav class="modes conv" id="convsT" aria-label="Speeloefeningen als tegenspeler"></nav>
+      <div class="accitem">
+        <button class="acc" data-acc="convsL" aria-expanded="false"><span>Als leider</span><small></small></button>
+        <nav class="modes conv" id="convsL" aria-label="Speeloefeningen als leider"></nav>
+      </div>
+      <div class="accitem">
+        <button class="acc" data-acc="convsT" aria-expanded="false"><span>Als tegenspeler</span><small></small></button>
+        <nav class="modes conv" id="convsT" aria-label="Speeloefeningen als tegenspeler"></nav>
+      </div>
     </div>
   </div>
+  <div id="optbox">
+  <p class="stepl"><b>3</b> Kies wat je binnen deze oefening wilt</p>
   <div id="stepsbox">
-    <h3 class="grp">Binnen deze oefening</h3>
+    <h3 class="grp">Onderdeel</h3>
     <nav class="modes steps" id="steps" aria-label="Kies een onderdeel van deze oefening"></nav>
   </div>
   <div id="leadbox">
@@ -379,6 +445,7 @@ summary{cursor:pointer;font-weight:700}
   <div id="rkcbox">
     <p class="lbl">RKCB-antwoorden</p>
     <nav class="modes" id="rkc" aria-label="Kies 1430 of 3014"></nav>
+  </div>
   </div>
   <div class="scorebox">
     <span id="detailscore"></span>
@@ -757,7 +824,8 @@ summary{cursor:pointer;font-weight:700}
       </ul>
     </div>
     </details>
-  <button class="close" id="close">Aan de slag</button>
+  </div>
+  <div class="dfoot"><button class="close" id="close">Aan de slag</button></div>
 </dialog>
 
 <dialog id="theory" aria-labelledby="theorytitle">
@@ -3105,6 +3173,8 @@ const CONV_GROUPS = {
 const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen','signaal'];
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
+let openAcc = null;                 // het groepje dat in het keuzescherm openstaat
+const groupOf = c => c==='spelmix' ? 'convsL' : (Object.keys(CONV_GROUPS).find(id=>CONV_GROUPS[id].includes(c)) || null);
 const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman'};
 let state = {conv:'beide', step:'alles', stats:{}, streak:0, rkc:'1430'};
 try{
@@ -3281,14 +3351,29 @@ function renderModes(){
     const k = b.dataset.conv;
     b.setAttribute('aria-pressed', String(k==='spelalles' ? (state.conv==='spelmix' && state.playSet.length===PLAYABLE.length) : chosen.includes(k)));
   });
+  // groepjes: alleen het open groepje toont zijn oefeningen; de keuzes bij de gekozen oefening klappen er direct onder open
+  document.querySelectorAll('#convs .acc').forEach(btn=>{
+    const id = btn.dataset.acc, open = id===openAcc;
+    btn.setAttribute('aria-expanded', String(open));
+    $(id).hidden = !open;
+    const names = CONV_GROUPS[id].filter(k=>state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k))).map(k=>k==='alles' ? 'Alles door elkaar' : CONVS[k]);
+    btn.querySelector('small').textContent = names.length ? '✓ '+names.join(', ') : '';
+    btn.parentElement.classList.toggle('open', open);
+    btn.parentElement.classList.toggle('has', names.length>0);
+  });
+  const selGroup = groupOf(state.conv), anchor = (state.conv==='spelmix' && openAcc) ? openAcc : selGroup;
+  if(anchor && $(anchor)) $(anchor).after($('optbox'));
   const here = tabOf(state.conv)===tab;          // de gekozen oefening hoort bij het zichtbare tabblad
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.tab===tab)));
   $('paneB').hidden = tab!=='bieden';
   $('paneS').hidden = tab!=='spelen';
   $('stepsbox').hidden = !here || Object.keys(steps).length<2;
+  const anyOpt = () => ['stepsbox','leadbox','sigbox','rkcbox'].some(id=>!$(id).hidden);
   $('leadbox').hidden = !here || !(state.conv==='uitkomst' || (state.conv==='spelmix' && state.playSet.includes('uitkomst')));
   $('sigbox').hidden = !here || !(state.conv==='signaal' || (state.conv==='spelmix' && state.playSet.includes('signaal')));
   $('rkcbox').hidden = !here || (state.conv!=='rkcb' && state.conv!=='alles');
+  $('optbox').hidden = !here || !anyOpt() || anchor!==openAcc;
+  $('close').textContent = 'Aan de slag: '+(state.conv==='alles' ? 'bieden, alles door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' oefeningen door elkaar' : CONVS[state.conv]);
   chips($('steps'), steps, state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
   chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
@@ -3498,12 +3583,13 @@ $('gnew').addEventListener('click', gStart);
 $('gtipback').addEventListener('click', ()=>{ $('gtip').hidden = true; gPending = null; gBusy = false; gRender(); });
 $('gtipgo').addEventListener('click', ()=>{ const p = gPending; $('gtip').hidden = true; gPending = null; gBusy = false; if(p) gDo(p.seat, p.card); });
 const dlg = $('settings');
-const openMenu = () => { tab = tabOf(state.conv); renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); dlg.scrollTop = 0; };
+const openMenu = () => { tab = tabOf(state.conv); openAcc = groupOf(state.conv); renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); dlg.scrollTop = 0; };
 $('menu').addEventListener('click', openMenu);
 $('tabs').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
   tab = b.dataset.tab;
+  openAcc = tabOf(state.conv)===tab ? groupOf(state.conv) : (tab==='bieden' ? 'convsB1' : 'convsL');
   renderModes();
 });
 $('close').addEventListener('click', ()=>{ if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); });
@@ -3519,6 +3605,8 @@ $('box').addEventListener('click', e=>{
 $('convs').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
+  if(b.closest('#optbox')) return;                 // keuzes bij de oefening hebben hun eigen afhandeling
+  if(b.dataset.acc){ openAcc = openAcc===b.dataset.acc ? null : b.dataset.acc; renderModes(); return; }      // een groepje open- of dichtklappen
   const k = b.dataset.conv;
   if(k==='spelalles'){ state.playSet = PLAYABLE.slice(); state.conv = 'spelmix'; }
   else if(PLAYABLE.includes(k)){
