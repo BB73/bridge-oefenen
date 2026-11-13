@@ -29,7 +29,7 @@
     color-scheme:dark;
     --bg:#0F1A16; --surface:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
     --felt:#2E8B67; --on-felt:#FFFFFF;
-    --s:#9DBBFF; --h:#FF7B7B; --d:#FFA552; --c:#62D0A0;
+    --s:#9DBBFF; --h:#FF5A5A; --d:#FFA552; --c:#62D0A0;
     --good:#62D0A0; --good-bg:#173A2C; --bad:#FF8A80; --bad-bg:#43201D;
   }
 }
@@ -37,7 +37,7 @@
   color-scheme:dark;
   --bg:#0F1A16; --surface:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
   --felt:#2E8B67; --on-felt:#FFFFFF;
-  --s:#9DBBFF; --h:#FF7B7B; --d:#FFA552; --c:#62D0A0;
+  --s:#9DBBFF; --h:#FF5A5A; --d:#FFA552; --c:#62D0A0;
   --good:#62D0A0; --good-bg:#173A2C; --bad:#FF8A80; --bad-bg:#43201D;
 }
 *,*::before,*::after{box-sizing:inherit}
@@ -69,7 +69,8 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .S{color:var(--s)} .H{color:var(--h)} .D{color:var(--d)} .C{color:var(--c)}
 
 .hand{flex:none;list-style:none;margin:0;padding:0}
-#hand{margin-left:auto;width:max-content;min-width:50%;max-width:100%}
+#hand{margin-left:auto;margin-right:auto;width:max-content;max-width:100%}
+#mylabel{text-align:center}
 .table.play #hand{margin-left:0;width:auto;min-width:0}
 .table.play .hand:not(.small) li{font-size:1.15rem;font-size:clamp(1.05rem,2.9dvh,1.45rem);line-height:1.25}
 .table.play #dummy{margin-bottom:.45rem}
@@ -84,7 +85,7 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .box.suits .bid{font-size:1.6rem;height:3.2rem;border-top-width:1px}
 #dummy.right{margin-left:auto;width:max-content;min-width:50%}
 .odds{display:block;margin-top:.35rem;font-weight:700}
-.gstatus{flex:none;margin:0 0 .35rem;font-size:.92rem;line-height:1.3;min-height:2.4em}
+.gstatus{flex:none;margin:0 0 .35rem;font-size:.9rem;line-height:1.3;min-height:2.4em}
 .ghand li{font-size:1.1rem;line-height:1;margin:.22rem 0;align-items:center;gap:.5rem}
 .ghand .card{font-size:1rem;min-width:1.75rem;height:clamp(1.9rem,4.6dvh,2.4rem);padding:0 .2rem}
 .ghand .ranks.tap{gap:.2rem}
@@ -94,8 +95,8 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .tc{font-weight:700;font-size:1.15rem;visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:.1rem .45rem}
 .tc.on{visibility:visible}
 #tN{grid-column:2;grid-row:1} #tW{grid-column:1;grid-row:2} #tE{grid-column:3;grid-row:2} #tS{grid-column:2;grid-row:3}
-.tablewrap{flex:1;min-height:7.5rem;max-height:15rem;display:flex;align-items:center;justify-content:center;gap:.5rem;margin:.35rem 0}
-.sq{position:relative;height:100%;aspect-ratio:1;max-width:calc(100% - 7.5rem);background:var(--felt);border-radius:12px;box-shadow:inset 0 0 0 4px rgba(0,0,0,.18)}
+.tablewrap{flex:1;min-height:7.5rem;max-height:15rem;display:flex;align-items:stretch;justify-content:center;gap:.5rem;margin:.35rem 0}
+.sq{position:relative;flex:none;height:auto;min-height:7.5rem;min-width:7.5rem;aspect-ratio:1 / 1;max-width:calc(100% - 7.5rem);background:var(--felt);border-radius:12px;box-shadow:inset 0 0 0 4px rgba(0,0,0,.18)}
 .sq .tc{position:absolute;visibility:visible;width:2.5rem;height:3.1rem;padding:0;display:flex;align-items:center;justify-content:center;border-radius:6px;font-weight:700;font-size:1rem;line-height:1;background:transparent;border:1px dashed rgba(255,255,255,.4);color:rgba(255,255,255,.55)}
 .sq .tc.on{background:#FFFFFF;border:1px solid #C9D4CD;color:#14211C;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .sq .tc.on .S{color:#1B3F8F} .sq .tc.on .H{color:#C4202B} .sq .tc.on .D{color:#C85F0A} .sq .tc.on .C{color:#1E6A4E}
@@ -103,7 +104,7 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .sq #tS{bottom:6%;left:50%;transform:translateX(-50%)}
 .sq #tW{left:6%;top:50%;transform:translateY(-50%)}
 .sq #tE{right:6%;top:50%;transform:translateY(-50%)}
-.seat{flex:none;width:3rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;font-size:.8rem;color:var(--muted)}
+.seat{flex:none;align-self:center;width:3rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;font-size:.8rem;color:var(--muted)}
 .seat .back{width:2.1rem;height:2.7rem;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:var(--on-felt);background:repeating-linear-gradient(45deg,var(--s) 0 4px,var(--felt) 4px 8px);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line)}
 .seat.turn{color:var(--ink);font-weight:700}
 .seat.turn .back{box-shadow:0 0 0 2px var(--felt)}
@@ -114,8 +115,92 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .gtipbtns{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
 .gtipbtns button{font:inherit;font-weight:700;font-size:.95rem;height:2.5rem;border-radius:8px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
 .gtipbtns #gtipback{background:var(--ink);color:var(--bg)}
+.qwrap{flex:none;display:flex;align-items:center;justify-content:center;gap:.55rem;margin:0 0 .5rem}
+.qside{flex:none;width:4.9rem;display:flex;flex-direction:column;gap:.25rem;font-size:.8rem;line-height:1.2;color:var(--muted)}
+#qL{align-items:flex-end;text-align:right}
+#qR{align-items:flex-start}
+.cbadge{font-family:var(--display);font-size:1.2rem;line-height:1.2;color:var(--ink);background:var(--surface);border:2px solid var(--felt);border-radius:8px;padding:.1rem .5rem}
+.qsq{flex:none;width:6.8rem;height:6.8rem;min-width:0;min-height:0;max-width:none;margin:0}
+.qsq .tc{width:2rem;height:2.5rem;font-size:.85rem}
+.qsq #qN{top:5%;left:50%;transform:translateX(-50%)}
+.qsq #qS{bottom:5%;left:50%;transform:translateX(-50%)}
+.qsq #qW{left:5%;top:50%;transform:translateY(-50%)}
+.qsq #qE{right:5%;top:50%;transform:translateY(-50%)}
+.table.lead #hand, .table.qt #hand, .table.ns #hand, .table.ns #dummyhand{width:max-content;max-width:100%;min-width:0;margin-left:auto;margin-right:auto}
+.table.lead #mylabel, .table.qt #mylabel, .table.ns #mylabel, .table.ns #dummylabel{text-align:center}
+.table.ns #dummy{margin-bottom:.25rem}
+.qstrip{flex:none;align-self:center;display:flex;align-items:center;justify-content:center;min-width:9rem;height:2rem;margin:.1rem 0 .35rem;padding:0 1rem;border-radius:10px;background:var(--felt);color:var(--on-felt);box-shadow:inset 0 0 0 3px rgba(0,0,0,.18);font-family:var(--display);font-weight:700;font-size:1.05rem}
+.qstrip .S,.qstrip .H,.qstrip .D,.qstrip .C{color:inherit}
+.table.qt .qside{width:5.7rem}
+.table.qt .qsq{width:6.2rem;height:6.2rem}
+.mini{display:flex;flex-direction:column;font-size:.9rem;font-weight:700;line-height:1.3;color:var(--ink);white-space:nowrap;text-align:left}
+.table.sd .hand:not(.small) li{font-size:1.2rem;line-height:1.4;gap:.45rem}
+.table.sd .hand .sym{width:1.2rem;font-size:1.2rem}
+.table.sd .hand .ranks{letter-spacing:.06em}
+.table.sd .qside{width:auto;min-width:4.4rem}
+.table.sd .qside .hand{margin:0;width:max-content}
+.table.sd .qsq{width:5.8rem;height:5.8rem}
+.nsq{flex:none;align-self:center;width:clamp(4.6rem,14dvh,7.2rem);height:clamp(4.6rem,14dvh,7.2rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:.25rem 0 .45rem}
+.nsq i{position:absolute;font-style:normal;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6)}
+.nsq .pN{top:.35rem;left:50%;transform:translateX(-50%)}
+.nsq .pS{bottom:.35rem;left:50%;transform:translateX(-50%)}
+.nsq .pW{left:.45rem;top:50%;transform:translateY(-50%)}
+.nsq .pE{right:.45rem;top:50%;transform:translateY(-50%)}
+.nsq .ctr{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.3rem;color:#FFFFFF}
+.nsq .ctr b{background:#FFFFFF;color:#14211C;border-radius:8px;padding:.05rem .5rem;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.nsq .ctr .S{color:#1B3F8F} .nsq .ctr .H{color:#C4202B} .nsq .ctr .D{color:#C85F0A} .nsq .ctr .C{color:#1E6A4E}
+.nsq .tc{left:auto;right:calc(100% + 1rem);top:50%;transform:translateY(-50%) rotate(90deg);width:2.3rem;height:3.1rem;font-size:1.1rem;flex-direction:column;gap:.1rem}
+.nsq .tc:not(.on){display:none}
+.sq .tc.on.kS, .sq .tc.on.kS span{color:#1B3F8F}
+.sq .tc.on.kH, .sq .tc.on.kH span{color:#C4202B}
+.sq .tc.on.kD, .sq .tc.on.kD span{color:#C85F0A}
+.sq .tc.on.kC, .sq .tc.on.kC span{color:#1E6A4E}
+.bwrap{flex:none;display:flex;justify-content:center}
+.bsq{flex:none;width:clamp(9.5rem,27dvh,12.5rem);height:clamp(9.5rem,27dvh,12.5rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:1.2rem 1.3rem .7rem}
+.bs{position:absolute;display:flex;gap:.22rem;align-items:center;justify-content:center}
+.bs.n{top:.5rem;left:50%;transform:translateX(-50%)}
+.bs.z{bottom:.5rem;left:50%;transform:translateX(-50%)}
+.bs.w{left:.5rem;top:50%;transform:translateY(-50%);flex-direction:column}
+.bs.o{right:.5rem;top:50%;transform:translateY(-50%);flex-direction:column}
+.bl{position:absolute;font-style:normal;font-size:.75rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.bl.n{top:-1.15rem;left:50%;transform:translateX(-50%)}
+.bl.w{left:-1.05rem;top:50%;transform:translateY(-50%)}
+.bl.o{right:-1.05rem;top:50%;transform:translateY(-50%)}
+.bt{display:inline-flex;align-items:center;justify-content:center;min-width:2.2rem;height:1.6rem;padding:0 .3rem;border-radius:5px;background:#FFFFFF;color:#14211C;font-weight:700;font-size:.9rem;line-height:1;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.35)}
+.bt .S{color:#1B3F8F} .bt .H{color:#C4202B} .bt .D{color:#C85F0A} .bt .C{color:#1E6A4E}
+.bt.pas{background:#2E8B67;color:#FFFFFF;font-size:.75rem;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.bt.dbl{background:#C4202B;color:#FFFFFF}
+.bt.ask{background:transparent;color:#FFFFFF;border:2px dashed rgba(255,255,255,.85);box-shadow:none}
+.bt.ans{box-shadow:0 0 0 3px #FFD166}
 .gend{flex:none;margin-top:.4rem}
 .gend p{margin:0 0 .4rem;font-size:.95rem}
+.bid.d-C{background:color-mix(in srgb, var(--c) 15%, var(--surface));border-color:color-mix(in srgb, var(--c) 35%, var(--surface));border-top-color:var(--c)}
+.bid.d-D{background:color-mix(in srgb, var(--d) 15%, var(--surface));border-color:color-mix(in srgb, var(--d) 35%, var(--surface));border-top-color:var(--d)}
+.bid.d-H{background:color-mix(in srgb, var(--h) 14%, var(--surface));border-color:color-mix(in srgb, var(--h) 35%, var(--surface));border-top-color:var(--h)}
+.bid.d-S{background:color-mix(in srgb, var(--s) 14%, var(--surface));border-color:color-mix(in srgb, var(--s) 35%, var(--surface));border-top-color:var(--s)}
+.bid.d-N{background:color-mix(in srgb, var(--muted) 14%, var(--surface));border-color:color-mix(in srgb, var(--muted) 35%, var(--surface));border-top-color:var(--muted)}
+.bid[class*="d-"]{border-radius:10px}
+#hand.cards{display:flex;justify-content:center;width:100%;min-width:0;margin-left:0;padding:.15rem 0 .1rem}
+.hand.cards li{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:0;width:2.4rem;height:3.4rem;padding:.2rem 0 0 .22rem;margin-left:calc(-1 * (2.4rem - min(1.75rem, (100% - 2.4rem) / 12)));background:#FFFFFF;border:1px solid #B9C4BD;border-radius:7px;box-shadow:-2px 0 3px rgba(0,0,0,.16);font-size:1rem;font-weight:700;line-height:1.05;letter-spacing:-.04em}
+.hand.cards li:first-child{margin-left:0}
+.hand.cards li span + span{font-size:.95rem;letter-spacing:0}
+.hand.cards .kS{color:#1B3F8F} .hand.cards .kH{color:#C4202B} .hand.cards .kD{color:#C85F0A} .hand.cards .kC{color:#1E6A4E}
+.card{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:.1rem;min-width:2.35rem;height:3.15rem;padding:0 .2rem;background:#FFFFFF;border:1px solid #B9C4BD;border-bottom-width:3px;border-radius:8px;font-size:1.25rem;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.28)}
+.card .pip{font-size:.8rem;line-height:1}
+.card.kS{color:#1B3F8F} .card.kH{color:#C4202B} .card.kD{color:#C85F0A} .card.kC{color:#1E6A4E}
+.card:active:not(:disabled){transform:translateY(1px);border-bottom-width:2px}
+.card.right{background:#DDEFE5;border-color:#1E6A4E;box-shadow:0 0 0 2px #1E6A4E}
+.card.wrong{background:#F8DFDC;border-color:#B3261E;box-shadow:0 0 0 2px #B3261E}
+.table.lead .ranks.tap{gap:.35rem}
+.table.lead .hand li{margin:.4rem 0}
+.table.lead .hand .sym{font-size:1.5rem;width:1.7rem}
+.ghand .card{flex-direction:row}
+.ghand .card .pip{display:none}
+.bid.choice{display:flex;align-items:center;gap:.75rem}
+.cicon{flex:none;width:3.2rem;text-align:center;font-weight:700;font-size:1.05rem;white-space:nowrap;letter-spacing:.02em}
+.ctext{display:flex;flex-direction:column;gap:.12rem;min-width:0}
+.ctext b{font-size:1.05rem;font-weight:700;line-height:1.2}
+.ctext small{font-size:.82rem;line-height:1.25;color:var(--muted)}
 .box.choices{grid-template-columns:1fr}
 .bid.choice{height:auto;min-height:2.9rem;padding:.5rem .75rem;text-align:left;font-size:.95rem;font-weight:400;line-height:1.25;border-top-width:1px}
 .box.nums{grid-template-columns:repeat(7,1fr)}
@@ -171,6 +256,9 @@ details{margin-top:.9rem;border-top:1px solid var(--line);padding-top:.7rem}
 summary{cursor:pointer;font-weight:700}
 .rules{font-size:.95rem}
 .rules h3:first-child{margin-top:.25rem}
+.rules table{width:100%;border-collapse:collapse;font-size:.9rem;margin:.3rem 0}
+.rules th,.rules td{text-align:left;padding:.3rem .35rem;border-bottom:1px solid var(--line);vertical-align:top}
+.rules th{font-weight:700}
 .rules h3{font-family:var(--display);font-size:1rem;margin:.9rem 0 .25rem}
 .rules ul{margin:.2rem 0 0;padding-left:1.2rem}
 .rules li{margin:.2rem 0}
@@ -188,11 +276,17 @@ summary{cursor:pointer;font-weight:700}
 
   <main class="table" aria-label="Oefening">
     <p class="prompt" id="prompt"></p>
-    <table class="auction" id="auction" aria-label="Biedverloop"></table>
+    <div class="bwrap" id="auction" hidden><div class="sq bsq" id="bsq" aria-label="De tafel met het biedverloop"></div></div>
+    <div class="qwrap" id="qwrap" hidden>
+      <div class="qside" id="qL"></div>
+      <div class="sq qsq" id="qtable" aria-label="De tafel"><span class="tc" id="qN"></span><span class="tc" id="qW"></span><span class="tc" id="qE"></span><span class="tc" id="qS"></span></div>
+      <div class="qside" id="qR"></div>
+    </div>
     <div id="dummy" hidden>
       <p class="handlabel" id="dummylabel">Dummy (Noord)</p>
       <ul class="hand" id="dummyhand"></ul>
     </div>
+    <div class="sq nsq" id="qstrip" hidden aria-label="De tafel"><i class="pN">N</i><i class="pW">W</i><i class="pE">O</i><i class="pS">Z</i><span class="tc" id="nW"></span><span class="ctr" id="qstriptext"></span></div>
     <p class="handlabel" id="mylabel" hidden>Jouw hand (Zuid)</p>
     <ul class="hand" id="hand" aria-label="Jouw hand"></ul>
     <div class="action">
@@ -245,7 +339,7 @@ summary{cursor:pointer;font-weight:700}
     <div id="paneB">
       <p class="lbl">Basis</p>
       <nav class="modes conv" id="convsB1" aria-label="Basis van het bieden"></nav>
-      <p class="lbl">Na een 1SA-opening van partner</p>
+      <p class="lbl">Na een SA-opening van partner</p>
       <nav class="modes conv" id="convsB2" aria-label="Na 1SA van partner"></nav>
       <p class="lbl">Als de tegenpartij opent</p>
       <nav class="modes conv" id="convsB3" aria-label="Als de tegenpartij opent"></nav>
@@ -265,6 +359,17 @@ summary{cursor:pointer;font-weight:700}
   <div id="stepsbox">
     <h3 class="grp">Binnen deze oefening</h3>
     <nav class="modes steps" id="steps" aria-label="Kies een onderdeel van deze oefening"></nav>
+  </div>
+  <div id="leadbox">
+    <h3 class="grp">Jullie uitkomstafspraken</h3>
+    <p class="lbl">Klein uitkomen uit een lange kleur</p>
+    <nav class="modes" id="leadlen" aria-label="Kies vierde van boven of derde en vijfde"></nav>
+    <p class="lbl">Uitkomen van aas-heer</p>
+    <nav class="modes" id="leadak" aria-label="Kies aas of heer van aas-heer"></nav>
+  </div>
+  <div id="sigbox">
+    <h3 class="grp">Jullie signalen</h3>
+    <nav class="modes" id="sig" aria-label="Kies jullie manier van signaleren"></nav>
   </div>
   <div id="rkcbox">
     <p class="lbl">RKCB-antwoorden</p>
@@ -430,6 +535,75 @@ summary{cursor:pointer;font-weight:700}
         <li>Partner kiest zijn langste van de twee kleuren, zo laag mogelijk. Bij gelijke lengte het goedkoopste bod. Hij moet kiezen, ook met 0 punten.</li>
       </ul>
       <p>Dit is het Upper cuebid zoals Berry Westra het beschrijft: op een lage kleur altijd harten met schoppen, op een hoge kleur de andere hoge kleur met ruiten. In de app heb je 8–11 punten voor een tweekleurenbod; die grens is een eigen invulling.</p>
+      <h3>Ballumer: het idee in één zin</h3>
+      <ul>
+        <li>Bij gewone Stayman vertelt de openaar over harten én schoppen. Bij Ballumer vertelt de openaar alleen over harten; over schoppen vertelt de vrager zelf.</li>
+        <li>Daardoor komen er biedingen vrij, en die gebruikt de openaar om een vijfkaart hoog te laten zien.</li>
+        <li>Verder blijft alles hetzelfde: 2<span class="C">♣︎</span> vraagt naar de hoge kleuren, en laag bieden is zwak, hoog bieden is sterk.</li>
+      </ul>
+      <h3>Ballumer: wat is anders dan Stayman</h3>
+      <table>
+        <tr><th>Situatie</th><th>Stayman</th><th>Ballumer</th></tr>
+        <tr><td>Openaar: vier schoppen, geen vier harten</td><td>2<span class="S">♠︎</span></td><td>2<span class="D">♦︎</span></td></tr>
+        <tr><td>Openaar: vijf schoppen</td><td>2<span class="S">♠︎</span></td><td>2<span class="S">♠︎</span></td></tr>
+        <tr><td>Openaar: vijf harten</td><td>2<span class="H">♥︎</span></td><td>2SA of 3<span class="H">♥︎</span></td></tr>
+        <tr><td>Vrager na 2<span class="D">♦︎</span>, met vier schoppen</td><td>2SA of 3SA</td><td>2<span class="H">♥︎</span></td></tr>
+        <tr><td>Vrager na 2<span class="D">♦︎</span>, zonder vier schoppen</td><td>2SA of 3SA</td><td>2SA of 3SA</td></tr>
+      </table>
+      <h3>Ballumer: de openaar, stap voor stap</h3>
+      <ul>
+        <li>Loop na 2<span class="C">♣︎</span> deze vragen in volgorde af en stop bij de eerste die klopt.</li>
+        <li>1. Vijf harten? Dan 2SA met een minimum (15 punten), 3<span class="H">♥︎</span> met een maximum (16–17).</li>
+        <li>2. Vijf schoppen? Dan 2<span class="S">♠︎</span>.</li>
+        <li>3. Vier harten? Dan 2<span class="H">♥︎</span>, ook als je daarnaast vier schoppen hebt.</li>
+        <li>4. Niets van dit alles? Dan 2<span class="D">♦︎</span>. Je vierkaart schoppen, als je die hebt, houd je nog voor je.</li>
+      </ul>
+      <h3>Ballumer: de vrager, per antwoord</h3>
+      <ul>
+        <li>Na 2<span class="D">♦︎</span>: heb je vier schoppen, bied dan 2<span class="H">♥︎</span>. Dat bod is kunstmatig en betekent "ik heb vier schoppen". Het gaat niet over harten, want die heeft partner net ontkend.</li>
+        <li>Na 2<span class="D">♦︎</span> zonder vier schoppen: er is geen fit. 2SA met 8–9 punten, 3SA met 10 of meer.</li>
+        <li>Na 2<span class="H">♥︎</span> met vier harten: fit. 3<span class="H">♥︎</span> met 8–9 punten, 4<span class="H">♥︎</span> met 10 of meer.</li>
+        <li>Na 2<span class="H">♥︎</span> zonder vier harten: 2SA of 3SA. Partner weet dan dat je vier schoppen hebt, want anders had je niet gevraagd.</li>
+        <li>Na 2SA (vijf harten, minimum): met drie of meer harten bied je 3<span class="D">♦︎</span>, een transfer naar harten. Zonder fit pas je met 8–9 punten en bied je 3SA met 10 of meer.</li>
+      </ul>
+      <h3>Ballumer: de openaar na 2<span class="D">♦︎</span> – 2<span class="H">♥︎</span></h3>
+      <ul>
+        <li>Partner heeft vier schoppen laten zien. Nu vertel jij twee dingen tegelijk: of je er ook vier hebt, en of je minimaal of maximaal bent.</li>
+        <li>Fit en minimum: 2<span class="S">♠︎</span>. Fit en maximum: 3<span class="S">♠︎</span>.</li>
+        <li>Geen fit en minimum: 2SA. Geen fit en maximum: 3SA.</li>
+        <li>Voordeel boven Stayman: met een minimum tegenover een uitnodigende hand speel je 2<span class="S">♠︎</span> in plaats van 3<span class="S">♠︎</span>.</li>
+      </ul>
+      <h3>Ballumer: ezelsbruggetjes</h3>
+      <ul>
+        <li>Openaar: "ik praat alleen over harten."</li>
+        <li>Vrager: "schoppen meld ik zelf, en wel met 2<span class="H">♥︎</span>."</li>
+        <li>Een sprong of 2<span class="S">♠︎</span> van de openaar betekent altijd een vijfkaart.</li>
+        <li>SA van de vrager betekent "geen fit in de kleur waar we het net over hadden".</li>
+      </ul>
+      <h3>Ballumer: voorbeelden</h3>
+      <ul>
+        <li>1SA – 2<span class="C">♣︎</span> – 2<span class="D">♦︎</span> – 2<span class="H">♥︎</span> – 2<span class="S">♠︎</span>. Openaar heeft vier schoppen maar geen vier harten, vrager heeft vier schoppen. Openaar is minimaal en speelt 2<span class="S">♠︎</span>; de vrager past met 8–9 punten of biedt 4<span class="S">♠︎</span> met meer.</li>
+        <li>1SA – 2<span class="C">♣︎</span> – 2<span class="D">♦︎</span> – 3SA. De vrager had alleen een vierkaart harten. Geen fit, genoeg voor de manche.</li>
+        <li>1SA – 2<span class="C">♣︎</span> – 2<span class="H">♥︎</span> – 3SA. De vrager heeft vier schoppen en geen vier harten. Heeft de openaar ook vier schoppen, dan weet ze dat er een schoppenfit is.</li>
+        <li>1SA – 2<span class="C">♣︎</span> – 2SA – 3<span class="D">♦︎</span> – 3<span class="H">♥︎</span>. Openaar toont vijf harten en een minimum, de vrager heeft fit en transfereert.</li>
+      </ul>
+      <h3>Ballumer: veelgemaakte fouten</h3>
+      <ul>
+        <li>Als openaar uit gewoonte 2<span class="S">♠︎</span> bieden met een vierkaart schoppen. Dat belooft nu een vijfkaart.</li>
+        <li>Als vrager na 2<span class="D">♦︎</span> meteen 2SA of 3SA bieden terwijl je vier schoppen hebt. Dan ontken je schoppen en mis je de fit.</li>
+        <li>Partners 2<span class="H">♥︎</span> na 2<span class="D">♦︎</span> opvatten als harten en erop passen. Het is schoppen, en het bod is forcing.</li>
+        <li>Als openaar met vier harten én vier schoppen twijfelen: bied gewoon 2<span class="H">♥︎</span>. De schoppen komen vanzelf aan bod.</li>
+      </ul>
+      <p>Dit volgt het document over Ballumer Stayman dat je hebt aangeleverd. In de app is uitnodigen 8–9 punten en manche 10–14, en is de openaar minimaal met 15 en maximaal met 16–17; die grenzen zijn een eigen invulling. Het 3<span class="D">♦︎</span>-bod direct na 1SA, de transfers naar de lage kleuren, Garbage Ballumer en handen met een vijfkaart én een vierkaart hoog zitten er niet in.</p>
+      <h3>Na een 2SA-opening van partner</h3>
+      <ul>
+        <li>Een opening van 2SA belooft 20–22 punten en een evenwichtige hand. Die opening zelf oefen je bij Openen.</li>
+        <li>Stayman en Jacoby werken hetzelfde als na 1SA, maar een niveau hoger.</li>
+        <li>3<span class="D">♦︎</span> met vijf of meer harten, 3<span class="H">♥︎</span> met vijf of meer schoppen. Dat doe je met elke kracht; de openaar biedt de kleur erboven.</li>
+        <li>3<span class="C">♣︎</span> (Stayman) met een vierkaart hoog en 4 of meer punten. De openaar antwoordt 3<span class="D">♦︎</span> (geen vierkaart hoog), 3<span class="H">♥︎</span> of 3<span class="S">♠︎</span>.</li>
+        <li>Geen vier- of vijfkaart hoog: pas met 0–3 punten, 3SA met 4–10.</li>
+      </ul>
+      <p>Handen met 11 of meer punten (slemzone) en handen met een vijfkaart én een vierkaart hoog komen niet voor.</p>
       <h3>Rubensohl</h3>
       <ul>
         <li>Partner opent 1SA en de tegenpartij biedt 2 in een kleur.</li>
@@ -525,7 +699,9 @@ summary{cursor:pointer;font-weight:700}
         <li>Ontwikkel je extra slagen vroeg, zolang je nog hoge kaarten hebt om weer aan slag te komen.</li>
         <li>Speel naar je honneurs toe als je moet snijden, en let op in welke hand je aan slag bent.</li>
         <li>Je moet kleur bekennen: kaarten die je niet mag spelen zijn grijs.</li>
-        <li>Tips: kies je een kaart die duidelijk slechter is, dan krijg je meteen een tip en mag je opnieuw kiezen of toch spelen. In de laatste zes slagen rekent de app dat uit over mogelijke verdelingen van de kaarten die je niet ziet, en geeft een tip als een andere kaart gemiddeld minstens een halve slag meer oplevert. Daarvoor let de app alleen op twee vuistregels: geen hoge kaart weggooien, en geen honneur voorspelen zonder de kaart eronder.</li>
+        <li>Coaching: kies je een kaart waar de app een duidelijk betere voor ziet, dan vraagt hij "weet je het zeker?" en mag je opnieuw kiezen of toch spelen.</li>
+        <li>In de eerste zes slagen let de app op vaste patronen: je contract is binnen maar je gaat nog van slag, je maakt je vaste slagen op terwijl er nog een kleur te ontwikkelen is, je speelt weg van een honneur in plaats van ernaartoe, je speelt een honneur voor zonder de kaart eronder, of je gooit een hoge kaart weg.</li>
+        <li>In de laatste zeven slagen rekent de app het uit over mogelijke verdelingen van de kaarten die je niet ziet.</li>
       </ul>
       <p>De computer speelt West en Oost met vuistregels: de vierde van boven uitkomen, partners kleur terugspelen, tweede hand laag en derde hand hoog. Het zijn geen sterke tegenspelers.</p>
       <h3>Spelen: snijden</h3>
@@ -542,11 +718,21 @@ summary{cursor:pointer;font-weight:700}
         <li>Heeft partner een kleur geboden, kom dan uit in partners kleur. Met twee kaarten de hoogste; met drie of meer en een plaatje erbij een kleintje.</li>
         <li>Tegen SA zonder bod van partner: kom uit in je langste kleur.</li>
         <li>Heb je daar een serie van drie hoge kaarten (H V B, V B 10) of bijna een serie (H V 10), kom dan uit met de hoogste van de serie.</li>
-        <li>Zonder serie kom je tegen SA uit met de vierde van boven. Een kleintje belooft een plaatje.</li>
-        <li>Tegen een troefcontract is een serie van twee hoge kaarten al genoeg: de aas van A H, de heer van H V, de vrouw van V B.</li>
+        <li>Zonder serie kom je klein uit. Welke kleine kaart hangt af van jullie afspraak: de vierde van boven, of derde of vijfde (uit een even aantal de derde van boven, uit een oneven aantal de laagste). Je stelt dit in bij het kiezen van de oefening.</li>
+        <li>Tegen een troefcontract is een serie van twee hoge kaarten al genoeg: de heer van H V, de vrouw van V B. Van A H kom je uit met de aas of met de heer, afhankelijk van jullie afspraak; ook dat stel je in.</li>
         <li>Tegen een troefcontract met een singleton en kleine troeven: kom uit met de singleton en hoop op een aftroever.</li>
         <li>Tegen een troefcontract kom je nooit klein uit onder een aas vandaan.</li>
+        <li>Romeins als uitkomstafspraak: een oneven kaart vraagt partner de kleur door te spelen. Uit een kleur die je terug wilt zien kom je uit met je laagste oneven kaart.</li>
       </ul>
+      <h3>Tegenspel: signaleren</h3>
+      <ul>
+        <li>Met de kaart die je bijspeelt of weggooit vertel je partner welke kleur je wilt. Je stelt in welke afspraak jullie spelen.</li>
+        <li>Hoog is aan: een hoge kaart vraagt partner de kleur door te spelen, een lage kaart wijst hem af.</li>
+        <li>Lavinthal bij niet bekennen: je gooit een kaart weg uit een kleur die je níét wilt. Een hoge kaart vraagt om de hoogste van de twee overgebleven kleuren, een lage om de laagste.</li>
+        <li>Romeins-Lavinthal: een oneven kaart is aan in die kleur. Een even kaart wijst de kleur af en wijst een andere aan: een hoge even de hoogste overgebleven kleur, een lage even de laagste.</li>
+        <li>De kleur die gespeeld wordt en de kleur waaruit je signaleert tellen niet mee als overgebleven kleur. In een troefcontract telt troef ook niet mee.</li>
+      </ul>
+      <p>In de app speelt de tegenpartij steeds 3SA. Er bestaan varianten, zoals omgekeerd Romeins; die zitten er niet in.</p>
       <h3>Tegenspel: door sterk, naar zwak</h3>
       <ul>
         <li>Ben je als tegenspeler aan slag, kijk dan waar de dummy ligt en wat hij heeft.</li>
@@ -713,7 +899,7 @@ function pickMix(set, recent, since){
   for(let i=0;i<set.length;i++){ t -= ws[i]; if(t<=0) return set[i]; }
   return set[set.length-1];
 }
-let PLAY_SET = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen'];   // de app zet dit vanuit de instellingen
+let PLAY_SET = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen','signaal'];   // de app zet dit vanuit de instellingen
 function newQuestion(conv, idx, stepKey){
   if(conv==='spelmix'){ conv = PLAY_SET[rnd(PLAY_SET.length)]; stepKey = 'alles'; }
   if(conv==='alles'){
@@ -723,6 +909,7 @@ function newQuestion(conv, idx, stepKey){
   }
   if(conv==='openen') return newOQ(O_TARGETS[stepKey] ? stepKey : 'alles');
   if(conv==='tellen') return newTQ();
+  if(conv==='signaal') return newSGQ(stepKey);
   if(conv==='troef') return newTRQ(stepKey);
   if(conv==='verliezers') return newVLQ();
   if(conv==='ontwikkel') return newOWQ();
@@ -828,7 +1015,7 @@ function explain(q){
   if(q.conv==='tellen') return explainT(q);
   if(q.conv==='uitkomst') return q.d.why;
   if(q.conv==='doorsterk') return q.d.why;
-  if(q.conv==='handen') return q.d.why;
+  if(q.conv==='handen' || q.conv==='signaal') return q.d.why;
   if(q.conv==='ontwikkel') return q.d.why;
   if(q.conv==='verliezers') return q.d.why;
   if(q.conv==='troef') return q.d.why;
@@ -896,7 +1083,7 @@ function promptText(q){
   if(q.conv==='snijden') return 'Je wilt in deze kleur zoveel mogelijk slagen maken. Hoe speel je?';
   if(q.conv==='uitkomst') return q.d.prompt;
   if(q.conv==='doorsterk') return q.d.prompt;
-  if(q.conv==='handen') return q.d.prompt;
+  if(q.conv==='handen' || q.conv==='signaal') return q.d.prompt;
   if(q.conv==='verliezers') return q.d.prompt;
   if(q.conv==='troef') return q.d.prompt;
   if(q.conv==='ontwikkel') return 'Je speelt 3SA en hebt te weinig vaste slagen. Welke kleur speel je om er slagen bij te maken?';
@@ -1699,7 +1886,7 @@ function newSQ(){
   const good = typeof t.good==='function' ? t.good(total) : t.good;
   const order = [0,1,2];
   for(let i=2;i>0;i--){ const j = rnd(i+1); const z = order[i]; order[i] = order[j]; order[j] = z; }
-  const choices = order.map(i=>({id:'c'+i, text:fill(t.opts[i])}));
+  const choices = order.map(i=>({id:'c'+i, text:fill(t.opts[i]), title:t.shorts[i].charAt(0).toUpperCase()+t.shorts[i].slice(1), sub:fill(t.opts[i])}));
   const odds = t.odds(13-total);
   const pct = p => p<=0 ? '0%' : p<0.01 ? 'minder dan 1%' : Math.round(p*100)+'%';
   const ranked = [0,1,2].sort((a,b)=>odds[b]-odds[a]);
@@ -1710,6 +1897,16 @@ function newSQ(){
 }
 // ---------- Spelen: de uitkomstkaart ----------
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
+// Uitkomstafspraken, in te stellen door de speler
+let LEAD_LEN = '4';      // '4' = vierde van boven, '35' = derde uit een even aantal, laagste uit een oneven aantal
+let LEAD_AK = 'A';       // van aas-heer: 'A' = de aas, 'K' = de heer
+function leadLowIdx(n){ return LEAD_LEN==='35' ? (n%2===0 ? 2 : n-1) : (n>=4 ? 3 : n-1); }
+// De kleine kaart waarmee je uitkomt uit een kleur die je terug wilt zien. Romeins: de laagste oneven kaart (null als die er niet is).
+function leadLowCard(cards){
+  if(LEAD_LEN!=='rom') return cards[leadLowIdx(cards.length)];
+  const odd = cards.filter(r=>r<=9 && r%2===1);
+  return odd.length ? Math.min(...odd) : null;
+}
 function newUQ(stepKey){
   const pick = (n, pool) => { const p = pool.slice(); for(let i=p.length-1;i>0;i--){ const j = rnd(i+1); const z = p[i]; p[i] = p[j]; p[j] = z; } return p.slice(0,n); };
   const low = [2,3,4,5,6,7,8];
@@ -1721,7 +1918,7 @@ function newUQ(stepKey){
   const kind = sa ? ['serie','serie','vierde','vierde','partner'][rnd(5)] : ['tserie','tserie','single','single','tpartner'][rnd(5)];
   const order = shuffle([0,1,2,3]);            // willekeurige toewijzing van kleuren
   const hold = [[],[],[],[]];
-  let answer, why, prompt, contract;
+  let answer, why, prompt, contract, retry = false;
   const partnerLead = (pi) => {
     const n = 2+rnd(3);                         // 2, 3 of 4 kaarten in partners kleur
     let cards;
@@ -1729,11 +1926,12 @@ function newUQ(stepKey){
     else cards = [(sa ? [14,13,12,11] : [13,12,11])[rnd(sa ? 4 : 3)]].concat(pick(n-1, low));   // tegen troef niet onder een aas vandaan
     cards.sort((a,b)=>b-a);
     hold[pi] = cards;
-    const su = SUITS[pi], lead = n===2 ? cards[0] : cards[n-1];
+    const su = SUITS[pi], lead = n===2 ? cards[0] : leadLowCard(cards);
+    if(lead===null){ retry = true; return n; }
     answer = su+lead;
     why = 'Partner heeft '+SNAME[su]+' geboden: kom uit in partners kleur. '+(n===2
       ? 'Met twee kaarten speel je de hoogste eerst: '+DE(lead)+'.'
-      : 'Met drie of meer kaarten en een plaatje erbij kom je klein uit: '+DE(lead)+'. Een kleintje belooft een plaatje.');
+      : 'Met drie of meer kaarten en een plaatje erbij kom je klein uit'+(LEAD_LEN==='rom' ? '. Jullie spelen Romeins: een oneven kaart vraagt partner de kleur door te spelen, dus kom uit met je laagste oneven kaart, '+DE(lead)+'.' : LEAD_LEN==='35' ? '. Jullie spelen derde of vijfde: met '+['','','','drie','vier'][n]+' kaarten is dat '+(n===4 ? 'de derde van boven' : 'de laagste')+', '+DE(lead)+'.' : ': '+DE(lead)+'. Een kleintje belooft een plaatje.'));
     return n;
   };
   if(sa){
@@ -1753,8 +1951,14 @@ function newUQ(stepKey){
       const cards = hon.concat(pick((five ? 5 : 4)-hon.length, low)).sort((a,b)=>b-a);
       hold[mi] = cards;
       (five ? [3,3,2] : [3,3,3]).forEach((len,k)=>{ hold[order[k+1]] = filler(len); });
-      answer = SUITS[mi]+cards[3];
-      why = 'Tegen SA kom je uit in je langste kleur, hier '+SNAME[SUITS[mi]]+'. Je hebt daar geen serie van drie hoge kaarten, dus kom je uit met de vierde van boven: '+DE(cards[3])+'. Dat kleintje vertelt partner ook dat je een plaatje in de kleur hebt.';
+      const lowCard = leadLowCard(cards), li = cards.indexOf(lowCard);
+      if(lowCard===null) retry = true;
+      answer = SUITS[mi]+lowCard;
+      why = 'Tegen SA kom je uit in je langste kleur, hier '+SNAME[SUITS[mi]]+'. Je hebt daar geen serie van drie hoge kaarten, dus kom je klein uit. '+(LEAD_LEN==='rom'
+        ? 'Jullie spelen Romeins: een oneven kaart vraagt partner de kleur door te spelen. Je wilt deze kleur terug, dus kom uit met je laagste oneven kaart, '+DE(lowCard)+'.'
+        : LEAD_LEN==='35'
+        ? 'Jullie spelen derde of vijfde: uit een even aantal de derde van boven, uit een oneven aantal de laagste. Je hebt er '+(five ? 'vijf' : 'vier')+', dus '+DE(cards[li])+'.'
+        : 'Jullie spelen de vierde van boven: '+DE(cards[li])+'. Dat kleintje vertelt partner ook dat je een plaatje in de kleur hebt.');
       prompt = 'Oost speelt 3SA en jij komt uit. Tik de kaart aan.';
     }else{
       const pi = order[0], n = partnerLead(pi);
@@ -1772,8 +1976,11 @@ function newUQ(stepKey){
       const seq = [[14,13],[13,12],[12,11]][rnd(3)];
       hold[side[0]] = seq.concat(pick(2, [2,3,4,5,6,7,8]));
       hold[side[1]] = filler(3); hold[side[2]] = filler(3);
-      answer = SUITS[side[0]]+seq[0];
-      why = 'Tegen een troefcontract is een serie hoge kaarten de veiligste uitkomst. Je hebt '+seq.map(NM).join(' en ')+' in '+SNAME[SUITS[side[0]]]+': kom uit met de hoogste, '+DE(seq[0])+'. Kom tegen een troefcontract nooit klein uit onder een aas vandaan.';
+      const ak = seq[0]===14, lead = (ak && LEAD_AK==='K') ? 13 : seq[0];
+      answer = SUITS[side[0]]+lead;
+      why = 'Tegen een troefcontract is een serie hoge kaarten de veiligste uitkomst. Je hebt '+seq.map(NM).join(' en ')+' in '+SNAME[SUITS[side[0]]]+': '+(ak
+        ? (LEAD_AK==='K' ? 'jullie spelen de heer van aas-heer, dus kom uit met de heer.' : 'jullie spelen de aas van aas-heer, dus kom uit met de aas.')
+        : 'kom uit met de hoogste, '+DE(seq[0])+'.')+' Kom tegen een troefcontract nooit klein uit onder een aas vandaan.';
       prompt = cT+' en jij komt uit. Tik de kaart aan.';
     }else if(kind==='single'){
       const r = 2+rnd(8);
@@ -1791,7 +1998,7 @@ function newUQ(stepKey){
   }
   const cards = [];
   hold.forEach((rs,si)=>rs.forEach(r=>cards.push(si*13+r-2)));
-  if(cards.length!==13 || new Set(cards).size!==13) return newUQ(stepKey);
+  if(retry || cards.length!==13 || new Set(cards).size!==13) return newUQ(stepKey);
   return {conv:'uitkomst', idx:1, d:{why, prompt, kind, contract}, me:makeHand(cards), partner:null, answer, cards:true,
           box:'lead', last:null, auction:null, hasNext:false};
 }
@@ -2007,6 +2214,9 @@ function newTRQ(stepKey){
     const total = losers.reduce((a,b)=>a+b);
     const N = ['geen','één','twee','drie','vier','vijf','zes'];
     const sym = s => '<span class="'+s+'">'+SYM[s]+'</span>';
+    const titles = ['Troef trekken', 'Aftroeven in de dummy', 'Hoge kaarten spelen'];
+    const subs = ['Eerst de troeven van de tegenpartij ophalen', 'Eerst je verliezers aftroeven, daarna pas troef trekken', 'Eerst je azen en heren in de andere kleuren'];
+    const icons = [sym(T)+sym(T)+sym(T), 'N '+sym(T), 'A H'];
     const opts = ['Trek eerst de troeven van de tegenpartij', 'Troef eerst af in de dummy, en trek daarna pas troef', 'Speel eerst je hoge kaarten in de andere kleuren'];
     let good, why;
     if(!ruff){
@@ -2020,8 +2230,8 @@ function newTRQ(stepKey){
       why = 'Je telt '+total+' verliezers, '+(total-3)+' te veel voor 4'+sym(T)+'. In '+SNAME[SUITS[xi]]+' heb jij drie kaarten en de dummy maar '+N[dLen[xi]]+': je kunt daar '+(ruffable===1 ? 'één verliezer' : 'twee verliezers')+' aftroeven in de dummy. Doe dat eerst. Trek je eerst drie keer troef, dan heeft de dummy geen troeven meer over om mee af te troeven.';
     }
     const order = pick(3, [0,1,2]);
-    return {conv:'troef', idx:1, d:{why, goodText:opts[good], ruff, total, prompt:'Je speelt 4'+sym(T)+' en bent aan slag. Wat doe je eerst?'}, me:S, dummy:D, partner:null,
-            answer:'c'+good, choices:order.map(i=>({id:'c'+i, text:opts[i]})), box:'choice', last:null, auction:null, hasNext:false, check:{sLen, dLen, ti, xi, losers}};
+    return {conv:'troef', idx:1, d:{why, goodText:titles[good], ruff, total, prompt:'Je speelt 4'+sym(T)+' en bent aan slag. Wat doe je eerst?'}, me:S, dummy:D, partner:null,
+            answer:'c'+good, choices:order.map(i=>({id:'c'+i, text:opts[i], title:titles[i], sub:subs[i], icon:icons[i]})), box:'choice', last:null, auction:null, hasNext:false, check:{sLen, dLen, ti, xi, losers}};
   }
 }
 // ---------- Antwoorden op een 2-opening: de zwakke twee en de sterke 2 klaveren ----------
@@ -2541,7 +2751,7 @@ function gTipEval(st, seat, samples){
   const trick0 = st.trick.map(t=>[t.seat, gSuit(t.card), t.card%13]);
   const t0 = Date.now(); let done = 0;
   for(let n=0;n<samples;n++){
-    if(n>=4 && Date.now()-t0>200) break;            // op een trage telefoon liever minder verdelingen dan wachten
+    if(n>=3 && Date.now()-t0>250) break;            // op een trage telefoon liever minder verdelingen dan wachten
     done++;
     // verdeel de onbekende kaarten
     const E = [], W = [], free = [];
@@ -2567,20 +2777,67 @@ function gTipEval(st, seat, samples){
   legal.forEach(c=>{ sum[c] /= done; });
   return sum;
 }
-// Eerder in het spel: twee vuistregels die bijna altijd een slag kosten
+// Coaching eerder in het spel: vuistregels voor de momenten waarop een leider in SA meestal een slag weggeeft
+function gSure(st){
+  // vaste slagen die NZ nu nog kan incasseren, per kleur, met de kaarten die al gespeeld zijn
+  let total = 0; const per = [];
+  for(let s=0;s<4;s++){
+    const n0 = st.hands[0].filter(c=>gSuit(c)===s).length, n2 = st.hands[2].filter(c=>gSuit(c)===s).length;
+    const ours = c => st.hands[0].includes(c) || st.hands[2].includes(c);
+    let k = 0, out = 0;
+    for(let r=14;r>=2;r--){ const c = s*13+r-2; if(st.played.includes(c)) continue; if(ours(c)) k++; else break; }
+    for(let r=14;r>=2;r--){ const c = s*13+r-2; if(!st.played.includes(c) && !ours(c)) out++; }
+    const maxLen = Math.max(n0,n2), rounds = Math.min(k, maxLen);
+    const t = (rounds>0 && rounds>=out) ? maxLen : rounds;
+    per.push({t, k, len:n0+n2, out}); total += t;
+  }
+  return {total, per};
+}
 function gTipRule(st, seat, card){
   const hand = st.hands[seat], other = st.hands[(seat+2)%4], s = gSuit(card), r = gRank(card);
   const mine = hand.filter(c=>gSuit(c)===s).sort((a,b)=>gRank(a)-gRank(b));
+  const theirs = other.filter(c=>gSuit(c)===s).sort((a,b)=>gRank(a)-gRank(b));
   const NM = x => ({14:'aas',13:'heer',12:'vrouw',11:'boer'})[x] || String(x);
   const cardTxt = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
+  const ours = c => hand.includes(c) || other.includes(c);
+  const gone = c => st.played.includes(c);
+  const master = c => { for(let x=gRank(c)+1;x<=14;x++){ const id = gSuit(c)*13+x-2; if(!gone(id) && !ours(id)) return false; } return true; };
+  const hereName = seat===0 ? 'de dummy' : 'je hand', thereName = seat===0 ? 'je hand' : 'de dummy';
   if(!st.trick.length){
-    if(r<11 || r>13) return null;
-    const ours = c => hand.includes(c) || other.includes(c);
-    const higherOut = [14,13,12].some(x=>x>r && !st.played.includes(s*13+x-2) && !ours(s*13+x-2));
-    const below = ours(s*13+r-3);                                   // de kaart direct eronder
-    if(higherOut && !below && other.some(c=>gSuit(c)===s) && mine.length>=2){
-      const low = other.filter(c=>gSuit(c)===s).sort((a,b)=>gRank(a)-gRank(b))[0];
-      return {best:null, text:'Je speelt de '+NM(r)+' voor zonder de kaart eronder. De tegenpartij legt er een hogere kaart op en je '+NM(r)+' is weg. Speel liever vanuit de andere hand een kleintje, zoals '+cardTxt(low)+', naar je '+NM(r)+' toe.'};
+    const sure = gSure(st), have = st.ns+sure.total, wins = master(card) || theirs.some(master);
+    // 1. Het contract is binnen: niet meer van slag gaan
+    if(have>=st.need && !wins){
+      const cash = hand.filter(master)[0];
+      return {rule:'incasseer', best: cash===undefined ? null : cash, text:'Weet je het zeker? Je hebt '+st.ns+' slagen binnen en nog '+sure.total+' vaste slagen: samen genoeg voor je contract. Met deze kaart kun je van slag raken. Waarom niet eerst je vaste slagen incasseren'+(cash===undefined ? '?' : ', bijvoorbeeld '+cardTxt(cash)+'?')};
+    }
+    // 2. Vaste slagen opmaken terwijl er nog een kleur te ontwikkelen is
+    if(have<st.need && wins && sure.per[s].len<=6){
+      for(let t=0;t<4;t++){
+        if(t===s) continue;
+        const hon = [13,12,11,10].filter(x=>ours(t*13+x-2));
+        const aceOut = !gone(t*13+12) && !ours(t*13+12);
+        const touching = hon.some(x=>hon.includes(x-1));
+        const n = sure.per[t].len;
+        if(aceOut && touching && hon[0]>=12 && n>=5 && sure.per[t].k===0){
+          return {rule:'ontwikkel', best:null, text:'Weet je het zeker? Je hebt nu '+have+' slagen en hebt er '+st.need+' nodig. Waarom niet eerst '+SNAME[SUITS[t]]+'? Daar heb je '+hon.map(NM).join(', ')+' en kun je slagen ontwikkelen door de aas eruit te spelen. Doe dat nu je in de andere kleuren nog hoge kaarten hebt om weer aan slag te komen.'};
+        }
+      }
+    }
+    // 3. Wegspelen van een honneur waar je naartoe had moeten spelen
+    if(r<=10 && mine.length>=2 && theirs.length>=1){
+      const top = mine[mine.length-1], tr = gRank(top), otherTop = gRank(theirs[theirs.length-1]);
+      if((tr===13 || tr===12) && !master(top) && otherTop<tr && otherTop<=10){
+        const withAce = tr===12 && mine.some(c=>gRank(c)===14);
+        const need = tr===13 ? 'aas' : 'heer';
+        return {rule:'wegspelen', best:null, text:'Weet je het zeker? Je speelt '+SNAME[SUITS[s]]+' weg van je '+(withAce ? 'aas en vrouw' : NM(tr))+'. Waarom niet vanuit '+thereName+' naar '+hereName+' toe? Zit de '+need+' goed, dan maakt je '+NM(tr)+' een slag.'};
+      }
+    }
+    // 4. Een honneur voorspelen zonder de kaart eronder
+    if(r>=12 && r<=13){
+      const higherOut = [14,13,12].some(x=>x>r && !gone(s*13+x-2) && !ours(s*13+x-2));
+      if(higherOut && !ours(s*13+r-3) && theirs.length && mine.length>=2){
+        return {rule:'voorspelen', best:null, text:'Weet je het zeker? Je speelt de '+NM(r)+' voor zonder de kaart eronder. De tegenpartij legt er een hogere kaart op en je '+NM(r)+' is weg. Waarom niet vanuit '+thereName+' een kleintje, zoals '+cardTxt(theirs[0])+', naar je '+NM(r)+' toe?'};
+      }
     }
     return null;
   }
@@ -2590,32 +2847,222 @@ function gTipRule(st, seat, card){
   st.trick.forEach(t=>{ if(gSuit(t.card)===led && gRank(t.card)>gRank(win.card)) win = t; });
   const oursWins = win.seat%2===0, last = st.trick.length===3, low = mine[0];
   if(gRank(card)-gRank(low)<2) return null;
-  if(r<gRank(win.card) && !oursWins) return {best:low, text:'Deze slag kun je niet winnen. Gooi dan geen hoge kaart weg: leg '+cardTxt(low)+' en bewaar je '+NM(r)+'.'};
+  if(r<gRank(win.card) && !oursWins) return {rule:'weggooien', best:low, text:'Weet je het zeker? Deze slag kun je niet winnen. Waarom niet '+cardTxt(low)+'? Dan bewaar je je '+NM(r)+'.'};
   if(last){
-    if(oursWins) return {best:low, text:'Je andere hand heeft deze slag al gewonnen. Leg '+cardTxt(low)+' en bewaar je '+NM(r)+' voor later.'};
+    if(oursWins) return {rule:'weggooien', best:low, text:'Weet je het zeker? Je andere hand heeft deze slag al gewonnen. Waarom niet '+cardTxt(low)+'? Dan bewaar je je '+NM(r)+' voor later.'};
     const cheap = mine.find(c=>gRank(c)>gRank(win.card));
-    if(cheap!==undefined && cheap!==card && gRank(card)-gRank(cheap)>=2) return {best:cheap, text:'Je speelt als laatste, dus je kunt de slag zo goedkoop mogelijk winnen. '+cardTxt(cheap)+' is genoeg; bewaar je '+NM(r)+'.'};
+    if(cheap!==undefined && cheap!==card && gRank(card)-gRank(cheap)>=2) return {rule:'goedkoop', best:cheap, text:'Weet je het zeker? Je speelt als laatste, dus je kunt de slag zo goedkoop mogelijk winnen. '+cardTxt(cheap)+' is genoeg; dan bewaar je je '+NM(r)+'.'};
   }
   return null;
 }
-function gTip(st, seat, card){
+function gTip(st, seat, card, evReady){
   const legal = gLegal(st, seat);
   if(legal.length<2) return null;
-  if(st.hands[seat].length<=6){
-    const ev = gTipEval(st, seat, st.hands[seat].length<=5 ? 20 : 10);
+  const n = st.hands[seat].length;
+  if(n<=7){
+    const ev = evReady || gTipEval(st, seat, n<=5 ? 20 : n===6 ? 10 : 6);
     let best = legal[0];
     legal.forEach(c=>{ if(ev[c]>ev[best]+1e-9) best = c; });
-    if(ev[best]-ev[card]<0.5) return null;
-    const f = x => x.toFixed(1).replace('.', ','), cardTxt = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
-    return {best, text:cardTxt(best)+' is hier beter. Met '+cardTxt(card)+' maak je van de slagen die nog komen gemiddeld '+f(ev[card])+', met '+cardTxt(best)+' gemiddeld '+f(ev[best])+'.'};
+    if(ev[best]-ev[card]>=(n===7 ? 0.75 : 0.5)){
+      const f = x => x.toFixed(1).replace('.', ','), cardTxt = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
+      return {rule:'berekend', best, text:'Weet je het zeker? Waarom niet '+cardTxt(best)+'? Met '+cardTxt(card)+' maak je van de slagen die nog komen gemiddeld '+f(ev[card])+', met '+cardTxt(best)+' gemiddeld '+f(ev[best])+'.'};
+    }
+    if(n<=6) return null;
   }
   return gTipRule(st, seat, card);
 }
+// ---------- Na een 2SA-opening van partner (20-22, evenwichtig): Stayman en Jacoby een niveau hoger ----------
+function is2NT(h){
+  const [s,hh,d,c] = h.len;
+  return h.hcp>=20 && h.hcp<=22 && s<=4 && hh<=4 && d<=5 && c<=5 && Math.min(s,hh,d,c)>=2 && h.len.filter(n=>n===2).length<=1;
+}
+function resp2NT(h){
+  const [S,H] = h.len, p = h.hcp;
+  if(p>10 || Math.max(...h.len)>6) return null;
+  if(S>=5 || H>=5){
+    if(S>=4 && H>=4) return null;                       // vijfkaart met een vierkaart hoog ernaast: komt niet voor
+    return S>=5 ? {bid:'3H', kind:'jacoby', suit:'S'} : {bid:'3D', kind:'jacoby', suit:'H'};
+  }
+  if(p<=3) return {bid:'pas', kind:'pas'};
+  if(S===4 || H===4) return {bid:'3C', kind:'stayman'};
+  return {bid:'3N', kind:'sa'};
+}
+function new2NQ(stepKey){
+  const B = bidHTML, step = sk12(stepKey, 0.65);
+  for(;;){
+    if(step===1){
+      const want = ['pas','jacoby','jacoby','stayman','stayman','sa'][rnd(6)];
+      const me = drawHand(fullDeck(), h=>{ const r = resp2NT(h); return r && r.kind===want ? r : null; }, 20000);
+      if(!me) continue;
+      const n = drawHand(me.rest, is2NT, 40000);
+      if(!n) continue;
+      const a = me.r, p = me.h.hcp;
+      let why;
+      if(a.kind==='pas') why = 'Partner heeft 20–22 punten. Met '+pts(p)+' komen jullie samen niet aan de 25 voor de manche, en een vijfkaart hoog heb je niet. Pas.';
+      else if(a.kind==='jacoby') why = 'Je hebt een '+NKAART[me.h.len[SI[a.suit]]]+' '+SNAME[a.suit]+'. Ook na 2SA speel je Jacoby, alleen een niveau hoger: bied de kleur eronder, '+B(a.bid)+'. Dat doe je met elke kracht, ook met '+pts(p)+'.';
+      else if(a.kind==='stayman') why = 'Je hebt '+pts(p)+': tegenover 20–22 genoeg voor de manche. Met een vierkaart hoog vraag je eerst met '+B('3C')+' (Stayman) of partner ook een vierkaart hoog heeft.';
+      else why = 'Je hebt '+pts(p)+': tegenover 20–22 genoeg voor de manche. Je hebt geen vier- of vijfkaart hoog, dus bied je meteen 3SA.';
+      return mkQ('na2sa', 1, {why, kind:a.kind, prompt:'Partner opent 2SA (20–22 punten) en Oost past. Wat bied je?'}, me.h, n.h, a.bid, 'std', '2N', {start:1, calls:['2N','pas']});
+    }
+    const want = rnd(2) ? 'stayman' : 'jacoby';
+    const me = drawHand(fullDeck(), is2NT, 60000);
+    if(!me) continue;
+    const n = drawHand(me.rest, h=>{ const r = resp2NT(h); return r && r.kind===want ? r : null; }, 20000);
+    if(!n) continue;
+    const pb = n.r.bid, [S,H] = me.h.len;
+    let answer, why;
+    if(want==='jacoby'){ answer = '3'+n.r.suit; why = 'Partner biedt '+B(pb)+' en belooft daarmee minstens vijf '+SNAME[n.r.suit]+'. Net als na 1SA bied je altijd de kleur erboven: '+B(answer)+'.'; }
+    else if(H===4){ answer = '3H'; why = S===4 ? 'Partner vraagt met Stayman naar je hoge kleuren. Je hebt beide vierkaarten: bied eerst '+B('3H')+'.' : 'Partner vraagt met Stayman naar je hoge kleuren. Je hebt een vierkaart harten: '+B('3H')+'.'; }
+    else if(S===4){ answer = '3S'; why = 'Partner vraagt met Stayman naar je hoge kleuren. Je hebt een vierkaart schoppen en geen vier harten: '+B('3S')+'.'; }
+    else { answer = '3D'; why = 'Partner vraagt met Stayman naar je hoge kleuren. Je hebt geen vierkaart harten of schoppen: '+B('3D')+'.'; }
+    return mkQ('na2sa', 2, {why, kind:'open-'+want, prompt:'Je opende 2SA en partner biedt '+B(pb)+'. Wat antwoord je?'}, me.h, n.h, answer, 'std', pb, {start:3, calls:['2N','pas',pb,'pas']});
+  }
+}
+NEWCONV.na2sa = new2NQ;
+// ---------- Tegenspel: signaleren ----------
+// SIG = 'std': hoog is aan, laag is af; bij niet bekennen Lavinthal. SIG = 'rom': Romeins-Lavinthal (oneven is aan, even wijst een andere kleur aan).
+let SIG = 'std';
+function newSGQ(stepKey){
+  const pick = (n, pool) => { const p = pool.slice(); for(let i=p.length-1;i>0;i--){ const j = rnd(i+1); const z = p[i]; p[i] = p[j]; p[j] = z; } return p.slice(0,n); };
+  const DE = r => 'de '+(({14:'aas',13:'heer',12:'vrouw',11:'boer'})[r] || r);
+  const step = sk12(stepKey, 0.55), rom = SIG==='rom';
+  const hold = [[],[],[],[]];
+  const order = pick(4, [0,1,2,3]);
+  const C = (si, r) => cardHTML(SUITS[si]+r);
+  let answer, accept = null, why, prompt, slotN = null, slotO = null, kind;
+  if(step===1){
+    // partner komt uit met de aas (van aas-heer); jij speelt bij
+    const L = order[0], rest = order.slice(1).sort((a,b)=>a-b);         // overige kleuren, van hoog naar laag
+    kind = rnd(2) ? 'aan' : 'af';
+    slotN = SUITS[L]+14;
+    if(kind==='aan'){
+      const o = [3,5,7,9][rnd(4)], evens = [2,4,6,8].filter(x=>Math.abs(x-o)>1), e = evens[rnd(evens.length)];
+      hold[L] = [12, o, e];
+      [4,3,3].forEach((n,k)=>{ hold[rest[k]] = pick(n, [2,3,4,5,6,7,8,9]); });
+      const hi = Math.max(o,e);
+      answer = SUITS[L]+(rom ? o : hi);
+      why = 'Partner komt uit met de aas, dus hij heeft de heer ook. Jij hebt de vrouw en wilt dat hij de kleur doorspeelt: geef een aansignaal. '+(rom
+        ? 'Jullie spelen Romeins: een oneven kaart is aan. Leg '+C(L,o)+'.'
+        : 'Jullie spelen hoog is aan: leg je hoogste kleintje, '+C(L,hi)+'.');
+    }else{
+      const W = rnd(2) ? rest[0] : rest[2];                              // de kleur die je wel wilt: de hoogste of de laagste van de drie
+      const H = [8,10][rnd(2)], l = [2,4][rnd(2)], o = [5,7][rnd(2)];
+      hold[L] = [H, o, l];
+      hold[W] = [14,13].concat(pick(2, [3,5,6,7,9]));
+      rest.filter(i=>i!==W).forEach(i=>{ hold[i] = pick(3, [2,3,4,5,6,7,8]); });
+      const low = Math.min(H,o,l);
+      answer = SUITS[L]+(rom ? (W===rest[0] ? H : l) : low);
+      why = 'Je hebt niets in '+SNAME[SUITS[L]]+' en wilt niet dat partner de kleur doorspeelt: geef een afsignaal. '+(rom
+        ? 'Jullie spelen Romeins-Lavinthal: een even kaart wijst de kleur af en zegt meteen wat je wel wilt. Je sterke kleur is '+SNAME[SUITS[W]]+', de '+(W===rest[0] ? 'hoogste' : 'laagste')+' van de drie andere kleuren. Leg daarom je '+(W===rest[0] ? 'hoge' : 'lage')+' even kaart, '+C(L, W===rest[0] ? H : l)+'.'
+        : 'Jullie spelen laag is af: leg je laagste kaart, '+C(L,low)+'.');
+    }
+    prompt = 'Oost speelt 3SA. Partner komt uit met '+C(L,14)+' en de dummy legt klein bij. Welke kaart leg jij?';
+  }else{
+    // de leider speelt een kleur die jij niet meer hebt: je moet een kaart afgooien
+    kind = 'afgooien';
+    const X = order[0], W = order[1], D1 = order[2], D2 = order[3];
+    const wo = [3,5,7][rnd(3)];
+    hold[W] = [14,13,wo].concat(pick(1, [2,4,6,8]));
+    const mk = n => { const H = [8,10][rnd(2)], l = [2,4][rnd(2)]; return {H, l, cards:[H, [5,7][rnd(2)], l].concat(n>3 ? pick(n-3, [3,6,9].filter(x=>x<H)) : [])}; };
+    const a = mk(5), b = mk(4);
+    hold[D1] = a.cards; hold[D2] = b.cards;
+    slotO = SUITS[X]+[13,12,11,10][rnd(4)];
+    // gooi je weg uit D, dan blijven W en de andere afgooikleur over: hoog vraagt om de hoogste van die twee, laag om de laagste
+    const sig = (D, other, x) => W<other ? x.H : (rom ? x.l : Math.min(...x.cards));   // lagere index = hogere kleur; zonder Romeins telt gewoon de laagste kaart
+    const c1 = sig(D1, D2, a), c2 = sig(D2, D1, b);
+    answer = SUITS[D1]+c1;
+    accept = [SUITS[D1]+c1, SUITS[D2]+c2];
+    if(rom) accept.push(SUITS[W]+wo);
+    const hoog1 = W<D2;
+    why = 'Je kunt '+SNAME[SUITS[X]]+' niet bekennen en wilt dat partner '+SNAME[SUITS[W]]+' speelt, want daar heb je aas en heer. '+(rom
+      ? 'Bij Romeins-Lavinthal kan dat op twee manieren. Een oneven kaart in de kleur die je wilt: '+C(W,wo)+'. Of een even kaart in een andere kleur: een hoge even vraagt om de hoogste van de twee overgebleven kleuren, een lage even om de laagste. Gooi je '+SNAME[SUITS[D1]]+' weg, dan blijven '+SNAME[SUITS[W]]+' en '+SNAME[SUITS[D2]]+' over; '+SNAME[SUITS[W]]+' is daarvan de '+(hoog1 ? 'hoogste' : 'laagste')+', dus '+C(D1,c1)+'.'
+      : 'Bij Lavinthal gooi je een kaart weg uit een kleur die je níét wilt. Een hoge kaart vraagt om de hoogste van de twee overgebleven kleuren, een lage om de laagste. Gooi je '+SNAME[SUITS[D1]]+' weg, dan blijven '+SNAME[SUITS[W]]+' en '+SNAME[SUITS[D2]]+' over; '+SNAME[SUITS[W]]+' is daarvan de '+(hoog1 ? 'hoogste' : 'laagste')+', dus een '+(hoog1 ? 'hoge' : 'lage')+' kaart: '+C(D1,c1)+'.')
+      +' Met '+C(D2,c2)+' zeg je hetzelfde.';
+    prompt = 'Oost speelt 3SA en speelt '+cardHTML(slotO)+' voor. Die kleur heb je niet meer. Welke kaart gooi je weg?';
+  }
+  const cards = [];
+  hold.forEach((rs,si)=>rs.forEach(r=>cards.push(si*13+r-2)));
+  if(cards.length!==13 || new Set(cards).size!==13) return newSGQ(stepKey);
+  return {conv:'signaal', idx:1, d:{why, prompt, kind, slotN, slotO, sig:SIG}, me:makeHand(cards), partner:null, answer, accept, cards:true,
+          box:'lead', last:null, auction:null, hasNext:false};
+}
+// ---------- Ballumer Stayman ----------
+// Na 1SA - 2 klaveren meldt de openaar alleen harten (2H) of geen harten (2R); 2S en 2SA/3H tonen een vijfkaart.
+// De vrager meldt zelf zijn vierkaart schoppen met 2H na 2R.
+function isOpenerB(h){                                   // 15-17 evenwichtig; een vijfkaart hoog mag
+  return h.hcp>=15 && h.hcp<=17 && Math.max(...h.len)<=5 && Math.min(...h.len)>=2 && h.len.filter(n=>n===2).length<=1;
+}
+function ballAnswer(o){
+  const [S,H] = o.len;
+  if(H===5) return o.hcp>=16 ? '3H' : '2N';
+  if(S===5) return '2S';
+  return H===4 ? '2H' : '2D';
+}
+function ballAsker(h){ return respKind(h)==='flat' && h.hcp>=8 && (h.len[0]===4 || h.len[1]===4); }
+function ballRebid(r, ans){
+  const [S,H] = r.len, inv = r.hcp<=9;
+  if(ans==='2D') return S===4 ? {bid:'2H', kind:'schoppen'} : {bid:inv ? '2N' : '3N', kind:'geenschoppen'};
+  if(ans==='2H') return H===4 ? {bid:inv ? '3H' : '4H', kind:'hartenfit'} : {bid:inv ? '2N' : '3N', kind:'geenfit'};
+  if(ans==='2N') return H>=3 ? {bid:'3D', kind:'transfer'} : {bid:inv ? 'pas' : '3N', kind:'geen5fit'};
+  return null;
+}
+function newBAQ(stepKey){
+  const B = bidHTML;
+  const step = stepKey===1 || stepKey==='1' ? 1 : stepKey===2 || stepKey==='2' ? 2 : stepKey===3 || stepKey==='3' ? 3 : 1+rnd(3);
+  for(;;){
+    if(step===1){
+      const want = ['2D','2D','2H','2H','2S','2N','3H'][rnd(7)];
+      const me = drawHand(fullDeck(), h=>isOpenerB(h) && ballAnswer(h)===want, 60000);
+      if(!me) continue;
+      const n = drawHand(me.rest, ballAsker, 6000);
+      if(!n) continue;
+      const [S,H] = me.h.len, p = me.h.hcp;
+      let why;
+      if(want==='2D') why = 'Bij Ballumer zeg je alleen iets over harten. Je hebt geen vierkaart harten en geen vijfkaart hoog: '+B('2D')+'.'+(S===4 ? ' Je vierkaart schoppen meld je niet zelf; partner vertelt het als hij er vier heeft.' : '');
+      else if(want==='2H') why = 'Je hebt een vierkaart harten: '+B('2H')+'.'+(S===4 ? ' Dat je ook vier schoppen hebt, komt later vanzelf aan bod.' : '');
+      else if(want==='2S') why = 'Bij Ballumer is '+B('2S')+' vrijgekomen voor iets anders: het toont een vijfkaart schoppen. Die heb je, dus '+B('2S')+'.';
+      else if(want==='2N') why = 'Je hebt een vijfkaart harten en met '+p+' punten een minimale 1SA-opening. Dat toon je met 2SA.';
+      else why = 'Je hebt een vijfkaart harten en met '+p+' punten een maximale 1SA-opening. Dat toon je met '+B('3H')+'.';
+      return mkQ('ballumer', 1, {why, kind:want, prompt:'Jullie spelen Ballumer Stayman. Je opende 1SA en partner biedt '+B('2C')+'. Wat antwoord je?'}, me.h, n.h, want, 'std', '2C', {start:3, calls:['1N','pas','2C','pas']});
+    }
+    if(step===2){
+      const want = ['schoppen','schoppen','geenschoppen','hartenfit','geenfit','transfer','geen5fit'][rnd(7)];
+      const ans = want==='schoppen' || want==='geenschoppen' ? '2D' : want==='hartenfit' || want==='geenfit' ? '2H' : '2N';
+      const me = drawHand(fullDeck(), h=>{ if(!ballAsker(h)) return null; const r = ballRebid(h, ans); return r && r.kind===want ? r : null; }, 60000);
+      if(!me) continue;
+      const n = drawHand(me.rest, h=>isOpenerB(h) && ballAnswer(h)===ans, 40000);
+      if(!n) continue;
+      const a = me.r, p = me.h.hcp, [S,H] = me.h.len, inv = p<=9;
+      const kracht = inv ? 'Met '+p+' punten nodig je uit' : 'Met '+p+' punten is er genoeg voor de manche';
+      let why;
+      if(want==='schoppen') why = 'Partner heeft geen vierkaart harten. Over schoppen is nog niets gezegd: bij Ballumer meld jij je vierkaart schoppen zelf, met '+B('2H')+'. Dat bod zegt dus niets over harten.';
+      else if(want==='geenschoppen') why = 'Partner heeft geen vierkaart harten, en jij hebt geen vierkaart schoppen. Er is dus geen fit in een hoge kleur. '+kracht+': '+B(a.bid)+'.';
+      else if(want==='hartenfit') why = 'Partner heeft een vierkaart harten en jij ook: fit. '+kracht+': '+B(a.bid)+'.';
+      else if(want==='geenfit') why = 'Partner heeft harten, maar jouw vierkaart is schoppen. '+kracht+': '+B(a.bid)+'. Net als bij gewone Stayman weet partner nu dat je vier schoppen hebt.';
+      else if(want==='transfer') why = 'Partner toont met 2SA een vijfkaart harten en een minimum. Jij hebt '+NTAL[H]+' harten mee: fit. Bied '+B('3D')+' als transfer naar harten, zodat partner het contract speelt.';
+      else why = 'Partner toont met 2SA een vijfkaart harten en een minimum. Jij hebt maar '+NTAL[H]+' harten: geen fit. '+(inv ? 'Met '+p+' punten tegenover een minimum is er geen manche: pas, en speel 2SA.' : 'Met '+p+' punten is er genoeg voor de manche: 3SA.');
+      return mkQ('ballumer', 2, {why, kind:want, prompt:'Jullie spelen Ballumer Stayman. Je vroeg met '+B('2C')+' en partner antwoordt '+B(ans)+'. Wat bied je nu?'}, me.h, n.h, a.bid, 'std', ans, {start:1, calls:['1N','pas','2C','pas',ans,'pas']});
+    }
+    const want = ['2S','3S','2N','3N'][rnd(4)];
+    const me = drawHand(fullDeck(), h=>{
+      if(!isOpenerB(h) || ballAnswer(h)!=='2D') return false;
+      const fit = h.len[0]===4, max = h.hcp>=16;
+      return want===(fit ? (max ? '3S' : '2S') : (max ? '3N' : '2N'));
+    }, 60000);
+    if(!me) continue;
+    const n = drawHand(me.rest, h=>ballAsker(h) && h.len[0]===4, 8000);
+    if(!n) continue;
+    const p = me.h.hcp, fit = me.h.len[0]===4, max = p>=16;
+    const why = 'Partner toont met '+B('2H')+' een vierkaart schoppen; over harten zegt dat bod niets. '+(fit ? 'Jij hebt ook vier schoppen: fit.' : 'Jij hebt geen vier schoppen: geen fit.')+' Met '+p+' punten ben je '+(max ? 'maximaal' : 'minimaal')+': '+B(want)+'.'+(fit && !max ? ' Zo speel je met een minimum lekker laag.' : '');
+    return mkQ('ballumer', 3, {why, kind:want, prompt:'Jullie spelen Ballumer Stayman. Na je '+B('2D')+' biedt partner '+B('2H')+'. Wat bied je?'}, me.h, n.h, want, 'std', '2H', {start:3, calls:['1N','pas','2C','pas','2D','pas','2H','pas']});
+  }
+}
+NEWCONV.ballumer = newBAQ;
 // ENGINE-END
 
 const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
-const CONVS = {openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', spel:'Heel spel spelen', spelmix:'Spelen: mix'};
+const CONVS = {openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E'};
 const STEPS_21 = {alles:'Alles door elkaar', 1:'Je eerste antwoord', 2:'Openaar na 1SA'};
 const STEPS_TR = {alles:'Alles door elkaar', 1:'Eerst troef trekken', 2:'Eerst aftroeven'};
@@ -2631,24 +3078,27 @@ const STEPS_OPEN = {alles:'Alle openingen', 1:'1-niveau of pas', 2:'Zwak en pre�
 const STEPS_DBL = {alles:'Alles door elkaar', 1:'Doubleren of niet', 2:'Antwoord op doublet', 3:'Na het antwoord'};
 const STEPS = {alles:'Alles door elkaar', 1:'Eerste bod', 2:'Antwoord van openaar', 3:'Tweede bod', 4:'Openaar maakt af'};
 const STEP_SHORT = {alles:'alles', 1:'1e bod', 2:'antwoord', 3:'2e bod', 4:'afmaken'};
+const STEPS_2N = {alles:'Alles door elkaar', 1:'Je eerste antwoord', 2:'Antwoord van de openaar'};
+const STEPS_SG = {alles:'Alles door elkaar', 1:'Bijspelen op partners uitkomst', 2:'Niet bekennen'};
+const STEPS_BA = {alles:'Alles door elkaar', 1:'Antwoord van de openaar', 2:'Vervolg van de vrager', 3:'Openaar na 2♦\uFE0E – 2♥\uFE0E'};
 const STEPS_G2 = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden'};
 const STEPS_TS = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt het'};
 const STEPS_BY = {doublet:STEPS_DBL, openen:STEPS_OPEN, volgbod:STEPS_VOLG, wet:STEPS_WET, rkcb:STEPS_RKC, bijbod:STEPS_BIJ, uitkomst:STEPS_UIT,
   doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_G2, muiderberg:STEPS_G2, uppercue:STEPS_TS, unusual:STEPS_TS,
   negatief:STEPS_ONE, tellen:STEPS_ONE, snijden:STEPS_ONE, ontwikkel:STEPS_ONE, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE,
-  inverted:STEPS_ONE, rubensohl:STEPS_ONE, dont:STEPS_ONE};
+  signaal:STEPS_SG, ballumer:STEPS_BA, inverted:STEPS_ONE, rubensohl:STEPS_ONE, dont:STEPS_ONE, na2sa:STEPS_2N};
 const CONV_GROUPS = {
   convsB1:['openen','bijbod','volgbod','wet','alles'],
-  convsB2:['stayman','jacoby','beide','rubensohl'],
+  convsB2:['stayman','jacoby','beide','ballumer','rubensohl','na2sa'],
   convsB3:['doublet','negatief','uppercue','unusual','dont'],
   convsB4:['antw2','muiderberg','gambling','inverted','twee1','rkcb'],
   convsL:['tellen','ontwikkel','verliezers','troef','snijden','spel'],
-  convsT:['uitkomst','doorsterk','handen']
+  convsT:['uitkomst','doorsterk','handen','signaal']
 };
-const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen'];
+const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen','signaal'];
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
-const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg'};
+const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman'};
 let state = {conv:'beide', step:'alles', stats:{}, streak:0, rkc:'1430'};
 try{
   const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
@@ -2659,6 +3109,11 @@ if(!STEPS[state.step]) state.step = 'alles';
 if(!state.stats || typeof state.stats!=='object') state.stats = {};
 if(state.rkc!=='1430' && state.rkc!=='3014') state.rkc = '1430';
 RKC = state.rkc;
+if(!['4','35','rom'].includes(state.leadLen)) state.leadLen = '4';
+if(!state.sigChosen || (state.sig!=='std' && state.sig!=='rom')) state.sig = 'rom';     // Romeins-Lavinthal is de standaard, tot je zelf iets anders kiest
+SIG = state.sig;
+if(state.leadAK!=='A' && state.leadAK!=='K') state.leadAK = 'A';
+LEAD_LEN = state.leadLen; LEAD_AK = state.leadAK;
 if(!Array.isArray(state.playSet)) state.playSet = [];
 if(!state.mixRecent || typeof state.mixRecent!=='object') state.mixRecent = {};
 if(!state.mixSince || typeof state.mixSince!=='object') state.mixSince = {};
@@ -2674,27 +3129,81 @@ function handHTML(h, only, tap){
   return SUITS.map((s,i)=>{
     if(only!=null && i!==only) return '';
     const ranks = tap
-      ? h.suits[i].map(r=>'<button class="card" data-card="'+s+r+'">'+(RANK[r]||r)+'</button>').join('')
+      ? h.suits[i].map(r=>'<button class="card k'+s+'" data-card="'+s+r+'">'+(RANK[r]||r)+'<span class="pip">'+SYM[s]+'</span></button>').join('')
       : h.suits[i].map(r=>RANK[r]||r).join(' ');
     return '<li><span class="sym '+s+'">'+SYM[s]+'</span>'+
       (ranks ? '<span class="ranks'+(tap ? ' tap' : '')+'">'+ranks+'</span>' : '<span class="void">geen</span>')+'</li>';
   }).join('');
 }
+function cardsHTML(h){
+  return SUITS.map((s,i)=>h.suits[i].map(r=>'<li class="k'+s+'"><span>'+(RANK[r]||r)+'</span><span>'+SYM[s]+'</span></li>').join('')).join('');
+}
+// Kleine tafel bij de tegenspeloefeningen: wie heeft wat gespeeld, en waar komt jouw kaart
+// De uitkomst van West als jij leider bent: uit een willekeurige hand van de overige kaarten, volgens de gewone uitkomstregels
+function leadFor(q){
+  const used = new Set();
+  [q.me, q.dummy].forEach(h=>h.suits.forEach((rs,si)=>rs.forEach(r=>used.add(si*13+r-2))));
+  const rest = [];
+  for(let c=0;c<52;c++) if(!used.has(c)) rest.push(c);
+  for(let i=rest.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); const z = rest[i]; rest[i] = rest[j]; rest[j] = z; }
+  const W = makeHand(rest.slice(0,13));
+  const ti = q.check && q.check.ti!=null ? q.check.ti : -1;       // troefkleur, of -1 bij SA
+  let order = [0,1,2,3].filter(i=>i!==ti && W.len[i]>0).sort((a,b)=>W.len[b]-W.len[a]);
+  if(ti>=0){ const safe = order.filter(i=>!(W.suits[i][0]===14 && W.suits[i][1]!==13)); if(safe.length) order = safe; }   // tegen troef niet onder een aas vandaan
+  if(!order.length) order = [ti];
+  const si = order[0], s = W.suits[si];
+  const seq = ti>=0 ? (s.length>=2 && s[0]>=11 && s[0]-s[1]===1) : (s.length>=3 && s[0]>=10 && s[0]-s[1]===1 && s[1]-s[2]<=2);
+  return SUITS[si]+(seq ? s[0] : s.length>=4 ? s[3] : s[s.length-1]);
+}
+function renderQTable(mine){
+  const on = q.conv==='uitkomst' || q.conv==='handen' || q.conv==='doorsterk' || q.conv==='signaal';
+  $('qwrap').hidden = !on;
+  document.querySelector('main.table').classList.toggle('qt', on);
+  if(!on) return;
+  // links en rechts van de tafel: de leider met het contract, en de dummy met zijn kaarten aan de kant waar hij ligt
+  const mini = h => '<ul class="hand">'+handHTML(h, q.only)+'</ul>';      // dezelfde opmaak als je eigen hand
+  let left, right;
+  if(q.conv==='uitkomst'){
+    const c = q.d.contract, shown = /SA$/.test(c) ? c : bidHTML(c);
+    right = '<b class="cbadge">'+shown+'</b><span>Oost is leider</span>';
+    left = '<span>West wordt dummy</span>';
+  }else if(q.conv==='signaal'){
+    right = '<b class="cbadge">3SA</b><span>Oost is leider</span>';
+    left = '<span>West is dummy</span>';
+  }else{
+    const badge = q.conv==='doorsterk' ? '<b class="cbadge">3SA</b>' : '';
+    const dummySide = '<span>Dummy ('+(q.dummyRight ? 'Oost' : 'West')+')</span>'+mini(q.dummy);
+    const leaderSide = badge+'<span>'+(q.dummyRight ? 'West' : 'Oost')+' is leider</span>';
+    left = q.dummyRight ? leaderSide : dummySide;
+    right = q.dummyRight ? dummySide : leaderSide;
+  }
+  $('qL').innerHTML = left; $('qR').innerHTML = right;
+  const slot = {N:null, O:null, Z:mine || null, W:null};
+  if(q.conv==='signaal'){ slot.N = q.d.slotN; slot.O = q.d.slotO; }
+  if(q.conv==='handen'){
+    const su = SUITS[q.only];
+    if(q.dummyRight){ slot.N = su+q.d.lead; slot.O = su+Math.min(...q.dummy.suits[q.only]); }   // partner kwam uit, de dummy (Oost) legde klein
+    else slot.O = su+q.d.lead;                                                                   // de leider (Oost) speelt voor
+  }
+  [['qN','N'],['qE','O'],['qS','Z'],['qW','W']].forEach(([id,k])=>{
+    const el = $(id);
+    el.innerHTML = slot[k] ? cardHTML(slot[k]) : k;
+    el.classList.toggle('on', !!slot[k]);
+  });
+}
 function renderAuction(done){
   $('auction').hidden = !q.auction;
   if(!q.auction) return;
-  // Kolommen: West, Noord, Oost, Zuid. Jij zit Zuid, partner Noord.
-  const a = q.auction, cells = [];
-  for(let i=0;i<a.start;i++) cells.push('<td></td>');
-  a.calls.forEach(b=>{
-    cells.push('<td'+(b==='pas' ? ' class="opp"' : '')+'>'+(b==='X' ? 'Dbl' : bidHTML(b))+'</td>');
-  });
-  const shown = q.answer==='X' ? 'Dbl' : bidHTML(q.answer);
-  cells.push('<td class="ask'+(done?' done':'')+'"><span>'+(done ? shown : '?')+'</span></td>');
-  while(cells.length%4) cells.push('<td></td>');
-  let rows = '';
-  for(let i=0;i<cells.length;i+=4) rows += '<tr>'+cells.slice(i,i+4).join('')+'</tr>';
-  $('auction').innerHTML = '<thead><tr><th>West</th><th>Noord</th><th>Oost</th><th class="me">Zuid (jij)</th></tr></thead><tbody>'+rows+'</tbody>';
+  // De tafel van bovenaf: elk bod ligt voor de speler die het deed. Stoelen: 0 = West, 1 = Noord, 2 = Oost, 3 = Zuid (jij).
+  const a = q.auction, seats = [[],[],[],[]];
+  const tile = b => b==='pas' ? '<span class="bt pas">pas</span>' : b==='X' ? '<span class="bt dbl">Dbl</span>' : '<span class="bt">'+bidHTML(b)+'</span>';
+  a.calls.forEach((b,i)=>{ seats[(a.start+i)%4].push(tile(b)); });
+  const mine = q.answer==='pas' ? 'pas' : q.answer==='X' ? 'Dbl' : bidHTML(q.answer);
+  seats[3].push(done ? '<span class="bt ans">'+mine+'</span>' : '<span class="bt ask">?</span>');
+  $('bsq').innerHTML =
+    '<i class="bl n">Noord (partner)</i><i class="bl w">W</i><i class="bl o">O</i>'+
+    '<div class="bs n">'+seats[1].join('')+'</div><div class="bs w">'+seats[0].join('')+'</div>'+
+    '<div class="bs o">'+seats[2].join('')+'</div><div class="bs z">'+seats[3].join('')+'</div>';
 }
 function renderBox(){
   if(q.box==='suit'){
@@ -2709,7 +3218,7 @@ function renderBox(){
   }
   if(q.box==='choice'){
     $('box').className = 'box choices';
-    $('box').innerHTML = q.choices.map(c=>'<button class="bid choice" data-bid="'+c.id+'">'+c.text+'</button>').join('');
+    $('box').innerHTML = q.choices.map(c=>'<button class="bid choice" data-bid="'+c.id+'">'+(c.icon ? '<span class="cicon">'+c.icon+'</span>' : '')+'<span class="ctext"><b>'+(c.title || c.text)+'</b>'+(c.sub ? '<small>'+c.sub+'</small>' : '')+'</span></button>').join('');
     return;
   }
   if(q.box==='num'){
@@ -2725,7 +3234,7 @@ function renderBox(){
   for(let lvl=from; lvl<=to; lvl++){
     for(const d of DEN){
       const b = lvl+d;
-      html += '<button class="bid" data-bid="'+b+'"'+(bidRank(b)<=last?' disabled':'')+'>'+bidHTML(b)+'</button>';
+      html += '<button class="bid d-'+d+'" data-bid="'+b+'"'+(bidRank(b)<=last?' disabled':'')+'>'+bidHTML(b)+'</button>';
     }
   }
   if(dbl) html += '<button class="bid dbl" data-bid="X">Doublet</button>';
@@ -2769,9 +3278,14 @@ function renderModes(){
   $('paneB').hidden = tab!=='bieden';
   $('paneS').hidden = tab!=='spelen';
   $('stepsbox').hidden = !here || Object.keys(steps).length<2;
+  $('leadbox').hidden = !here || !(state.conv==='uitkomst' || (state.conv==='spelmix' && state.playSet.includes('uitkomst')));
+  $('sigbox').hidden = !here || !(state.conv==='signaal' || (state.conv==='spelmix' && state.playSet.includes('signaal')));
   $('rkcbox').hidden = !here || (state.conv!=='rkcb' && state.conv!=='alles');
   chips($('steps'), steps, state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
+  chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
+  chips($('sig'), {'rom':'Romeins-Lavinthal', 'std':'Hoog is aan, Lavinthal bij niet bekennen'}, state.sig, 'v');
+  chips($('leadak'), {'A':'De aas', 'K':'De heer'}, state.leadAK, 'v');
   $('menu').textContent = CONVS[state.conv]+(state.step==='alles' ? '' : ' · deel '+state.step)+' ▾';
 }
 function next(fresh){
@@ -2791,19 +3305,34 @@ function next(fresh){
     }else q = newQuestion(state.conv, idx, state.step);
   }
   answered = false;
-  $('prompt').innerHTML = promptText(q);
+  if(q.dummy && !q.dummyLabel && q.only==null && !q.lead) q.lead = leadFor(q);     // jij bent leider: West is al uitgekomen
+  $('prompt').innerHTML = (q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
   renderAuction(false);
+  $('hand').className = 'hand';
   $('hand').innerHTML = handHTML(q.me, q.only, q.box==='lead');
   document.querySelector('.table').classList.toggle('lead', q.box==='lead');
   const play = !!q.dummy;
   document.querySelector('.table').classList.toggle('play', play);
-  $('dummy').hidden = !play;
-  $('mylabel').hidden = !play;
+  const side = q.conv==='doorsterk' || q.conv==='handen';       // de dummy ligt links of rechts: zijn kaarten staan naast de tafel
+  const ns = play && !side;                                     // de dummy ligt tegenover je: boven de tafel
+  document.querySelector('main.table').classList.toggle('ns', ns);
+  document.querySelector('main.table').classList.toggle('sd', side);
+  $('dummy').hidden = !ns;
+  $('qstrip').hidden = !ns;
+  if(ns){
+    const c = q.d.contract || (q.check && q.check.ti!=null ? '4'+SUITS[q.check.ti] : q.conv==='ontwikkel' ? '3SA' : '');
+    $('qstriptext').innerHTML = c ? '<b>'+(/SA$/.test(c) ? c : bidHTML(c))+'</b>' : '';
+    // de uitkomst van West: een kaart die een kwartslag gedraaid links van de tafel ligt, zoals West hem neerlegt
+    $('nW').innerHTML = q.lead ? (RANK[+q.lead.slice(1)] || q.lead.slice(1))+'<span>'+SYM[q.lead[0]]+'</span>' : '';
+    $('nW').className = 'tc'+(q.lead ? ' on k'+q.lead[0] : '');
+  }
+  $('mylabel').hidden = false;
   if(play){
     $('dummyhand').innerHTML = handHTML(q.dummy, q.only);
     $('dummylabel').textContent = q.dummyLabel || 'Dummy (Noord)';
     $('dummy').classList.toggle('right', !!q.dummyRight);
   }
+  renderQTable(null);
   renderBox();
   $('feedback').hidden = true;
   $('box').hidden = false;
@@ -2826,6 +3355,7 @@ function answer(bid){
   const fb = $('feedback');
   fb.className = 'feedback '+(ok?'ok':'no');
   if(q.cards){
+    renderQTable(bid);
     document.querySelectorAll('#hand .card').forEach(c=>{
       c.disabled = true;
       if(c.dataset.card===q.answer || (ok && c.dataset.card===bid)) c.classList.add('right');
@@ -2850,8 +3380,8 @@ function answer(bid){
 }
 
 const THEORY = {openen:['Openen'], stayman:['Opening','Stayman','Uitnodigingen'], jacoby:['Opening','Jacoby','Uitnodigingen'],
-  geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], rkcb:['RKCB'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
-const THEORY_TITLE = {openen:'Openen', stayman:'Stayman', jacoby:'Jacoby', geen:'Bieden na 1SA', doublet:'Informatiedoublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid en Unusual 2SA', unusual:'Upper cuebid en Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', spel:'Een heel spel spelen'};
+  geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], rkcb:['RKCB'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
+const THEORY_TITLE = {openen:'Openen', stayman:'Stayman', jacoby:'Jacoby', geen:'Bieden na 1SA', doublet:'Informatiedoublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid en Unusual 2SA', unusual:'Upper cuebid en Unusual 2SA', rubensohl:'Rubensohl', ballumer:'Ballumer Stayman', na2sa:'Na 2SA van partner', dont:'DONT', muiderberg:'Muiderberg', spel:'Een heel spel spelen'};
 function showTheory(){
   const tconv = state.conv==='spel' ? 'spel' : q.conv;
   const want = THEORY[tconv] || [];
@@ -2877,7 +3407,7 @@ function gHandHTML(seat){
   const myTurn = G && !G.over && !gBusy && G.turn===seat, legal = myTurn ? gLegal(G, seat) : [];
   return SUITS.map((s,si)=>{
     const cs = G.hands[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
-    const btns = cs.map(c=>'<button class="card" data-c="'+c+'"'+(myTurn && legal.includes(c) ? '' : ' disabled')+'>'+(RANK[gRank(c)]||gRank(c))+'</button>').join('');
+    const btns = cs.map(c=>'<button class="card k'+s+'" data-c="'+c+'"'+(myTurn && legal.includes(c) ? '' : ' disabled')+'>'+(RANK[gRank(c)]||gRank(c))+'<span class="pip">'+SYM[s]+'</span></button>').join('');
     return '<li><span class="sym '+s+'">'+SYM[s]+'</span>'+(btns ? '<span class="ranks tap">'+btns+'</span>' : '<span class="void">geen</span>')+'</li>';
   }).join('');
 }
@@ -2899,13 +3429,14 @@ function gRender(){
   let who = '';
   if(!G.over){
     if(gBusy) who = (G.turn===1 || G.turn===3) && gShown.filter(x=>x!==null).length<4 ? SEATNAME[G.turn]+' is aan de beurt' : '';
+    else if(G.played.length===1) who = 'Tel eerst: je hebt '+G.top+' vaste slagen en hebt er '+G.need+' nodig'+(G.top<G.need ? '. Waar haal je de andere '+(G.need-G.top)+' vandaan?' : '.')+' Speel dan uit de dummy.';
     else who = G.turn===0 ? 'Speel een kaart uit de dummy' : 'Speel een kaart uit je hand';
   }
   $('gstatus').innerHTML = '<b>3SA</b> · jij '+G.ns+', zij '+G.ew+' · nodig '+G.need+(who ? '<br>'+who : '');
 }
 function gFinish(){
   const diff = G.ns-G.need;
-  $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. Je begon met '+G.top+' vaste slagen.';
+  $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. Je begon met '+G.top+' vaste slagen. '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
   $('gend').hidden = false;
   gRender();
 }
@@ -2915,7 +3446,15 @@ function gAdvance(){
     gBusy = true; gRender();
     const run = gRun;
     setTimeout(()=>{ if(run!==gRun || state.conv!=='spel') return; const seat = G.turn; gDo(seat, gAI(G, seat)); }, 600);
-  }else{ gBusy = false; gRender(); }
+  }else{
+    gBusy = false; gRender();
+    // alvast uitrekenen terwijl je nadenkt, zodat de vraag er meteen is als je een kaart aantikt
+    const run = gRun, at = G.played.length, seat = G.turn, n = G.hands[seat].length;
+    if(n<=7 && gLegal(G, seat).length>1) setTimeout(()=>{
+      if(run!==gRun || !G || G.over || G.played.length!==at || G.turn!==seat || state.conv!=='spel') return;
+      G.pre = {at, seat, ev:gTipEval(G, seat, n<=5 ? 20 : n===6 ? 10 : 6)};
+    }, 80);
+  }
 }
 function gDo(seat, card){
   const res = gPlay(G, seat, card);
@@ -2937,11 +3476,12 @@ function gStart(){
   $(id).addEventListener('click', e=>{
     const b = e.target.closest('.card'), seat = k===0 ? 0 : 2;
     if(!b || b.disabled || !G || gBusy || G.over || G.turn!==seat) return;
-    const card = +b.dataset.c, tip = gTip(G, seat, card);
+    const card = +b.dataset.c, pre = (G.pre && G.pre.at===G.played.length && G.pre.seat===seat) ? G.pre.ev : null, tip = gTip(G, seat, card, pre);
     if(!tip){ gDo(seat, card); return; }
     gPending = {seat, card};
     gBusy = true; gRender();
-    $('gtiptext').innerHTML = '<b>Tip.</b> '+tip.text;
+    G.tips = (G.tips||0)+1;
+    $('gtiptext').innerHTML = tip.text;
     $('gtip').hidden = false;
   });
 });
@@ -2982,6 +3522,24 @@ $('convs').addEventListener('click', e=>{
   else state.conv = k;
   if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
   save();
+  renderModes(); next(true);
+});
+$('leadlen').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.leadLen = b.dataset.v; LEAD_LEN = state.leadLen; save();
+  renderModes(); next(true);
+});
+$('sig').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.sig = b.dataset.v; state.sigChosen = true; SIG = state.sig; save();
+  renderModes(); next(true);
+});
+$('leadak').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.leadAK = b.dataset.v; LEAD_AK = state.leadAK; save();
   renderModes(); next(true);
 });
 $('rkc').addEventListener('click', e=>{
