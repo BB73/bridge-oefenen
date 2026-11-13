@@ -291,6 +291,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .tabs button{font:inherit;font-family:var(--display);font-weight:700;font-size:1.1rem;height:2.7rem;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .tabs button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
 .hint{margin:0 0 .5rem;font-size:.9rem;color:var(--muted)}
+#convsBA, #convsA{margin-bottom:.2rem}
 #paneB .lbl:first-child{margin-top:0}
 .grp{font-family:var(--display);font-size:1.05rem;margin:1rem 0 .4rem;padding-top:.7rem;border-top:1px solid var(--line)}
 #convs .grp:first-child{border-top:0;padding-top:0;margin-top:.25rem}
@@ -393,21 +394,27 @@ summary{cursor:pointer;font-weight:700}
   <p class="stepl"><b>2</b> Open een groep en kies een oefening</p>
   <div id="convs">
     <div id="paneB">
+      <p class="hint">Zet aan wat jullie spelen: dat is je systeemkaart. De vragen komen door elkaar, en waar je meer fouten maakt krijg je vaker.</p>
+      <nav class="modes conv" id="convsBA" aria-label="Alle biedoefeningen"><button data-conv="biedalles" aria-pressed="false">Standaardkaart: alles door elkaar</button></nav>
       <div class="accitem">
-        <button class="acc" data-acc="convsB1" aria-expanded="false"><span>Basis</span><small></small></button>
-        <nav class="modes conv" id="convsB1" aria-label="Basis van het bieden"></nav>
+        <button class="acc" data-acc="convsB1" aria-expanded="false"><span>Openingen</span><small></small></button>
+        <nav class="modes conv" id="convsB1" aria-label="Openingen"></nav>
       </div>
       <div class="accitem">
-        <button class="acc" data-acc="convsB2" aria-expanded="false"><span>Na een SA-opening van partner</span><small></small></button>
-        <nav class="modes conv" id="convsB2" aria-label="Na 1SA van partner"></nav>
+        <button class="acc" data-acc="convsB2" aria-expanded="false"><span>Ongestoord bieden</span><small></small></button>
+        <nav class="modes conv" id="convsB2" aria-label="Ongestoord bieden"></nav>
       </div>
       <div class="accitem">
-        <button class="acc" data-acc="convsB3" aria-expanded="false"><span>Als de tegenpartij opent</span><small></small></button>
-        <nav class="modes conv" id="convsB3" aria-label="Als de tegenpartij opent"></nav>
+        <button class="acc" data-acc="convsB3" aria-expanded="false"><span>De tegenpartij opent</span><small></small></button>
+        <nav class="modes conv" id="convsB3" aria-label="De tegenpartij opent"></nav>
       </div>
       <div class="accitem">
-        <button class="acc" data-acc="convsB4" aria-expanded="false"><span>Bijzondere openingen en afspraken</span><small></small></button>
-        <nav class="modes conv" id="convsB4" aria-label="Bijzondere openingen en afspraken"></nav>
+        <button class="acc" data-acc="convsB4" aria-expanded="false"><span>Beide partijen bieden</span><small></small></button>
+        <nav class="modes conv" id="convsB4" aria-label="Beide partijen bieden"></nav>
+      </div>
+      <div class="accitem">
+        <button class="acc" data-acc="convsB5" aria-expanded="false"><span>Slembieden</span><small></small></button>
+        <nav class="modes conv" id="convsB5" aria-label="Slembieden"></nav>
       </div>
     </div>
     <div id="paneS">
@@ -542,7 +549,7 @@ summary{cursor:pointer;font-weight:700}
       <h3>Bijbod: partner opent 1 in een kleur</h3>
       <ul>
         <li>0–5 punten: pas. Vanaf 6 punten antwoord je.</li>
-        <li>Partner opent 1<span class="H">♥︎</span> of 1<span class="S">♠︎</span> en jij hebt drie of meer kaarten mee: steun. Met 6–9 punten naar 2, met 10–12 punten en vier troeven naar 3 (uitnodigend), met 13–15 punten naar 4.</li>
+        <li>Partner opent 1<span class="H">♥︎</span> of 1<span class="S">♠︎</span> en jij hebt drie of meer kaarten mee: steun. Met 6–9 punten naar 2, met 10–12 punten en vier troeven naar 3 (uitnodigend), met 13–15 punten naar 4. Omdat er een fit is, tel je hier je distributiepunten mee: doubleton 1, singleton 2, renonce 3.</li>
         <li>Steun met 10–12 punten en maar drie troeven: bied eerst een eigen kleur en steun partner in de volgende ronde.</li>
         <li>Een nieuwe kleur op 1-niveau: vanaf 6 punten met een vierkaart of langer. Een vierkaart hoog sla je niet over.</li>
         <li>Met twee vierkaarten hoog bied je eerst de laagste, met twee vijfkaarten eerst de hoogste.</li>
@@ -619,7 +626,7 @@ summary{cursor:pointer;font-weight:700}
         <li>De sprong (3 in partners kleur) is zwak en preëmptief: tot 9 punten.</li>
         <li>Beide beloven steun en ontkennen een vierkaart hoog. Met een vierkaart hoog bied je die eerst.</li>
         <li>De openaar na de sterke verhoging: 2SA met een evenwichtige hand en 12–14 punten, 3SA met 18–19, en 3 in de kleur met een onevenwichtig minimum.</li>
-        <li>De openaar na de zwakke sprong: pas, tenzij je 18–19 punten evenwichtig hebt; dan 3SA.</li>
+        <li>De openaar na de zwakke sprong telt zijn distributiepunten mee, want er is een grote fit: doubleton 1, singleton 2, renonce 3. Met 17 of meer en een onevenwichtige hand biedt hij 5 in de kleur; met 18–19 punten evenwichtig 3SA; anders pas.</li>
       </ul>
       <p>In de app heb je voor een verhoging steeds vijf kaarten mee.</p>
       <h3>Upper cuebid en Unusual 2SA</h3>
@@ -1022,6 +1029,8 @@ function pickMix(set, recent, since){
   return set[set.length-1];
 }
 let PLAY_SET = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen','signaal'];   // de app zet dit vanuit de instellingen
+// Systeemkaart: welke afspraken staan samen aan? Die bepalen wat andere oefeningen wel en niet mogen vragen.
+const SYS = {muiderberg:false, inverted:false};
 function newQuestion(conv, idx, stepKey){
   if(conv==='spelmix'){ conv = PLAY_SET[rnd(PLAY_SET.length)]; stepKey = 'alles'; }
   if(conv==='alles'){
@@ -1457,7 +1466,7 @@ const O_TARGETS = {
   3:['2C','2C','2N','2N','1sterk','1N']
 };
 function newOQ(stepKey){
-  const list = O_TARGETS[stepKey], want = list[rnd(list.length)];
+  const list = O_TARGETS[stepKey].filter(k=>!(SYS.muiderberg && k==='zwak2')), want = list[rnd(list.length)];      // met Muiderberg geen zwakke twee
   const full = Array.from({length:52},(_,i)=>i);
   let got = null;
   while(!got) got = drawHand(full, h=>{
@@ -1786,11 +1795,14 @@ function explainR(q){
   return t+(q.answer==='pas' ? ' Partners '+B(d.ans)+' is al het eindcontract: pas.' : ' Stop in '+B(q.answer)+'.');
 }
 // ---------- Bijbod: antwoorden op partners opening van 1 in een kleur ----------
+// Distributiepunten: tel je mee zodra er een troeffit is. Doubleton 1, singleton 2, renonce 3.
+function distPts(h){ return h.len.reduce((a,n)=>a+(n===0 ? 3 : n===1 ? 2 : n===2 ? 1 : 0), 0); }
 function respAction(h, open){
   const os = open[1], oi = SI[os], p = h.hcp, [S,H,D,C] = h.len;
   if(p>19 || Math.max(...h.len)>6) return null;
-  if(p<6) return {bid:'pas', kind:'pas'};
-  const out = (bid, kind, suit) => ({bid, kind, suit, n: suit ? h.len[SI[suit]] : 0});
+  const fit = oi<=1 && h.len[oi]>=3 && h.len[oi]<=4, dp = fit ? distPts(h) : 0, tp = p+dp;      // met fit tellen distributiepunten mee
+  if(tp<6) return {bid:'pas', kind:'pas'};
+  const out = (bid, kind, suit) => ({bid, kind, suit, n: suit ? h.len[SI[suit]] : 0, dp, tp});
   // gewoon een nieuwe kleur bieden, zo laag mogelijk (voor handen vanaf 11 punten)
   const natural = () => {
     if(oi<=1){
@@ -1821,13 +1833,13 @@ function respAction(h, open){
     const sup = h.len[oi];
     if(sup>=3){
       if(sup>4) return null;
-      if(p<=9) return out('2'+os, 'steun2', os);
-      if(p<=12){
+      if(tp<=9) return out('2'+os, 'steun2', os);
+      if(tp<=12){
         if(sup===4) return out('3'+os, 'steun3', os);
         const n = natural();                    // drie troeven: eerst een eigen kleur, daarna steunen
         return (n && (n.bid[0]==='1' || p>=11)) ? out(n.bid, 'steunlater', n.suit) : null;
       }
-      return out('4'+os, 'steun4', os);
+      return tp<=15 ? out('4'+os, 'steun4', os) : null;
     }
     const lower = (os==='S' ? [1,2,3] : [2,3]).filter(i=>h.len[i]>=(i===1 ? 5 : 4));
     const L = lower.length ? Math.max(...lower.map(i=>h.len[i])) : 0;
@@ -1868,6 +1880,7 @@ function newBQ(stepKey){
     const hoog = stepKey===1 || stepKey==='1' ? true : stepKey===2 || stepKey==='2' ? false : rnd(2)===1;
     const open = '1'+(hoog ? SUITS[rnd(2)] : SUITS[2+rnd(2)]);
     const list = B_TARGETS[hoog ? 'hoog' : 'laag'], want = list[rnd(list.length)];
+    if(SYS.inverted && want.startsWith('steunlaag')) continue;      // met Inverted minors is de steun in een lage kleur anders
     const full = Array.from({length:52},(_,i)=>i);
     const me = drawHand(full, h=>{ const r = respAction(h,open); return r && r.kind===want ? r : null; }, 4000);
     if(!me) continue;
@@ -1880,15 +1893,16 @@ function newBQ(stepKey){
 function explainB(q){
   const B = bidHTML, a = q.d.act, os = q.d.open[1], p = q.me.hcp;
   const punten = p===1 ? '1 punt' : p+' punten';
+  const act = q.d.act, tot = act.dp ? punten+' en '+act.dp+' distributiepunt'+(act.dp===1 ? '' : 'en')+', samen '+act.tp : punten;
   const NK = ['','','','driekaart','vierkaart','vijfkaart','zeskaart'];
   const N = ['geen','één','twee','drie','vier','vijf','zes'];
   switch(a.kind){
     case 'pas': return 'Met '+punten+' pas je. Voor een antwoord op partners opening heb je minstens 6 punten nodig.';
-    case 'steun2': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+punten+' (6–9) steun je naar 2-niveau: '+B(a.bid)+'.';
-    case 'steun3': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+punten+' (10–12) spring je naar 3-niveau: '+B(a.bid)+'. Dat is uitnodigend.';
-    case 'steunlater': return 'Je hebt drie '+SNAME[os]+' mee en '+punten+': te sterk voor '+B('2'+os)+', maar voor '+B('3'+os)+' heb je vier troeven nodig. Bied eerst je eigen kleur: '+B(a.bid)+'. In de volgende ronde steun je '+SNAME[os]+'; zo weet partner dat je 10–12 punten met drie troeven hebt.';
+    case 'steun2': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+tot+' (6–9) steun je naar 2-niveau: '+B(a.bid)+'.';
+    case 'steun3': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+tot+' (10–12) spring je naar 3-niveau: '+B(a.bid)+'. Dat is uitnodigend.';
+    case 'steunlater': return 'Je hebt drie '+SNAME[os]+' mee en '+tot+': te sterk voor '+B('2'+os)+', maar voor '+B('3'+os)+' heb je vier troeven nodig. Bied eerst je eigen kleur: '+B(a.bid)+'. In de volgende ronde steun je '+SNAME[os]+'; zo weet partner dat je 10–12 punten met drie troeven hebt.';
     case 'sterk': return 'Je hebt '+punten+', maar geen goede eigen vijfkaart voor een sprong. Bied gewoon je kleur zo laag mogelijk: '+B(a.bid)+'. Een nieuwe kleur is forcing, dus partner mag niet passen. Daarna bied je door tot minstens de manche.';
-    case 'steun4': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+punten+' (13–15) is er genoeg voor de manche: bied '+B(a.bid)+'.';
+    case 'steun4': return 'Partner belooft vijf '+SNAME[os]+' en jij hebt er '+N[a.n]+': fit. Met '+tot+' (13–15) is er genoeg voor de manche: bied '+B(a.bid)+'.';
     case 'steunlaag2': return 'Je hebt geen vierkaart hoog, maar wel '+N[a.n]+' '+SNAME[os]+'. Met '+punten+' (6–9) steun je partners kleur naar 2-niveau: '+B(a.bid)+'. In een lage kleur heb je daar een vijfkaart voor nodig, want partner kan er maar drie hebben.';
     case 'steunlaag3': return 'Je hebt geen vierkaart hoog, maar wel '+N[a.n]+' '+SNAME[os]+'. Met '+punten+' (10–12) spring je in partners kleur naar 3-niveau: '+B(a.bid)+'. Dat is uitnodigend.';
     case 'sprong': return 'Je hebt '+punten+' en een goede '+NK[a.n]+' '+SNAME[a.suit]+'. Met 16 of meer punten en een goede eigen kleur spring je in die kleur: '+B(a.bid)+'. Dat is mancheforcing en laat partner weten dat slem mogelijk is.';
@@ -2368,7 +2382,7 @@ function newTRQ(stepKey){
 }
 // ---------- Antwoorden op een 2-opening: de zwakke twee en de sterke 2 klaveren ----------
 function newA2Q(stepKey){
-  const st4 = [1,2,3,4].includes(+stepKey) ? +stepKey : 1+rnd(4);
+  const st4 = [1,2,3,4].includes(+stepKey) ? +stepKey : SYS.muiderberg ? [2,4][rnd(2)] : 1+rnd(4);      // met Muiderberg alleen de sterke 2 klaveren
   if(st4===3) return newA2Q3();
   if(st4===4) return newA2Q4();
   stepKey = st4;
@@ -3466,15 +3480,16 @@ NEWCONV.gambling = sk => { const s = [1,2,3].includes(+sk) ? +sk : 1+rnd(3); ret
 function newIMQ2(){
   const B = bidHTML;
   for(;;){
-    const os = SUITS[2+rnd(2)], oi = SI[os], open = '1'+os, want = ['2N','2N','3m','3m','3N','pas','pas','3Nna3'][rnd(8)];
-    const weak = want==='pas' || want==='3Nna3';
+    const os = SUITS[2+rnd(2)], oi = SI[os], open = '1'+os, want = ['2N','2N','3m','3m','3N','pas','pas','3Nna3','5m','5m'][rnd(10)];
+    const weak = want==='pas' || want==='3Nna3' || want==='5m';
     const me = drawHand(fullDeck(), h=>{
       if(openingBid(h)!==open) return false;
       const p = h.hcp, bal = Math.min(...h.len)>=2 && h.len.filter(x=>x===2).length<=1 && Math.max(...h.len)<=5;
       if(want==='2N') return bal && p>=12 && p<=14;
       if(want==='3N' || want==='3Nna3') return bal && p>=18 && p<=19;
       if(want==='3m') return !bal && p>=12 && p<=15 && h.len[oi]>=4;
-      return p>=12 && p<=17;
+      if(want==='5m') return !bal && p>=12 && p<=17 && p+distPts(h)>=17;
+      return p>=12 && p<=17 && p+distPts(h)<=16;
     }, 60000);
     if(!me) continue;
     const n = drawHand(me.rest, h=>{
@@ -3486,12 +3501,15 @@ function newIMQ2(){
     const p = me.h.hcp, pb = (weak ? '3' : '2')+os, suit = SNAME[os];
     let answer, why;
     if(weak){
-      answer = want==='pas' ? 'pas' : '3N';
-      why = 'Bij Inverted minors is de sprong naar '+B(pb)+' zwak en storend. '+(want==='pas' ? 'Met '+pts(p)+' is er geen manche: pas.' : 'Maar jij hebt '+pts(p)+' en een evenwichtige hand: genoeg om 3SA te proberen.');
+      const dp = distPts(me.h), som = pts(p)+(dp ? ' en '+dp+' distributiepunt'+(dp===1 ? '' : 'en')+' (samen '+(p+dp)+')' : '');
+      answer = want==='pas' ? 'pas' : want==='5m' ? '5'+os : '3N';
+      why = 'Bij Inverted minors is de sprong naar '+B(pb)+' zwak en storend, maar er is wel een grote fit. Tel daarom je distributiepunten mee: doubleton 1, singleton 2, renonce 3. '+(want==='pas' ? 'Je hebt '+som+': minder dan 17, dus geen manche. Pas.'
+        : want==='5m' ? 'Je hebt '+som+': met 17 of meer en een onevenwichtige hand bied je de manche in de kleur, '+B(answer)+'.'
+        : 'Je hebt '+pts(p)+' en een evenwichtige hand: genoeg om 3SA te proberen.');
     }else if(want==='2N'){ answer = '2N'; why = 'Partners '+B(pb)+' is bij Inverted minors de sterke verhoging: 10 of meer punten, forcing. Jij hebt een evenwichtige hand met '+pts(p)+' (minimum): 2SA.'; }
     else if(want==='3N'){ answer = '3N'; why = 'Partners '+B(pb)+' is de sterke verhoging. Jij hebt een evenwichtige hand met '+pts(p)+': te sterk voor 1SA, dus nu 3SA (18–19).'; }
     else { answer = '3'+os; why = 'Partners '+B(pb)+' is de sterke verhoging. Jij hebt '+pts(p)+' en een onevenwichtige hand: herhaal de kleur met '+B(answer)+'. Dat toont een minimum zonder SA-verdeling.'; }
-    return mkQ('inverted', 2, {why, kind:'o-'+want, prompt:'Jullie spelen Inverted minors. Je opende '+B(open)+' en partner biedt '+B(pb)+'. Wat bied je?'}, me.h, n.h, answer, 'open', pb, {start:3, calls:[open,'pas',pb,'pas']});
+    return mkQ('inverted', 2, {why, kind:'o-'+want, prompt:'Jullie spelen Inverted minors. Je opende '+B(open)+' en partner biedt '+B(pb)+'. Wat bied je?'}, me.h, n.h, answer, weak ? 'mid' : 'open', pb, {start:3, calls:[open,'pas',pb,'pas']});
   }
 }
 NEWCONV.inverted = sk => (+sk===2 || (+sk!==1 && rnd(2))) ? newIMQ2() : newIMQ();
@@ -3687,7 +3705,7 @@ function newVQ3(){
 
 const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
-const CONVS = {openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix'};
+const CONVS = {openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Systeemkaart'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E', 3:'Openaar na 2SA (zwakke twee)', 4:'Openaar na 2♣\uFE0E – 2♦\uFE0E'};
 const STEPS_DO = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt DONT', 3:'Na je doublet'};
 const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA'};
@@ -3716,28 +3734,37 @@ const STEPS_G2 = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden'};
 const STEPS_TS = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt het'};
 const STEPS_BY = {doublet:STEPS_DBL, openen:STEPS_OPEN, volgbod:STEPS_VOLG, wet:STEPS_WET, rkcb:STEPS_RKC, bijbod:STEPS_BIJ, uitkomst:STEPS_UIT,
   doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_GA, muiderberg:STEPS_MU, uppercue:STEPS_TS, unusual:STEPS_TS,
-  negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_ONE, ontwikkel:STEPS_ONE, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE,
+  negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_ONE, ontwikkel:STEPS_ONE, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
   signaal:STEPS_SG, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
 const CONV_GROUPS = {
-  convsB1:['openen','bijbod','volgbod','wet','alles'],
-  convsB2:['stayman','jacoby','beide','ballumer','rubensohl','na2sa'],
-  convsB3:['doublet','negatief','uppercue','unusual','dont'],
-  convsB4:['antw2','muiderberg','gambling','inverted','twee1','rkcb'],
+  convsB1:['openen','muiderberg','gambling'],
+  convsB2:['bijbod','twee1','inverted','stayman','ballumer','jacoby','na2sa','antw2'],
+  convsB3:['volgbod','doublet','uppercue','unusual','dont'],
+  convsB4:['negatief','wet','rubensohl'],
+  convsB5:['rkcb'],
   convsL:['tellen','ontwikkel','verliezers','troef','snijden','spel'],
   convsT:['uitkomst','doorsterk','handen','signaal']
 };
 const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','uitkomst','doorsterk','handen','signaal'];
+const BIDDABLE = ['openen','muiderberg','gambling','bijbod','twee1','inverted','stayman','ballumer','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb'];
+const BID_DEFAULT = ['openen','bijbod','stayman','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb'];   // de standaardkaart
+const BID_EXCL = [['stayman','ballumer'], ['bijbod','twee1']];       // afspraken die je niet tegelijk kunt spelen
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
 let openAcc = null;                 // het groepje dat in het keuzescherm openstaat
-const groupOf = c => c==='spelmix' ? 'convsL' : (Object.keys(CONV_GROUPS).find(id=>CONV_GROUPS[id].includes(c)) || null);
+const groupOf = c => c==='spelmix' ? 'convsL' : c==='biedmix' ? 'convsB1' : (Object.keys(CONV_GROUPS).find(id=>CONV_GROUPS[id].includes(c)) || null);
 const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman'};
 let state = {conv:'beide', step:'alles', stats:{}, streak:0, rkc:'1430'};
 try{
   const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
   if(saved && typeof saved==='object') state = Object.assign(state, saved);
 }catch(e){}
-if(!CONVS[state.conv]) state.conv = 'beide';
+if(!Array.isArray(state.bidSet)) state.bidSet = [];
+state.bidSet = state.bidSet.filter(k=>BIDDABLE.includes(k));
+if(state.conv==='alles'){ state.bidSet = BID_DEFAULT.slice(); state.conv = 'biedmix'; }                 // oude keuzes omzetten naar een systeemkaart
+if(state.conv==='beide'){ state.bidSet = ['stayman','jacoby']; state.conv = 'biedmix'; }
+if(state.conv==='biedmix' && state.bidSet.length<2) state.conv = state.bidSet[0] || 'stayman';
+if(!CONVS[state.conv]) state.conv = 'stayman';
 if(!STEPS[state.step]) state.step = 'alles';
 if(!state.stats || typeof state.stats!=='object') state.stats = {};
 if(state.rkc!=='1430' && state.rkc!=='3014') state.rkc = '1430';
@@ -3867,7 +3894,7 @@ function renderBox(){
     return;
   }
   const last = q.last ? bidRank(q.last) : -1, dbl = q.box==='dbl';
-  const from = q.box==='slam' ? 5 : q.box==='std' ? 2 : 1, to = q.box==='slam' ? 7 : dbl ? 3 : 4;
+  const from = q.box==='slam' ? 5 : q.box==='mid' ? 3 : q.box==='std' ? 2 : 1, to = q.box==='slam' ? 7 : q.box==='mid' ? 5 : dbl ? 3 : 4;
   let html = '';
   for(let lvl=from; lvl<=to; lvl++){
     for(const d of DEN){
@@ -3906,6 +3933,11 @@ function renderModes(){
   $('mixinfo').textContent = extra.length ? 'Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.' : '';
   $('mixinfo').hidden = !extra.length;
   // bij Spelen kun je meerdere oefeningen tegelijk aanzetten
+  const chosenB = state.conv==='biedmix' ? state.bidSet : [state.conv];
+  document.querySelectorAll('#paneB button[data-conv]').forEach(b=>{
+    const k = b.dataset.conv;
+    b.setAttribute('aria-pressed', String(k==='biedalles' ? (state.conv==='biedmix' && BID_DEFAULT.every(x=>state.bidSet.includes(x)) && state.bidSet.length===BID_DEFAULT.length) : chosenB.includes(k)));
+  });
   const chosen = state.conv==='spelmix' ? state.playSet : [state.conv];
   document.querySelectorAll('#paneS button[data-conv]').forEach(b=>{
     const k = b.dataset.conv;
@@ -3916,12 +3948,13 @@ function renderModes(){
     const id = btn.dataset.acc, open = id===openAcc;
     btn.setAttribute('aria-expanded', String(open));
     $(id).hidden = !open;
-    const names = CONV_GROUPS[id].filter(k=>state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k))).map(k=>k==='alles' ? 'Alles door elkaar' : CONVS[k]);
+    const names = CONV_GROUPS[id].filter(k=>state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k)) || (state.conv==='biedmix' && state.bidSet.includes(k))).map(k=>CONVS[k]);
     btn.querySelector('small').textContent = names.length ? '✓ '+names.join(', ') : '';
     btn.parentElement.classList.toggle('open', open);
     btn.parentElement.classList.toggle('has', names.length>0);
   });
-  const selGroup = groupOf(state.conv), anchor = (state.conv==='spelmix' && openAcc) ? openAcc : selGroup;
+  const isMix = state.conv==='spelmix' || state.conv==='biedmix';
+  const selGroup = groupOf(state.conv), anchor = (isMix && openAcc) ? openAcc : selGroup;
   if(anchor && $(anchor)) $(anchor).after($('optbox'));
   const here = tabOf(state.conv)===tab;          // de gekozen oefening hoort bij het zichtbare tabblad
   document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.tab===tab)));
@@ -3931,11 +3964,12 @@ function renderModes(){
   const anyOpt = () => ['stepsbox','leadbox','sigbox','muidbox','w2box','rkcbox'].some(id=>!$(id).hidden);
   $('leadbox').hidden = !here || !(state.conv==='uitkomst' || (state.conv==='spelmix' && state.playSet.includes('uitkomst')));
   $('sigbox').hidden = !here || !(state.conv==='signaal' || (state.conv==='spelmix' && state.playSet.includes('signaal')));
-  $('muidbox').hidden = !here || state.conv!=='muiderberg';
-  $('w2box').hidden = !here || state.conv!=='antw2';
-  $('rkcbox').hidden = !here || (state.conv!=='rkcb' && state.conv!=='alles');
+  const inCard = k => state.conv===k || (state.conv==='biedmix' && state.bidSet.includes(k));
+  $('muidbox').hidden = !here || !inCard('muiderberg');
+  $('w2box').hidden = !here || !inCard('antw2') || (state.conv==='biedmix' && state.bidSet.includes('muiderberg'));
+  $('rkcbox').hidden = !here || !inCard('rkcb');
   $('optbox').hidden = !here || !anyOpt() || anchor!==openAcc;
-  $('close').textContent = 'Aan de slag: '+(state.conv==='alles' ? 'bieden, alles door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' oefeningen door elkaar' : CONVS[state.conv]);
+  $('close').textContent = 'Aan de slag: '+(state.conv==='biedmix' ? 'systeemkaart met '+state.bidSet.length+' afspraken' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' oefeningen door elkaar' : CONVS[state.conv]);
   chips($('steps'), steps, state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
   chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
@@ -3955,11 +3989,14 @@ function next(fresh){
     q = q.conv==='doublet' ? makeDQ(q.d, 3) : makeQ(q.d, q.idx+2);
   }else{
     const idx = state.step==='alles' ? 1+Math.floor(Math.random()*4) : +state.step;
-    if(state.conv==='spelmix'){
-      const k = pickMix(state.playSet, state.mixRecent, state.mixSince);
-      state.playSet.forEach(x=>{ state.mixSince[x] = x===k ? 0 : (state.mixSince[x]||0)+1; });
+    const card = state.conv==='spelmix' ? state.playSet : state.conv==='biedmix' ? state.bidSet : null;
+    SYS.muiderberg = state.conv==='biedmix' && state.bidSet.includes('muiderberg');
+    SYS.inverted = state.conv==='biedmix' && state.bidSet.includes('inverted');
+    if(card){
+      const k = pickMix(card, state.mixRecent, state.mixSince);
+      card.forEach(x=>{ state.mixSince[x] = x===k ? 0 : (state.mixSince[x]||0)+1; });
       save();
-      q = newQuestion(k, idx, 'alles');
+      q = newQuestion(k, 1+Math.floor(Math.random()*4), 'alles');
     }else q = newQuestion(state.conv, idx, state.step);
   }
   answered = false;
@@ -4003,8 +4040,9 @@ function answer(bid){
   s[1]++; if(ok) s[0]++;
   state.stats[q.conv] = s;
   state.streak = ok ? state.streak+1 : 0;
-  if(state.conv==='spelmix'){
-    const r = state.mixRecent[q.conv] || (state.mixRecent[q.conv] = []);
+  if(state.conv==='spelmix' || state.conv==='biedmix'){
+    const mk = state.conv==='biedmix' ? (state.bidSet.includes(q.conv) ? q.conv : q.conv==='geen' ? (state.bidSet.find(x=>x==='stayman' || x==='jacoby' || x==='ballumer') || q.conv) : q.conv) : q.conv;
+    const r = state.mixRecent[mk] || (state.mixRecent[mk] = []);
     r.push(ok ? 0 : 1);
     if(r.length>10) r.shift();
   }
@@ -4179,6 +4217,18 @@ $('convs').addEventListener('click', e=>{
     if(set.includes(k)){ if(set.length>1) set = set.filter(x=>x!==k); } else set.push(k);
     state.playSet = set;
     state.conv = set.length===1 ? set[0] : 'spelmix';
+  }
+  else if(k==='biedalles'){ state.bidSet = BID_DEFAULT.slice(); state.conv = 'biedmix'; }
+  else if(BIDDABLE.includes(k)){
+    // de systeemkaart: aan- of uitzetten; minstens één afspraak blijft aan, en alternatieven sluiten elkaar uit
+    let set = state.conv==='biedmix' ? state.bidSet.slice() : BIDDABLE.includes(state.conv) ? [state.conv] : [];
+    if(set.includes(k)){ if(set.length>1) set = set.filter(x=>x!==k); }
+    else{
+      BID_EXCL.forEach(pair=>{ if(pair.includes(k)) set = set.filter(x=>!pair.includes(x)); });
+      set.push(k);
+    }
+    state.bidSet = BIDDABLE.filter(x=>set.includes(x));
+    state.conv = state.bidSet.length===1 ? state.bidSet[0] : 'biedmix';
   }
   else state.conv = k;
   if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
