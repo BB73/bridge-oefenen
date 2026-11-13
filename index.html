@@ -250,7 +250,8 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--felt);outline
 .feedback{flex:1;min-height:0;display:flex;flex-direction:column;border-radius:10px;padding:.55rem .7rem .6rem;border:1px solid var(--line)}
 .feedback.ok{border-color:var(--good);background:var(--good-bg)}
 .feedback.no{border-color:var(--bad);background:var(--bad-bg)}
-.fbtext{flex:1;min-height:0;overflow-y:auto}
+.fbtext{flex:1 1 auto;min-height:0;overflow-y:auto}
+.feedback{flex:1 1 auto}
 .verdict{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0 0 .2rem}
 .why{margin:0 0 .4rem;font-size:.92rem;line-height:1.35}
 .partner{border-top:1px solid var(--line);padding-top:.35rem}
@@ -259,11 +260,11 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--felt);outline
 dialog{border:1px solid var(--line);border-radius:14px;padding:0;background:var(--surface);color:var(--ink);width:min(32rem,94vw);max-height:92vh;max-height:92dvh;overflow:hidden}
 dialog[open]{display:flex;flex-direction:column}
 .dhead{flex:none;padding:.9rem 1rem 0}
-.dbody{flex:1;min-height:0;overflow-y:auto;padding:0 1rem .6rem}
+.dbody{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 1rem .6rem}
 .dfoot{flex:none;padding:.6rem 1rem .9rem;border-top:1px solid var(--line)}
 .dfoot .close{margin-top:0}
 #theory{padding:1rem}
-#theory .rules{flex:1;min-height:0;overflow-y:auto}
+#theory .rules{flex:1 1 auto;min-height:0;overflow-y:auto}
 #theory .close{flex:none;margin-top:.75rem}
 .stepl{margin:.5rem 0 .35rem;font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.4rem}
 .stepl b{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border-radius:50%;background:var(--ink);color:var(--bg);font-size:.75rem}
