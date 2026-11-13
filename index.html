@@ -156,7 +156,7 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .sq .tc.on.kD, .sq .tc.on.kD span{color:#C85F0A}
 .sq .tc.on.kC, .sq .tc.on.kC span{color:#1E6A4E}
 .bwrap{flex:none;display:flex;justify-content:center}
-.bsq{flex:none;width:clamp(9.5rem,27dvh,12.5rem);height:clamp(9.5rem,27dvh,12.5rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:1.2rem 1.3rem .7rem}
+.bsq{flex:none;width:clamp(7rem,20dvh,11rem);height:clamp(7rem,20dvh,11rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:1.1rem 1.3rem .4rem}
 .bs{position:absolute;display:flex;gap:.22rem;align-items:center;justify-content:center}
 .bs.n{top:.5rem;left:50%;transform:translateX(-50%)}
 .bs.z{bottom:.5rem;left:50%;transform:translateX(-50%)}
@@ -239,7 +239,7 @@ main.table > .action{flex:1 0 auto}
 
 .action{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;margin-top:.5rem}
 .box{display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem}
-.bid{font:inherit;font-weight:700;font-size:1.1rem;height:2.6rem;height:clamp(2.4rem,6.5dvh,3.2rem);padding:0;border-radius:8px;border:1px solid var(--line);border-top:4px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.bid{font:inherit;font-weight:700;font-size:1.1rem;height:2.4rem;height:clamp(2.1rem,5.4dvh,3rem);padding:0;border-radius:8px;border:1px solid var(--line);border-top:4px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 .bid:hover:not(:disabled){border-color:var(--ink);border-top-color:var(--ink)}
 .bid:disabled{cursor:default;opacity:.38}
 .bid.dbl{grid-column:span 2;background:var(--bad);border-color:var(--bad);color:var(--surface);border-top-width:1px}
@@ -274,7 +274,7 @@ dialog[open]{display:flex;flex-direction:column}
 .accitem nav{padding:.65rem .75rem .2rem}
 .accitem #optbox{margin:.5rem .75rem .75rem}
 .acc{display:flex;align-items:center;gap:.5rem;width:100%;font:inherit;font-weight:700;font-size:1rem;text-align:left;padding:.75rem .8rem;background:none;border:0;color:var(--ink);cursor:pointer}
-.acc span{flex:none}
+.acc span{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .acc small{flex:1;min-width:0;font-weight:400;font-size:.85rem;color:var(--felt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .acc::after{content:"▾";flex:none;color:var(--muted)}
 .acc[aria-expanded="true"]::after{content:"▴"}
@@ -3474,7 +3474,7 @@ function next(fresh){
     $('nW').innerHTML = q.lead ? (RANK[+q.lead.slice(1)] || q.lead.slice(1))+'<span>'+SYM[q.lead[0]]+'</span>' : '';
     $('nW').className = 'tc'+(q.lead ? ' on k'+q.lead[0] : '');
   }
-  $('mylabel').hidden = false;
+  $('mylabel').hidden = !!q.auction;      // bij het bieden wijst het vraagteken op de tafel je plek al aan
   if(play){
     $('dummyhand').innerHTML = handHTML(q.dummy, q.only);
     $('dummylabel').textContent = q.dummyLabel || 'Dummy (Noord)';
