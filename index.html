@@ -362,8 +362,10 @@ summary{cursor:pointer;font-weight:700}
   </div>
   <div id="leadbox">
     <h3 class="grp">Jullie uitkomstafspraken</h3>
-    <p class="lbl">Klein uitkomen uit een lange kleur</p>
-    <nav class="modes" id="leadlen" aria-label="Kies vierde van boven of derde en vijfde"></nav>
+    <p class="lbl">Klein uitkomen tegen SA</p>
+    <nav class="modes" id="leadlen" aria-label="Kies de afspraak tegen SA"></nav>
+    <p class="lbl">Klein uitkomen tegen een troefcontract</p>
+    <nav class="modes" id="leadsuit" aria-label="Kies de afspraak tegen een troefcontract"></nav>
     <p class="lbl">Uitkomen van aas-heer</p>
     <nav class="modes" id="leadak" aria-label="Kies aas of heer van aas-heer"></nav>
   </div>
@@ -718,7 +720,7 @@ summary{cursor:pointer;font-weight:700}
         <li>Heeft partner een kleur geboden, kom dan uit in partners kleur. Met twee kaarten de hoogste; met drie of meer en een plaatje erbij een kleintje.</li>
         <li>Tegen SA zonder bod van partner: kom uit in je langste kleur.</li>
         <li>Heb je daar een serie van drie hoge kaarten (H V B, V B 10) of bijna een serie (H V 10), kom dan uit met de hoogste van de serie.</li>
-        <li>Zonder serie kom je klein uit. Welke kleine kaart hangt af van jullie afspraak: de vierde van boven, of derde of vijfde (uit een even aantal de derde van boven, uit een oneven aantal de laagste). Je stelt dit in bij het kiezen van de oefening.</li>
+        <li>Zonder serie kom je klein uit. Welke kleine kaart hangt af van jullie afspraak: de vierde van boven, of derde of vijfde (uit een even aantal de derde van boven, uit een oneven aantal de laagste). Je stelt dit in bij het kiezen van de oefening, apart voor SA-contracten en voor troefcontracten.</li>
         <li>Tegen een troefcontract is een serie van twee hoge kaarten al genoeg: de heer van H V, de vrouw van V B. Van A H kom je uit met de aas of met de heer, afhankelijk van jullie afspraak; ook dat stel je in.</li>
         <li>Tegen een troefcontract met een singleton en kleine troeven: kom uit met de singleton en hoop op een aftroever.</li>
         <li>Tegen een troefcontract kom je nooit klein uit onder een aas vandaan.</li>
@@ -1898,6 +1900,7 @@ function newSQ(){
 // ---------- Spelen: de uitkomstkaart ----------
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
 // Uitkomstafspraken, in te stellen door de speler
+let LEAD_SA = '4', LEAD_SUIT = '4';   // de afspraak tegen SA en tegen een troefcontract kan verschillen
 let LEAD_LEN = '4';      // '4' = vierde van boven, '35' = derde uit een even aantal, laagste uit een oneven aantal
 let LEAD_AK = 'A';       // van aas-heer: 'A' = de aas, 'K' = de heer
 function leadLowIdx(n){ return LEAD_LEN==='35' ? (n%2===0 ? 2 : n-1) : (n>=4 ? 3 : n-1); }
@@ -1915,6 +1918,7 @@ function newUQ(stepKey){
   const NM = r => ({14:'aas',13:'heer',12:'vrouw',11:'boer'})[r] || String(r);
   const DE = r => (r>=11 ? 'de '+NM(r) : 'de '+r);
   const sa = stepKey===1 || stepKey==='1' ? true : stepKey===2 || stepKey==='2' ? false : rnd(2)===1;
+  LEAD_LEN = sa ? LEAD_SA : LEAD_SUIT;      // de afspraak die bij dit contract hoort
   const kind = sa ? ['serie','serie','vierde','vierde','partner'][rnd(5)] : ['tserie','tserie','single','single','tpartner'][rnd(5)];
   const order = shuffle([0,1,2,3]);            // willekeurige toewijzing van kleuren
   const hold = [[],[],[],[]];
@@ -3113,7 +3117,8 @@ if(!['4','35','rom'].includes(state.leadLen)) state.leadLen = '4';
 if(!state.sigChosen || (state.sig!=='std' && state.sig!=='rom')) state.sig = 'rom';     // Romeins-Lavinthal is de standaard, tot je zelf iets anders kiest
 SIG = state.sig;
 if(state.leadAK!=='A' && state.leadAK!=='K') state.leadAK = 'A';
-LEAD_LEN = state.leadLen; LEAD_AK = state.leadAK;
+if(!['4','35','rom'].includes(state.leadSuit)) state.leadSuit = state.leadLen;
+LEAD_SA = state.leadLen; LEAD_SUIT = state.leadSuit; LEAD_AK = state.leadAK;
 if(!Array.isArray(state.playSet)) state.playSet = [];
 if(!state.mixRecent || typeof state.mixRecent!=='object') state.mixRecent = {};
 if(!state.mixSince || typeof state.mixSince!=='object') state.mixSince = {};
@@ -3284,6 +3289,7 @@ function renderModes(){
   chips($('steps'), steps, state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
   chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
+  chips($('leadsuit'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadSuit, 'v');
   chips($('sig'), {'rom':'Romeins-Lavinthal', 'std':'Hoog is aan, Lavinthal bij niet bekennen'}, state.sig, 'v');
   chips($('leadak'), {'A':'De aas', 'K':'De heer'}, state.leadAK, 'v');
   $('menu').textContent = CONVS[state.conv]+(state.step==='alles' ? '' : ' · deel '+state.step)+' ▾';
@@ -3527,13 +3533,19 @@ $('convs').addEventListener('click', e=>{
 $('leadlen').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
-  state.leadLen = b.dataset.v; LEAD_LEN = state.leadLen; save();
+  state.leadLen = b.dataset.v; LEAD_SA = state.leadLen; save();
   renderModes(); next(true);
 });
 $('sig').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
   state.sig = b.dataset.v; state.sigChosen = true; SIG = state.sig; save();
+  renderModes(); next(true);
+});
+$('leadsuit').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  state.leadSuit = b.dataset.v; LEAD_SUIT = state.leadSuit; save();
   renderModes(); next(true);
 });
 $('leadak').addEventListener('click', e=>{
