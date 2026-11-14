@@ -302,6 +302,18 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .modes button{font:inherit;font-size:.95rem;padding:.45rem .8rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .modes.conv button{font-weight:700}
+.subh{flex:0 0 100%;font-size:.74rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.subset{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:.4rem;padding:.1rem 0 .45rem}
+.subset[hidden]{display:none}
+.subset .subh{margin-top:.2rem}
+.subset .subh:first-child{margin-top:0}
+.modes .subacc{flex:0 0 100%;display:flex;align-items:center;gap:.5rem;font-size:.9rem;font-weight:700;text-align:left;padding:.5rem .7rem;border-radius:9px;border:1px solid var(--line);background:color-mix(in srgb, var(--ink) 4%, transparent);color:var(--ink)}
+.modes .subacc span{flex:none}
+.modes .subacc small{flex:1;min-width:0;font-weight:400;font-size:.82rem;color:var(--felt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modes .subacc::after{content:"▾";flex:none;color:var(--muted)}
+.modes .subacc[aria-expanded="true"]::after{content:"▴"}
+.modes .subacc[aria-expanded="true"]{border-color:var(--felt)}
+.modes .subacc.has{border-color:var(--felt)}
 .modes.conv button[aria-pressed="true"]{background:var(--felt);border-color:var(--felt);color:var(--on-felt)}
 .scorebox{margin:.9rem 0 0;font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .reset{font:inherit;font-size:.9rem;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
@@ -392,7 +404,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
   </div>
   <div class="dbody" id="dbody">
-  <p class="stepl"><b>2</b> Open een groep en kies een oefening</p>
+  <p class="stepl"><b>2</b> Open een groep, dan een subgroep, en kies</p>
   <div id="convs">
     <div id="paneB">
       <p class="hint">Zet aan wat jullie spelen: dat is je systeemkaart. De vragen komen door elkaar, en waar je meer fouten maakt krijg je vaker.</p>
@@ -1217,11 +1229,11 @@ function newQuestion(conv, idx, stepKey){
   if(conv==='signaal') return newSGQ(stepKey);
   if(conv==='troef') return newTRQ(stepKey);
   if(conv==='verliezers') return newVLQ();
-  if(conv==='ontwikkel') return newOWQ();
+  if(conv==='ontwikkel') return newOWQ(stepKey);
   if(conv==='handen') return newHQ(stepKey);
   if(conv==='doorsterk') return newDSQ(stepKey);
   if(conv==='uitkomst') return newUQ(stepKey);
-  if(conv==='snijden') return newSQ();
+  if(conv==='snijden') return newSQ(stepKey);
   if(NEWCONV[conv]) return NEWCONV[conv](stepKey);
   if(conv==='negatief') return (+stepKey===2 || (+stepKey!==1 && rnd(3)===0)) ? newNQ2() : newNQ();
   if(conv==='twee1') return (+stepKey===3 || (![1,2].includes(+stepKey) && rnd(3)===0)) ? new21Q3() : new21Q(stepKey);
@@ -2237,8 +2249,9 @@ const S_TEMPLATES = [
    shorts:['aas slaan','vrouw voorspelen en laten lopen','naar de vrouw spelen'], odds:n=>[pShort(n,1), 0.5, 0],
    why:()=>'Hier mag je een honneur voorspelen, omdat je de boer en de 10 erachter hebt. Zit de heer vóór de aas, dan maak je alle drie de slagen: legt de tegenstander de heer, dan neem je de aas, en legt hij klein, dan loopt de vrouw door.'}
 ];
-function newSQ(){
-  const t = S_TEMPLATES[rnd(S_TEMPLATES.length)], si = rnd(4);
+function newSQ(sk){
+  const pool = +sk===1 ? [0,3,4,6] : +sk===2 ? [1,5] : +sk===3 ? [2] : null;
+  const t = S_TEMPLATES[pool ? pool[rnd(pool.length)] : rnd(S_TEMPLATES.length)], si = rnd(4);
   const nx = t.xs[0]+rnd(t.xs[1]-t.xs[0]+1), ny = t.ys[0]+rnd(t.ys[1]-t.ys[0]+1);
   const small = [2,3,4,5,6,7,8,9].filter(r=>!t.x.includes(r) && !t.y.includes(r));
   for(let i=small.length-1;i>0;i--){ const j = rnd(i+1); const z = small[i]; small[i] = small[j]; small[j] = z; }
@@ -2451,10 +2464,10 @@ function newHQ(stepKey){
           partner:null, answer, box:'lead', last:null, auction:null, hasNext:false};
 }
 // ---------- Spelen: slagen ontwikkelen in een SA-contract ----------
-function newOWQ(){
+function newOWQ(sk){
   const pick = (n, pool) => { const p = pool.slice(); for(let i=p.length-1;i>0;i--){ const j = rnd(i+1); const z = p[i]; p[i] = p[j]; p[j] = z; } return p.slice(0,n); };
   for(;;){
-    const len = rnd(4)===0;                          // true: lengteslagen in een kleur met aas en heer
+    const len = +sk===2 ? true : +sk===1 ? false : rnd(4)===0;                          // true: lengteslagen in een kleur met aas en heer
     const T = len ? {h:[14,13], n:[5,3], extra:2, kind:'lengte'}
                   : [{h:[13,12,11], n:[4,3], extra:2, kind:'HVB'}, {h:[12,11,10,9], n:[4,3], extra:2, kind:'VB109'}, {h:[13,12,11,10], n:[4,3], extra:3, kind:'HVB10'}][rnd(3)];
     // de drie andere kleuren: alleen vaste slagen, niets te ontwikkelen
@@ -4345,8 +4358,8 @@ function newOPH(){
   return pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. West komt uit met '+lead+' en blijft de kleur spelen. De aas is je enige stop, en je moet later nog een keer van slag. Wanneer neem je de aas?', opts, times, why);
 }
 // ---------- De gevaarlijke hand ----------
-function newGEV(){
-  const si = 1+rnd(3), pNorth = rnd(2)===1, dangerWest = rnd(2)===1;
+function newGEV(sk){
+  const si = 1+rnd(3), pNorth = rnd(2)===1, dangerWest = +sk===1 ? true : +sk===2 ? false : rnd(2)===1;
   const sm = pxSmall(3, []), P = [14,11,10,sm[0]], Q = [13,sm[1],sm[2]];
   const pName = pNorth ? 'de dummy' : 'je hand', qName = pNorth ? 'je hand' : 'de dummy';
   const loseA = pNorth ? 'Oost' : 'West', loseB = pNorth ? 'West' : 'Oost', safe = dangerWest ? 'Oost' : 'West';
@@ -4360,8 +4373,8 @@ function newGEV(){
   return pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why);
 }
 // ---------- Entrees en deblokkeren ----------
-function newENT(){
-  const si = rnd(4), t = rnd(4), longNorth = t===3 ? true : rnd(2)===1;
+function newENT(sk){
+  const si = rnd(4), t = +sk===1 ? rnd(3) : +sk===2 ? 3 : rnd(4), longNorth = t===3 ? true : rnd(2)===1;
   const lName = longNorth ? 'de dummy' : 'je hand', sName = longNorth ? 'je hand' : 'de dummy';
   let L, S, opts, good = 0, why, prompt = 'Je speelt 3SA en wilt alle slagen in deze kleur maken. '+(longNorth ? 'De dummy' : 'Je hand')+' heeft geen andere entree. Welke kaart speel je eerst?';
   if(t===3){
@@ -4381,8 +4394,8 @@ function newENT(){
   return pxQ('entree', si, longNorth ? L : S, longNorth ? S : L, prompt, opts, good, why);
 }
 // ---------- Veiligheidsspel ----------
-function newVEI(){
-  const si = rnd(4), t = rnd(2), pNorth = rnd(2)===1, sm = pxSmall(5, [9]);
+function newVEI(sk){
+  const si = rnd(4), t = +sk===1 ? 0 : +sk===2 ? 1 : rnd(2), pNorth = rnd(2)===1, sm = pxSmall(5, [9]);
   const pName = pNorth ? 'de dummy' : 'je hand', qName = pNorth ? 'je hand' : 'de dummy';
   let P, Q, opts, why;
   if(t===0){
@@ -4397,8 +4410,8 @@ function newVEI(){
   return pxQ('veilig', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 6SA en mag in deze kleur geen slag verliezen. De tegenpartij heeft de boer, de tien en twee kleintjes. Welke kaart speel je eerst?', opts, 0, why, {contract6:true});
 }
 // ---------- Tegenspel: honneur op honneur ----------
-function newDEK(){
-  const si = rnd(4), t = rnd(4), sm = pxSmall(4, []);
+function newDEK(sk){
+  const si = rnd(4), t = +sk===1 ? rnd(2) : +sk===2 ? 2+rnd(2) : rnd(4), sm = pxSmall(4, []);
   const T = [[[12,sm[0],sm[1]], 12, 13, true], [[12,11,sm[0]], 12, 13, false], [[11,sm[0],sm[1]], 11, 12, true], [[11,10,sm[0]], 11, 12, false]][t];
   const dummy = T[0], lead = T[1], mineH = T[2], cover = T[3], mine = [mineH, sm[2], sm[3]];
   const opts = [{title:'Dekken', sub:'Leg de '+PXN[mineH]+' op de '+PXN[lead]}, {title:'Klein bijspelen', sub:'Bewaar je '+PXN[mineH]}];
@@ -4407,9 +4420,9 @@ function newDEK(){
   return pxQ('dekken', si, dummy, mine, 'West speelt 3SA. De dummy ligt rechts van je en speelt '+cardHTML(SUITS[si]+lead)+' voor. Wat doe je?', opts, cover ? 0 : 1, why, {sideDummy:true, dummyRight:true});
 }
 // ---------- Tegenspel: de regel van 11 ----------
-function newR11(){
+function newR11(sk){
   for(;;){
-    const si = rnd(4), N = 5+rnd(4), right = rnd(2)===1;
+    const si = rnd(4), N = 5+rnd(4), right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1);
     const hi = []; for(let r=N+1;r<=14;r++) hi.push(r);
     for(let i=hi.length-1;i>0;i--){ const j = rnd(i+1); const z = hi[i]; hi[i] = hi[j]; hi[j] = z; }
     const rest = hi.slice(3);                                   // partner houdt drie hogere kaarten
@@ -4434,8 +4447,8 @@ function pxN(conv, si, north, south, prompt, ans, why, contract, extra){
 }
 const pxCard = r => 'De '+(PXN[r] || r);
 // ---------- Dubbele snit ----------
-function newDSN(){
-  const si = rnd(4), pNorth = rnd(2)===1, t = rnd(2), sm = pxSmall(4, []);
+function newDSN(sk){
+  const si = rnd(4), pNorth = rnd(2)===1, t = +sk===1 ? 0 : +sk===2 ? 1 : rnd(2), sm = pxSmall(4, []);
   const pName = pNorth ? 'de dummy' : 'je hand', qName = pNorth ? 'je hand' : 'de dummy';
   const P = t===0 ? [14,11,10] : [14,11,9], Q = [sm[0],sm[1],sm[2]], lowc = t===0 ? 'tien' : 'negen';
   const opts = [{title:'Twee keer snijden', sub:'Klein uit '+qName+' naar de '+lowc+'; later nog een keer klein naar de boer'},
@@ -4456,8 +4469,8 @@ function newCMB(){
   return pxQ('combi', 2, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA en hebt nog één slag nodig. Komt de tegenpartij aan slag, dan ga je down. In klaveren heb je '+other+'. Dit zijn je ruiten. Wat doe je eerst?', opts, 0, why);
 }
 // ---------- Lange kleur vrijspelen ----------
-function newVRY(){
-  const si = 1+rnd(3), t = rnd(3), sm = pxSmall(5, []);
+function newVRY(sk){
+  const si = 1+rnd(3), t = +sk===1 ? 0 : +sk===2 ? 1+rnd(2) : rnd(3), sm = pxSmall(5, []);
   let N, S, split, ans, why;
   if(t===0){
     N = [14,sm[0],sm[1],sm[2],sm[3]]; S = [sm[4]]; split = '4-3'; ans = 3;
@@ -4493,8 +4506,8 @@ function newTLH(){
   }
 }
 // ---------- Tegenspel: partners kleur terugspelen ----------
-function newTRG(){
-  const si = rnd(4), three = rnd(2)===1, right = rnd(2)===1;
+function newTRG(sk){
+  const si = rnd(4), three = rnd(2)===1, right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1);
   const pool = [10,9,8,7,6,4,3,2]; for(let i=pool.length-1;i>0;i--){ const j = rnd(i+1); const z = pool[i]; pool[i] = pool[j]; pool[j] = z; }
   const mine = pool.slice(0, three ? 3 : 2).sort((a,b)=>b-a), dummy = pool.slice(3,5).sort((a,b)=>b-a);
   const good = three ? mine.length-1 : 0;
@@ -4504,8 +4517,8 @@ function newTRG(){
   return pxQ('terug', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA. Partner kwam in deze kleur uit en jij nam de slag met de aas. Dit heb je nog over. Welke kaart speel je terug?', opts, good, why, {sideDummy:true, dummyRight:right});
 }
 // ---------- Tegenspel: lengtesignaal ----------
-function newLEN(){
-  const si = rnd(4), three = rnd(2)===1, right = rnd(2)===1;
+function newLEN(sk){
+  const si = rnd(4), three = rnd(2)===1, right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1);
   const pool = [9,8,7,6,5,4,3,2]; for(let i=pool.length-1;i>0;i--){ const j = rnd(i+1); const z = pool[i]; pool[i] = pool[j]; pool[j] = z; }
   const mine = pool.slice(0, three ? 3 : 2).sort((a,b)=>b-a), dummy = [13,12,11,10].concat(pool.slice(3,4));
   const opts = mine.map(r=>({title:pxCard(r), sub: r===mine[0] ? 'Je hoogste' : r===mine[mine.length-1] ? 'Je laagste' : 'Je middelste'}));
@@ -4514,16 +4527,16 @@ function newLEN(){
   return pxQ('lengte', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur naar de dummy, die verder geen entree heeft. Partner heeft waarschijnlijk de aas. Welke kaart speel je bij om je lengte te tonen?', opts, three ? mine.length-1 : 0, why, {sideDummy:true, dummyRight:right});
 }
 // ---------- Tegenspel: je aas ophouden ----------
-function newOPT(){
-  const si = rnd(4), right = rnd(2)===1, pTwo = rnd(2)===1, sm = pxSmall(3, []);
+function newOPT(sk){
+  const si = rnd(4), right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1), pTwo = rnd(2)===1, sm = pxSmall(3, []);
   const dummy = [13,12,11,10,sm[0]], mine = [14,sm[1],sm[2]], decl = pTwo ? 3 : 2;
   const opts = [{title:'In de eerste ronde', sub:'Neem meteen'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Neem je aas precies op het moment dat de leider zijn laatste kaart in de kleur speelt; dan kan hij de dummy niet meer bereiken. De dummy heeft vijf kaarten en jij drie. Partner toont '+(pTwo ? 'met hoog-laag een even aantal: twee' : 'met laag-hoog een oneven aantal: drie')+'. Dan heeft de leider er 13 − 5 − 3 − '+(pTwo ? 2 : 3)+' = '+decl+'. Neem dus in de '+(decl===3 ? 'derde' : 'tweede')+' ronde.';
   return pxQ('ophoudt', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur. De dummy heeft verder geen entree. Partner speelt '+(pTwo ? 'eerst een hoge en dan een lage kaart' : 'eerst een lage en dan een hogere kaart')+'. Wanneer neem je je aas?', opts, decl-1, why, {sideDummy:true, dummyRight:right});
 }
 // ---------- Tegenspel: actief of passief ----------
-function newACT(){
-  const right = rnd(2)===1, active = rnd(2)===1, sm = pxSmall(5, []);
+function newACT(sk){
+  const right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1), active = rnd(2)===1, sm = pxSmall(5, []);
   const dummy = active ? [14,13,12,sm[0],sm[1]] : [sm[0],sm[1],sm[2]], mine = active ? [sm[2],sm[3]] : [sm[3],sm[4]];
   const opts = [{title:'Actief', sub:'Speel een nieuwe kleur aan, ook vanaf een honneur: je slagen moeten nu komen'},
                 {title:'Passief', sub:'Speel veilig terug en laat de leider zelf zijn kleuren aanspelen'}];
@@ -4569,25 +4582,44 @@ const STEPS_BA = {alles:'Alles door elkaar', 1:'Antwoord van de openaar', 2:'Ver
 const STEPS_MU = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden', 3:'Vervolg van de openaar'};
 const STEPS_G2 = {alles:'Alles door elkaar', 1:'Openen', 2:'Antwoorden'};
 const STEPS_TS = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt het'};
+const STEPS_SN = {alles:'Alles door elkaar', 1:'Snit op de heer', 2:'Naar een honneur toe spelen', 3:'De vrouw zoeken'};
+const STEPS_OW = {alles:'Alles door elkaar', 1:'Honneurs uitspelen', 2:'Lengteslagen'};
+const STEPS_GV = {alles:'Alles door elkaar', 1:'West is gevaarlijk', 2:'Oost is gevaarlijk'};
+const STEPS_EN = {alles:'Alles door elkaar', 1:'Deblokkeren', 2:'Eerst een slag afgeven'};
+const STEPS_VE = {alles:'Alles door elkaar', 1:'Aas-negen tegenover heer-vrouw', 2:'Vrouw tegenover aas-heer-negen'};
+const STEPS_DN = {alles:'Alles door elkaar', 1:'Aas-boer-tien', 2:'Aas-boer-negen'};
+const STEPS_VR = {alles:'Alles door elkaar', 1:'Aas vijfde tegenover een singleton', 2:'Aas-heer vijfde tegenover een doubleton'};
+const STEPS_DK = {alles:'Alles door elkaar', 1:'De vrouw wordt voorgespeeld', 2:'De boer wordt voorgespeeld'};
 const STEPS_BY = {doublet:STEPS_DBL, openen:STEPS_ONE, volgbod:STEPS_VOLG, wet:STEPS_WET, rkcb:STEPS_RKC, bijbod:STEPS_BIJ, uitkomst:STEPS_UIT,
   doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_GA, muiderberg:STEPS_MU, uppercue:STEPS_TS, unusual:STEPS_TS,
-  negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_ONE, ontwikkel:STEPS_ONE, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
-  signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_ONE, entree:STEPS_ONE, veilig:STEPS_ONE, dekken:STEPS_ONE, regel11:STEPS_ONE, dsnit:STEPS_ONE, combi:STEPS_ONE, vrij:STEPS_ONE, weggooi:STEPS_ONE, telhand:STEPS_ONE, terug:STEPS_ONE, lengte:STEPS_ONE, ophoudt:STEPS_ONE, actief:STEPS_ONE, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
-const CONV_GROUPS = {
-  convsB1:['openen','muiderberg','gambling','reverse'],
-  convsB2:['bijbod','twee1','inverted','checkback','nmf','vierde','stayman','ballumer','jacoby','texas','na2sa','antw2','multi'],
-  convsB3:['volgbod','doublet','uppercue','unusual','dont','landy','mlandy'],
-  convsB4:['negatief','nadbl','wet','rubensohl'],
-  convsB5:['rkcb','blackwood'],
-  convsL:['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','spel'],
-  convsT:['uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief']
+  negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_SN, ontwikkel:STEPS_OW, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
+  signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_GV, entree:STEPS_EN, veilig:STEPS_VE, dekken:STEPS_DK, regel11:STEPS_DS, dsnit:STEPS_DN, combi:STEPS_ONE, vrij:STEPS_VR, weggooi:STEPS_ONE, telhand:STEPS_ONE, terug:STEPS_DS, lengte:STEPS_DS, ophoudt:STEPS_DS, actief:STEPS_DS, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
+const CONV_SUBS = {
+  convsB1:[['Natuurlijk en sterk',['openen']], ['Zwak en preëmptief',['muiderberg','multi','gambling']]],
+  convsB2:[['Antwoorden op 1 in een kleur',['bijbod','twee1','inverted']], ['Herbieding van de openaar',['reverse']], ['Na 1SA of 2SA',['stayman','ballumer','jacoby','texas','na2sa']], ['Na een 2-opening',['antw2']], ['Vierde kleur en checkback',['vierde','checkback','nmf']]],
+  convsB3:[['Volgbiedingen',['volgbod']], ['Informatiedoublet',['doublet']], ['Tweekleurenspelen',['uppercue','unusual']], ['Tegen hun 1SA',['dont','landy','mlandy']]],
+  convsB4:[['Na hun volgbod',['negatief','wet','rubensohl']], ['Na hun doublet',['nadbl']]],
+  convsB5:[['Azen vragen',['rkcb','blackwood']]],
+  convsL:[['Plannen en tellen',[['Je eigen kaarten',['tellen','verliezers']], ['De tegenpartij',['telhand']]]],
+           ['Slagen maken',[['Met honneurs',['ontwikkel','snijden','dsnit']], ['Met lengte',['vrij']], ['De volgorde',['combi']]]],
+           ['Troef',['troef','weggooi']],
+           ['Verbindingen en veiligheid',[['Tegen hun lange kleur',['ophouden','gevaar']], ['Oversteken',['entree']], ['Op zeker spelen',['veilig']]]],
+           ['Heel spel',['spel']]],
+  convsT:[['Uitkomen',[['Jij komt uit',['uitkomst']], ['Partner komt uit',['regel11']]]],
+          ['Signalen',[['Aan of af',['signaal']], ['Lengte',['lengte']]]],
+          ['Welke kaart leg je?',[['Vuistregels',['handen','dekken']], ['Wachten',['ophoudt']]]],
+          ['Welke kleur speel je?',[['Doorspelen',['doorsterk','terug']], ['Van kleur wisselen',['actief']]]]]
 };
+const CONV_GROUPS = {};
+const subKeys = s => [].concat(...s[1].map(x=>Array.isArray(x) ? x[1] : [x]));      // een subgroep kan zelf weer in stukjes verdeeld zijn
+for(const id in CONV_SUBS) CONV_GROUPS[id] = [].concat(...CONV_SUBS[id].map(subKeys));
 const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];
 const BIDDABLE = ['openen','muiderberg','gambling','bijbod','twee1','inverted','stayman','ballumer','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb','blackwood','checkback','nadbl','landy','mlandy','multi','nmf','vierde','reverse','texas'];
 const BID_DEFAULT = ['openen','bijbod','stayman','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb'];   // de standaardkaart
 const BID_EXCL = [['stayman','ballumer'], ['bijbod','twee1'], ['rkcb','blackwood'], ['dont','landy','mlandy'], ['checkback','nmf']];       // afspraken die je niet tegelijk kunt spelen
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
+let openSub = 0, subFor = null;      // de subgroep die binnen het open groepje openstaat
 let openAcc = null;                 // het groepje dat in het keuzescherm openstaat
 const groupOf = c => c==='spelmix' ? 'convsL' : c==='biedmix' ? 'convsB1' : (Object.keys(CONV_GROUPS).find(id=>CONV_GROUPS[id].includes(c)) || null);
 const STAT_LABEL = {stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers'};
@@ -4786,9 +4818,19 @@ function renderModes(){
   const steps = STEPS_BY[state.conv] || STEPS;
   if(!steps[state.step]) state.step = 'alles';
   for(const id in CONV_GROUPS){
-    const items = {};
-    CONV_GROUPS[id].forEach(k=>{ items[k] = k==='alles' ? 'Alles door elkaar' : CONVS[k]; });
-    chips($(id), items, state.conv, 'conv');
+    const subs = CONV_SUBS[id], isOn = k => state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k)) || (state.conv==='biedmix' && state.bidSet.includes(k));
+    if(id===openAcc && subFor!==id){            // groep net geopend: klap de subgroep met je keuze open
+      subFor = id;
+      const i = subs.findIndex(s=>subKeys(s).some(isOn));
+      openSub = i<0 ? 0 : i;
+    }
+    const chip = k => '<button data-conv="'+k+'" aria-pressed="'+(state.conv===k)+'">'+CONVS[k]+'</button>';
+    $(id).innerHTML = subs.map((s,i)=>{
+      const open = subs.length<2 || (id===openAcc && i===openSub), on = subKeys(s).filter(isOn).map(k=>CONVS[k]);
+      const head = subs.length<2 ? '<span class="subh">'+s[0]+'</span>'
+        : '<button class="subacc'+(on.length ? ' has' : '')+'" data-sub="'+i+'" aria-expanded="'+open+'"><span>'+s[0]+'</span><small>'+(on.length ? '✓ '+on.join(', ') : '')+'</small></button>';
+      return head+'<div class="subset"'+(open ? '' : ' hidden')+'>'+s[1].map(x=>Array.isArray(x) ? '<span class="subh">'+x[0]+'</span>'+x[1].map(chip).join('') : chip(x)).join('')+'</div>';
+    }).join('');
   }
   const extra = state.conv==='spelmix' ? state.playSet.filter(k=>{ const r = state.mixRecent[k]; return r && r.length>=3 && r.reduce((a,b)=>a+b,0)/r.length>=0.4; }) : [];
   $('mixinfo').textContent = extra.length ? 'Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.' : '';
@@ -5079,9 +5121,11 @@ $('box').addEventListener('click', e=>{
 $('convs').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
-  if(b.closest('#optbox')) return;                 // keuzes bij de oefening hebben hun eigen afhandeling
-  if(b.dataset.acc){ openAcc = openAcc===b.dataset.acc ? null : b.dataset.acc; renderModes(); return; }      // een groepje open- of dichtklappen
+  if(!b.isConnected || b.closest('#optbox')) return;                 // keuzes bij de oefening hebben hun eigen afhandeling (en zijn dan al opnieuw getekend)
+  if(b.dataset.acc){ openAcc = openAcc===b.dataset.acc ? null : b.dataset.acc; subFor = null; renderModes(); return; }
+  if(b.dataset.sub){ openSub = openSub===+b.dataset.sub ? -1 : +b.dataset.sub; renderModes(); return; }      // een subgroep open- of dichtklappen      // een groepje open- of dichtklappen
   const k = b.dataset.conv;
+  if(!k) return;
   if(k==='spelalles'){ state.playSet = PLAYABLE.slice(); state.conv = 'spelmix'; }
   else if(PLAYABLE.includes(k)){
     // aan- of uitzetten; minstens één oefening blijft aan
@@ -5106,6 +5150,7 @@ $('convs').addEventListener('click', e=>{
   if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
   save();
   renderModes(); next(true);
+  if(!$('optbox').hidden && $('optbox').scrollIntoView) $('optbox').scrollIntoView({block:'nearest'});      // de keuzes bij deze oefening in beeld brengen
 });
 $('leadlen').addEventListener('click', e=>{
   const b = e.target.closest('button');
