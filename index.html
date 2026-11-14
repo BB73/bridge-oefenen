@@ -85,6 +85,7 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .box.suits .bid{font-size:1.6rem;height:3.2rem;border-top-width:1px}
 #dummy.right{margin-left:auto;width:max-content;min-width:50%}
 .odds{display:block;margin-top:.35rem;font-weight:700}
+.acetip{display:block;margin:0 0 .5rem;padding:.45rem .6rem;border-left:4px solid currentColor;border-radius:6px;background:color-mix(in srgb, currentColor 9%, transparent)}
 .gstatus{flex:none;margin:0 0 .35rem;font-size:.9rem;line-height:1.3;min-height:2.4em}
 .ghand li{font-size:1.1rem;line-height:1;margin:.22rem 0;align-items:center;gap:.5rem}
 .ghand .card{font-size:1rem;min-width:1.75rem;height:clamp(1.9rem,4.6dvh,2.4rem);padding:0 .2rem}
@@ -140,6 +141,13 @@ h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;m
 .table.sd .qside{width:auto;min-width:4.4rem}
 .table.sd .qside .hand{margin:0;width:max-content}
 .table.sd .qsq{width:5.8rem;height:5.8rem}
+.table.sd.one .qsq{width:clamp(6.2rem,16dvh,7.6rem);height:clamp(6.2rem,16dvh,7.6rem)}
+.table.sd.one .hand:not(.small) li{font-size:clamp(1.35rem,3.4dvh,1.7rem);gap:.6rem}
+.table.sd.one .hand .sym{width:1.6rem;font-size:1.6rem}
+.table.sd.one.long .qsq{width:6.2rem;height:6.2rem}
+.table.sd.one.long .qside .hand li{font-size:1.25rem;gap:.4rem}
+.table.sd.one.long .qside .hand .sym{width:1.25rem;font-size:1.25rem}
+@media (min-width:760px){ .table.sd.one.long .qsq{width:clamp(6.2rem,16dvh,7.6rem);height:clamp(6.2rem,16dvh,7.6rem)} .table.sd.one.long .qside .hand li{font-size:clamp(1.35rem,3.4dvh,1.7rem)} }
 .nsq{flex:none;align-self:center;width:clamp(4.6rem,14dvh,7.2rem);height:clamp(4.6rem,14dvh,7.2rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:.25rem 0 .45rem}
 .nsq i{position:absolute;font-style:normal;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6)}
 .nsq .pN{top:.35rem;left:50%;transform:translateX(-50%)}
@@ -228,6 +236,7 @@ main.table > .action{flex:1 0 auto}
 .bid.choice{height:auto;min-height:2.9rem;padding:.5rem .75rem;text-align:left;font-size:.95rem;font-weight:400;line-height:1.25;border-top-width:1px}
 .box.nums{grid-template-columns:repeat(7,1fr)}
 .box.nums .bid{border-top-width:1px}
+.numlbl{grid-column:1/-1;margin:0 0 .1rem;font-size:.9rem;font-weight:700;color:var(--muted)}
 .hand li{display:flex;align-items:baseline;gap:.75rem;font-size:1.35rem;font-size:clamp(1.2rem,3.5dvh,1.7rem);font-weight:700;line-height:1.3}
 .hand .sym{width:1.4rem;text-align:center;flex:none}
 .hand .ranks{letter-spacing:.14em}
@@ -2208,7 +2217,7 @@ const S_TEMPLATES = [
      'Sla eerst de aas en speel daarna de vrouw',
      'Speel klein vanuit {Y} naar de vrouw in {X}',
      'Speel de vrouw voor vanuit {X}'],
-   shorts:['aas slaan','naar de vrouw spelen','vrouw voorspelen'], odds:n=>[pShort(n,1), 0.5, 0],
+   shorts:['aas slaan','naar de vrouw spelen','vrouw voorspelen'], tips:{0:'Een aas loopt niet weg: die maakt later ook nog zijn slag. Speel je hem meteen, dan is je vork weg en maakt de heer altijd een slag. Snijd eerst.'}, odds:n=>[pShort(n,1), 0.5, 0],
    why:()=>'Speel naar de vrouw toe. Zit de heer vóór de vrouw, en dat is de helft van de keren, dan maakt de vrouw een slag en heb je er twee. Sla je eerst de aas, dan maakt de vrouw alleen een slag als de heer kaal zit.'},
   {x:[13], y:[], xs:[1,2], ys:[2,3], good:1, goal:'één slag', opts:[
      'Speel de heer voor vanuit {X}',
@@ -2220,7 +2229,7 @@ const S_TEMPLATES = [
      'Sla de aas en de heer en hoop dat de vrouw valt',
      'Speel klein vanuit {Y} naar de boer in {X}',
      'Speel de boer voor vanuit {X}'],
-   shorts:['aas en heer slaan','naar de boer spelen','boer voorspelen'], odds:n=>[pShort(n,2), 0.5, 0],
+   shorts:['aas en heer slaan','naar de boer spelen','boer voorspelen'], tips:{0:'Met acht kaarten of minder valt de vrouw meestal niet onder aas en heer. Sla hooguit één hoge kaart en snijd daarna naar de boer.'}, odds:n=>[pShort(n,2), 0.5, 0],
    why:t=>t>=9
      ? 'Je mist de vrouw en hebt samen negen kaarten. De tegenpartij heeft er maar vier; zitten die 2-2, dan valt de vrouw onder aas en heer. Vuistregel: met acht snijden, met negen slaan.'
      : 'Je mist de vrouw en hebt samen '+t+' kaarten. Dan valt de vrouw meestal niet onder aas en heer. Snijd: speel naar de boer toe en hoop dat de vrouw ervoor zit. Vuistregel: met acht snijden, met negen slaan.'},
@@ -2228,13 +2237,13 @@ const S_TEMPLATES = [
      'Speel de vrouw voor vanuit {X}',
      'Speel klein vanuit {Y} naar de vrouw in {X}',
      'Sla de aas en speel daarna de vrouw voor'],
-   shorts:['vrouw voorspelen','naar de vrouw spelen','aas slaan'], odds:n=>[0, 0.5, pShort(n,1)],
+   shorts:['vrouw voorspelen','naar de vrouw spelen','aas slaan'], tips:{2:'Een aas loopt niet weg: die maakt later ook nog zijn slag. Speel eerst klein naar de vrouw; zit de heer goed, dan heb je twee slagen.'}, odds:n=>[0, 0.5, pShort(n,1)],
    why:()=>'Speel naar de vrouw toe. Zit de heer vóór de vrouw, dan maakt de vrouw een slag. De vrouw voorspelen helpt niet: de heer gaat erop en je hebt de boer niet om daarvan te profiteren.'},
   {x:[14,12,11], y:[], xs:[0,1], ys:[3,3], good:1, goal:'drie slagen', opts:[
      'Sla de aas en speel daarna de vrouw',
      'Speel klein vanuit {Y} naar de boer in {X}, en doe dat later nog een keer',
      'Speel de vrouw voor vanuit {X}'],
-   shorts:['aas slaan','twee keer naar de boer spelen','vrouw voorspelen'], odds:n=>[pShort(n,1), 0.5, 0],
+   shorts:['aas slaan','twee keer naar de boer spelen','vrouw voorspelen'], tips:{0:'Een aas loopt niet weg: die maakt later ook nog zijn slag. Speel je hem meteen, dan is je vork weg en maakt de heer altijd een slag. Snijd eerst.'}, odds:n=>[pShort(n,1), 0.5, 0],
    why:()=>'Snijd op de heer door naar de boer toe te spelen. Houdt de boer, ga dan terug naar de andere hand en snijd nog een keer. Zit de heer goed, dan maak je drie slagen.'},
   {x:[13,12], y:[], xs:[1,1], ys:[3,3], good:1, goal:'twee slagen', opts:[
      'Speel de heer voor vanuit {X}',
@@ -2246,7 +2255,7 @@ const S_TEMPLATES = [
      'Sla eerst de aas',
      'Speel de vrouw voor vanuit {Y} en laat haar doorlopen als de heer niet komt',
      'Speel klein vanuit {X} naar de vrouw in {Y}'],
-   shorts:['aas slaan','vrouw voorspelen en laten lopen','naar de vrouw spelen'], odds:n=>[pShort(n,1), 0.5, 0],
+   shorts:['aas slaan','vrouw voorspelen en laten lopen','naar de vrouw spelen'], tips:{0:'Een aas loopt niet weg. Sla je hem meteen, dan maakt de heer altijd een slag. Laat eerst de vrouw lopen: de aas ligt klaar als de heer verschijnt.'}, odds:n=>[pShort(n,1), 0.5, 0],
    why:()=>'Hier mag je een honneur voorspelen, omdat je de boer en de 10 erachter hebt. Zit de heer vóór de aas, dan maak je alle drie de slagen: legt de tegenstander de heer, dan neem je de aas, en legt hij klein, dan loopt de vrouw door.'}
 ];
 function newSQ(sk){
@@ -2263,7 +2272,7 @@ function newSQ(sk){
   const good = typeof t.good==='function' ? t.good(total) : t.good;
   const order = [0,1,2];
   for(let i=2;i>0;i--){ const j = rnd(i+1); const z = order[i]; order[i] = order[j]; order[j] = z; }
-  const choices = order.map(i=>({id:'c'+i, text:fill(t.opts[i]), title:t.shorts[i].charAt(0).toUpperCase()+t.shorts[i].slice(1), sub:fill(t.opts[i])}));
+  const choices = order.map(i=>({id:'c'+i, text:fill(t.opts[i]), title:t.shorts[i].charAt(0).toUpperCase()+t.shorts[i].slice(1), sub:fill(t.opts[i]), tip:t.tips && t.tips[i]}));
   const odds = t.odds(13-total);
   const pct = p => p<=0 ? '0%' : p<0.01 ? 'minder dan 1%' : Math.round(p*100)+'%';
   const ranked = [0,1,2].sort((a,b)=>odds[b]-odds[a]);
@@ -4345,7 +4354,7 @@ function pxQ(conv, si, north, south, prompt, opts, good, why, extra){
   const order = opts.map((_,i)=>i);
   for(let i=order.length-1;i>0;i--){ const j = rnd(i+1); const z = order[i]; order[i] = order[j]; order[j] = z; }
   return Object.assign({conv, idx:1, d:{why, prompt, goodText:opts[good].title, contract:'3SA'}, me:pxHand(si, south), dummy:pxHand(si, north), partner:null, only:si,
-    answer:'c'+good, choices:order.map(i=>({id:'c'+i, text:opts[i].title, title:opts[i].title, sub:opts[i].sub})), box:'choice', last:null, auction:null, hasNext:false}, extra || {});
+    answer:'c'+good, choices:order.map(i=>({id:'c'+i, text:opts[i].title, title:opts[i].title, sub:opts[i].sub, tip:opts[i].tip})), box:'choice', last:null, auction:null, hasNext:false}, extra || {});
 }
 const PXN = {14:'aas', 13:'heer', 12:'vrouw', 11:'boer', 10:'tien'};
 // ---------- Ophouden ----------
@@ -4353,7 +4362,7 @@ function newOPH(){
   const si = rnd(4), six = rnd(2)===1, aceSouth = rnd(3)>0;
   const sm = pxSmall(5, []), withA = [14, sm[0], sm[1]], other = six ? [sm[2], sm[3], sm[4]] : [sm[2], sm[3]];
   const total = 3+other.length, times = 7-total, lead = cardHTML(SUITS[si]+13);
-  const opts = [{title:'Meteen', sub:'Neem de eerste slag met de aas'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
+  const opts = [{title:'Meteen', sub:'Neem de eerste slag met de aas', tip:'De aas is je enige stop. Neem je hem meteen, dan heeft Oost nog een kaart in de kleur om naar West terug te spelen. Wacht tot Oost er geen meer heeft.'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Regel van 7: tel je kaarten in deze kleur bij elkaar op en trek dat af van 7. Je hebt er samen '+total+', dus 7 − '+total+' = '+times+': zo vaak houd je de aas op. Heeft West een vijfkaart, dan heeft Oost daarna geen kaart meer in de kleur. Komt Oost later aan slag, dan kan hij partners vrije kaarten niet bereiken.';
   return pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. West komt uit met '+lead+' en blijft de kleur spelen. De aas is je enige stop, en je moet later nog een keer van slag. Wanneer neem je de aas?', opts, times, why);
 }
@@ -4365,7 +4374,7 @@ function newGEV(sk){
   const loseA = pNorth ? 'Oost' : 'West', loseB = pNorth ? 'West' : 'Oost', safe = dangerWest ? 'Oost' : 'West';
   const opts = [{title:'Naar de boer snijden', sub:'Speel klein vanuit '+qName+' naar de boer in '+pName},
                 {title:'De boer laten doorlopen', sub:'Speel de boer voor vanuit '+pName+' en leg klein in '+qName},
-                {title:'Aas en heer slaan', sub:'Hoop dat de vrouw valt'}];
+                {title:'Aas en heer slaan', sub:'Hoop dat de vrouw valt', tip:'Aas en heer slaan werkt alleen als de vrouw toevallig valt. Valt ze niet, dan komt misschien de gevaarlijke hand aan slag. Met de snit naar de veilige kant kan er niets misgaan.'}];
   const good = loseA===safe ? 0 : 1;
   const reden = dangerWest ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.'
     : 'Je hebt in schoppen nog heer en een kleintje. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
@@ -4380,7 +4389,7 @@ function newENT(sk){
   if(t===3){
     const sm = pxSmall(5, []); L = [14,13,sm[0],sm[1],sm[2]]; S = [sm[3],sm[4]];
     prompt = 'Je speelt 3SA en hebt vier slagen in deze kleur nodig. De dummy heeft geen andere entree. Hoe begin je?';
-    opts = [{title:'Eerst een slag afgeven', sub:'Speel de eerste ronde klein van beide kanten'}, {title:'Aas en heer slaan', sub:'En daarna een kleintje'}, {title:'Aas slaan, dan klein', sub:'De heer bewaar je'}];
+    opts = [{title:'Eerst een slag afgeven', sub:'Speel de eerste ronde klein van beide kanten'}, {title:'Aas en heer slaan', sub:'En daarna een kleintje', tip:'Sla je de hoge kaarten eerst, dan heb je straks geen kleintje meer om naar de dummy over te steken. Geef eerst de slag af die je toch kwijt bent.'}, {title:'Aas slaan, dan klein', sub:'De heer bewaar je', tip:'Sla je de hoge kaarten eerst, dan heb je straks geen kleintje meer om naar de dummy over te steken. Geef eerst de slag af die je toch kwijt bent.'}];
     why = 'Je moet hoe dan ook één slag in de kleur afgeven. Doe dat meteen, nu je nog een kleintje in je hand hebt om terug te komen. Daarna speel je naar aas en heer, en bij een 3-3-verdeling zijn de laatste twee kaarten vrij. Sla je eerst aas en heer, dan heb je geen kaart meer om de dummy te bereiken.';
   }else{
     const sm = pxSmall(4, []);
@@ -4388,7 +4397,7 @@ function newENT(sk){
     else if(t===1){ S = [14,sm[0]]; L = [13,12,11,sm[1],sm[2]]; }
     else { S = [13,12,sm[0]]; L = [14,11,sm[1],sm[2],sm[3]]; }
     const hi = PXN[S[0]], lt = PXN[L[0]];
-    opts = [{title:'De '+hi+' uit '+sName, sub:'De hoge kaart van de korte kant eerst'}, {title:'De '+lt+' uit '+lName, sub:'Begin bij de lange kant'}, {title:'Klein uit '+sName, sub:'Naar de '+lt+' in '+lName}];
+    opts = [{title:'De '+hi+' uit '+sName, sub:'De hoge kaart van de korte kant eerst'}, {title:'De '+lt+' uit '+lName, sub:'Begin bij de lange kant', tip: lt==='aas' ? 'Die aas heb je straks nodig om bij de lange kleur te komen. Speel eerst de hoge kaarten van de korte kant, anders blokkeert de kleur.' : undefined}, {title:'Klein uit '+sName, sub:'Naar de '+lt+' in '+lName}];
     why = 'Speel de hoge kaarten van de korte kant eerst. Begin met de '+hi+' uit '+sName+(t===2 ? ', daarna de vrouw' : '')+', en steek dan met je kleintje over naar '+lName+'. Begin je bij de lange kant, dan blijft de '+hi+' aan het eind alleen over: de kleur blokkeert en de rest van '+lName+' is onbereikbaar.';
   }
   return pxQ('entree', si, longNorth ? L : S, longNorth ? S : L, prompt, opts, good, why);
@@ -4400,12 +4409,12 @@ function newVEI(sk){
   let P, Q, opts, why;
   if(t===0){
     P = [14,9,sm[0],sm[1]]; Q = [13,12,sm[2],sm[3],sm[4]];
-    opts = [{title:'Eerst de heer', sub:'Uit '+qName+': de kant met twee honneurs'}, {title:'Eerst de aas', sub:'Uit '+pName}, {title:'Klein naar de 9', sub:'Meteen snijden'}];
-    why = 'Begin met een honneur van de kant die er twee heeft. Bekent iedereen, dan is er niets aan de hand. Bekent er één niet, dan weet je waar boer en tien zitten, en ligt aas-negen nog klaar om over de boer en tien heen te snijden. Begin je met de aas, dan is die kans weg en verlies je een slag.';
+    opts = [{title:'Eerst de heer', sub:'Uit '+qName+': de kant met twee honneurs'}, {title:'Eerst de aas', sub:'Uit '+pName, tip:'Met de aas haal je je vork aas-negen uit elkaar. Begin met een honneur die je kunt missen en bewaar de aas tot je weet hoe de kleur zit.'}, {title:'Klein naar de 9', sub:'Meteen snijden'}];
+    why = 'Je kunt maar naar één kant snijden: alleen aas-negen vormt een vork. Die moet je dus heel laten. Begin met een honneur van de kant die er twee heeft. Bekent iedereen, dan is er niets aan de hand. Heeft de speler vóór de aas-negen alle vier, dan zie je dat nu, en speel je twee keer door hem heen naar aas-negen: je verliest geen slag. Begin je met de aas, dan is de vork weg en verlies je een slag. Zit de vier aan de andere kant, dan is er niets aan te doen: daar heb je geen negen om mee te snijden.';
   }else{
     P = [12,sm[0],sm[1],sm[2]]; Q = [14,13,9,sm[3],sm[4]];
-    opts = [{title:'Eerst de vrouw', sub:'Uit '+pName+': bewaar aas, heer en 9 bij elkaar'}, {title:'Eerst de aas', sub:'Uit '+qName}, {title:'Klein naar de 9', sub:'Meteen snijden'}];
-    why = 'Bewaar aas, heer en negen bij elkaar en begin met de losse vrouw. Bekent er één niet, dan kun je twee keer door boer en tien heen spelen: de 10 neem je met de heer, de boer met de aas, en de negen is vrij. Begin je met de aas, dan houd je heer-negen over en verlies je een slag aan de boer.';
+    opts = [{title:'Eerst de vrouw', sub:'Uit '+pName+': bewaar aas, heer en 9 bij elkaar'}, {title:'Eerst de aas', sub:'Uit '+qName, tip:'Met de aas haal je je vork aas-heer-negen uit elkaar. Begin met de losse vrouw en bewaar de aas tot je weet hoe de kleur zit.'}, {title:'Klein naar de 9', sub:'Meteen snijden'}];
+    why = 'Je kunt maar naar één kant snijden: alleen aas-heer-negen vormt een vork, de kant van de vrouw heeft geen negen of tien. Die vork moet je dus heel laten: begin met de losse vrouw. Heeft de speler vóór aas-heer-negen alle vier, dan zie je dat nu, en speel je twee keer door hem heen: de 10 neem je met de heer, de boer met de aas, en de negen is vrij. Begin je met de aas, dan houd je heer-negen over en verlies je een slag aan de boer. Zit de vier achter aas-heer-negen, dan is er niets aan te doen, wat je ook speelt.';
   }
   return pxQ('veilig', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 6SA en mag in deze kleur geen slag verliezen. De tegenpartij heeft de boer, de tien en twee kleintjes. Welke kaart speel je eerst?', opts, 0, why, {contract6:true});
 }
@@ -4453,7 +4462,7 @@ function newDSN(sk){
   const P = t===0 ? [14,11,10] : [14,11,9], Q = [sm[0],sm[1],sm[2]], lowc = t===0 ? 'tien' : 'negen';
   const opts = [{title:'Twee keer snijden', sub:'Klein uit '+qName+' naar de '+lowc+'; later nog een keer klein naar de boer'},
                 {title:'Eén keer snijden', sub:'Klein uit '+qName+' naar de boer, daarna de aas slaan'},
-                {title:'De aas slaan', sub:'En daarna de boer naspelen'}];
+                {title:'De aas slaan', sub:'En daarna de boer naspelen', tip:'Sla je de aas, dan geef je daarna slagen af aan heer en vrouw. Laat de aas liggen en speel er twee keer naartoe.'}];
   const why = t===0 ? 'Je mist heer en vrouw. Snijd twee keer: eerst naar de tien, en als die verliest later naar de boer. Je maakt twee slagen zodra minstens één van de twee honneurs goed zit, en dat is drie van de vier keer. Snijd je maar één keer, dan heb je beide honneurs goed nodig of geluk.'
     : 'Je mist heer, vrouw en tien. Begin met de diepe snit naar de negen. Zit de tien goed met een honneur erbij, dan jaagt de negen een honneur weg en snijd je daarna over de andere met de boer. Begin je met de boer, dan heb je heer en vrouw allebei goed nodig.';
   return pxQ('dsnit', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA en hebt in deze kleur twee slagen nodig. Je kunt vaak genoeg oversteken. Hoe speel je?', opts, 0, why);
@@ -4464,7 +4473,7 @@ function newCMB(){
   const other = long ? 'aas, heer, vrouw en een kleintje tegenover twee kleintjes' : 'aas, heer en drie kleintjes tegenover twee kleintjes';
   const opts = [{title:'Eerst de klaveren', sub:'Speel de klaveren van boven af; vallen ze niet, dan snijd je alsnog in ruiten'},
                 {title:'Meteen de ruitensnit', sub:'Speel klein naar de vrouw'},
-                {title:'Eerst de ruitenaas', sub:'En daarna naar de vrouw'}];
+                {title:'Eerst de ruitenaas', sub:'En daarna naar de vrouw', tip:'Met de aas geef je de vork aas-vrouw op: zit de heer goed, dan had de snit gewoon gewerkt. Probeer eerst de klaveren en houd de ruitensnit achter de hand.'}];
   const why = 'Combineer je kansen. Probeer eerst de kleur die je kunt testen zonder van slag te gaan: speel de klaveren van boven af. Vallen ze 3-3, dan heb je je extra slag al. Vallen ze niet, dan heb je nog steeds de ruitensnit. Snijd je meteen en zit de heer verkeerd, dan ben je van slag en krijg je de klaverenkans niet meer.';
   return pxQ('combi', 2, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA en hebt nog één slag nodig. Komt de tegenpartij aan slag, dan ga je down. In klaveren heb je '+other+'. Dit zijn je ruiten. Wat doe je eerst?', opts, 0, why);
 }
@@ -4530,7 +4539,7 @@ function newLEN(sk){
 function newOPT(sk){
   const si = rnd(4), right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1), pTwo = rnd(2)===1, sm = pxSmall(3, []);
   const dummy = [13,12,11,10,sm[0]], mine = [14,sm[1],sm[2]], decl = pTwo ? 3 : 2;
-  const opts = [{title:'In de eerste ronde', sub:'Neem meteen'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
+  const opts = [{title:'In de eerste ronde', sub:'Neem meteen', tip:'Neem je je aas meteen, dan heeft de leider nog een kaart in de kleur om de dummy te bereiken. Wacht tot hij zijn laatste kaart speelt.'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Neem je aas precies op het moment dat de leider zijn laatste kaart in de kleur speelt; dan kan hij de dummy niet meer bereiken. De dummy heeft vijf kaarten en jij drie. Partner toont '+(pTwo ? 'met hoog-laag een even aantal: twee' : 'met laag-hoog een oneven aantal: drie')+'. Dan heeft de leider er 13 − 5 − 3 − '+(pTwo ? 2 : 3)+' = '+decl+'. Neem dus in de '+(decl===3 ? 'derde' : 'tweede')+' ronde.';
   return pxQ('ophoudt', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur. De dummy heeft verder geen entree. Partner speelt '+(pTwo ? 'eerst een hoge en dan een lage kaart' : 'eerst een lage en dan een hogere kaart')+'. Wanneer neem je je aas?', opts, decl-1, why, {sideDummy:true, dummyRight:right});
 }
@@ -4766,7 +4775,8 @@ function renderBox(){
     return;
   }
   if(q.box==='num'){
-    let h = '';
+    const NUMLBL = {verliezers:'Verliezers in eigen hand', tellen:'Vaste slagen', regel11:'Hogere kaarten bij de leider', vrij:'Entrees naar de dummy', telhand:'Kaarten in deze kleur'};
+    let h = NUMLBL[q.conv] ? '<p class="numlbl">'+NUMLBL[q.conv]+'</p>' : '';
     for(let n=0;n<=13;n++) h += '<button class="bid" data-bid="'+n+'">'+n+'</button>';
     $('box').className = 'box nums';
     $('box').innerHTML = h;
@@ -4926,6 +4936,8 @@ function next(fresh){
   const ns = play && !side;                                     // de dummy ligt tegenover je: boven de tafel
   document.querySelector('main.table').classList.toggle('ns', ns);
   document.querySelector('main.table').classList.toggle('sd', side);
+  document.querySelector('main.table').classList.toggle('one', side && q.only!=null);      // één kleur: er is ruimte voor een grotere tafel en grotere kaarten
+  document.querySelector('main.table').classList.toggle('long', side && q.only!=null && Math.max(...q.dummy.len)>=4);      // lange kleur in de dummy: iets kleiner, anders past de rij niet
   $('dummy').hidden = !ns;
   $('qstrip').hidden = !ns;
   if(ns){
@@ -4975,7 +4987,8 @@ function answer(bid){
   const suitName = s => '<span class="'+s+'">'+SYM[s]+'</span> '+SNAME[s];
   $('verdict').innerHTML = q.suitPick ? (ok ? 'Goed: '+suitName(q.answer) : 'Niet goed. Jij koos '+suitName(bid)+', beter is '+suitName(q.answer)) : q.cards ? (ok ? 'Goed: '+cardHTML(bid) : 'Niet goed. Jij koos '+cardHTML(bid)+', beter is '+cardHTML(q.answer)) : q.choices ? (ok ? 'Goed' : 'Niet goed. Beter: '+q.d.goodText.charAt(0).toLowerCase()+q.d.goodText.slice(1))
     : ok ? 'Goed: '+bidHTML(q.answer) : 'Niet goed. Jij koos '+bidHTML(bid)+', juist is '+bidHTML(q.answer);
-  $('why').innerHTML = explain(q);
+  const pickC = q.choices && !ok ? q.choices.find(c=>c.id===bid) : null;
+  $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q);
   if(q.partner){
     $('partnerlabel').textContent = 'Hand van partner (Noord), '+q.partner.hcp+' punten';
     $('partnerhand').innerHTML = handHTML(q.partner);

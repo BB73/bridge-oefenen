@@ -1,5 +1,5 @@
 // Verhoog dit nummer bij elke nieuwe versie, dan halen telefoons de nieuwe bestanden op.
-const VERSION = 'bridge-v77';
+const VERSION = 'bridge-v81';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
