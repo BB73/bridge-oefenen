@@ -51,6 +51,27 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font
 h1{font-family:var(--display);font-weight:700;font-size:1.1rem;line-height:1.1;margin:0;white-space:nowrap}
 .score{flex:1;min-width:0;margin:0;text-align:center;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .score b{color:var(--ink)}
+button.score{flex:0 1 auto;margin:0 0 0 auto;display:inline-flex;align-items:center;gap:.35rem;font:inherit;font-size:.85rem;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.4rem .7rem;cursor:pointer}
+button.score .swide{font-weight:400;color:var(--muted)}
+.sico{display:inline-flex;align-items:flex-end;gap:2px;height:.85rem}
+.sico i{display:block;width:3px;border-radius:1px;background:var(--felt)}
+.sico i:nth-child(1){height:45%} .sico i:nth-child(2){height:100%} .sico i:nth-child(3){height:70%}
+@media (max-width:520px){ button.score .swide{display:none} }
+.ressum{margin:.2rem 0 .6rem;font-size:.95rem;line-height:1.4}
+.ressum b{font-family:var(--display)}
+.resgrp{margin:.9rem 0 .3rem;font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.resgrp.weak{color:var(--bad)} .resgrp.strong{color:var(--good)}
+.resrow{display:grid;grid-template-columns:1fr auto;gap:.1rem .6rem;align-items:center;width:100%;font:inherit;text-align:left;padding:.45rem .6rem;margin:.3rem 0;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer}
+.resrow[disabled]{cursor:default}
+.resrow .nm{font-weight:700;min-width:0}
+.resrow .nm small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
+.resrow .pc{font-family:var(--display);font-weight:700;font-size:1.05rem;text-align:right}
+.resrow .pc small{display:block;font-family:var(--body);font-weight:400;font-size:.78rem;color:var(--muted)}
+.resbar{grid-column:1/-1;height:.45rem;border-radius:999px;background:var(--bad-bg);overflow:hidden}
+.resbar i{display:block;height:100%;border-radius:999px;background:var(--good)}
+.resrow.few .resbar{background:var(--line)} .resrow.few .resbar i{background:var(--muted)}
+.resact{font:inherit;font-weight:700;width:100%;min-height:2.7rem;margin:.2rem 0 .2rem;border-radius:10px;border:2px solid var(--felt);background:transparent;color:var(--felt);cursor:pointer}
+.resnote{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
 .info{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--felt);font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;font-size:1.15rem;line-height:1;cursor:pointer;padding:0}
 .menu{flex:none;font:inherit;font-size:.85rem;font-weight:700;padding:.45rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap;cursor:pointer}
 
@@ -343,7 +364,7 @@ summary{cursor:pointer;font-weight:700}
 <div class="wrap">
   <header class="top">
     <h1>Bridge</h1>
-    <p class="score" id="score" aria-live="polite"></p>
+    <button class="score" id="score" aria-haspopup="dialog" aria-label="Mijn resultaten"></button>
     <button class="info" id="info" aria-haspopup="dialog" aria-label="Theorie bij deze vraag">i</button>
     <button class="menu" id="menu" aria-haspopup="dialog"></button>
   </header>
@@ -512,7 +533,8 @@ summary{cursor:pointer;font-weight:700}
   </div>
   </div>
   <div class="scorebox">
-    <span id="detailscore"></span>
+    <button class="reset" id="showres">Mijn resultaten bekijken</button>
+    <span id="detailscore" hidden></span>
     <button class="reset" id="reset">Score wissen</button>
   </div>
 
@@ -1070,6 +1092,18 @@ summary{cursor:pointer;font-weight:700}
     </details>
   </div>
   <div class="dfoot"><button class="close" id="close">Aan de slag</button></div>
+</dialog>
+
+<dialog id="results" aria-labelledby="restitle">
+  <div class="dhead">
+    <h2 id="restitle">Waar ben je goed in?</h2>
+    <div class="tabs" id="restabs">
+      <button data-rtab="bieden">Bieden</button>
+      <button data-rtab="spelen">Spelen</button>
+    </div>
+  </div>
+  <div class="dbody" id="resbody"></div>
+  <div class="dfoot"><button class="close" id="resclose">Terug</button></div>
 </dialog>
 
 <dialog id="theory" aria-labelledby="theorytitle">
@@ -4805,7 +4839,7 @@ function renderScore(){
     good += s[0]; total += s[1];
     if(s[1]) parts.push(STAT_LABEL[k]+': '+s[0]+' van '+s[1]);
   }
-  $('score').innerHTML = total ? '<b>'+good+'/'+total+'</b> goed · reeks '+state.streak : '';
+  $('score').innerHTML = '<span class="sico" aria-hidden="true"><i></i><i></i><i></i></span>'+(total ? '<b>'+good+'/'+total+'</b><span class="swide"> goed · reeks '+state.streak+'</span>' : 'Resultaten');
   $('detailscore').textContent = parts.length ? parts.join(' | ') : 'Nog geen handen gespeeld';
 }
 function chips(el, items, current, attr){
@@ -4965,6 +4999,9 @@ function answer(bid){
   const s = state.stats[q.conv] || [0,0];
   s[1]++; if(ok) s[0]++;
   state.stats[q.conv] = s;
+  if(!state.hist || typeof state.hist!=='object') state.hist = {};
+  const hh = state.hist[q.conv] || (state.hist[q.conv] = []);
+  hh.push(ok ? 1 : 0); if(hh.length>10) hh.shift();
   state.streak = ok ? state.streak+1 : 0;
   if(state.conv==='spelmix' || state.conv==='biedmix'){
     const mk = state.conv==='biedmix' ? (state.bidSet.includes(q.conv) ? q.conv : q.conv==='geen' ? (state.bidSet.find(x=>x==='stayman' || x==='jacoby' || x==='ballumer') || q.conv) : q.conv) : q.conv;
@@ -5020,6 +5057,83 @@ function showTheory(){
   t.scrollTop = 0;
 }
 $('info').addEventListener('click', showTheory);
+// ---------- Resultaten: waar ben je goed in en waar niet ----------
+let resTab = 'bieden';
+const RES_MIN = 5;                                   // pas vanaf vijf vragen zegt een percentage iets
+const RES_GROUP = {convsB1:'Openingen', convsB2:'Ongestoord bieden', convsB3:'De tegenpartij opent', convsB4:'Beide partijen bieden', convsB5:'Slembieden', convsL:'Als leider', convsT:'Als tegenspeler'};
+function resRows(which){
+  const rows = [];
+  for(const k in state.stats){
+    const s = state.stats[k];
+    if(!s || !s[1]) continue;
+    const isPlay = PLAYABLE.includes(k);
+    if((which==='spelen')!==isPlay) continue;
+    const g = groupOf(k), h = (state.hist && state.hist[k]) || [];
+    rows.push({k, name:CONVS[k] || STAT_LABEL[k] || k, good:s[0], n:s[1], pct:s[0]/s[1], group:g ? RES_GROUP[g] : 'Na 1SA', can:isPlay || BIDDABLE.includes(k),
+               last: h.length>=5 ? h.reduce((a,b)=>a+b,0)+' van de laatste '+h.length+' goed' : ''});
+  }
+  return rows;
+}
+function resWeak(which){
+  const rows = resRows(which).filter(r=>r.can && r.n>=RES_MIN).sort((a,b)=>a.pct-b.pct);
+  const weak = rows.filter(r=>r.pct<0.6);
+  return (weak.length ? weak : rows.filter(r=>r.pct<0.8)).slice(0,4);
+}
+function renderResults(){
+  document.querySelectorAll('#restabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.rtab===resTab)));
+  const rows = resRows(resTab), wat = resTab==='bieden' ? 'biedvragen' : 'speelvragen';
+  if(!rows.length){ $('resbody').innerHTML = '<p class="ressum">Je hebt nog geen '+wat+' beantwoord. Speel er een paar, dan zie je hier waar je goed in bent en waar niet.</p>'; return; }
+  const tot = rows.reduce((a,r)=>a+r.n,0), good = rows.reduce((a,r)=>a+r.good,0);
+  const rated = rows.filter(r=>r.n>=RES_MIN).sort((a,b)=>a.pct-b.pct || b.n-a.n);
+  const weak = rated.filter(r=>r.pct<0.6), mid = rated.filter(r=>r.pct>=0.6 && r.pct<0.8), strong = rated.filter(r=>r.pct>=0.8).reverse();
+  const few = rows.filter(r=>r.n<RES_MIN).sort((a,b)=>b.n-a.n);
+  const row = (r, cls) => '<button class="resrow'+(cls ? ' '+cls : '')+'" data-res="'+r.k+'"'+(r.can ? '' : ' disabled')+'><span class="nm">'+r.name+'<small>'+r.group+(r.last ? ' · '+r.last : '')+'</small></span>'
+    +'<span class="pc">'+Math.round(r.pct*100)+'%<small>'+r.good+' van '+r.n+'</small></span><span class="resbar"><i style="width:'+Math.round(r.pct*100)+'%"></i></span></button>';
+  let h = '<p class="ressum"><b>'+good+' van '+tot+'</b> '+wat+' goed ('+Math.round(100*good/tot)+'%).';
+  if(strong.length) h += ' Het sterkst: <b>'+strong[0].name+'</b>.';
+  if(weak.length) h += ' Het meest te winnen: <b>'+weak[0].name+'</b>.';
+  h += '</p>';
+  const pick = resWeak(resTab);
+  if(pick.length) h += '<button class="resact" data-resweak="1">Oefen mijn zwakste punten ('+pick.length+')</button>';
+  if(weak.length) h += '<h3 class="resgrp weak">Hier valt nog te winnen · onder 60%</h3>'+weak.map(r=>row(r)).join('');
+  if(mid.length) h += '<h3 class="resgrp">Redelijk · 60 tot 80%</h3>'+mid.map(r=>row(r)).join('');
+  if(strong.length) h += '<h3 class="resgrp strong">Hier ben je goed in · 80% of meer</h3>'+strong.map(r=>row(r)).join('');
+  if(few.length) h += '<h3 class="resgrp">Nog te weinig gespeeld · minder dan '+RES_MIN+' vragen</h3>'+few.map(r=>row(r,'few')).join('');
+  h += '<p class="resnote">Tik op een regel om die oefening te starten. Heel spel spelen telt hier niet mee.</p>';
+  $('resbody').innerHTML = h;
+}
+function openResults(){
+  resTab = tabOf(state.conv);
+  renderResults();
+  const d = $('results'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
+  $('resbody').scrollTop = 0;
+}
+const closeResults = () => { const d = $('results'); if(d.close) d.close(); else d.removeAttribute('open'); };
+$('score').addEventListener('click', openResults);
+$('showres').addEventListener('click', ()=>{ if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); openResults(); });
+$('resclose').addEventListener('click', closeResults);
+$('results').addEventListener('click', e=>{ if(e.target===$('results')) closeResults(); });
+$('restabs').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; resTab = b.dataset.rtab; renderResults(); $('resbody').scrollTop = 0; });
+$('resbody').addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b || b.disabled) return;
+  if(b.dataset.resweak){
+    const ks = resWeak(resTab).map(r=>r.k);
+    if(!ks.length) return;
+    if(resTab==='spelen'){ state.playSet = PLAYABLE.filter(k=>ks.includes(k)); state.conv = state.playSet.length===1 ? state.playSet[0] : 'spelmix'; PLAY_SET = state.playSet.slice(); }
+    else{
+      let set = [];
+      ks.forEach(k=>{ if(!BID_EXCL.some(p=>p.includes(k) && set.some(x=>p.includes(x)))) set.push(k); });      // afspraken die elkaar uitsluiten niet samen
+      state.bidSet = BIDDABLE.filter(k=>set.includes(k)); state.conv = state.bidSet.length===1 ? state.bidSet[0] : 'biedmix';
+    }
+  }else{
+    const k = b.dataset.res;
+    if(PLAYABLE.includes(k)){ state.playSet = [k]; PLAY_SET = [k]; } else state.bidSet = [k];
+    state.conv = k;
+  }
+  state.step = 'alles';
+  save(); renderModes(); closeResults(); next(true);
+});
 $('theoryclose').addEventListener('click', ()=>{ const t = $('theory'); if(t.close) t.close(); else t.removeAttribute('open'); });
 $('theory').addEventListener('click', e=>{ if(e.target===$('theory') && $('theory').close) $('theory').close(); });
 
@@ -5254,7 +5368,7 @@ $('steps').addEventListener('click', e=>{
   renderModes(); next(true);
 });
 $('next').addEventListener('click', ()=>next(false));
-$('reset').addEventListener('click', ()=>{ state.stats = {}; state.streak = 0; state.mixRecent = {}; state.mixSince = {}; save(); renderScore(); renderModes(); });
+$('reset').addEventListener('click', ()=>{ state.hist = {}; state.stats = {}; state.streak = 0; state.mixRecent = {}; state.mixSince = {}; save(); renderScore(); renderModes(); });
 
 renderModes(); renderScore(); next(true);
 openMenu();
