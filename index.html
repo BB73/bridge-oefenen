@@ -5197,7 +5197,7 @@ Object.assign(NEWCONV, {dsnit:newDSN, combi:newCMB, vrij:newVRY, weggooi:newWEG,
 
 const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
-const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'3-niveau preëmptief', 'o:4x':'4-niveau preëmptief', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
+const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'3-niveau preëmptief', 'o:4x':'4-niveau preëmptief', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E', 3:'Openaar na 2SA (zwakke twee)', 4:'Openaar na 2♣\uFE0E – 2♦\uFE0E'};
 const STEPS_DO = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt DONT', 3:'Na je doublet'};
 const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA', 3:'Vervolg na de transfer', 4:'Na hun doublet op 1SA', 5:'Na 1♣\uFE0E en een zwak sprongvolgbod'};
@@ -5245,10 +5245,10 @@ const STEPS_BY = {puppet2:STEPS_PU, puppet1:{alles:'Alles door elkaar', 1:'Vrage
   negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_SN, ontwikkel:STEPS_OW, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
   signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_GV, entree:STEPS_EN, veilig:STEPS_VE, dekken:STEPS_DK, regel11:STEPS_DS, dsnit:STEPS_DN, combi:STEPS_ONE, vrij:STEPS_VR, weggooi:STEPS_ONE, telhand:STEPS_ONE, terug:STEPS_DS, lengte:STEPS_DS, ophoudt:STEPS_DS, actief:STEPS_DS, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
 const CONV_SUBS = {
-  convsB1:[['Biedsysteem',['twee1']], ['Openingen op 1-niveau',['o:1C','o:1D','o:1H','o:1S','o:1N','o:pas','o:derde','o:vierde']], ['Sterke openingen',['o:2C','o:2N']], ['De 2♦︎-opening',['o:2D','multi']], ['Zwak en preëmptief',['zwak2h','zwak2a','muiderberg','gambling','o:3x','o:4x']]],
-  convsB2:[['Antwoorden op 1 in een kleur',['bijbod','twee1','inverted']], ['Antwoorden na 1SA of 2SA',['stayman','ballumer','jacoby','texas','puppet1','na2sa','puppet2']], ['Antwoorden na een 2-opening',['antw2','zwak2h','zwak2a','muiderberg','multi']], ['Herbiedingen',['reverse','vierde','checkback','nmf']]],      // de zwakke openingen staan ook bij groep 1
-  convsB3:[['Volgbiedingen',['volgbod']], ['Informatiedoublet',['doublet']], ['Tweekleurenspelen',['uppercue','unusual']], ['Tegen hun 1SA',['dont','landy','mlandy']]],
-  convsB4:[['Na hun volgbod',['negatief','wet','rubensohl']], ['Na hun doublet',['nadbl']], ['Tweekleurenspelen',['uppercue','unusual']]],      // de tweekleurenspelen staan ook bij groep 3
+  convsB1:[['Openingen op 1-niveau',['o:1C','o:1D','o:1H','o:1S','o:1N']], ['Sterke openingen',['o:2C','o:2N']], ['De 2♦︎-opening',[]], ['Zwakke en bijzondere openingen',['o:2D','zwak2h','zwak2a','muiderberg','multi','gambling']], ['Preëmptief, of niet openen',['o:3x','o:4x','o:pas','o:34']]],
+  convsB2:[['Antwoorden op 1 in een kleur',['bijbod','twee1','inverted']], ['Antwoorden na 1SA',['stayman','ballumer','jacoby','texas','puppet1']], ['Antwoorden na 2SA',['na2sa','puppet2']], ['Antwoorden na een 2-opening',['antw2','zwak2h','zwak2a','muiderberg','multi']], ['Herbiedingen',['reverse','vierde','checkback','nmf']]],      // de zwakke openingen staan ook bij groep 1
+  convsB3:[['Volgbod en doublet',['volgbod','doublet']], ['Tweekleurenspelen',['uppercue','unusual']], ['Tegen hun 1SA',['dont','landy','mlandy']]],
+  convsB4:[['Na hun volgbod of doublet',['negatief','wet','rubensohl','nadbl']], ['Tweekleurenspelen',['uppercue','unusual']]],      // de tweekleurenspelen staan ook bij groep 3
   convsB5:[['Azen vragen',['rkcb','blackwood']]],
   convsL:[['Plannen en tellen',[['Je eigen kaarten',['tellen','verliezers']], ['De tegenpartij',['telhand']]]],
            ['Slagen maken',[['Met honneurs',['ontwikkel','snijden','dsnit']], ['Met lengte',['vrij']], ['De volgorde',['combi']]]],
@@ -5264,6 +5264,7 @@ const CONV_SUBS = {
 const NAV = {bieden:[{id:'convsB1', name:'Eigen team opent'}, {id:'convsB2', name:'Antwoorden en herbiedingen'}, {id:'convsB3', name:'Tegenpartij opent'}, {id:'convsB4', name:'Competitief bieden'}, {id:'convsB5', name:'Slembiedingen'}],
              spelen:[{id:'convsL', name:'Als leider'}, {id:'convsT', name:'Als tegenspeler'}]};
 const OPTMAP = {puppet1:['pupbox'], uitkomst:['leadbox'], signaal:['sigbox'], antw2:['w2box'], zwak2h:['w2box'], zwak2a:['w2box'], muiderberg:['muidbox'], vierde:['fkfbox'], blackwood:['bwbox'], rkcb:['rkcbox']};
+const oSet = k => k==='o:34' ? ['derde','vierde'] : [k.slice(2)];      // welke openingen horen bij een regel in het menu
 let nav = [];                       // waar je in het keuzescherm bent: [] = Home
 const CONV_GROUPS = {};
 const subKeys = s => [].concat(...s[1].map(x=>Array.isArray(x) ? x[1] : [x]));      // een subgroep kan zelf weer in stukjes verdeeld zijn
@@ -5481,7 +5482,7 @@ function renderModes(){
   const extra = state.conv==='spelmix' ? state.playSet.filter(k=>{ const r = state.mixRecent[k]; return r && r.length>=3 && r.reduce((a,b)=>a+b,0)/r.length>=0.4; }) : [];
   // nav = [bieden|spelen, kaart|oefen, rubriek, subrubriek, oefening]. Bij bieden kies je eerst: de systeemkaart invullen, of oefenen wat erop staat.
   const T = nav[0] || null, mode = nav[1] || null, cardMode = mode==='kaart';
-  const isOn = k => k.startsWith('o:') ? (isOn('openen') && effOpen().includes(k.slice(2))) : (state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k)) || (state.conv==='biedmix' && state.bidSet.includes(k)));
+  const isOn = k => k.startsWith('o:') ? (isOn('openen') && oSet(k).some(x=>effOpen().includes(x))) : (state.conv===k || (state.conv==='spelmix' && state.playSet.includes(k)) || (state.conv==='biedmix' && state.bidSet.includes(k)));
   const onCard = k => state.card.includes(k);
   const sel = k => cardMode ? onCard(k) : isOn(k);
   // wat je op een pagina ziet: op de kaart geen losse openingen, bij oefenen alleen wat op de kaart staat
@@ -5490,18 +5491,21 @@ function renderModes(){
   const hasOpts = k => !k.startsWith('o:') && (cardMode ? !!OPTMAP[k] : T==='spelen' ? (stepsN(k)>1 || !!OPTMAP[k]) : stepsN(k)>1);
   const learnPage = !!T && mode==='leer';
   const cats = T ? NAV[T] : null, cat = (nav[2] && !learnPage) ? cats.find(c=>c.id===nav[2]) : null;
-  const subsOf = cat ? CONV_SUBS[cat.id] : null, sub = (subsOf && nav[3]!=null) ? subsOf[nav[3]] : null, pk = nav[4] || null;
+  const subsOf = cat ? CONV_SUBS[cat.id] : null;
+  const setPage = (id, i) => cardMode && id==='convsB1' && (i===0 || i===1 || i===2);      // pagina's met een systeemkeuze: openingen op 1-niveau, 2 klaveren, 2 ruiten
+  const visSubs = cat ? subsOf.map((s,i)=>i).filter(i=>setPage(cat.id, i) || vis(subKeys(subsOf[i])).length) : [];
+  if(cat && nav[3]==null && visSubs.length===1 && !setPage(cat.id, visSubs[0])) nav[3] = visSubs[0];      // maar één subrubriek: ga er meteen heen
+  const sub = (subsOf && nav[3]!=null) ? subsOf[nav[3]] : null, pk = nav[4] || null;
   tab = T || tabOf(state.conv);
-  const setPage = (id, i) => cardMode && id==='convsB1' && (i===0 || i===2 || i===3);      // pagina's met een systeemkeuze: biedsysteem, 2 klaveren, 2 ruiten
   const sysPage = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===0;
-  const c2Page = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===2;
-  const d2Page = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===3;
+  const c2Page = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===1;
+  const d2Page = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===2;
   // kruimelpad: elk eerder niveau is een link terug
   const cr = [['Home', 0]];
   if(T) cr.push([(T==='bieden' ? 'Bieden' : 'Spelen')+(learnPage ? ': leerpad' : ''), T==='bieden' ? 1 : 2]);
   if(T==='bieden' && mode && !learnPage) cr.push([cardMode ? 'Mijn systeemkaart' : 'Oefenen', 2]);
-  if(cat) cr.push([cat.name, subsOf.length>1 ? 3 : 4]);
-  if(sub && subsOf.length>1) cr.push([sub[0], 4]);
+  if(cat) cr.push([cat.name, visSubs.length>1 ? 3 : 4]);
+  if(sub && visSubs.length>1) cr.push([sub[0], 4]);
   if(pk) cr.push([CONVS[pk], 5]);
   $('crumbs').innerHTML = cr.map((c,i)=> i===cr.length-1 ? '<b aria-current="page">'+c[0]+'</b>' : '<button data-crumb="'+c[1]+'">'+c[0]+'</button>').join('<span aria-hidden="true">/</span>');
   const allOf = t => [...new Set([].concat(...NAV[t].map(c=>CONV_GROUPS[c.id])))];
@@ -5532,16 +5536,16 @@ function renderModes(){
                  + (lock ? '' : '<div class="lbtns"><button class="lbtn" data-ltheory="'+i+'">Uitleg lezen</button><button class="lbtn go" data-lstart="'+i+'">'+(done ? 'Herhalen' : 'Oefenen')+'</button></div>')+'</div>'; })()
        + '<div class="navtools">'+(cur<total-1 ? '<button class="navclear all" data-lskip="1">Deze stap overslaan</button>' : '')+'<button class="navclear all" data-lfree="1">Zelf kiezen wat ik oefen</button><button class="navclear" data-lreset="1">Dit leerpad opnieuw beginnen</button></div>';
   }else if(!cat){
-    pg = cats.map(c=>navRow('data-cat="'+c.id+'"', c.name, CONV_GROUPS[c.id], (!cardMode && !vis(CONV_GROUPS[c.id]).length) ? 'Niet op je systeemkaart' : null)).join('')
+    pg = cats.map(c=>{ const v = [...new Set(vis(CONV_GROUPS[c.id]))]; return (v.length===1 && !(cardMode && c.id==='convsB1')) ? convRow(v[0]) : navRow('data-cat="'+c.id+'"', c.name, CONV_GROUPS[c.id], (!cardMode && !v.length) ? 'Niet op je systeemkaart' : null); }).join('')
        + tools(allOf(T), T==='spelen' ? 'bij spelen' : cardMode ? '' : 'bij bieden', false).replace('Alles  van','Alles van');
     if(T==='bieden' && !cardMode) pg += '<div class="navtools"><button class="navclear all" data-allcard="1">Mijn hele systeemkaart oefenen</button></div>';
     if(cardMode) pg += '<div class="navtools"><button class="navclear all" data-cardview="1">Systeemkaart bekijken en afdrukken</button></div>';
     if(T==='spelen' && extra.length) pg += '<p class="hint">Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.</p>';
   }else if(!sub){
-    pg = subsOf.map((s,i)=>(vis(subKeys(s)).length || setPage(cat.id, i)) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : '').join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', false);
+    pg = subsOf.map((s,i)=>{ const v = vis(subKeys(s)); return setPage(cat.id, i) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : !v.length ? '' : v.length===1 ? convRow(v[0]) : navRow('data-subi="'+i+'"', s[0], subKeys(s)); }).join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', false);
   }else if(!pk){
     const rows = sub[1].map(x=>Array.isArray(x) ? (vis(x[1]).length ? '<p class="navsub">'+x[0]+'</p>'+vis(x[1]).map(convRow).join('') : '') : (vis([x]).length ? convRow(x) : '')).join('');
-    pg = (sysPage ? '<p class="hint">Kies hieronder jullie basissysteem. Speel je 2 over 1 mancheforcing, zet die dan op je kaart.</p>' : '')
+    pg = (sysPage ? '<p class="hint">Kies hieronder jullie basissysteem. 2 over 1 mancheforcing zet je op je kaart onder Antwoorden en herbiedingen.</p>' : '')
        + (rows || (cardMode ? '' : '<p class="hint">Hiervan staat niets op je systeemkaart.</p>'))
        + (vis(subKeys(sub)).length ? tools(subKeys(sub), 'in deze rubriek', T==='spelen' && subKeys(sub).length>1 && !subKeys(sub).includes('spel')) : '');
   }else{
@@ -6378,7 +6382,14 @@ $('convs').addEventListener('click', e=>{
   if(d.lreset){ const t = nav[0]; LEARN[t].forEach(s=>{ delete state.learn.hist[s.id]; }); state.learn.step[t] = 0; if(state.learn.run && state.learn.run.t===t) state.learn.run = null; learnView = null; save(); top(); return; }
   if(d.cat){ nav = nav.slice(0,2).concat(d.cat); if(CONV_SUBS[d.cat].length===1) nav.push(0); top(); return; }
   if(d.subi!==undefined){ nav = nav.slice(0,3).concat(+d.subi); top(); return; }
-  if(d.opt){ nav = nav.slice(0,4).concat(d.opt); top(); return; }
+  if(d.opt){
+    let ci = nav[2], si = nav[3];
+    if(ci==null || si==null || !subKeys(CONV_SUBS[ci][si]).includes(d.opt)){      // de keuze stond een niveau hoger: zoek zijn eigen rubriek op
+      const cs = ci!=null ? [ci] : NAV[nav[0]].map(c=>c.id);
+      outer: for(const c of cs){ for(let i=0;i<CONV_SUBS[c].length;i++){ if(subKeys(CONV_SUBS[c][i]).includes(d.opt)){ ci = c; si = i; break outer; } } }
+    }
+    nav = [nav[0], nav[1], ci, si, d.opt]; top(); return;
+  }
   const isPlayTab = nav[0]==='spelen';
   const scope = () => { const subs = nav[2] ? CONV_SUBS[nav[2]] : null; return nav[3]!=null ? subKeys(subs[nav[3]]) : nav[2] ? CONV_GROUPS[nav[2]] : [].concat(...NAV[nav[0]].map(c=>CONV_GROUPS[c.id])); };
   if(nav[1]==='kaart'){                                                          // de systeemkaart invullen
@@ -6397,14 +6408,14 @@ $('convs').addEventListener('click', e=>{
   let set = isPlayTab ? (state.conv==='spelmix' ? state.playSet.slice() : (PLAYABLE.includes(state.conv) || state.conv==='spel') ? [state.conv] : [])
                       : (state.conv==='biedmix' ? state.bidSet.slice() : BIDDABLE.includes(state.conv) ? [state.conv] : []);
   let os = set.includes('openen') ? effOpen() : [];                             // de aangevinkte openingen
-  if(d.clear){ const sc = scope(); set = set.filter(k=>!sc.includes(k)); os = os.filter(x=>!sc.includes('o:'+x)); }
+  if(d.clear){ const sc = scope(); set = set.filter(k=>!sc.includes(k)); const off = [].concat(...sc.filter(k=>k.startsWith('o:')).map(oSet)); os = os.filter(x=>!off.includes(x)); }
   else if(d.all){ set = set.filter(k=>k!=='spel'); scope().forEach(k=>{ if(!set.includes(k)) set.push(k); }); }
   else if(d.allcard){ set = state.card.slice(); os = NAV_OPEN.slice(); }
   else if(d.only){ set = [d.only]; os = []; state.step = 'alles'; }
   else{
     const k = d.conv;
     if(!k) return;
-    if(k.startsWith('o:')){ const x = k.slice(2); os = os.includes(x) ? os.filter(y=>y!==x) : os.concat(x); }
+    if(k.startsWith('o:')){ const xs = oSet(k); os = xs.some(x=>os.includes(x)) ? os.filter(y=>!xs.includes(y)) : os.concat(xs); }
     else if(set.includes(k)) set = set.filter(x=>x!==k);
     else if(k==='spel') set = ['spel'];                                        // een heel spel speel je los, niet in een mix
     else{
