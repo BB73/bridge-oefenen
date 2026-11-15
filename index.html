@@ -406,6 +406,16 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
   #printsheet .skpn{padding:5mm 7mm 4mm}
   #printsheet h4{font-size:11pt} #printsheet .sknm{font-size:11.5pt} #printsheet .skbs{font-size:12.5pt} #printsheet .sknt{font-size:8.6pt}
 }
+.ibtn{flex:none;align-self:center;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:1.05rem;line-height:1;cursor:pointer;padding:0}
+.lbl .ibtn{width:1.5rem;height:1.5rem;font-size:.9rem;margin-left:.3rem;vertical-align:middle}
+#infodlg{width:min(100vw - 1.5rem, 34rem)}
+#infobody h4{margin:.9rem 0 .2rem;font-size:1rem}
+#infobody p{margin:.25rem 0;line-height:1.45}
+.itags{display:flex;flex-wrap:wrap;gap:.35rem;margin:.3rem 0 .4rem !important}
+.itag{font-size:.8rem;padding:.15rem .55rem;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.itag.ibas, .itag.ivee{border-color:var(--good);color:var(--good)}
+.itag.igev, .itag.iwei{border-color:var(--bad);color:var(--bad)}
+.inote{margin-top:.9rem !important;font-size:.8rem;color:var(--muted)}
 .lstrip{display:flex;gap:.3rem;margin:.2rem 0 .6rem}
 .ldot{flex:1;min-width:0;height:2.1rem;border-radius:999px;font:inherit;font-size:.9rem;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;padding:0}
 .ldot.done{background:var(--good);border-color:var(--good);color:#fff}
@@ -570,51 +580,51 @@ summary{cursor:pointer;font-weight:700}
     <nav class="modes" id="os4" aria-label="Passen en plaats aan tafel"></nav>
   </div>
   <div id="sysbox">
-    <p class="lbl">Hoge kleuren openen</p>
+    <p class="lbl">Hoge kleuren openen <button class="ibtn" data-info="set:base" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="basem" aria-label="Kies vijfkaart of vierkaart hoog"></nav>
     <p class="lbl" id="basecl">1♣︎ met vijfkaart hoog</p>
     <nav class="modes" id="basec" aria-label="Kies hoe kort 1 klaveren kan zijn"></nav>
     <p class="hint" id="basehint"></p>
   </div>
   <div id="pupbox">
-    <p class="lbl">Puppet Stayman na 1SA: met welk bod?</p>
+    <p class="lbl">Puppet Stayman na 1SA: met welk bod? <button class="ibtn" data-info="set:pup1" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="pup1" aria-label="Kies het vraagbod voor Puppet Stayman na 1SA"></nav>
     <p class="hint" id="pup1hint"></p>
   </div>
   <div id="d2box">
-    <p class="lbl">Wat belooft 2♦︎?</p>
+    <p class="lbl">Wat belooft 2♦︎? <button class="ibtn" data-info="set:d2" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="d2" aria-label="Kies wat de 2 ruiten-opening belooft"></nav>
     <p class="hint" id="d2hint"></p>
   </div>
   <div id="c2box">
-    <p class="lbl">Wat belooft 2♣︎?</p>
+    <p class="lbl">Wat belooft 2♣︎? <button class="ibtn" data-info="set:c2" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="c2" aria-label="Kies wat de 2 klaveren-opening belooft"></nav>
     <p class="hint" id="c2hint"></p>
   </div>
   <div id="openbox">
     <p class="lbl" hidden>Openen: 2♦︎-opening</p>
     <nav class="modes" id="multi" aria-label="Kies zwakke twee of Multi" hidden></nav>
-    <p class="lbl">1SA met een vijfkaart hoog</p>
+    <p class="lbl">1SA met een vijfkaart hoog <button class="ibtn" data-info="set:nt5" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="nt5" aria-label="Kies of 1SA een vijfkaart hoog mag bevatten"></nav>
   </div>
   <div id="w2box">
-    <p class="lbl">Zwakke twee: antwoorden op het 2SA-vraagbod</p>
+    <p class="lbl">Zwakke twee: antwoorden op het 2SA-vraagbod <button class="ibtn" data-info="set:w2" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="w2" aria-label="Kies jullie antwoorden op 2SA na een zwakke twee"></nav>
   </div>
   <div id="muidbox">
-    <p class="lbl">Muiderberg: antwoorden op het 2SA-vraagbod</p>
+    <p class="lbl">Muiderberg: antwoorden op het 2SA-vraagbod <button class="ibtn" data-info="set:muid" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="muid" aria-label="Kies jullie antwoorden op 2SA"></nav>
   </div>
   <div id="fkfbox">
-    <p class="lbl">Vierde kleur forcing</p>
+    <p class="lbl">Vierde kleur forcing <button class="ibtn" data-info="set:fkf" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="fkf" aria-label="Kies hoe sterk de vierde kleur is"></nav>
   </div>
   <div id="bwbox">
-    <p class="lbl">Blackwood: heren vragen</p>
+    <p class="lbl">Blackwood: heren vragen <button class="ibtn" data-info="set:heren" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="heren" aria-label="Kies hoe jullie naar heren vragen"></nav>
   </div>
   <div id="rkcbox">
-    <p class="lbl">RKCB-antwoorden</p>
+    <p class="lbl">RKCB-antwoorden <button class="ibtn" data-info="set:rkc" aria-label="Uitleg over deze keuze">i</button></p>
     <nav class="modes" id="rkc" aria-label="Kies 1430 of 3014"></nav>
   </div>
   </div>
@@ -1210,6 +1220,12 @@ summary{cursor:pointer;font-weight:700}
   </div>
   </div>
   <div class="dfoot"><button class="close" id="close">Aan de slag</button></div>
+</dialog>
+
+<dialog id="infodlg" aria-labelledby="infotitle">
+  <div class="dhead"><h2 id="infotitle"></h2></div>
+  <div class="dbody" id="infobody"></div>
+  <div class="dfoot"><button class="close" id="infoclose">Sluiten</button></div>
 </dialog>
 
 <dialog id="cardview" aria-labelledby="cvtitle">
@@ -1857,7 +1873,8 @@ function openKind(h){
 const O_ALL = ['1C','1D','1H','1S','1N','2C','2D','2H','2S','2N','3x','4x','pas','derde','vierde'];
 let OPEN_SET = O_ALL.slice();
 const NAV_OPEN = ['1C','1D','1H','1S','1N','pas','derde','vierde','2C','2D','2N','3x','4x'];      // de openingen die je los kunt aanvinken; zwakke tweeën hebben hun eigen oefening
-const effOpen = () => { const l = OPEN_SET.filter(x=>NAV_OPEN.includes(x)); return l.length ? l : NAV_OPEN.slice(); };
+const preOff = x => (x==='3x' || x==='4x') && typeof state!=='undefined' && Array.isArray(state.card) && !(state.learn && state.learn.on) && !state.card.includes('o:'+x);      // niet op de systeemkaart: dan ook geen vragen
+const effOpen = () => { const ok = NAV_OPEN.filter(x=>!preOff(x)); const l = OPEN_SET.filter(x=>ok.includes(x)); return l.length ? l : ok; };
 function newOQ(){
   const blocked = b => ((MULTI || SYS.muiderberg) && (b==='2H' || b==='2S')) || (SYS.z2h && !MULTI && b==='2D');      // met Multi of Muiderberg zijn 2 harten en 2 schoppen geen zwakke twee
   let list = effOpen();
@@ -5197,7 +5214,7 @@ Object.assign(NEWCONV, {dsnit:newDSN, combi:newCMB, vrij:newVRY, weggooi:newWEG,
 
 const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
-const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'3-niveau preëmptief', 'o:4x':'4-niveau preëmptief', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
+const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'Preëmptief op 3-niveau', 'o:4x':'Preëmptief op 4-niveau', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', rkcb:'RKCB', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E', 3:'Openaar na 2SA (zwakke twee)', 4:'Openaar na 2♣\uFE0E – 2♦\uFE0E'};
 const STEPS_DO = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt DONT', 3:'Na je doublet'};
 const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA', 3:'Vervolg na de transfer', 4:'Na hun doublet op 1SA', 5:'Na 1♣\uFE0E en een zwak sprongvolgbod'};
@@ -5245,7 +5262,7 @@ const STEPS_BY = {puppet2:STEPS_PU, puppet1:{alles:'Alles door elkaar', 1:'Vrage
   negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_SN, ontwikkel:STEPS_OW, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
   signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_GV, entree:STEPS_EN, veilig:STEPS_VE, dekken:STEPS_DK, regel11:STEPS_DS, dsnit:STEPS_DN, combi:STEPS_ONE, vrij:STEPS_VR, weggooi:STEPS_ONE, telhand:STEPS_ONE, terug:STEPS_DS, lengte:STEPS_DS, ophoudt:STEPS_DS, actief:STEPS_DS, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
 const CONV_SUBS = {
-  convsB1:[['Openingen op 1-niveau',['o:1C','o:1D','o:1H','o:1S','o:1N']], ['Sterke openingen',['o:2C','o:2N']], ['De 2♦︎-opening',[]], ['Zwakke en bijzondere openingen',['o:2D','zwak2h','zwak2a','muiderberg','multi','gambling']], ['Preëmptief, of niet openen',['o:3x','o:4x','o:pas','o:34']]],
+  convsB1:[['Openingen op 1-niveau',['o:1C','o:1D','o:1H','o:1S','o:1N']], ['Sterke openingen',['o:2C','o:2N']], ['De 2♦︎-opening',[]], ['Zwakke tweeën',['o:2D','zwak2h','zwak2a','muiderberg','multi']], ['Preëmptief en overig',['o:3x','o:4x','gambling','o:pas','o:34']]],
   convsB2:[['Antwoorden op 1 in een kleur',['bijbod','twee1','inverted']], ['Antwoorden na 1SA',['stayman','ballumer','jacoby','texas','puppet1']], ['Antwoorden na 2SA',['na2sa','puppet2']], ['Antwoorden na een 2-opening',['antw2','zwak2h','zwak2a','muiderberg','multi']], ['Herbiedingen',['reverse','vierde','checkback','nmf']]],      // de zwakke openingen staan ook bij groep 1
   convsB3:[['Volgbod en doublet',['volgbod','doublet']], ['Tweekleurenspelen',['uppercue','unusual']], ['Tegen hun 1SA',['dont','landy','mlandy']]],
   convsB4:[['Na hun volgbod of doublet',['negatief','wet','rubensohl','nadbl']], ['Tweekleurenspelen',['uppercue','unusual']]],      // de tweekleurenspelen staan ook bij groep 3
@@ -5272,6 +5289,8 @@ for(const id in CONV_SUBS) CONV_GROUPS[id] = [].concat(...CONV_SUBS[id].map(subK
 const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];
 const BIDDABLE = ['puppet1','puppet2','openen','zwak2h','zwak2a','muiderberg','gambling','bijbod','twee1','inverted','stayman','ballumer','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb','blackwood','checkback','nadbl','landy','mlandy','multi','nmf','vierde','reverse','texas'];
 const BID_DEFAULT = ['openen','bijbod','stayman','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb'];   // de standaardkaart
+const CARD_OPEN = ['o:3x','o:4x'];      // openingen die je ook op de systeemkaart zet
+const CARDKEYS = BIDDABLE.concat(CARD_OPEN);
 const BID_EXCL = [['na2sa','puppet2'], ['stayman','ballumer'], ['bijbod','twee1'], ['rkcb','blackwood'], ['dont','landy','mlandy'], ['checkback','nmf'], ['zwak2h','zwak2a'], ['zwak2h','muiderberg'], ['zwak2a','muiderberg'], ['zwak2h','multi'], ['zwak2a','multi']];       // afspraken die je niet tegelijk kunt spelen
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
@@ -5486,7 +5505,7 @@ function renderModes(){
   const onCard = k => state.card.includes(k);
   const sel = k => cardMode ? onCard(k) : isOn(k);
   // wat je op een pagina ziet: op de kaart geen losse openingen, bij oefenen alleen wat op de kaart staat
-  const vis = keys => T==='spelen' ? keys : cardMode ? keys.filter(k=>!k.startsWith('o:')) : keys.filter(k=>k.startsWith('o:') || onCard(k));
+  const vis = keys => T==='spelen' ? keys : cardMode ? keys.filter(k=>!k.startsWith('o:') || CARD_OPEN.includes(k)) : keys.filter(k=>k.startsWith('o:') ? (!CARD_OPEN.includes(k) || onCard(k)) : onCard(k));
   const stepsN = k => Object.keys(STEPS_BY[k] || STEPS).length;
   const hasOpts = k => !k.startsWith('o:') && (cardMode ? !!OPTMAP[k] : T==='spelen' ? (stepsN(k)>1 || !!OPTMAP[k]) : stepsN(k)>1);
   const learnPage = !!T && mode==='leer';
@@ -5512,7 +5531,7 @@ function renderModes(){
   const names = keys => [...new Set(vis(keys))].filter(sel).map(k=>CONVS[k]);
   const navRow = (attr, label, keys, off) => { const n = off ? [] : names(keys); return '<button class="navrow'+(n.length ? ' has' : '')+'" '+(off ? 'disabled' : attr)+'><span>'+label+'</span><small>'+(off ? off : n.length ? '✓ '+n.join(', ') : '')+'</small></button>'; };
   const tools = (keys, wat, selAll) => { const n = names(keys).length; return '<div class="navtools"><button class="navclear" data-clear="1"'+(n ? '' : ' disabled')+'>'+(cardMode ? 'Alles '+wat+' van de kaart halen' : 'Alles '+wat+' deselecteren')+(n ? ' ('+n+')' : '')+'</button>'+(selAll ? '<button class="navclear all" data-all="1">Alles '+wat+' selecteren</button>' : '')+'</div>'; };
-  const convRow = k => (k==='o:2N' && state.c2==='sa') ? '<div class="convrow"><button class="pick" disabled aria-pressed="false">2SA: vervalt, die hand opent 2♣︎</button></div>' : '<div class="convrow"><button class="pick" data-conv="'+k+'" aria-pressed="'+sel(k)+'">'+CONVS[k]+'</button>'+(hasOpts(k) && sel(k) ? '<button class="more" data-opt="'+k+'">'+(cardMode ? 'Variant ›' : 'Opties ›')+'</button>' : '')+'</div>';
+  const convRow = k => (k==='o:2N' && state.c2==='sa') ? '<div class="convrow"><button class="pick" disabled aria-pressed="false">2SA: vervalt, die hand opent 2♣︎</button></div>' : '<div class="convrow"><button class="pick" data-conv="'+k+'" aria-pressed="'+sel(k)+'">'+CONVS[k]+'</button>'+((cardMode && INFO[k]) ? '<button class="ibtn" data-info="'+k+'" aria-label="Uitleg over '+CONVS[k]+'">i</button>' : '')+(hasOpts(k) && sel(k) ? '<button class="more" data-opt="'+k+'">'+(cardMode ? 'Variant ›' : 'Opties ›')+'</button>' : '')+'</div>';
   const nPrB = state.conv==='biedmix' ? state.bidSet.length : BIDDABLE.includes(state.conv) ? 1 : 0;      // zoveel biedoefeningen staan nu aan
   const nPrS = state.conv==='spelmix' ? state.playSet.length : (PLAYABLE.includes(state.conv) || state.conv==='spel') ? 1 : 0;
   let pg = '';
@@ -5733,6 +5752,102 @@ function showTheory(full){
 $('theorybody').addEventListener('click', e=>{ if(e.target.closest('#fullth')) showTheory(true); });
 $('info').addEventListener('click', ()=>showTheory());
 $('why').addEventListener('click', e=>{ if(e.target.closest('[data-lnext]') && state.learn.run){ const t = state.learn.run.t; startLearn(t, state.learn.step[t]); showTheory(); } });
+// ---------- Uitleg bij de systeemkaart: wat is het, waarin verschilt het, voor wie, en hoe vaak wordt het gespeeld ----------
+// n = niveau (Basis, Gemiddeld, Gevorderd), g = gebruik (Veel, Regelmatig, Weinig); beide zijn een inschatting voor Nederlandse clubs.
+const INFO = {
+  bijbod:{n:'Basis', g:'Veel', w:'De gewone antwoorden op een opening van 1 in een kleur: steunen, een nieuwe kleur bieden of 1SA. Een nieuwe kleur op 2-niveau belooft 11 of meer punten en is forcing voor één ronde.', v:'Het alternatief is 2 over 1 mancheforcing, waar een nieuwe kleur op 2-niveau meteen manchekracht belooft. Het gewone bijbod is eenvoudiger en is wat de meeste cursussen leren. Uitnodigende handen bied je er makkelijker mee, sterke handen moeilijker.'},
+  twee1:{n:'Gevorderd', g:'Regelmatig', w:'Een nieuwe kleur op 2-niveau zonder sprong belooft 12 of meer punten en is mancheforcing. Daardoor wordt 1SA op {1H} of {1S} breder (6–11 punten) en forcing.', v:'Tegenover het gewone bijbod: met sterke handen heb je alle ruimte om rustig de beste manche of slem te zoeken. De prijs is dat uitnodigende handen (10–11 punten) via 1SA moeten. Populair bij wedstrijdspelers, minder op de gemiddelde clubavond.'},
+  inverted:{n:'Gemiddeld', g:'Regelmatig', w:'Steun in partners {1C} of {1D} is omgedraaid: de enkele verhoging is sterk (10 of meer punten, forcing), de sprong is zwak en storend.', v:'Standaard is het andersom: de enkele verhoging is zwak en de sprong uitnodigend. Inverted houdt het bieden laag als je sterk bent en maakt het de tegenpartij lastig als je zwak bent. Je moet het alerteren.'},
+  stayman:{n:'Basis', g:'Veel', w:'Na partners 1SA vraagt {2C} naar een vierkaart harten of schoppen, vanaf 8 punten.', v:'De standaard die bijna iedereen speelt. Ballumer en Puppet Stayman zijn uitbreidingen die ook een vijfkaart hoog bij de openaar vinden; die hebben pas zin als jullie 1SA met een vijfkaart hoog openen.'},
+  ballumer:{n:'Gevorderd', g:'Weinig', w:'Een variant van Stayman: na {2C} vertelt de openaar alleen over harten; over schoppen vertelt de vrager zelf. De biedingen die zo vrijkomen gebruikt de openaar om een vijfkaart hoog te tonen.', v:'Vindt meer dan gewone Stayman, ook een 5-3 fit, maar heeft meer vervolgafspraken om te onthouden. Het lost hetzelfde op als Puppet Stayman, op een andere manier. Je speelt Ballumer in plaats van gewone Stayman.'},
+  jacoby:{n:'Basis', g:'Veel', w:'Na partners 1SA bied je met een vijfkaart hoog de kleur eronder: {2D} toont harten, {2H} toont schoppen. De openaar biedt de kleur erboven.', v:'Zonder transfers speelt de zwakke hand het contract en ligt de sterke hand open op tafel. Vrijwel iedereen die Stayman speelt, speelt ook Jacoby.'},
+  texas:{n:'Gemiddeld', g:'Regelmatig', w:'Transfers op 4-niveau na 1SA: {4D} naar harten, {4H} naar schoppen, met een zeskaart en manchekracht. In de app horen hier ook de transfers naar de lage kleuren en het kwantitatieve 4SA bij.', v:'Via Jacoby en daarna 4 in je kleur kom je op hetzelfde contract uit. Met Texas zeg je erbij dat je geen sleminteresse hebt, en neem je de tegenpartij biedruimte af.'},
+  puppet1:{n:'Gevorderd', g:'Weinig', w:'Vraagt of de 1SA-openaar een vijfkaart harten of schoppen heeft. Je kiest of je het met {3C} (een sprong) of met {2C} speelt.', v:'Alleen zinvol als jullie 1SA ook met een vijfkaart hoog openen. Met {3C} blijft gewone Stayman bestaan; met {2C} vervangt Puppet de gewone Stayman.'},
+  na2sa:{n:'Basis', g:'Veel', w:'Na een 2SA-opening werken Stayman ({3C}) en Jacoby ({3D} en {3H}) net als na 1SA, een niveau hoger.', v:'Het alternatief is Puppet Stayman na 2SA, dat ook een vijfkaart hoog bij de openaar vindt. Gewone Stayman is eenvoudiger. Je speelt één van de twee.'},
+  puppet2:{n:'Gemiddeld', g:'Regelmatig', w:'Na 2SA vraagt {3C} of de openaar een vijfkaart harten of schoppen heeft. Zonder vijfkaart toont hij met {3D} dat hij wel een vierkaart hoog heeft.', v:'Een 2SA-opening bevat vaak een vijfkaart hoog, dus Puppet vindt fits die gewone Stayman mist. Het vervolg na {3D}, waarbij je de kleur biedt die je níet hebt, vraagt oefening. Onder wedstrijdspelers gangbaar.'},
+  antw2:{n:'Basis', g:'Veel', w:'Wat je biedt op partners zwakke twee (pas, storend verhogen, 2SA vragen, de manche) en op de sterke {2C}.', v:'Dit zijn de gewone antwoorden. De variant zit in het 2SA-vraagbod: Ogust, of het tonen van een bijkleur. Die kies je bij de zwakke twee zelf.'},
+  zwak2h:{n:'Basis', g:'Veel', w:'{2H} en {2S} tonen een zeskaart met 6–10 punten. {2D} blijft vrij voor iets anders.', v:'De alternatieven zijn de zwakke twee ook in ruiten, of Muiderberg (een vijfkaart hoog met een lage kleur). Een zwakke twee komt minder vaak voor dan Muiderberg, maar is eenvoudiger en beschrijft je hand nauwkeuriger.'},
+  zwak2a:{n:'Basis', g:'Veel', w:'{2D}, {2H} en {2S} tonen alle drie een zeskaart met 6–10 punten.', v:'Je kunt vaker storend openen, maar je houdt alleen {2C} over voor sterke handen. Wie {2D} voor Multi of iets anders wil gebruiken, kiest de zwakke twee alleen in harten en schoppen.'},
+  muiderberg:{n:'Gemiddeld', g:'Veel', w:'{2H} en {2S} tonen precies een vijfkaart in die kleur met een vierkaart of langer in een lage kleur, 6–10 punten.', v:'Komt vaker voor dan een zwakke twee, want je hebt maar een vijfkaart nodig. Typisch Nederlands en hier veel gespeeld, vaak samen met Multi {2D}. Het is minder veilig dan een zeskaart, en je moet het alerteren.'},
+  multi:{n:'Gevorderd', g:'Regelmatig', w:'{2D} toont een zwakke twee in harten óf schoppen; partner weet nog niet welke. In de app oefen je de antwoorden en het vervolg.', v:'Maakt {2H} en {2S} vrij voor Muiderberg. De tegenpartij weet je kleur nog niet, maar je partner ook niet. Vraagt meer afspraken dan gewone zwakke tweeën.'},
+  gambling:{n:'Gemiddeld', g:'Regelmatig', w:'Een opening van 3SA toont een dichte zevenkaart in klaveren of ruiten, zonder aas of heer ernaast.', v:'Zonder deze afspraak zou 3SA een zeer sterke evenwichtige hand zijn, maar die open je al met {2C}. Gambling komt zelden voor, maar het kost niets om af te spreken.'},
+  reverse:{n:'Gemiddeld', g:'Veel', w:'Biedt de openaar op 2-niveau een tweede kleur die hoger is dan zijn eerste, dan belooft dat 16 of meer punten. Het is forcing.', v:'Geen conventie die je wel of niet speelt, maar een regel uit het natuurlijke bieden. Wie hem niet kent, biedt met een minimale hand te hoog.'},
+  vierde:{n:'Gemiddeld', g:'Veel', w:'Zijn er drie kleuren geboden, dan is een bod in de vierde kleur kunstmatig en forcing. Je vraagt partner zijn hand verder te omschrijven.', v:'De variant zit in de kracht: mancheforcing (12 of meer punten) of al vanaf een uitnodiging (11 of meer). Mancheforcing is eenvoudiger, want daarna hoeft niemand meer te springen.'},
+  checkback:{n:'Gemiddeld', g:'Regelmatig', w:'Na 1 laag – 1 hoog – 1SA vraagt {2C} of de openaar een driekaart steun heeft voor je vijfkaart hoog.', v:'New Minor Forcing doet hetzelfde met de andere lage kleur als vraagbod. Checkback is altijd {2C} en daardoor makkelijker te onthouden. Je speelt één van de twee.'},
+  nmf:{n:'Gevorderd', g:'Regelmatig', w:'Na 1 laag – 1 hoog – 1SA is de ándere lage kleur het vraagbod: {2D} na een opening van {1C}, {2C} na {1D}.', v:'Doet hetzelfde als Checkback Stayman. Het voordeel is dat je in partners openingskleur nog natuurlijk kunt stoppen. Vooral gangbaar bij wie Amerikaans lesmateriaal volgt. Je speelt één van de twee.'},
+  volgbod:{n:'Basis', g:'Veel', w:'Bieden nadat de tegenpartij heeft geopend: het gewone volgbod, het zwakke sprongvolgbod en het 1SA-volgbod.', v:'Geen conventie met varianten, maar de basis van het tegenbieden.'},
+  doublet:{n:'Basis', g:'Veel', w:'Een doublet op hun opening is niet voor straf: met openingskracht en kort in hun kleur vraag je partner zijn beste kleur te bieden.', v:'Iedereen speelt dit. Met een goede eigen vijfkaart doe je in plaats daarvan een volgbod.'},
+  uppercue:{n:'Gemiddeld', g:'Regelmatig', w:'Na hun opening van 1 in een kleur toont 2 in hún kleur de twee hoogste ongeboden kleuren, minstens 5-5.', v:'Samen met Unusual 2SA (de twee laagste kleuren) dek je de tweekleurenspelen af. Het lijkt op Michaels, waar het cuebid net andere kleuren toont. Je moet het alerteren.'},
+  unusual:{n:'Gemiddeld', g:'Veel', w:'Na hun opening van 1 in een kleur toont een sprong naar 2SA de twee laagste ongeboden kleuren, minstens 5-5.', v:'Zonder deze afspraak zou 2SA een zeer sterke evenwichtige hand zijn, maar die doubleert eerst. Heel gangbaar.'},
+  dont:{n:'Gemiddeld', g:'Regelmatig', w:'Tegen hun 1SA: een doublet toont één lange kleur; {2C}, {2D} en {2H} tonen die kleur met een hogere kleur erbij.', v:'Je kunt met bijna elke eenkleurige of tweekleurige hand storen, maar je strafdoublet op 1SA ben je kwijt. Landy is eenvoudiger; Multi-Landy houdt het strafdoublet en toont ook veel handen.'},
+  landy:{n:'Basis', g:'Veel', w:'Tegen hun 1SA toont {2C} beide hoge kleuren; de andere biedingen zijn natuurlijk.', v:'De eenvoudigste afspraak: één kunstmatig bod. Je mist handen met een hoge en een lage kleur; die tonen Multi-Landy en DONT wel.'},
+  mlandy:{n:'Gevorderd', g:'Regelmatig', w:'Tegen hun 1SA: {2C} toont beide hoge kleuren, {2D} een zeskaart in één hoge kleur, {2H} en {2S} een vijfkaart met een lage kleur ernaast.', v:'Toont meer handen dan Landy en houdt het strafdoublet, anders dan DONT. Het lijkt op Multi en Muiderberg, dus vertrouwd voor wie die al speelt.'},
+  negatief:{n:'Basis', g:'Veel', w:'Partner opent en de tegenpartij doet een volgbod. Jouw doublet toont dan de ongeboden hoge kleur, niet de wens om te straffen.', v:'Vrijwel iedereen speelt dit. Zonder negatief doublet kun je een vierkaart hoog na een volgbod vaak niet meer tonen.'},
+  wet:{n:'Gemiddeld', g:'Veel', w:'Een vuistregel voor als beide partijen bieden: bied tot het niveau dat gelijk is aan het aantal troeven van jullie samen. Acht troeven is 2-niveau, negen is 3-niveau.', v:'Geen conventie maar een richtlijn. Je hoeft niets af te spreken of te alerteren.'},
+  rubensohl:{n:'Gevorderd', g:'Weinig', w:'Partner opent 1SA en de tegenpartij doet een volgbod. Vanaf 2SA is elk bod een transfer naar de kleur erboven.', v:'Het bekendere alternatief is Lebensohl, waar 2SA een tussenbod naar {3C} is. Rubensohl toont je kleur meteen en laat de sterke hand spelen, maar vraagt meer geheugen. Op 2-niveau blijft alles natuurlijk.'},
+  nadbl:{n:'Basis', g:'Veel', w:'Partner opent en de tegenpartij doubleert. Een redoublet toont 10 of meer punten; een nieuwe kleur op 1-niveau is forcing, op 2-niveau niet.', v:'Dit zijn de standaardafspraken. Er bestaan uitgebreidere systemen met transfers na het doublet; die zitten niet in de app.'},
+  rkcb:{n:'Gemiddeld', g:'Veel', w:'4SA vraagt naar vijf sleutelkaarten: de vier azen en troefheer. Daarna kun je ook naar troefvrouw en naar heren vragen.', v:'Gewone Blackwood telt alleen azen. RKCB vertelt ook over troefheer en troefvrouw, en voorkomt zo een slem die op een troefverliezer down gaat. Je speelt één van de twee.'},
+  blackwood:{n:'Basis', g:'Veel', w:'4SA vraagt naar azen: {5C} geen of vier, {5D} één, {5H} twee, {5S} drie.', v:'Eenvoudiger dan RKCB, maar zegt niets over troefheer en troefvrouw. Een goede keuze om mee te beginnen; veel paren stappen later over op RKCB.'},
+  'o:3x':{n:'Basis', g:'Veel', w:'Een opening van 3 in een kleur toont een zevenkaart met 5–9 punten. Je bent te zwak voor een opening op 1-niveau en neemt de tegenpartij biedruimte af.', v:'Vrijwel iedereen speelt dit. De enige variatie is hoe streng je bent: sommige paren openen kwetsbaar alleen met een goede kleur, of in de derde hand ook met een zeskaart. Dat onderscheid maakt de app niet. Haal je dit van je kaart, dan krijg je er geen vragen over.'},
+  'o:4x':{n:'Basis', g:'Veel', w:'Een opening van 4 in een kleur toont een achtkaart met 5–9 punten. In harten of schoppen is dat meteen de manche.', v:'Hetzelfde idee als de opening op 3-niveau, een kaart langer. Sommige paren spelen {4C} en {4D} als sterke transfer naar harten en schoppen (Namyats); dat zit niet in de app.'},
+  'set:base':{t:'Hoge kleuren en de lengte van 1♣︎', w:'Hoeveel kaarten beloven jullie openingen op 1-niveau?', o:[
+    ['Vijfkaart hoog, 1♣︎ vanaf 3 kaarten', 'Basis', 'Veel', '{1H} en {1S} beloven een vijfkaart. Zonder vijfkaart hoog open je je beste lage kleur. Natuurlijk, en je hoeft niets te alerteren. Dit leren de meeste cursussen.'],
+    ['Vijfkaart hoog, 1♣︎ vanaf 2 kaarten', 'Gemiddeld', 'Veel', '{1D} belooft altijd een vierkaart; alle andere handen zonder vijfkaart hoog openen {1C}. Ruiten wordt daardoor nauwkeuriger, maar {1C} moet je alerteren en partner kan klaveren minder makkelijk steunen.'],
+    ['Vierkaart hoog', 'Gemiddeld', 'Weinig', 'Je opent elke vierkaart, ook harten of schoppen. Je vindt 4-4 fits snel, maar steunen vraagt vier kaarten mee. In Nederland vooral bij wie het oudere Acol heeft geleerd. In de app geldt dit alleen voor de openingsvragen.']]},
+  'set:nt5':{t:'1SA met een vijfkaart hoog', w:'Open je 1SA met 15–17 punten en een 5-3-3-2 met een vijfkaart harten of schoppen?', o:[
+    ['Nee', 'Basis', 'Veel', 'Met een vijfkaart hoog open je altijd in die kleur. Eenvoudig, maar je herbieding is soms lastig: je hand is te sterk voor een minimumbod en te zwak voor een sprong.'],
+    ['Ja', 'Gemiddeld', 'Regelmatig', 'Je hand is in één bod omschreven. De 5-3 fit vind je dan alleen terug met Puppet Stayman of Ballumer. Onder wedstrijdspelers gangbaar.']]},
+  'set:c2':{t:'Wat belooft 2♣︎?', w:'{2C} is altijd de sterke, kunstmatige opening. De varianten voegen er een tweede soort hand aan toe.', o:[
+    ['Alleen sterk', 'Basis', 'Veel', 'Vanaf 23 punten, of 22 met een onevenwichtige hand. 2SA is dan 20–22 evenwichtig. De standaard.'],
+    ['Sterk, ook 20–21 evenwichtig', 'Gevorderd', 'Weinig', 'Ook de evenwichtige hand van 20–21 opent {2C} en biedt daarna 2SA. Je houdt zo ruimte over voor Stayman en transfers, en 2SA komt vrij voor iets anders.'],
+    ['Sterk of zwak in ruiten', 'Gevorderd', 'Regelmatig', '{2C} is sterk, óf een zwakke twee in ruiten. Handig als {2D} bij jullie Multi is en je de zwakke twee in ruiten niet kwijt wilt. Je moet het alerteren.']]},
+  'set:d2':{t:'Wat belooft 2♦︎?', w:'De opening van {2D} heeft veel mogelijke betekenissen. Deze zes zitten in de app.', o:[
+    ['Zwak in ruiten', 'Basis', 'Veel', 'Een zeskaart ruiten met 6–10 punten, net als de zwakke twee in harten en schoppen. Natuurlijk en eenvoudig.'],
+    ['Multi', 'Gevorderd', 'Regelmatig', 'Een zwakke twee in harten óf schoppen. Maakt {2H} en {2S} vrij voor Muiderberg. In Nederland een veelgespeelde combinatie.'],
+    ['Multi + sterk', 'Gevorderd', 'Regelmatig', 'Multi, met als extra mogelijkheid een sterke hand met een lange lage kleur. De tegenpartij kan dan minder makkelijk straffen, maar jullie vervolg wordt ingewikkelder.'],
+    ['Mancheforcing', 'Gevorderd', 'Weinig', 'Benjamin: {2D} is de mancheforcing opening en {2C} wordt sterk voor één ronde. Vooral in Engeland en Frankrijk gespeeld.'],
+    ['Driekleurenspel', 'Gevorderd', 'Weinig', 'Een sterke hand met 4-4-4-1 of 5-4-4-0. Lost handen op die anders moeilijk te bieden zijn, maar komt zelden voor.'],
+    ['Beide hoge kleuren', 'Gevorderd', 'Weinig', 'Zwak met minstens 5-4 in harten en schoppen. Storend en lastig te verdedigen; vooral in wedstrijdbridge.']]},
+  'set:w2':{t:'Na 2SA op de zwakke twee', w:'Partner vraagt met 2SA hoe goed je zwakke twee is. Wat antwoord je?', o:[
+    ['Ogust', 'Gemiddeld', 'Veel', 'Vier stapjes: minimum of maximum, en een slechte of goede kleur. Partner weet het meeste, wat vooral voor 3SA van belang is.'],
+    ['Minimum, of bijkleur tonen', 'Gemiddeld', 'Regelmatig', 'Met een minimum herhaal je je kleur; met een maximum toon je een aas of heer in een bijkleur. Eenvoudiger te onthouden en handig om een entree te vinden.']]},
+  'set:muid':{t:'Na 2SA op Muiderberg', w:'Partner vraagt met 2SA naar je hand. Wat toon je?', o:[
+    ['Minimum of maximum', 'Gemiddeld', 'Veel', 'Je toont je lage kleur en of je sterk of zwak bent. Helpt partner beslissen of de manche erin zit.'],
+    ['Vier- of vijfkaart', 'Gemiddeld', 'Regelmatig', 'Je toont je lage kleur en hoe lang die is. Helpt partner de beste troefkleur kiezen.']]},
+  'set:rkc':{t:'RKCB: 1430 of 3014', w:'De volgorde van de eerste twee antwoorden op 4SA.', o:[
+    ['1430', 'Gemiddeld', 'Veel', '{5C} toont 1 of 4 sleutelkaarten, {5D} 0 of 3. Na {5C} is er ruimte om goedkoop naar troefvrouw te vragen. In Nederland het meest gespeeld.'],
+    ['3014', 'Gemiddeld', 'Regelmatig', '{5C} toont 0 of 3, {5D} 1 of 4. De oorspronkelijke volgorde. Het maakt weinig uit, als jullie maar hetzelfde spelen.']]},
+  'set:heren':{t:'Heren vragen', w:'Hoe vraag je na de azen naar heren?', o:[
+    ['Met 5SA', 'Basis', 'Veel', '5SA vraagt naar heren en belooft dat jullie alle azen hebben. Eenvoudig en bekend.'],
+    ['Gestroomlijnd', 'Gevorderd', 'Weinig', 'Het eerstvolgende bod boven het azenantwoord vraagt naar heren. Je blijft lager, maar het kan niet samen met de troefvrouwvraag van RKCB.']]},
+  'set:fkf':{t:'Vierde kleur forcing', w:'Hoe sterk moet je zijn om de vierde kleur te bieden?', o:[
+    ['Mancheforcing', 'Gemiddeld', 'Veel', 'Vanaf 12 punten. Daarna past niemand meer voor de manche, dus je kunt rustig bieden.'],
+    ['Vanaf een uitnodiging', 'Gevorderd', 'Regelmatig', 'Vanaf 11 punten. Je kunt ook uitnodigende handen kwijt, maar moet daarna afspreken welke biedingen nog forcing zijn.']]},
+  'set:pup1':{t:'Puppet Stayman na 1SA', w:'Met welk bod vraag je naar een vijfkaart hoog?', o:[
+    ['3♣︎ (sprong)', 'Gevorderd', 'Weinig', 'Mancheforcing. {2C} blijft gewone Stayman, dus je verliest niets van wat je al speelde.'],
+    ['2♣︎', 'Gevorderd', 'Weinig', 'Vervangt de gewone Stayman en kan vanaf 8 punten. Je vindt de vijfkaart ook met een uitnodigende hand, maar het vervolg is anders dan je gewend bent.']]}
+};
+function infoBody(key){
+  const I = INFO[key];
+  if(!I) return '';
+  const tag = (l, v) => '<span class="itag i'+v.slice(0,3).toLowerCase()+'"><b>'+l+':</b> '+v+'</span>';
+  let h = '';
+  if(I.o){
+    h += '<p>'+lt(I.w)+'</p>'+I.o.map(o=>'<h4>'+o[0]+'</h4><p class="itags">'+tag('Niveau', o[1])+tag('Gebruik', o[2])+'</p><p>'+lt(o[3])+'</p>').join('');
+  }else{
+    h += '<p class="itags">'+tag('Niveau', I.n)+tag('Gebruik', I.g)+'</p><h4>Wat is het?</h4><p>'+lt(I.w)+'</p><h4>Verschil met de alternatieven</h4><p>'+lt(I.v)+'</p>';
+    if((THEORY[key] || []).length) h += '<p><button class="navclear all" id="inforules" data-k="'+key+'">Bekijk alle regels</button></p>';
+  }
+  return h+'<p class="inote">Niveau en gebruik zijn een inschatting voor Nederlandse clubs, geen telling.</p>';
+}
+function openInfo(key){
+  const I = INFO[key];
+  if(!I) return;
+  $('infotitle').textContent = I.t || CONVS[key];
+  $('infobody').innerHTML = infoBody(key);
+  const d = $('infodlg'); if(!d.open){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
+  $('infobody').scrollTop = 0;
+}
 // ---------- Systeemkaart afdrukken: een A4 in vier vlakken, om twee keer dubbel te vouwen ----------
 function cardSheetHTML(){
   const B = bidHTML, on = k => state.card.includes(k), esc = s => String(s || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -5783,7 +5898,7 @@ function cardSheetHTML(){
   const o3 = [[B('2C')+': '+c2, B('2D')+': afwachtend'], [B('2D')+': '+d2, d2a], [B('2H')+'/'+B('2S').slice(1)+': '+mj[0], mj[1]],
               [state.c2==='sa' ? '2SA: vervalt' : '2SA: 20–22', state.c2==='sa' ? '&nbsp;' : on('puppet2') ? B('3C')+': Puppet Stayman<br>'+B('3D')+'/'+B('3H').slice(1)+': Jacoby' : B('3C')+': Stayman<br>'+B('3D')+'/'+B('3H').slice(1)+': Jacoby']];
   if(on('gambling')) o3.push(['3SA: Gambling, dichte 7+ krt '+B('1C').slice(1)+'/'+B('1D').slice(1), B('4C')+': pas of corrigeer']);
-  o3.push(['3 en 4 in een kleur', 'Preëmptief: 7- of 8-krt, 5–9']);
+  if(on('o:3x') || on('o:4x')) o3.push([(on('o:3x') && on('o:4x')) ? '3 en 4 in een kleur' : on('o:3x') ? '3 in een kleur' : '4 in een kleur', 'Preëmptief: '+((on('o:3x') && on('o:4x')) ? '7- of 8-krt' : on('o:3x') ? '7-krt' : '8-krt')+', 5–9']);
   const tus = [];
   if(on('negatief')) tus.push(['Negatief doublet', 'Toont de ongeboden hoge kleur(en), 6+']);
   if(on('rubensohl')) tus.push(['Na 1SA van partner', 'Rubensohl: vanaf 2SA transfers']);
@@ -5852,12 +5967,13 @@ function bookHTML(){
      + (state.c2==='sa' ? '<li>'+B('2C')+': sterk en kunstmatig, ook met 20–21 evenwichtig (daarna 2SA). Een 2SA-opening is er dan niet voor die hand.</li>' : '<li>2SA: 20–22 punten, evenwichtig.</li><li>'+B('2C')+': sterk en kunstmatig, vanaf 23 punten (of 22 onevenwichtig)'+(state.c2==='ruiten' ? ', óf een zwakke twee in ruiten; na '+B('2D')+' past de zwakke hand (alerteren)' : '')+'.</li>')
      + '<li>'+B('2D')+': '+d2txt+'.</li>'
      + '<li>'+B('2H')+' en '+B('2S')+': '+(on('muiderberg') ? 'Muiderberg: een vijfkaart met een vierkaart of langer in een lage kleur, 6–10 punten' : (state.d2==='multi' || state.d2==='multis') ? 'lopen via de Multi '+B('2D') : 'een zwakke twee: zeskaart, 6–10 punten')+'.</li>'
-     + '<li>3 in een kleur: zevenkaart, 5–9 punten. 4 in een kleur: achtkaart.</li>'
+     + ((on('o:3x') || on('o:4x')) ? '<li>'+[on('o:3x') ? '3 in een kleur: zevenkaart, 5–9 punten.' : '', on('o:4x') ? '4 in een kleur: achtkaart, 5–9 punten.' : ''].join(' ').trim()+'</li>' : '')
      + '<li>Wet van 20: met 10–11 punten tel je de lengte van je twee langste kleuren erbij. Is dat 20 of meer, dan open je.</li></ul>';
   shown.add([...document.querySelectorAll('#settings .rules h3')].map(e=>e.textContent).find(t=>t.indexOf('Openen')===0) || '');
   const keepOpen = OPEN_SET;
   [['1C','1♣'],['1D','1♦'],['1H','1♥'],['1S','1♠'],['1N','1SA'],['2C','2♣'],['2D','2♦'],['2N','2SA'],['3x','3-niveau']].forEach(o=>{
     if(o[0]==='2N' && state.c2==='sa') return;
+    if(o[0]==='3x' && !on('o:3x')) return;
     if(o[0]==='2D' && state.d2==='zwak' && state.c2==='ruiten') return;
     OPEN_SET = [o[0]]; h += example('openen', 'alles', 'opening '+o[1]);
   });
@@ -5907,6 +6023,17 @@ function renderCardView(){
   $('cvsheet').style.transform = 'scale('+s+')';
   $('cvscale').style.height = Math.round(1123*s)+'px';
 }
+$('infobody').addEventListener('click', e=>{
+  const b = e.target.closest('#inforules');
+  if(!b) return;
+  const want = THEORY[b.dataset.k] || []; let out = '', on = false;
+  for(const el of document.querySelector('#settings .rules').children){ if(el.tagName==='H3') on = want.some(w=>el.textContent.indexOf(w)===0); if(on) out += el.outerHTML; }
+  $('infobody').innerHTML = '<div class="rules">'+out+'</div><p><button class="navclear all" id="infoback" data-k="'+b.dataset.k+'">Terug naar de uitleg</button></p>';
+  $('infobody').scrollTop = 0;
+});
+$('infobody').addEventListener('click', e=>{ const b = e.target.closest('#infoback'); if(b) openInfo(b.dataset.k); });
+$('infoclose').addEventListener('click', ()=>{ const d = $('infodlg'); if(d.close) d.close(); else d.removeAttribute('open'); });
+$('settings').addEventListener('click', e=>{ const b = e.target.closest('[data-info]'); if(b){ e.preventDefault(); openInfo(b.dataset.info); } });
 function openCardView(){
   if(!state.sk || typeof state.sk!=='object') state.sk = {};
   bookCache = '';
@@ -6331,7 +6458,7 @@ function syncPractice(){
 }
 function cardDrop(keys){ state.card = state.card.filter(k=>!keys.includes(k)); syncPractice(); }
 function cardAdd(k){
-  if(k==='openen' || state.card.includes(k) || !BIDDABLE.includes(k)) return;
+  if(k==='openen' || state.card.includes(k) || !CARDKEYS.includes(k)) return;
   let c = state.card.slice();
   BID_EXCL.forEach(pair=>{ if(pair.includes(k)) c = c.filter(x=>!pair.includes(x)); });      // alternatieven sluiten elkaar uit
   if(PUP1==='2c'){ if(k==='puppet1') c = c.filter(x=>x!=='stayman' && x!=='ballumer'); else if(k==='stayman' || k==='ballumer') c = c.filter(x=>x!=='puppet1'); }
@@ -6341,7 +6468,7 @@ function cardAdd(k){
   D2 = state.d2; MULTI = D2==='multi' || D2==='multis';
   if(D2!=='zwak') c = c.filter(x=>x!=='zwak2a');
   if(!MULTI) c = c.filter(x=>x!=='multi');
-  state.card = BIDDABLE.filter(x=>c.includes(x));
+  state.card = CARDKEYS.filter(x=>c.includes(x));
   syncPractice();
 }
 const fixEmptySel = () => {
@@ -6366,6 +6493,7 @@ $('convs').addEventListener('click', e=>{
   const d = b.dataset, top = () => { renderModes(); $('dbody').scrollTop = 0; };
   if(d.begin){ state.learn.on = !state.learn.on; save(); top(); return; }
   if(d.go){ learnView = null; nav = state.learn.on ? [d.go,'leer'] : d.go==='spelen' ? ['spelen','oefen'] : ['bieden']; top(); return; }
+  if(d.info) return;                                // de uitleg-knop heeft zijn eigen afhandeling
   if(d.cardview){ openCardView(); return; }
   if(d.mode){ nav = [nav[0], d.mode]; top(); return; }
   if(d.lview!==undefined){ learnView = +d.lview; top(); return; }
@@ -6393,7 +6521,7 @@ $('convs').addEventListener('click', e=>{
   const isPlayTab = nav[0]==='spelen';
   const scope = () => { const subs = nav[2] ? CONV_SUBS[nav[2]] : null; return nav[3]!=null ? subKeys(subs[nav[3]]) : nav[2] ? CONV_GROUPS[nav[2]] : [].concat(...NAV[nav[0]].map(c=>CONV_GROUPS[c.id])); };
   if(nav[1]==='kaart'){                                                          // de systeemkaart invullen
-    if(d.clear) cardDrop(scope().filter(k=>!k.startsWith('o:')));
+    if(d.clear) cardDrop(scope().filter(k=>!k.startsWith('o:') || CARD_OPEN.includes(k)));
     else{
       const k = d.conv;
       if(!k) return;
@@ -6570,7 +6698,8 @@ if(!state.learn.step || typeof state.learn.step!=='object') state.learn.step = {
 ['bieden','spelen'].forEach(t=>{ state.learn.step[t] = Math.max(0, Math.min(LEARN[t].length-1, state.learn.step[t]|0)); });
 if(!state.learn.run || typeof state.learn.run!=='object' || !LEARN[state.learn.run.t] || !LEARN[state.learn.run.t][state.learn.run.i]) state.learn.run = null;
 state.learn.on = !!state.learn.on;
-state.card = BIDDABLE.filter(k=>k!=='openen' && state.card.includes(k));
+if(!state.preInit){ state.preInit = 1; CARD_OPEN.forEach(k=>{ if(!state.card.includes(k)) state.card.push(k); }); }      // preëmptief openen stond er altijd al stilzwijgend op
+state.card = CARDKEYS.filter(k=>k!=='openen' && state.card.includes(k));
 syncPractice();
 fixEmptySel();
 renderModes(); renderScore(); next(true);
