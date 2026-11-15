@@ -353,6 +353,11 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .vul{display:inline-block;font-size:.85rem;font-weight:700;padding:.05rem .45rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);margin-right:.15rem}
 .isrc{margin:.2rem 0 0;padding-left:1.1rem;font-size:.85rem;line-height:1.5}
 .isrc a{color:var(--felt)}
+.ltab{border-collapse:collapse;width:100%;margin:.2rem 0 .5rem;font-size:.95rem}
+.ltab th{text-align:left;font-weight:700;font-size:.8rem;color:var(--muted);padding:.15rem .3rem}
+.ltab td{padding:.14rem .3rem;border-top:1px solid var(--line)}
+.ltab td:first-child{font-weight:700;white-space:nowrap}
+.lcell{min-width:3.4rem;padding:.3rem .5rem;border-radius:.55rem;border:1px solid var(--felt);background:var(--surface);color:var(--ink, inherit);font:inherit;font-weight:700;cursor:pointer}
 .cnote{margin:0 0 .45rem;padding:.35rem .6rem;border-radius:.6rem;background:var(--surface);border:1px solid var(--line);font-size:.9rem;line-height:1.35}
 .convrow .pick{flex:1;min-width:0;display:flex;align-items:center;gap:.55rem;font:inherit;font-weight:700;font-size:1rem;text-align:left;padding:.65rem .8rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer}
 .convrow .pick::before{content:"";flex:none;width:1.1rem;height:1.1rem;border-radius:4px;border:2px solid var(--muted);box-sizing:border-box}
@@ -580,12 +585,8 @@ summary{cursor:pointer;font-weight:700}
   </div>
   <div id="leadpbox">
     <h3 class="grp">Uitkomen van honneurs</h3>
-    <p class="lbl">Van een serie (H V B, V B 10)</p>
-    <nav class="modes" id="lp_serie" aria-label="Kies wat je uitkomt van een serie"></nav>
-    <p class="lbl">Van een onderbroken serie (H V 10 x)</p>
-    <nav class="modes" id="lp_onder" aria-label="Kies wat je uitkomt van een onderbroken serie"></nav>
-    <p class="lbl">Tegen SA van H V x (x)</p>
-    <nav class="modes" id="lp_hvx" aria-label="Kies wat je tegen SA uitkomt van heer-vrouw"></nav>
+    <p class="lbl">Tik op een vakje om de kaart te wijzigen. Zo vul je de tabel op de kaart in.</p>
+    <table class="ltab" id="ltab"></table>
     <p class="lbl">In partners kleur, met twee kaarten</p>
     <nav class="modes" id="lp_twee" aria-label="Kies wat je uitkomt in partners kleur"></nav>
   </div>
@@ -6414,10 +6415,10 @@ function renderModes(){
     const L = lpGet();
     pg = '<p class="hint">Deze afspraken komen op de afgedrukte kaart, in het vlak Uitkomen en signaleren.</p>'
        + '<button class="navrow has" data-ksub="0"><span>'+LEADPG[0]+'</span><small>SA: '+LEADN_[state.leadLen]+' · troef: '+LEADN_[state.leadSuit]+' · van A H de '+(state.leadAK==='K' ? 'heer' : 'aas')+'</small></button>'
-       + '<button class="navrow has" data-ksub="1"><span>'+LEADPG[1]+'</span><small>'+(L.serie==='rus' ? 'Rusinow tegen troef' : 'Hoogste van een serie')+' · partners kleur: de '+(L.twee==='laag' ? 'laagste' : 'hoogste')+'</small></button>'
+       + '<button class="navrow has" data-ksub="1"><span>'+LEADPG[1]+'</span><small>'+LT_ROWS.slice(1,3).map(r=>r[1].replace(' (x)','')+': '+ltGet()[r[0]].join('/')).join(' · ')+' · partners kleur: de '+(L.twee==='laag' ? 'laagste' : 'hoogste')+'</small></button>'
        + '<button class="navrow has" data-ksub="2"><span>'+LEADPG[2]+'</span><small>'+(state.sig==='rom' ? 'Romeins-Lavinthal' : 'Hoog is aan, Lavinthal')+'</small></button>';
   }else if(leadsPage){
-    pg = '<p class="hint">'+['Welke kleine kaart kom je uit, en wat speel je van aas-heer?', 'Welke kaart kom je uit van een serie honneurs?', 'Hoe signaleren jullie?'][nav[2]]+'</p>';
+    pg = '<p class="hint">'+['Welke kleine kaart kom je uit, en wat speel je van aas-heer?', 'Welke kaart kom je uit van welke combinatie, tegen SA en tegen een troefcontract?', 'Hoe signaleren jullie?'][nav[2]]+'</p>';
   }else if(T==='bieden' && !mode){
     pg = '<p class="hint">Leg eerst vast wat jullie spelen. Bij Oefenen kies je daaruit wat je nu wilt trainen.</p>'
        + '<button class="navrow has" data-mode="kaart"><span>Mijn systeemkaart</span><small>'+state.card.length+' afspraken</small></button>'
@@ -6446,7 +6447,7 @@ function renderModes(){
   }else{
     const single = state.conv===pk;
     pg = '<p class="hint">'+(cardMode ? 'Welke variant spelen jullie bij '+CONVS[pk]+'?' : 'Opties bij '+CONVS[pk]+'.')+'</p>';
-    if(!cardMode && stepsN(pk)>1 && !single) pg += '<p class="hint">Een onderdeel kiezen kan als dit je enige oefening is.</p><div class="navtools"><button class="navclear all" data-only="'+pk+'">Alleen '+CONVS[pk]+' oefenen</button></div>';
+    if(!cardMode && stepsN(pk)>1 && !single) pg += '<p class="hint">Je oefent nu meerdere dingen door elkaar. Kies je hieronder een onderdeel, dan oefen je alleen '+CONVS[pk]+'.</p><div class="navtools"><button class="navclear all" data-only="'+pk+'">Alleen '+CONVS[pk]+' oefenen</button></div>';
   }
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
@@ -6454,17 +6455,22 @@ function renderModes(){
   $('homeextra').hidden = !!T;
   const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadbox'],['leadpbox'],['sigbox']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
   ['leadpbox','leadbox','sigbox','openselbox','openbox','sysbox','c2box','d2box','pupbox','muidbox','muidlbox','w2box','bwbox','rkhbox','acolbox','benbox','lmbox','bergbox','t1rbox','t1nbox','t1dbox','fkfbox','rkcbox'].forEach(id=>{ $(id).hidden = !boxes.includes(id); });
-  $('stepsbox').hidden = !(showOpt && !cardMode && state.conv===pk && Object.keys(steps).length>1);
+  const pkSteps = (showOpt && !cardMode) ? (STEPS_BY[pk] || STEPS) : steps;      // de onderdelen van de oefening waar je naar kijkt, ook als je een mix oefent
+  $('stepsbox').hidden = !(showOpt && !cardMode && Object.keys(pkSteps).length>1);
   renderOpenSel();
   $('optbox').hidden = !boxes.length && $('stepsbox').hidden;
   const emptySel = (state.conv==='biedmix' && !state.bidSet.length) || (state.conv==='spelmix' && !state.playSet.length);
   $('close').disabled = emptySel;
   $('close').textContent = emptySel ? 'Kies eerst iets om te oefenen' : 'Aan de slag: '+(state.conv==='biedmix' ? 'bieden, '+state.bidSet.length+' onderdelen door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' onderdelen door elkaar' : CONVS[state.conv]);
-  chips($('steps'), steps, state.step, 'step');
+  chips($('steps'), pkSteps, (pk && state.conv!==pk) ? 'alles' : state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
   chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
   chips($('leadsuit'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadSuit, 'v');
-  { const L = lpGet(); chips($('lp_serie'), {top:'De hoogste', rus:'Rusinow: tegen troef de tweede'}, L.serie, 'v'); chips($('lp_onder'), {top:'De hoogste', klein:'Klein'}, L.onder, 'v'); chips($('lp_hvx'), {klein:'Klein', heer:'De heer'}, L.hvx, 'v'); chips($('lp_twee'), {hoog:'De hoogste', laag:'De laagste'}, L.twee, 'v'); }
+  { const L = lpGet(), T2 = ltGet(), KL = {'4':'4e', '35':'3e/5e', 'rom':'Rom.'};
+    $('ltab').innerHTML = '<tr><th>Kaart</th><th>SA</th><th>Kleur</th></tr>'
+      + LT_ROWS.map(r=>'<tr><td>'+r[1]+'</td>'+[0,1].map(i=>'<td><button class="lcell" data-lt="'+r[0]+'" data-col="'+i+'" aria-label="'+r[1]+' tegen '+(i ? 'troef' : 'SA')+': '+T2[r[0]][i]+'. Tik om te wijzigen">'+T2[r[0]][i]+'</button></td>').join('')+'</tr>').join('')
+      + '<tr><td>x x x x (x)</td><td><button class="lcell" data-lt="X" data-col="0">'+KL[state.leadLen]+'</button></td><td><button class="lcell" data-lt="X" data-col="1">'+KL[state.leadSuit]+'</button></td></tr>';
+    chips($('lp_twee'), {hoog:'De hoogste', laag:'De laagste'}, L.twee, 'v'); }
   chips($('sig'), {'rom':'Romeins-Lavinthal', 'std':'Hoog is aan, Lavinthal bij niet bekennen'}, state.sig, 'v');
   chips($('fkf'), {'gf':'Mancheforcing', 'inv':'Vanaf een uitnodiging'}, state.fkf, 'v');
   chips($('heren'), {'5sa':'Met 5SA', 'stroom':'Gestroomlijnd'}, state.heren, 'v');
@@ -6822,9 +6828,8 @@ function cardSheetHTML(){
   const ak = state.leadAK==='K' ? 'H' : 'A';
   let p1 = '<h4>Uitkomen</h4>'+tbl([['Tegen troef', LEADN[state.leadSuit]], ['Tegen SA', LEADN[state.leadLen]], ['Van A H (troef)', state.leadAK==='K' ? 'de heer' : 'de aas']])
     + '<h4>Uitkomstprincipes</h4><table class="w3"><tr><th>Kaart</th><th>SA</th><th>Kleur</th><th>Toelichting</th></tr>'
-    + (()=>{ const L = lpGet(), rus = L.serie==='rus', sr = rus ? 'Tegen troef de tweede (Rusinow)' : 'Hoogste van de serie', kl = {'4':'4e', '35':'3e/5e', 'rom':'Rom.'};
-        return [['A H x (x)', ak, ak, 'Van aas-heer'], ['H V B (x)', 'H', rus ? 'V' : 'H', sr], ['H V x (x)', L.hvx==='heer' ? 'H' : 'x', rus ? 'V' : 'H', L.hvx==='heer' ? 'Ook tegen SA de heer' : 'Tegen troef is twee genoeg'], ['V B 10 (x)', 'V', rus ? 'B' : 'V', sr],
-                ['H V 10 x', L.onder==='klein' ? 'x' : 'H', rus ? 'V' : 'H', L.onder==='klein' ? 'Tegen SA klein' : 'Bijna een serie'], ['x x x x (x)', kl[state.leadLen], kl[state.leadSuit], 'Klein: zie Uitkomen']]; })().map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>'
+    + (()=>{ const T2 = ltGet(), kl = {'4':'4e', '35':'3e/5e', 'rom':'Rom.'};
+        return LT_ROWS.map(r=>[r[1], T2[r[0]][0], T2[r[0]][1], ltNote(r[0], T2[r[0]])]).concat([['x x x x (x)', kl[state.leadLen], kl[state.leadSuit], 'Klein: zie Uitkomen']]); })().map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>'
     + '<p class="sknt">Tegen troef nooit klein onder een aas vandaan. Partners kleur: van twee de '+(lpGet().twee==='laag' ? 'laagste' : 'hoogste')+'.</p>'
     + '<h4>Signaleren</h4>'+tbl([['Op partners uitkomst', state.sig==='rom' ? 'Romeins: oneven is aan' : 'Hoog is aan, laag is af'], ['Bij niet bekennen', state.sig==='rom' ? 'Romeins-Lavinthal' : 'Lavinthal'], ['&nbsp;', '']]);
   // vlak 2 (rechtsboven, de voorkant): namen, basissysteem, openingen op 1-niveau
@@ -7476,6 +7481,25 @@ function exclWhy(k, gone){
 let cardNote = null;
 const LEADN_ = {'4':'4e van boven', '35':'3e of 5e', 'rom':'Romeins'};
 // Uitkomen van honneurs: serie (top = hoogste, rus = Rusinow tegen troef), onder (onderbroken serie H V 10: top of klein), hvx (tegen SA van H V x: klein of heer), twee (partners kleur met twee kaarten: hoog of laag)
+// De tabel met uitkomstprincipes: per combinatie de kaart tegen SA en tegen een troefcontract. Elk vakje is instelbaar.
+const LT_ROWS = [['AH','A H x (x)',['A','H']], ['HVB','H V B (x)',['H','V']], ['HVX','H V x (x)',['x','H','V']], ['VB10','V B 10 (x)',['V','B']], ['HV10','H V 10 x',['H','V','x']]];
+function ltGet(){
+  const s = (typeof state!=='undefined' && state) || {}, L = lpGet(), ak = s.leadAK==='K' ? 'H' : 'A', rus = L.serie==='rus';
+  const d = {AH:[ak, ak], HVB:['H', rus ? 'V' : 'H'], HVX:[L.hvx==='heer' ? 'H' : 'x', rus ? 'V' : 'H'], VB10:['V', rus ? 'B' : 'V'], HV10:[L.onder==='klein' ? 'x' : 'H', rus ? 'V' : 'H']};
+  const t = s.lt || {};
+  LT_ROWS.forEach(r=>{ const v = t[r[0]]; if(Array.isArray(v)) [0,1].forEach(i=>{ if(r[2].includes(v[i])) d[r[0]][i] = v[i]; }); });
+  d.AH[1] = ak;                                        // de aas-heer-keuze tegen troef is dezelfde als op de pagina 'Klein uitkomen en aas-heer'
+  return d;
+}
+function ltNote(key, v){
+  const top = {HVB:'H', HVX:'H', VB10:'V', HV10:'H'}[key];
+  if(key==='AH') return 'Van aas-heer';
+  if(key==='HVX' && v[0]==='x' && v[1]==='H') return 'Tegen troef is twee genoeg';
+  if(v[0]===top && v[1]===top) return key==='HV10' ? 'Bijna een serie' : 'Hoogste van de serie';
+  if(v[0]===top && v[1]!==top && v[1]!=='x') return 'Tegen troef de tweede (Rusinow)';
+  if(v[0]==='x' && v[1]===top) return 'Tegen SA klein';
+  return 'Volgens afspraak';
+}
 function lpGet(){ const d = {serie:'top', onder:'top', hvx:'klein', twee:'hoog'}, s = (typeof state!=='undefined' && state.lp) || {}; return {serie:s.serie==='rus' ? 'rus' : d.serie, onder:s.onder==='klein' ? 'klein' : d.onder, hvx:s.hvx==='heer' ? 'heer' : d.hvx, twee:s.twee==='laag' ? 'laag' : d.twee}; }
 function normD2(){ if(isMultiV(state.d2) && !state.card.includes('multi')) state.d2 = 'zwak'; if(state.d2==='benji' && !state.card.includes('benji')) state.d2 = 'zwak'; if(state.d2!=='benji') state.card = state.card.filter(x=>x!=='benji'); D2 = state.d2; MULTI = isMultiV(D2); }
 function nameSync(){ CONVS['c2:2n'] = '2SA ('+(D2==='benji' ? '21–22' : D2==='multib' ? '20–21' : '20–22')+')'; }
@@ -7610,12 +7634,21 @@ $('leadlen').addEventListener('click', e=>{
   state.leadLen = b.dataset.v; LEAD_SA = state.leadLen; save();
   renderModes(); next(true);
 });
-['serie','onder','hvx','twee'].forEach(key=>$('lp_'+key).addEventListener('click', e=>{
+$('lp_twee').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
-  state.lp = Object.assign(lpGet(), {[key]:b.dataset.v}); save();
+  state.lp = Object.assign(lpGet(), {twee:b.dataset.v}); save();
   renderModes();
-}));
+});
+$('ltab').addEventListener('click', e=>{
+  const b = e.target.closest('.lcell');
+  if(!b) return;
+  const key = b.dataset.lt, col = +b.dataset.col, nxt = (list, cur) => list[(list.indexOf(cur)+1) % list.length];
+  if(key==='X'){ const f = col ? 'leadSuit' : 'leadLen'; state[f] = nxt(['4','35','rom'], state[f]); if(col) LEAD_SUIT = state.leadSuit; else LEAD_SA = state.leadLen; }
+  else if(key==='AH' && col===1){ state.leadAK = state.leadAK==='K' ? 'A' : 'K'; LEAD_AK = state.leadAK; }
+  else{ const T2 = ltGet(), row = LT_ROWS.find(r=>r[0]===key); T2[key][col] = nxt(row[2], T2[key][col]); state.lt = T2; }
+  save(); renderModes(); next(true);
+});
 $('sig').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
@@ -7769,6 +7802,12 @@ $('rkc').addEventListener('click', e=>{
 $('steps').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b) return;
+  if(nav[4] && state.conv!==nav[4]){                                  // in een mix: een onderdeel kiezen maakt dit je enige oefening
+    if(b.dataset.step==='alles') return;
+    const only = document.querySelector('#navpage [data-only="'+nav[4]+'"]');
+    if(!only) return;
+    only.click();
+  }
   state.step = b.dataset.step; save();
   renderModes(); next(true);
 });
