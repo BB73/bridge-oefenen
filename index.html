@@ -357,6 +357,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .ltab th{text-align:left;font-weight:700;font-size:.8rem;color:var(--muted);padding:.15rem .3rem}
 .ltab td{padding:.14rem .3rem;border-top:1px solid var(--line)}
 .ltab td:first-child{font-weight:700;white-space:nowrap}
+.lcell.wide{display:block;width:100%;text-align:left;margin:.15rem 0}
 .lcell{min-width:3.4rem;padding:.3rem .5rem;border-radius:.55rem;border:1px solid var(--felt);background:var(--surface);color:var(--ink, inherit);font:inherit;font-weight:700;cursor:pointer}
 .cnote{margin:0 0 .45rem;padding:.35rem .6rem;border-radius:.6rem;background:var(--surface);border:1px solid var(--line);font-size:.9rem;line-height:1.35}
 .convrow .pick{flex:1;min-width:0;display:flex;align-items:center;gap:.55rem;font:inherit;font-weight:700;font-size:1rem;text-align:left;padding:.65rem .8rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);cursor:pointer}
@@ -584,8 +585,8 @@ summary{cursor:pointer;font-weight:700}
     <nav class="modes" id="leadak" aria-label="Kies aas of heer van aas-heer"></nav>
   </div>
   <div id="leadpbox">
-    <h3 class="grp">Uitkomen van honneurs</h3>
-    <p class="lbl">Tik op een vakje om de kaart te wijzigen. Zo vul je de tabel op de kaart in.</p>
+    <h3 class="grp">Uitkomen</h3>
+    <p class="lbl">Tik op een vakje om te wijzigen.</p>
     <table class="ltab" id="ltab"></table>
     <p class="lbl">In partners kleur, met twee kaarten</p>
     <nav class="modes" id="lp_twee" aria-label="Kies wat je uitkomt in partners kleur"></nav>
@@ -6377,7 +6378,7 @@ function renderModes(){
   if(cat && nav[3]==null && visSubs.length===1 && !setPage(cat.id, visSubs[0])) nav[3] = visSubs[0];      // maar één subrubriek: ga er meteen heen
   const sub = (subsOf && nav[3]!=null) ? subsOf[nav[3]] : null, pk = nav[4] || null;
   tab = (T==='bieden' || T==='spelen') ? T : tabOf(state.conv);
-  const LEADPG = ['Klein uitkomen en aas-heer', 'Uitkomen van honneurs', 'Signaleren'];
+  const LEADPG = ['Uitkomen', 'Signaleren'];
   const leadsPage = T==='kaart' && nav[1]==='leads';
   const sysPage = !!cat && !pk && setPage(cat.id, nav[3]) && nav[3]===0;
   const c2Page = false;
@@ -6414,11 +6415,10 @@ function renderModes(){
   }else if(leadsPage && nav[2]==null){
     const L = lpGet();
     pg = '<p class="hint">Deze afspraken komen op de afgedrukte kaart, in het vlak Uitkomen en signaleren.</p>'
-       + '<button class="navrow has" data-ksub="0"><span>'+LEADPG[0]+'</span><small>SA: '+LEADN_[state.leadLen]+' · troef: '+LEADN_[state.leadSuit]+' · van A H de '+(state.leadAK==='K' ? 'heer' : 'aas')+'</small></button>'
-       + '<button class="navrow has" data-ksub="1"><span>'+LEADPG[1]+'</span><small>'+LT_ROWS.slice(1,3).map(r=>r[1].replace(' (x)','')+': '+ltGet()[r[0]].join('/')).join(' · ')+' · partners kleur: de '+(L.twee==='laag' ? 'laagste' : 'hoogste')+'</small></button>'
-       + '<button class="navrow has" data-ksub="2"><span>'+LEADPG[2]+'</span><small>'+(state.sig==='rom' ? 'Romeins-Lavinthal' : 'Hoog is aan, Lavinthal')+'</small></button>';
+       + '<button class="navrow has" data-ksub="0"><span>'+LEADPG[0]+'</span><small>Kleintjes tegen SA: '+LEADN_[state.leadLen]+' · tegen troef: '+LEADN_[state.leadSuit]+' · en de tabel met honneurs</small></button>'
+       + '<button class="navrow has" data-ksub="1"><span>'+LEADPG[1]+'</span><small>'+(state.sig==='rom' ? 'Romeins-Lavinthal' : 'Hoog is aan, Lavinthal')+'</small></button>';
   }else if(leadsPage){
-    pg = '<p class="hint">'+['Welke kleine kaart kom je uit, en wat speel je van aas-heer?', 'Welke kaart kom je uit van welke combinatie, tegen SA en tegen een troefcontract?', 'Hoe signaleren jullie?'][nav[2]]+'</p>';
+    pg = '<p class="hint">'+['Welke kaart kom je uit van welke combinatie, tegen SA en tegen een troefcontract?', 'Hoe signaleren jullie?'][nav[2]]+'</p>';
   }else if(T==='bieden' && !mode){
     pg = '<p class="hint">Leg eerst vast wat jullie spelen. Bij Oefenen kies je daaruit wat je nu wilt trainen.</p>'
        + '<button class="navrow has" data-mode="kaart"><span>Mijn systeemkaart</span><small>'+state.card.length+' afspraken</small></button>'
@@ -6453,7 +6453,7 @@ function renderModes(){
   $('navpage').innerHTML = pg;
   $('settitle').textContent = learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
   $('homeextra').hidden = !!T;
-  const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadbox'],['leadpbox'],['sigbox']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
+  const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadpbox'],['sigbox']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
   ['leadpbox','leadbox','sigbox','openselbox','openbox','sysbox','c2box','d2box','pupbox','muidbox','muidlbox','w2box','bwbox','rkhbox','acolbox','benbox','lmbox','bergbox','t1rbox','t1nbox','t1dbox','fkfbox','rkcbox'].forEach(id=>{ $(id).hidden = !boxes.includes(id); });
   const pkSteps = (showOpt && !cardMode) ? (STEPS_BY[pk] || STEPS) : steps;      // de onderdelen van de oefening waar je naar kijkt, ook als je een mix oefent
   $('stepsbox').hidden = !(showOpt && !cardMode && Object.keys(pkSteps).length>1);
@@ -6464,12 +6464,12 @@ function renderModes(){
   $('close').textContent = emptySel ? 'Kies eerst iets om te oefenen' : 'Aan de slag: '+(state.conv==='biedmix' ? 'bieden, '+state.bidSet.length+' onderdelen door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' onderdelen door elkaar' : CONVS[state.conv]);
   chips($('steps'), pkSteps, (pk && state.conv!==pk) ? 'alles' : state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
-  chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadLen, 'v');
-  chips($('leadsuit'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins (oneven)'}, state.leadSuit, 'v');
+  chips($('leadlen'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins-Lavinthal'}, state.leadLen, 'v');
+  chips($('leadsuit'), {'4':'Vierde van boven', '35':'Derde of vijfde', 'rom':'Romeins-Lavinthal'}, state.leadSuit, 'v');
   { const L = lpGet(), T2 = ltGet(), KL = {'4':'4e', '35':'3e/5e', 'rom':'Rom.'};
     $('ltab').innerHTML = '<tr><th>Kaart</th><th>SA</th><th>Kleur</th></tr>'
       + LT_ROWS.map(r=>'<tr><td>'+r[1]+'</td>'+[0,1].map(i=>'<td><button class="lcell" data-lt="'+r[0]+'" data-col="'+i+'" aria-label="'+r[1]+' tegen '+(i ? 'troef' : 'SA')+': '+T2[r[0]][i]+'. Tik om te wijzigen">'+T2[r[0]][i]+'</button></td>').join('')+'</tr>').join('')
-      + '<tr><td>x x x x (x)</td><td><button class="lcell" data-lt="X" data-col="0">'+KL[state.leadLen]+'</button></td><td><button class="lcell" data-lt="X" data-col="1">'+KL[state.leadSuit]+'</button></td></tr>';
+      + '<tr><td>x x x x (x)</td><td colspan="2"><button class="lcell wide" data-lt="X" data-col="0">SA: '+LEADN_[state.leadLen]+'</button><button class="lcell wide" data-lt="X" data-col="1">Troef: '+LEADN_[state.leadSuit]+'</button></td></tr>';
     chips($('lp_twee'), {hoog:'De hoogste', laag:'De laagste'}, L.twee, 'v'); }
   chips($('sig'), {'rom':'Romeins-Lavinthal', 'std':'Hoog is aan, Lavinthal bij niet bekennen'}, state.sig, 'v');
   chips($('fkf'), {'gf':'Mancheforcing', 'inv':'Vanaf een uitnodiging'}, state.fkf, 'v');
@@ -6822,14 +6822,14 @@ function cardSheetHTML(){
   const B = bidHTML, on = k => state.card.includes(k), esc = s => String(s || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const sk = state.sk || {};
   const tbl = (rows, cls) => rows.length ? '<table'+(cls ? ' class="'+cls+'"' : '')+'>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>' : '';
-  const LEADN = {'4':'4e van boven', '35':'3e of 5e', 'rom':'Romeins (oneven vraagt door)'};
+  const LEADN = {'4':'4e van boven', '35':'3e of 5e', 'rom':'Romeins-Lavinthal'};
   const five = state.base!=='4h', cl = state.base==='5h2' ? 2 : state.base==='4h' ? 4 : 3, dl = state.base==='5h3' ? 3 : 4, ml = five ? 5 : 4;
   // vlak 1 (linksboven): uitkomen en signaleren
   const ak = state.leadAK==='K' ? 'H' : 'A';
   let p1 = '<h4>Uitkomen</h4>'+tbl([['Tegen troef', LEADN[state.leadSuit]], ['Tegen SA', LEADN[state.leadLen]], ['Van A H (troef)', state.leadAK==='K' ? 'de heer' : 'de aas']])
     + '<h4>Uitkomstprincipes</h4><table class="w3"><tr><th>Kaart</th><th>SA</th><th>Kleur</th><th>Toelichting</th></tr>'
     + (()=>{ const T2 = ltGet(), kl = {'4':'4e', '35':'3e/5e', 'rom':'Rom.'};
-        return LT_ROWS.map(r=>[r[1], T2[r[0]][0], T2[r[0]][1], ltNote(r[0], T2[r[0]])]).concat([['x x x x (x)', kl[state.leadLen], kl[state.leadSuit], 'Klein: zie Uitkomen']]); })().map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>'
+        return LT_ROWS.map(r=>[r[1], T2[r[0]][0], T2[r[0]][1], ltNote(r[0], T2[r[0]])]).concat([['x x x x (x)', 'x', 'x', state.leadLen===state.leadSuit ? LEADN[state.leadLen] : 'SA: '+LEADN[state.leadLen]+'; troef: '+LEADN[state.leadSuit]]]); })().map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>'
     + '<p class="sknt">Tegen troef nooit klein onder een aas vandaan. Partners kleur: van twee de '+(lpGet().twee==='laag' ? 'laagste' : 'hoogste')+'.</p>'
     + '<h4>Signaleren</h4>'+tbl([['Op partners uitkomst', state.sig==='rom' ? 'Romeins: oneven is aan' : 'Hoog is aan, laag is af'], ['Bij niet bekennen', state.sig==='rom' ? 'Romeins-Lavinthal' : 'Lavinthal'], ['&nbsp;', '']]);
   // vlak 2 (rechtsboven, de voorkant): namen, basissysteem, openingen op 1-niveau
@@ -7479,21 +7479,21 @@ function exclWhy(k, gone){
   return 'Je speelt één van de twee.';
 }
 let cardNote = null;
-const LEADN_ = {'4':'4e van boven', '35':'3e of 5e', 'rom':'Romeins'};
+const LEADN_ = {'4':'4e van boven', '35':'3e of 5e', 'rom':'Romeins-Lavinthal'};
 // Uitkomen van honneurs: serie (top = hoogste, rus = Rusinow tegen troef), onder (onderbroken serie H V 10: top of klein), hvx (tegen SA van H V x: klein of heer), twee (partners kleur met twee kaarten: hoog of laag)
 // De tabel met uitkomstprincipes: per combinatie de kaart tegen SA en tegen een troefcontract. Elk vakje is instelbaar.
-const LT_ROWS = [['AH','A H x (x)',['A','H']], ['HVB','H V B (x)',['H','V']], ['HVX','H V x (x)',['x','H','V']], ['VB10','V B 10 (x)',['V','B']], ['HV10','H V 10 x',['H','V','x']]];
+const LT_ROWS = [['AH','A H x (x)',['A','H','x']], ['HVB','H V B (x)',['H','V','B']], ['HVX','H V x (x)',['x','H','V']], ['VB10','V B 10 (x)',['V','B','10']], ['HV10','H V 10 x',['H','V','10','x']]];
 function ltGet(){
   const s = (typeof state!=='undefined' && state) || {}, L = lpGet(), ak = s.leadAK==='K' ? 'H' : 'A', rus = L.serie==='rus';
   const d = {AH:[ak, ak], HVB:['H', rus ? 'V' : 'H'], HVX:[L.hvx==='heer' ? 'H' : 'x', rus ? 'V' : 'H'], VB10:['V', rus ? 'B' : 'V'], HV10:[L.onder==='klein' ? 'x' : 'H', rus ? 'V' : 'H']};
   const t = s.lt || {};
   LT_ROWS.forEach(r=>{ const v = t[r[0]]; if(Array.isArray(v)) [0,1].forEach(i=>{ if(r[2].includes(v[i])) d[r[0]][i] = v[i]; }); });
-  d.AH[1] = ak;                                        // de aas-heer-keuze tegen troef is dezelfde als op de pagina 'Klein uitkomen en aas-heer'
+  if(d.AH[1]!=='x') d.AH[1] = ak;                      // aas of heer tegen troef is dezelfde keuze als bij de oefening Uitkomen
   return d;
 }
 function ltNote(key, v){
   const top = {HVB:'H', HVX:'H', VB10:'V', HV10:'H'}[key];
-  if(key==='AH') return 'Van aas-heer';
+  if(key==='AH') return (v[0]==='x' || v[1]==='x') ? 'Volgens afspraak' : 'Van aas-heer';
   if(key==='HVX' && v[0]==='x' && v[1]==='H') return 'Tegen troef is twee genoeg';
   if(v[0]===top && v[1]===top) return key==='HV10' ? 'Bijna een serie' : 'Hoogste van de serie';
   if(v[0]===top && v[1]!==top && v[1]!=='x') return 'Tegen troef de tweede (Rusinow)';
@@ -7645,7 +7645,7 @@ $('ltab').addEventListener('click', e=>{
   if(!b) return;
   const key = b.dataset.lt, col = +b.dataset.col, nxt = (list, cur) => list[(list.indexOf(cur)+1) % list.length];
   if(key==='X'){ const f = col ? 'leadSuit' : 'leadLen'; state[f] = nxt(['4','35','rom'], state[f]); if(col) LEAD_SUIT = state.leadSuit; else LEAD_SA = state.leadLen; }
-  else if(key==='AH' && col===1){ state.leadAK = state.leadAK==='K' ? 'A' : 'K'; LEAD_AK = state.leadAK; }
+  else if(key==='AH' && col===1){ const T2 = ltGet(), v = nxt(['A','H','x'], T2.AH[1]); T2.AH[1] = v; state.lt = T2; if(v!=='x'){ state.leadAK = v==='H' ? 'K' : 'A'; LEAD_AK = state.leadAK; } }
   else{ const T2 = ltGet(), row = LT_ROWS.find(r=>r[0]===key); T2[key][col] = nxt(row[2], T2[key][col]); state.lt = T2; }
   save(); renderModes(); next(true);
 });
