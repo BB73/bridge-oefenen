@@ -445,6 +445,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .ldot[aria-pressed="true"]{outline:3px solid color-mix(in srgb, var(--felt) 45%, transparent);outline-offset:1px}
 .lcard{padding:.7rem .8rem .8rem;border:1px solid var(--felt);border-radius:12px;background:color-mix(in srgb, var(--felt) 7%, var(--surface))}
 .lcard.lock{border-color:var(--line);background:var(--surface)}
+.tdet{margin:.8rem 0 .2rem} .tdet summary{cursor:pointer;font-weight:700;font-size:.92rem;padding:.4rem 0;color:var(--felt)}
 .lcard p{margin:0 0 .5rem;font-size:.92rem;line-height:1.35}
 .lcard .lname{font-family:var(--display);font-weight:700;font-size:1.05rem;margin-bottom:.15rem}
 .lcard .lstat{font-size:.82rem;color:var(--muted)} .lcard .lstat.done{color:var(--good)}
@@ -6161,6 +6162,36 @@ if(state.conv==='biedmix' && state.bidSet.length<2) state.conv = state.bidSet[0]
 if(!CONVS[state.conv]) state.conv = 'stayman';
 if(!STEPS[state.step]) state.step = 'alles';
 if(!state.stats || typeof state.stats!=='object') state.stats = {};
+if(!state.test || typeof state.test!=='object' || !Array.isArray(state.test.q)) state.test = null;
+// ---------- Toets van je systeemkaart: een paar vragen per afspraak, door elkaar; daarna een oordeel per afspraak en een oefenplan ----------
+const TEST_N = 3, TEST_NOPEN = 5;                    // vragen per afspraak; de openingen zijn er veel, die krijgen er meer
+const testKeys = () => BIDDABLE.filter(k=>k!=='openen' && state.card.includes(k)).concat(['openen']);
+const testOn = () => !!(state.test && state.test.run && state.conv==='biedmix' && state.bidSet.join(',')===state.test.set);
+function testArm(){                                  // zet de toets aan: je hele kaart door elkaar
+  const ks = testKeys();
+  state.openSet = O_ALL.filter(x=>NAV_OPEN.includes(x)); OPEN_SET = state.openSet.slice();
+  state.bidSet = BIDDABLE.filter(x=>ks.includes(x)); state.conv = 'biedmix'; state.step = 'alles';
+  if(state.learn) state.learn.run = null;
+  state.test.set = state.bidSet.join(','); state.test.run = true;
+}
+function testStart(){
+  const qq = [];
+  testKeys().forEach(k=>{ for(let i=0;i<(k==='openen' ? TEST_NOPEN : TEST_N);i++) qq.push(k); });
+  for(let i=qq.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [qq[i],qq[j]] = [qq[j],qq[i]]; }
+  state.test = {q:qq, i:0, res:{}, run:false, done:false, set:''};
+  testArm();
+}
+function testRows(){                                 // de uitslag per afspraak, zwakste eerst
+  const R = state.test ? state.test.res : {};
+  return Object.keys(R).filter(k=>R[k][1]).map(k=>({k, name:CONVS[k] || k, good:R[k][0], n:R[k][1], pct:R[k][0]/R[k][1]})).sort((a,b)=>a.pct-b.pct || b.n-a.n);
+}
+const testPlan = () => testRows().filter(r=>r.pct<0.8).slice(0,3);
+function testPractice(ks){                           // oefen een of meer afspraken uit het plan
+  if(state.test) state.test.run = false;
+  if(ks.includes('openen')){ state.openSet = O_ALL.filter(x=>NAV_OPEN.includes(x)); OPEN_SET = state.openSet.slice(); }
+  state.bidSet = BIDDABLE.filter(x=>ks.includes(x)); state.conv = state.bidSet.length===1 ? state.bidSet[0] : 'biedmix'; state.step = 'alles';
+  if(state.learn) state.learn.run = null;
+}
 if(state.rkc!=='1430' && state.rkc!=='3014') state.rkc = '1430';
 RKC = state.rkc;
 if(state.muid!=='minmax' && state.muid!=='lengte') state.muid = 'minmax';
@@ -6386,6 +6417,7 @@ function renderModes(){
   // kruimelpad: elk eerder niveau is een link terug
   const cr = [['Home', 0]];
   if(T==='kaart'){ cr.push(['Mijn systeemkaart', 1]); if(leadsPage) cr.push(['Uitkomen en signaleren', 2]); if(leadsPage && nav[2]!=null) cr.push([LEADPG[nav[2]], 3]); }
+  else if(T==='test'){ cr.push(['Challenge jezelf', 1]); if(mode) cr.push([mode==='toets' ? 'Test je systeemkaart' : 'Leerpad basisregels', 2]); }
   else if(T==='bieden' && cardMode){ cr.push(['Mijn systeemkaart', 'k']); cr.push(['Bieden', 2]); }
   else if(T) cr.push([(T==='bieden' ? 'Bieden' : 'Spelen')+(learnPage ? ': leerpad' : ''), 2]);
   if(cat) cr.push([cat.name, visSubs.length>1 ? 3 : 4]);
@@ -6403,10 +6435,44 @@ function renderModes(){
   if(!T){
     pg = '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
        + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
-       + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+state.card.length+' biedafspraken · uitkomen en signaleren · afdrukken</small></button></div>';
+       + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+state.card.length+' afspraken · uitkomen · afdrukken</small></button>'
+       + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
     if(state.learn.on) pg = '<div class="homebtns"><button class="homebtn has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
-       + '<button class="homebtn has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button></div>';
-    pg += '<button class="begin" data-begin="1" role="switch" aria-checked="'+state.learn.on+'"><span><b>Ik ben beginner</b><small>'+(state.learn.on ? 'Leerpad staat aan: stap voor stap, eerst uitleg en dan oefenen' : 'Zet het leerpad aan voor bieden en spelen')+'</small></span><i aria-hidden="true"></i></button>';
+       + '<button class="homebtn has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+       + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
+  }else if(T==='test' && !mode){
+    const TS = state.test;
+    pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
+       + '<button class="navrow'+(TS ? ' has' : '')+'" data-tgo="toets"><span>Test je systeemkaart</span><small>'+(TS && TS.done ? '✓ Uitslag en oefenplan staan klaar' : TS ? TS.i+' van '+TS.q.length+' vragen gedaan' : 'Je sterke en zwakke punten, met een oefenplan')+'</small></button>'
+       + '<button class="navrow'+(state.learn.on ? ' has' : '')+'" data-tgo="pad"><span>Leerpad basisregels</span><small>'+(state.learn.on ? '✓ Staat aan' : 'Voor beginners: stap voor stap, eerst uitleg en dan oefenen')+'</small></button>';
+  }else if(T==='test' && mode==='pad'){
+    pg = '<p class="hint">Voor wie de basisregels van bridge nog leert. Je gaat stap voor stap: eerst de uitleg, dan oefenen. Beheers je een stap, dan gaat de volgende open.</p>'
+       + '<button class="navrow has" data-lgo="bieden"><span>Leerpad bieden</span><small>Stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
+       + '<button class="navrow has" data-lgo="spelen"><span>Leerpad spelen</span><small>Stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+       + (state.learn.on ? '<div class="navtools"><button class="navclear" data-loff="1">Leerpad uitzetten: ik kies zelf wat ik oefen</button></div>' : '');
+  }else if(T==='test'){
+    const TS = state.test, ks = testKeys(), nQ = (ks.length-1)*TEST_N+TEST_NOPEN;
+    if(!TS){
+      pg = '<div class="lcard"><p class="lname">Test je systeemkaart</p><p>Je krijgt <b>'+nQ+' vragen</b> door elkaar: '+TEST_N+' per afspraak op je kaart ('+(ks.length-1)+' afspraken) en '+TEST_NOPEN+' over openen.</p>'
+         + '<p>Je kunt tussendoor stoppen; de toets gaat later verder waar je was. Na afloop zie je per afspraak of je hem beheerst, en krijg je een oefenplan.</p>'
+         + '<div class="lbtns"><button class="lbtn go" data-tstart="1">Toets starten</button></div></div>';
+    }else if(!TS.done){
+      pg = '<div class="lcard"><p class="lname">Je toets loopt</p><p class="lstat">'+TS.i+' van '+TS.q.length+' vragen gedaan</p><p>Ga verder waar je was. Pas na de laatste vraag krijg je de uitslag en je plan.</p>'
+         + '<div class="lbtns"><button class="lbtn go" data-tresume="1">Verder met de toets</button></div></div>'
+         + '<div class="navtools"><button class="navclear" data-tstart="1">Toets opnieuw beginnen</button></div>';
+    }else{
+      const rows = testRows(), strong = rows.filter(r=>r.pct>=0.8), mid = rows.filter(r=>r.pct>=0.6 && r.pct<0.8), weak = rows.filter(r=>r.pct<0.6), plan = testPlan();
+      const tot = rows.reduce((a,r)=>a+r.n,0), good = rows.reduce((a,r)=>a+r.good,0);
+      const row = r => '<button class="resrow" data-tone="'+r.k+'"><span class="nm">'+r.name+'</span><span class="pc">'+r.good+' van '+r.n+'</span><span class="resbar"><i style="width:'+Math.round(r.pct*100)+'%"></i></span></button>';
+      pg = '<p class="ressum"><b>'+good+' van '+tot+' goed ('+Math.round(100*good/tot)+'%).</b> Je beheerst '+strong.length+' van de '+rows.length+' afspraken'+(mid.length ? ', twijfelt bij '+mid.length : '')+(weak.length ? ' en '+weak.length+(weak.length===1 ? ' is' : ' zijn')+' nog zwak' : '')+'.</p>';
+      if(plan.length) pg += '<h3 class="resgrp weak">Je plan: oefen deze eerst</h3>'+plan.map(row).join('')
+         + '<button class="resact" data-tplan="1">Oefen mijn plan'+(plan.length>1 ? ' ('+plan.length+' door elkaar)' : '')+'</button>';
+      else pg += '<p class="hint">Je beheerst alles wat op je kaart staat. Je kunt je kaart uitbreiden met een nieuwe afspraak.</p>';
+      const rest = (ttl, cls, rs) => rs.length ? '<h3 class="resgrp'+(cls ? ' '+cls : '')+'">'+ttl+' ('+rs.length+')</h3>'+rs.map(row).join('') : '';
+      pg += '<details class="tdet"><summary>Alle afspraken bekijken</summary>'+rest('Zwak · onder 60%', 'weak', weak)+rest('Twijfel · 60 tot 80%', '', mid)+rest('Sterk · 80% of meer', 'strong', strong.slice().reverse())+'</details>'
+         + '<p class="resnote">Tik op een afspraak om alleen die te oefenen. Doe de toets daarna opnieuw om te zien of je vooruit bent gegaan.</p>'
+         + '<div class="navtools"><button class="navclear all" data-tstart="1">Toets opnieuw doen</button></div>';
+    }
   }else if(T==='kaart' && !nav[1]){
     pg = '<p class="hint">Leg hier vast wat jullie spelen. Bij Bieden en Spelen oefen je ermee, en je kunt de kaart afdrukken.</p>'
        + '<button class="navrow has" data-kgo="bieden"><span>Bieden</span><small>'+state.card.length+' afspraken</small></button>'
@@ -6451,7 +6517,7 @@ function renderModes(){
   }
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
-  $('settitle').textContent = learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
+  $('settitle').textContent = T==='test' ? 'Challenge jezelf' : learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
   $('homeextra').hidden = !!T;
   const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadpbox'],['sigbox']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
   ['leadpbox','leadbox','sigbox','openselbox','openbox','sysbox','c2box','d2box','pupbox','muidbox','muidlbox','w2box','bwbox','rkhbox','acolbox','benbox','lmbox','bergbox','t1rbox','t1nbox','t1dbox','fkfbox','rkcbox'].forEach(id=>{ $(id).hidden = !boxes.includes(id); });
@@ -6501,6 +6567,7 @@ function renderModes(){
   const stepName = (STEPS_BY[state.conv] || STEPS)[state.step];
   const osPart = state.conv==='openen' && state.openSet.length<O_ALL.length ? ' · '+state.openSet.length+' gekozen' : '';
   $('menu').textContent = CONVS[state.conv]+osPart+(state.step==='alles' || !stepName ? '' : ' · '+(/^\d+$/.test(state.step) ? 'deel '+state.step : stepName.split(' (')[0].toLowerCase()))+' ▾';
+  if(testOn()) $('menu').textContent = 'Toets: vraag '+Math.min(state.test.i+1, state.test.q.length)+' van '+state.test.q.length+' ▾';
 }
 function next(fresh){
   const isGame = state.conv==='spel';
@@ -6517,7 +6584,8 @@ function next(fresh){
     SYS.inverted = state.card.includes('inverted');
     SYS.z2h = state.card.includes('zwak2h');
     SYS.acol = state.card.includes('acol2');
-    if(card){
+    if(testOn()) q = newQuestion(state.test.q[state.test.i], 1+Math.floor(Math.random()*4), 'alles');      // de toets bepaalt de volgorde
+    else if(card){
       const k = pickMix(card, state.mixRecent, state.mixSince);
       card.forEach(x=>{ state.mixSince[x] = x===k ? 0 : (state.mixSince[x]||0)+1; });
       save();
@@ -6580,6 +6648,13 @@ function answer(bid){
       if(i<P.length-1){ state.learn.step[t] = i+1; learnMsg = '<span class="lmsg"><b>Stap '+(i+1)+' beheerst: '+good+' van de laatste '+lh.length+' goed.</b><button class="lbtn go" data-lnext="1">Naar stap '+(i+2)+': '+P[i+1].name+'</button></span>'; }
       else learnMsg = '<span class="lmsg"><b>Je hebt dit leerpad afgerond.</b> '+(t==='bieden' ? 'Vul nu je eigen systeemkaart verder in.' : 'Kies nu zelf wat je verder wilt oefenen.')+'</span>';
     }else learnMsg = '<span class="lmsg">Leerpad stap '+(i+1)+': '+good+' van de laatste '+lh.length+' goed'+(i===cur ? '. Voor de volgende stap heb je er '+LEARN_OK+' van de laatste '+LEARN_MIN+' nodig.' : '.')+(i<cur ? '<button class="lbtn" data-lnext="1">Verder met stap '+(cur+1)+': '+P[cur].name+'</button>' : '')+'</span>';
+  }
+  if(testOn()){
+    const TS = state.test, k = TS.q[TS.i], r = TS.res[k] || (TS.res[k] = [0,0]);
+    r[1]++; if(ok) r[0]++;
+    if(!q.hasNext) TS.i++;
+    if(TS.i>=TS.q.length){ TS.run = false; TS.done = true; learnMsg = '<span class="lmsg"><b>De toets is klaar.</b><button class="lbtn go" data-tdone="1">Bekijk je uitslag en plan</button></span>'; }
+    else learnMsg = '<span class="lmsg">Toets: '+TS.i+' van '+TS.q.length+' vragen gedaan.</span>';
   }
   if(state.conv==='spelmix' || state.conv==='biedmix'){
     const mk = state.conv==='biedmix' ? (state.bidSet.includes(q.conv) ? q.conv : q.conv==='geen' ? (state.bidSet.find(x=>x==='stayman' || x==='jacoby' || x==='ballumer') || q.conv) : q.conv) : q.conv;
@@ -6646,7 +6721,8 @@ function showTheory(full){
 }
 $('theorybody').addEventListener('click', e=>{ if(e.target.closest('#fullth')) showTheory(true); });
 $('info').addEventListener('click', ()=>showTheory());
-$('why').addEventListener('click', e=>{ if(e.target.closest('[data-lnext]') && state.learn.run){ const t = state.learn.run.t; startLearn(t, state.learn.step[t]); showTheory(); } });
+$('why').addEventListener('click', e=>{ if(e.target.closest('[data-tdone]')){ nav = ['test','toets']; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); return; }
+  if(e.target.closest('[data-lnext]') && state.learn.run){ const t = state.learn.run.t; startLearn(t, state.learn.step[t]); showTheory(); } });
 // ---------- Uitleg bij de systeemkaart: wat is het, waarin verschilt het, voor wie, en hoe vaak wordt het gespeeld ----------
 // n = niveau (Basis, Gemiddeld, Gevorderd), g = gebruik (Veel, Regelmatig, Weinig); beide zijn een inschatting voor Nederlandse clubs.
 const INFO = {
@@ -7550,7 +7626,14 @@ $('convs').addEventListener('click', e=>{
   if(!b || !b.isConnected || b.disabled) return;
   const d = b.dataset, top = () => { renderModes(); $('dbody').scrollTop = 0; };
   if(d.begin){ state.learn.on = !state.learn.on; save(); top(); return; }
-  if(d.go){ learnView = null; nav = d.go==='kaart' ? ['kaart'] : state.learn.on ? [d.go,'leer'] : [d.go,'oefen']; top(); return; }
+  const shut = () => { if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); };
+  if(d.tgo){ nav = ['test', d.tgo]; top(); return; }
+  if(d.lgo){ state.learn.on = true; learnView = null; save(); nav = [d.lgo,'leer']; top(); return; }
+  if(d.loff){ state.learn.on = false; save(); top(); return; }
+  if(d.tstart){ testStart(); save(); renderModes(); shut(); next(true); return; }
+  if(d.tresume){ testArm(); save(); renderModes(); shut(); next(true); return; }
+  if(d.tplan || d.tone){ testPractice(d.tone ? [d.tone] : testPlan().map(r=>r.k)); save(); renderModes(); shut(); next(true); return; }
+  if(d.go){ learnView = null; nav = d.go==='kaart' ? ['kaart'] : d.go==='test' ? ['test'] : state.learn.on ? [d.go,'leer'] : [d.go,'oefen']; top(); return; }
   if(d.kgo){ nav = d.kgo==='bieden' ? ['bieden','kaart'] : ['kaart','leads']; top(); return; }
   if(d.ksub!==undefined){ nav = ['kaart','leads',+d.ksub]; top(); return; }
   if(d.info) return;                                // de uitleg-knop heeft zijn eigen afhandeling
