@@ -6993,7 +6993,7 @@ function cardSheetHTML(){
   let p4 = '<h4>Volgbiedingen</h4>'+tbl(vb)+'<h4>Slemconventies</h4>'+tbl(sl)+'<h4>Overige conventies</h4>'+tbl(ov);
   // Op het A4: linksboven pagina 1, rechtsboven pagina 4, linksonder pagina 3, rechtsonder pagina 2. De onderste twee staan ondersteboven.
   const pg = n => '<span class="skpg">'+n+'</span>';
-  return '<div class="skpn">'+p2+pg(4)+'</div><div class="skpn">'+p1+pg(1)+'</div><div class="skpn">'+p4+pg(3)+'</div><div class="skpn">'+p3+pg(2)+'</div>';
+  return '<div class="skpn">'+p1+pg(4)+'</div><div class="skpn">'+p2+pg(1)+'</div><div class="skpn">'+p4+pg(3)+'</div><div class="skpn">'+p3+pg(2)+'</div>';
 }
 // Het handboek: alles van de systeemkaart uitgeschreven, met per onderdeel een uitgewerkte voorbeeldhand.
 function bookHTML(){
