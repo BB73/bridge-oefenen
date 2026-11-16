@@ -415,7 +415,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .ovpage h1{column-span:all;font-size:1.55em;margin:0 0 .55em} .ovpage h1 span{font-weight:400;font-size:.8em;margin-left:.6em}
 .ovpage h2{font-size:1.15em;margin:.55em 0 .2em;color:#1f3f8f;border-bottom:1px solid #1f3f8f;break-after:avoid} .ovpage h2:first-of-type{margin-top:0}
 .ovpage h3{font-size:1.06em;margin:.5em 0 .1em;break-after:avoid} .sheet.ovz .ovpage h4, #printsheet.ovz .ovpage h4{font-size:1em;font-weight:700;margin:.3em 0 .05em;color:#444;border:0;padding:0;break-after:avoid}
-.ovpage ul{margin:.1em 0 .3em;padding-left:1.15em} .ovpage li{margin:0} .ovpage p{margin:.15em 0} .ovpage .bvar{font-weight:700;font-style:italic}
+.ovpage ul{margin:.1em 0 .3em;padding-left:1.15em} .ovpage li{margin:0} .ovpage p{margin:.15em 0} .ovpage .bvar{font-weight:700;font-style:italic} .ovpage .ovnote{color:#444;font-style:italic}
 .ovpage table{border-collapse:collapse;font-size:.95em;margin:.2em 0} .ovpage td, .ovpage th{border:1px solid #b9c2cc;padding:1px 4px;text-align:left}
 .ovpage .S{color:#1b2f7a} .ovpage .H{color:#c8102e} .ovpage .D{color:#d2691e} .ovpage .C{color:#1e6a4e}      /* na het vouwen staan deze twee weer rechtop */
 .sheet h4{margin:10px 0 2px;font-size:14.5px;color:#1f3f8f;font-weight:700}
@@ -7467,9 +7467,9 @@ function ovBuild(host){
   if(!bookCache) bookCache = bookHTML();
   const src = document.createElement('div'); src.innerHTML = bookCache;
   src.querySelectorAll('.bex, h1, .bwho').forEach(e=>e.remove());
-  [...src.children].forEach(e=>{                                      // losse toelichtingen en dubbele tussenkopjes kosten alleen ruimte
-    if(e.tagName==='P' && !e.classList.contains('bvar')) e.remove();
-    else if(e.tagName==='H4'){ let pv = e.previousElementSibling; if(pv && pv.classList.contains('bvar')) pv = pv.previousElementSibling; if(pv && pv.tagName==='H3') e.remove(); }
+  [...src.children].forEach(e=>{                                      // een tussenkopje dat alleen de naam van de conventie herhaalt, valt weg
+    if(e.tagName==='H4'){ let pv = e.previousElementSibling; if(pv && pv.classList.contains('bvar')) pv = pv.previousElementSibling; if(pv && pv.tagName==='H3' && e.textContent.trim().indexOf(pv.textContent.trim())===0 && e.textContent.trim().length<=pv.textContent.trim().length+2) e.remove(); }
+    else if(e.tagName==='P' && !e.classList.contains('bvar')) e.classList.add('ovnote');
   });
   const els = [...src.children];
   const sk = state.sk || {}, esc = t => String(t || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -7496,7 +7496,7 @@ function renderCardView(){
   document.querySelectorAll('#cvtabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.cv===cvMode)));
   const named = !!(state.sk && String(state.sk.n1 || '').trim() && String(state.sk.n2 || '').trim());
   $('cvprint').disabled = !named; $('cvpdf').disabled = !named;
-  $('cvhint').textContent = (cvMode==='kaart' ? 'Eén A4 om aan je tegenstanders te geven. Vouw hem twee keer dubbel, dan staan je namen op de voorkant.' : cvMode==='plat' ? 'Voor jezelf: alle afspraken van je kaart met de antwoorden en vervolgbiedingen, zonder voorbeelden, klein bij elkaar gezet. Eén A4; bij een volle kaart ook de achterkant.' : (state.bookEx!==false ? 'Alles van je systeemkaart uitgeschreven, met bij elk onderdeel een uitgewerkte hand. Meerdere pagina’s.' : 'Alles van je systeemkaart uitgeschreven, alleen de regels. Meerdere pagina’s.'))+(named ? '' : ' Vul eerst beide namen in om te kunnen afdrukken; het NBB-nummer mag leeg blijven.');
+  $('cvhint').textContent = (cvMode==='kaart' ? 'Eén A4 om aan je tegenstanders te geven. Vouw hem twee keer dubbel, dan staan je namen op de voorkant.' : cvMode==='plat' ? 'Voor jezelf: alle afspraken van je kaart met de antwoorden, vervolgbiedingen en toelichting, zonder voorbeeldhanden. Eén A4 dubbelzijdig; een volle kaart heeft meer kantjes nodig.' : (state.bookEx!==false ? 'Alles van je systeemkaart uitgeschreven, met bij elk onderdeel een uitgewerkte hand. Meerdere pagina’s.' : 'Alles van je systeemkaart uitgeschreven, alleen de regels. Meerdere pagina’s.'))+(named ? '' : ' Vul eerst beide namen in om te kunnen afdrukken; het NBB-nummer mag leeg blijven.');
   $('cvscale').hidden = cvMode==='boek'; $('cvbook').hidden = cvMode!=='boek';
   const withEx = state.bookEx!==false;                                // het handboek met of zonder voorbeeldhanden
   $('cvex').hidden = cvMode!=='boek';
