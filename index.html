@@ -409,7 +409,15 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .sheet .skpn{box-sizing:border-box;padding:16px 24px 12px;overflow:hidden;min-width:0}
 .sheet .skpn{position:relative}
 .sheet .skpg{position:absolute;right:14px;bottom:8px;font-size:11px;font-weight:700;color:#555}
-.sheet .skpn:nth-child(3), .sheet .skpn:nth-child(4){transform:rotate(180deg)}      /* na het vouwen staan deze twee weer rechtop */
+.sheet .skpn:nth-child(3), .sheet .skpn:nth-child(4){transform:rotate(180deg)}
+.sheet.ovz{display:block;height:auto;background:none}
+.ovpage{box-sizing:border-box;width:793px;height:1120px;margin:0 0 10px;padding:30px 30px 34px;background:#fff;color:#111;columns:4;column-gap:16px;column-fill:auto;overflow:hidden;line-height:1.22}
+.ovpage h1{column-span:all;font-size:1.55em;margin:0 0 .55em} .ovpage h1 span{font-weight:400;font-size:.8em;margin-left:.6em}
+.ovpage h2{font-size:1.15em;margin:.55em 0 .2em;color:#1f3f8f;border-bottom:1px solid #1f3f8f;break-after:avoid} .ovpage h2:first-of-type{margin-top:0}
+.ovpage h3{font-size:1.06em;margin:.5em 0 .1em;break-after:avoid} .sheet.ovz .ovpage h4, #printsheet.ovz .ovpage h4{font-size:1em;font-weight:700;margin:.3em 0 .05em;color:#444;border:0;padding:0;break-after:avoid}
+.ovpage ul{margin:.1em 0 .3em;padding-left:1.15em} .ovpage li{margin:0} .ovpage p{margin:.15em 0} .ovpage .bvar{font-weight:700;font-style:italic}
+.ovpage table{border-collapse:collapse;font-size:.95em;margin:.2em 0} .ovpage td, .ovpage th{border:1px solid #b9c2cc;padding:1px 4px;text-align:left}
+.ovpage .S{color:#1b2f7a} .ovpage .H{color:#c8102e} .ovpage .D{color:#d2691e} .ovpage .C{color:#1e6a4e}      /* na het vouwen staan deze twee weer rechtop */
 .sheet h4{margin:10px 0 2px;font-size:14.5px;color:#1f3f8f;font-weight:700}
 .sheet h4:first-child{margin-top:0}
 .sheet table{width:100%;border-collapse:collapse;table-layout:fixed}
@@ -429,6 +437,10 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
   body.pr-card > *:not(#printsheet), body.pr-book > *:not(#printbook){display:none !important}
   body.pr-book #printbook{display:block !important;page:book;border:0;padding:0;font-size:10.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body.pr-card #printsheet{display:grid !important;width:210mm;height:296mm;grid-template-columns:105mm 105mm;grid-template-rows:148.5mm 147.5mm;overflow:hidden;font-size:9.4pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.pr-card #printsheet.ovz{display:block !important;width:auto;height:auto;overflow:visible}
+  #printsheet.ovz .ovpage{width:793px;height:1120px;margin:0;break-after:page;page-break-after:always}
+  #printsheet.ovz .ovpage:last-child{break-after:auto;page-break-after:auto}
+  #printsheet.ovz .ovpage h4{font-size:1em !important}
   #printsheet .skpn{padding:5mm 7mm 4mm}      /* de vlakken zijn precies een kwart A4: 105 bij 148,5 mm */
   #printsheet .skpg{right:5mm;bottom:3.5mm;font-size:8.5pt}
   #printsheet h4{font-size:11pt} #printsheet .sknm{font-size:11.5pt} #printsheet .skbs{font-size:12.5pt} #printsheet .sknt{font-size:8.6pt}
@@ -1486,8 +1498,9 @@ summary{cursor:pointer;font-weight:700}
   <div class="dhead">
     <h2 id="cvtitle">Systeemkaart afdrukken</h2>
     <div class="tabs" id="cvtabs">
-      <button data-cv="kaart">Kaart voor aan tafel</button>
-      <button data-cv="boek">Handboek voor jezelf</button>
+      <button data-cv="kaart">Vouwkaart</button>
+      <button data-cv="plat">Overzicht 1 A4</button>
+      <button data-cv="boek">Handboek</button>
     </div>
     <nav class="modes" id="cvex" aria-label="Kies of het handboek voorbeelden bevat" hidden></nav>
     <p class="hint" id="cvhint"></p>
@@ -6832,7 +6845,7 @@ function renderModes(){
     pg = '<p class="hint">Leg hier vast wat jullie spelen. Bij Bieden en Spelen oefen je ermee, en je kunt de kaart afdrukken.</p>'
        + '<button class="navrow has" data-kgo="bieden"><span>Bieden</span><small>'+state.card.length+' afspraken</small></button>'
        + '<button class="navrow has" data-kgo="leads"><span>Uitkomen en signaleren</span><small>'+LEADN_[state.leadLen]+' tegen SA · '+(state.sig==='rom' ? 'Romeins signaleren' : 'hoog is aan')+'</small></button>'
-       + '<button class="navrow" data-cardview="1"><span>Bekijken en afdrukken</span><small>De kaart voor de tegenstanders, of het handboek</small></button>';
+       + '<button class="navrow" data-cardview="1"><span>Bekijken en afdrukken</span><small>Vouwkaart, overzicht op één A4 of handboek</small></button>';
   }else if(leadsPage && nav[2]==null){
     const L = lpGet();
     pg = '<p class="hint">Deze afspraken komen op de afgedrukte kaart, in het vlak Uitkomen en signaleren.</p>'
@@ -7274,7 +7287,7 @@ function openInfo(key){
   $('infobody').scrollTop = 0;
 }
 // ---------- Systeemkaart afdrukken: een A4 in vier vlakken, om twee keer dubbel te vouwen ----------
-function cardSheetHTML(){
+function cardSheetHTML(flat){
   const B = bidHTML, on = k => state.card.includes(k), esc = s => String(s || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const sk = state.sk || {};
   const tbl = (rows, cls) => rows.length ? '<table'+(cls ? ' class="'+cls+'"' : '')+'>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</table>' : '';
@@ -7377,6 +7390,7 @@ function cardSheetHTML(){
   let p4 = '<h4>Volgbiedingen</h4>'+tbl(vb)+'<h4>Slemconventies</h4>'+tbl(sl)+'<h4>Overige conventies</h4>'+tbl(ov);
   // Op het A4: linksboven pagina 1, rechtsboven pagina 4, linksonder pagina 3, rechtsonder pagina 2. De onderste twee staan ondersteboven.
   const pg = n => '<span class="skpg">'+n+'</span>';
+  if(flat) return '<div class="skpn">'+p2+pg(1)+'</div><div class="skpn">'+p3+pg(2)+'</div><div class="skpn">'+p4+pg(3)+'</div><div class="skpn">'+p1+pg(4)+'</div>';      // overzicht: rechtop, in leesvolgorde
   return '<div class="skpn">'+p1+pg(4)+'</div><div class="skpn">'+p2+pg(1)+'</div><div class="skpn">'+p4+pg(3)+'</div><div class="skpn">'+p3+pg(2)+'</div>';
 }
 // Het handboek: alles van de systeemkaart uitgeschreven, met per onderdeel een uitgewerkte voorbeeldhand.
@@ -7448,12 +7462,42 @@ function bookHTML(){
   return h;
 }
 let cvMode = 'kaart', bookCache = '';
+// Het overzicht voor jezelf: de regels uit het handboek zonder voorbeelden, in vier kolommen op zo min mogelijk A4's.
+function ovBuild(host){
+  if(!bookCache) bookCache = bookHTML();
+  const src = document.createElement('div'); src.innerHTML = bookCache;
+  src.querySelectorAll('.bex, h1, .bwho').forEach(e=>e.remove());
+  [...src.children].forEach(e=>{                                      // losse toelichtingen en dubbele tussenkopjes kosten alleen ruimte
+    if(e.tagName==='P' && !e.classList.contains('bvar')) e.remove();
+    else if(e.tagName==='H4'){ let pv = e.previousElementSibling; if(pv && pv.classList.contains('bvar')) pv = pv.previousElementSibling; if(pv && pv.tagName==='H3') e.remove(); }
+  });
+  const els = [...src.children];
+  const sk = state.sk || {}, esc = t => String(t || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const title = '<h1>Overzicht biedsysteem <span>'+esc(sk.n1)+' en '+esc(sk.n2)+'</span></h1>';
+  const fill = fs => {
+    host.innerHTML = '';
+    const mk = first => { const pg = document.createElement('div'); pg.className = 'ovpage'; pg.style.fontSize = fs+'px'; if(first) pg.innerHTML = title; host.appendChild(pg); return pg; };
+    let page = mk(true), n = 1;
+    for(const el of els){
+      const c = el.cloneNode(true); page.appendChild(c);
+      if(page.scrollWidth>page.clientWidth+1 && page.children.length>2){
+        const move = [c]; let pv = c.previousElementSibling;
+        while(pv && (/^H[234]$/.test(pv.tagName) || pv.classList.contains('bvar'))){ move.unshift(pv); pv = pv.previousElementSibling; }      // een kopje blijft bij zijn regels
+        move.forEach(m=>m.remove()); page = mk(false); n++; move.forEach(m=>page.appendChild(m));
+      }
+    }
+    return n;
+  };
+  const least = fill(8.5);
+  for(const fs of [11.5, 11, 10.5, 10, 9.5, 9]) if(fill(fs)<=least) return least;
+  return fill(8.5);
+}
 function renderCardView(){
   document.querySelectorAll('#cvtabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.cv===cvMode)));
   const named = !!(state.sk && String(state.sk.n1 || '').trim() && String(state.sk.n2 || '').trim());
   $('cvprint').disabled = !named; $('cvpdf').disabled = !named;
-  $('cvhint').textContent = (cvMode==='kaart' ? 'Eén A4 om aan je tegenstanders te geven. Vouw hem twee keer dubbel, dan staan je namen op de voorkant.' : (state.bookEx!==false ? 'Alles van je systeemkaart uitgeschreven, met bij elk onderdeel een uitgewerkte hand. Meerdere pagina’s.' : 'Alles van je systeemkaart uitgeschreven, alleen de regels. Meerdere pagina’s.'))+(named ? '' : ' Vul eerst beide namen in om te kunnen afdrukken; het NBB-nummer mag leeg blijven.');
-  $('cvscale').hidden = cvMode!=='kaart'; $('cvbook').hidden = cvMode!=='boek';
+  $('cvhint').textContent = (cvMode==='kaart' ? 'Eén A4 om aan je tegenstanders te geven. Vouw hem twee keer dubbel, dan staan je namen op de voorkant.' : cvMode==='plat' ? 'Voor jezelf: alle afspraken van je kaart met de antwoorden en vervolgbiedingen, zonder voorbeelden, klein bij elkaar gezet. Eén A4; bij een volle kaart ook de achterkant.' : (state.bookEx!==false ? 'Alles van je systeemkaart uitgeschreven, met bij elk onderdeel een uitgewerkte hand. Meerdere pagina’s.' : 'Alles van je systeemkaart uitgeschreven, alleen de regels. Meerdere pagina’s.'))+(named ? '' : ' Vul eerst beide namen in om te kunnen afdrukken; het NBB-nummer mag leeg blijven.');
+  $('cvscale').hidden = cvMode==='boek'; $('cvbook').hidden = cvMode!=='boek';
   const withEx = state.bookEx!==false;                                // het handboek met of zonder voorbeeldhanden
   $('cvex').hidden = cvMode!=='boek';
   chips($('cvex'), {'ja':'Met voorbeelden', 'nee':'Zonder voorbeelden'}, withEx ? 'ja' : 'nee', 'v');
@@ -7465,6 +7509,15 @@ function renderCardView(){
     const sk = state.sk || {}, esc = s => String(s || '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));      // namen bijwerken zonder nieuwe voorbeelden te trekken
     const line = esc(sk.n1)+(sk.nr1 ? ' ('+esc(sk.nr1)+')' : '')+' en '+esc(sk.n2)+(sk.nr2 ? ' ('+esc(sk.nr2)+')' : '');
     document.querySelectorAll('#cvbook .bwho, #printbook .bwho').forEach(e=>{ e.innerHTML = line; });
+    return;
+  }
+  $('cvsheet').classList.toggle('ovz', cvMode==='plat'); $('printsheet').classList.toggle('ovz', cvMode==='plat');
+  if(cvMode==='plat'){                                                // het overzicht: alle regels in kolommen, zo groot als past
+    const n = ovBuild($('cvsheet'));
+    $('printsheet').innerHTML = $('cvsheet').innerHTML;
+    const w0 = $('cvscale').clientWidth, s0 = w0 ? Math.min(1, w0/794) : 1;
+    $('cvsheet').style.transform = 'scale('+s0+')';
+    $('cvscale').style.height = Math.round(n*1130*s0)+'px';
     return;
   }
   const h = cardSheetHTML();
@@ -7501,7 +7554,7 @@ function cardPrint(){
   if($('cvprint').disabled) return;
   const sk = state.sk || {}, clean = s => String(s || '').trim().replace(/[\\/:*?"<>|]+/g, ' ');
   if(cvTitle===null) cvTitle = document.title;
-  document.title = (cvMode==='boek' ? 'Handboek biedsysteem ' : 'Systeemkaart ')+clean(sk.n1)+' en '+clean(sk.n2);
+  document.title = (cvMode==='boek' ? 'Handboek biedsysteem ' : cvMode==='plat' ? 'Overzicht biedsysteem ' : 'Systeemkaart ')+clean(sk.n1)+' en '+clean(sk.n2);
   document.body.classList.remove('pr-card','pr-book');
   document.body.classList.add(cvMode==='boek' ? 'pr-book' : 'pr-card');
   window.print();
