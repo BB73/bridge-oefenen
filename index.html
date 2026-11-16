@@ -72,6 +72,9 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .resrow.few .resbar{background:var(--line)} .resrow.few .resbar i{background:var(--muted)}
 .resact{font:inherit;font-weight:700;width:100%;min-height:2.7rem;margin:.2rem 0 .2rem;border-radius:10px;border:2px solid var(--felt);background:transparent;color:var(--felt);cursor:pointer}
 .resnote{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
+.prevb{font-family:inherit;font-style:normal;font-size:1.5rem;padding-bottom:.15rem}
+.prevnav{flex:none;display:flex;gap:.4rem;margin-top:.5rem} .prevnav .next{margin-top:0;flex:1;width:auto} .prevnav .pstep{flex:none;width:2.9rem;height:2.9rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:1.3rem;cursor:pointer} .prevnav .pstep:disabled{opacity:.35;cursor:default}
+.prevnote{margin:.1rem 0 .35rem;font-size:.85rem;font-weight:700;color:var(--felt)}
 .info{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--felt);font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;font-size:1.15rem;line-height:1;cursor:pointer;padding:0}
 .menu{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font:inherit;font-size:.85rem;font-weight:700;padding:.45rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap;cursor:pointer}
 
@@ -530,6 +533,7 @@ summary{cursor:pointer;font-weight:700}
 <div class="wrap">
   <header class="top">
     <h1>Bridge</h1>
+    <button class="info prevb" id="prevbtn" hidden aria-label="Vorige hand bekijken">‹</button>
     <button class="score" id="score" aria-haspopup="dialog" aria-label="Mijn resultaten"></button>
     <button class="info" id="info" aria-haspopup="dialog" aria-label="Theorie bij deze vraag">i</button>
     <button class="menu" id="menu" aria-haspopup="dialog"></button>
@@ -8449,6 +8453,41 @@ if(!state.preInit){ state.preInit = 1; CARD_OPEN.forEach(k=>{ if(!state.card.inc
 state.card = CARDKEYS.filter(k=>k!=='openen' && state.card.includes(k));
 syncPractice();
 fixEmptySel();
+// ---------- Terugkijken: de laatste beantwoorde handen blijven bewaard, met je antwoord en de uitleg ----------
+const PREV = []; let prevAt = -1, prevGameHidden = true;
+function snapPrev(){
+  const m = document.querySelector('main.table');
+  if(!m || m.hidden || $('feedback').hidden) return;
+  PREV.push(m.cloneNode(true)); if(PREV.length>10) PREV.shift();
+  $('prevbtn').hidden = false;
+}
+function closePrev(){
+  const v = document.getElementById('prevmain');
+  if(!v) return;
+  v.remove(); prevAt = -1;
+  $('game').hidden = prevGameHidden; document.querySelector('main.table').hidden = !prevGameHidden;
+}
+function openPrev(i){
+  if(!PREV.length) return;
+  const live = document.querySelector('main.table');
+  if(prevAt<0) prevGameHidden = $('game').hidden;
+  const old = document.getElementById('prevmain'); if(old) old.remove();
+  prevAt = Math.max(0, Math.min(PREV.length-1, i));
+  const v = PREV[prevAt].cloneNode(true); v.id = 'prevmain'; v.hidden = false;
+  v.querySelectorAll('button').forEach(b=>{ b.disabled = true; });
+  const nx = v.querySelector('.next'), nav = document.createElement('div'); nav.className = 'prevnav';
+  nav.innerHTML = '<button class="pstep" data-p="-1" aria-label="Een hand eerder"'+(prevAt===0 ? ' disabled' : '')+'>‹</button><button class="pstep" data-p="1" aria-label="Een hand later"'+(prevAt===PREV.length-1 ? ' disabled' : '')+'>›</button><button class="next" data-p="0">Terug naar de huidige hand</button>';
+  nx.replaceWith(nav);
+  const note = document.createElement('p'); note.className = 'prevnote'; note.textContent = 'Je kijkt terug: hand '+(prevAt+1)+' van de laatste '+PREV.length+'.';
+  const fb = v.querySelector('.fbtext'); fb.insertBefore(note, fb.firstChild);
+  nav.addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b || b.disabled) return; const d = +b.dataset.p; if(d===0) closePrev(); else openPrev(prevAt+d); });
+  live.hidden = true; $('game').hidden = true;
+  $('game').after(v);
+}
+$('prevbtn').addEventListener('click', ()=>{ if(prevAt<0) openPrev(PREV.length-1); else if(prevAt>0) openPrev(prevAt-1); else closePrev(); });
+{ const answer0 = answer, next0 = next;
+  answer = function(){ const r = answer0.apply(this, arguments); snapPrev(); return r; };
+  next = function(){ closePrev(); return next0.apply(this, arguments); }; }
 renderModes(); renderScore(); next(true);
 openMenu();
 
