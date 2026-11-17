@@ -1,6 +1,6 @@
 // Verhoog dit nummer bij elke nieuwe versie, dan halen telefoons de nieuwe bestanden op.
-const VERSION = 'bridge-v164';
-const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
+const VERSION = 'bridge-v169';
+const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'dds.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

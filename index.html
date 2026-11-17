@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#E9EFEA; --surface:#FFFFFF; --ink:#14211C; --muted:#56655E; --line:#C9D4CD;
+  --bg:#E9EFEA; --surface:#FFFFFF; --panel:#EEF1EE; --ink:#14211C; --muted:#56655E; --line:#C9D4CD;
   --felt:#1E6A4E; --on-felt:#FFFFFF;
   --s:#1B3F8F; --h:#C4202B; --d:#C85F0A; --c:#1E6A4E;
   --good:#1E6A4E; --good-bg:#DDEFE5; --bad:#B3261E; --bad-bg:#F8DFDC;
@@ -27,7 +27,7 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#0F1A16; --surface:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
+    --bg:#0F1A16; --surface:#18261F; --panel:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
     --felt:#2E8B67; --on-felt:#FFFFFF;
     --s:#9DBBFF; --h:#FF5A5A; --d:#FFA552; --c:#62D0A0;
     --good:#62D0A0; --good-bg:#173A2C; --bad:#FF8A80; --bad-bg:#43201D;
@@ -35,7 +35,7 @@
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0F1A16; --surface:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
+  --bg:#0F1A16; --surface:#18261F; --panel:#18261F; --ink:#E8F0EA; --muted:#9DB0A6; --line:#2F443A;
   --felt:#2E8B67; --on-felt:#FFFFFF;
   --s:#9DBBFF; --h:#FF5A5A; --d:#FFA552; --c:#62D0A0;
   --good:#62D0A0; --good-bg:#173A2C; --bad:#FF8A80; --bad-bg:#43201D;
@@ -72,13 +72,15 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .resrow.few .resbar{background:var(--line)} .resrow.few .resbar i{background:var(--muted)}
 .resact{font:inherit;font-weight:700;width:100%;min-height:2.7rem;margin:.2rem 0 .2rem;border-radius:10px;border:2px solid var(--felt);background:transparent;color:var(--felt);cursor:pointer}
 .resnote{font-size:.85rem;color:var(--muted);margin:.8rem 0 0}
-.prevb{font-family:inherit;font-style:normal;font-size:1.5rem;padding-bottom:.15rem}
+.prevgrp{flex:none;display:inline-flex;gap:.35rem} .prevgrp[hidden]{display:none}
+.prevb{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:2px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:700;font-size:1.15rem;line-height:1;padding:0;cursor:pointer} .prevb{display:inline-flex;align-items:center;justify-content:center} .prevb svg{width:1.4rem;height:1.4rem;display:block} .prevb:disabled{opacity:.35;cursor:default} .prevgrp.on .prevb:not(:disabled){background:var(--felt);color:#fff}
+@media (max-width:420px){ .top:has(#prevbtn:not([hidden])) h1{display:none} }
 .prevnav{flex:none;display:flex;gap:.4rem;margin-top:.5rem} .prevnav .next{margin-top:0;flex:1;width:auto} .prevnav .pstep{flex:none;width:2.9rem;height:2.9rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-weight:700;font-size:1.3rem;cursor:pointer} .prevnav .pstep:disabled{opacity:.35;cursor:default}
 .prevnote{margin:.1rem 0 .35rem;font-size:.85rem;font-weight:700;color:var(--felt)}
 .info{flex:none;width:2.1rem;height:2.1rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--felt);font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;font-size:1.15rem;line-height:1;cursor:pointer;padding:0}
 .menu{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font:inherit;font-size:.85rem;font-weight:700;padding:.45rem .75rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap;cursor:pointer}
 
-.table{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.7rem .75rem}
+.table{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:.7rem .75rem}
 .prompt{flex:none;font-family:var(--display);font-weight:500;font-size:1.05rem;font-size:clamp(.95rem,2.5dvh,1.2rem);line-height:1.25;margin:0 0 .4rem}
 
 .auction{flex:none;width:100%;border-collapse:collapse;table-layout:fixed;text-align:center;margin-bottom:.4rem}
@@ -110,6 +112,7 @@ button.score .swide{font-weight:400;color:var(--muted)}
 #dummy.right{margin-left:auto;width:max-content;min-width:50%}
 .odds{display:block;margin-top:.35rem;font-weight:700}
 .acetip{display:block;margin:0 0 .5rem;padding:.45rem .6rem;border-left:4px solid currentColor;border-radius:6px;background:color-mix(in srgb, currentColor 9%, transparent)}
+.gdd small{display:block;margin-top:.3rem;font-size:.78em;opacity:.7}
 .gstatus{flex:none;margin:0 0 .35rem;font-family:var(--display);font-weight:500;font-size:1.05rem;font-size:clamp(.95rem,2.5dvh,1.2rem);line-height:1.25;min-height:2.5em}
 .ghand li{font-size:1.1rem;line-height:1;margin:.22rem 0;align-items:center;gap:.5rem}
 .ghand .card{font-size:1rem;min-width:1.75rem;height:clamp(1.9rem,4.6dvh,2.4rem);padding:0 .2rem}
@@ -178,16 +181,20 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .table.sd.one.long .qside .hand li{font-size:1.25rem;gap:.4rem}
 .table.sd.one.long .qside .hand .sym{width:1.25rem;font-size:1.25rem}
 @media (min-width:760px){ .table.sd.one.long .qsq{width:clamp(6.2rem,16dvh,7.6rem);height:clamp(6.2rem,16dvh,7.6rem)} .table.sd.one.long .qside .hand li{font-size:clamp(1.35rem,3.4dvh,1.7rem)} }
-.nsq{flex:none;align-self:center;width:clamp(4.6rem,14dvh,7.2rem);height:clamp(4.6rem,14dvh,7.2rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:.25rem 0 .45rem}
+.nsq{container-type:size;flex:none;align-self:center;width:clamp(5.2rem,15dvh,7.8rem);height:clamp(5.2rem,15dvh,7.8rem);min-width:0;min-height:0;max-width:none;aspect-ratio:auto;margin:.25rem 0 .45rem}
 .nsq i{position:absolute;font-style:normal;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6)}
 .nsq .pN{top:.35rem;left:50%;transform:translateX(-50%)}
 .nsq .pS{bottom:.35rem;left:50%;transform:translateX(-50%)}
 .nsq .pW{left:.45rem;top:50%;transform:translateY(-50%)}
 .nsq .pE{right:.45rem;top:50%;transform:translateY(-50%)}
-.nsq .ctr{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.3rem;color:#FFFFFF}
-.nsq .ctr b{background:#FFFFFF;color:#14211C;border-radius:8px;padding:.05rem .5rem;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.nsq .ctr{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:min(1.3rem, 17cqw);color:#FFFFFF}
+.nsq .tc.on ~ .ctr{padding-left:20cqw}
+.nsq .ctr b, .qsq .ctr b{background:#F2C230;color:#231A00;border-radius:8px;padding:.05rem .5rem;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.qsq .ctr{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:.95rem;pointer-events:none}
+.qsq .ctr .S{color:#1B3F8F} .qsq .ctr .H{color:#C4202B} .qsq .ctr .D{color:#C85F0A} .qsq .ctr .C{color:#1E6A4E}
+.dbadge{display:inline-block;background:var(--ink);color:var(--bg);font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:.08rem .45rem;margin-right:.35rem;vertical-align:middle}
 .nsq .ctr .S{color:#1B3F8F} .nsq .ctr .H{color:#C4202B} .nsq .ctr .D{color:#C85F0A} .nsq .ctr .C{color:#1E6A4E}
-.nsq .tc{left:auto;right:calc(100% + 1rem);top:50%;transform:translateY(-50%) rotate(90deg);width:2.3rem;height:3.1rem;font-size:1.1rem;flex-direction:column;gap:.1rem}
+.nsq .tc{left:5%;right:auto;top:50%;transform:translateY(-50%);width:min(2.1rem, 27cqw);height:min(2.8rem, 36cqw);font-size:min(1rem, 13cqw);flex-direction:column;gap:.05rem}
 .nsq .tc:not(.on){display:none}
 .sq .tc.on.kS, .sq .tc.on.kS span{color:#1B3F8F}
 .sq .tc.on.kH, .sq .tc.on.kH span{color:#C4202B}
@@ -533,7 +540,7 @@ summary{cursor:pointer;font-weight:700}
 <div class="wrap">
   <header class="top">
     <h1>Bridge</h1>
-    <button class="info prevb" id="prevbtn" hidden aria-label="Vorige hand bekijken">‹</button>
+    <span class="prevgrp" id="prevbtn" hidden><button class="prevb" id="prevL" aria-label="Vorige hand bekijken"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11.5 5 4.5 12l7 7" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="prevb" id="prevR" aria-label="Naar de volgende hand" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M12.5 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span>
     <button class="score" id="score" aria-haspopup="dialog" aria-label="Mijn resultaten"></button>
     <button class="info" id="info" aria-haspopup="dialog" aria-label="Theorie bij deze vraag">i</button>
     <button class="menu" id="menu" aria-haspopup="dialog"></button>
@@ -544,7 +551,7 @@ summary{cursor:pointer;font-weight:700}
     <div class="bwrap" id="auction" hidden><div class="sq bsq" id="bsq" aria-label="De tafel met het biedverloop"></div></div>
     <div class="qwrap" id="qwrap" hidden>
       <div class="qside" id="qL"></div>
-      <div class="sq qsq" id="qtable" aria-label="De tafel"><span class="tc" id="qN"></span><span class="tc" id="qW"></span><span class="tc" id="qE"></span><span class="tc" id="qS"></span></div>
+      <div class="sq qsq" id="qtable" aria-label="De tafel"><span class="ctr" id="qctr"></span><span class="tc" id="qN"></span><span class="tc" id="qW"></span><span class="tc" id="qE"></span><span class="tc" id="qS"></span></div>
       <div class="qside" id="qR"></div>
     </div>
     <div id="dummy" hidden>
@@ -572,7 +579,7 @@ summary{cursor:pointer;font-weight:700}
 
   <section class="table game" id="game" hidden aria-label="Een heel spel spelen">
     <p class="gstatus" id="gstatus" aria-live="polite"></p>
-    <p class="handlabel">Dummy (Noord)</p>
+    <p class="handlabel"><span class="dbadge">Dummy</span>Noord</p>
     <ul class="hand ghand" id="gnorth"></ul>
     <div class="tablewrap">
       <div class="seat" id="seatW"><span>West</span><span class="back" id="cntW"></span></div>
@@ -3328,6 +3335,7 @@ function gPlay(st, seat, card){
   if(i<0 || seat!==st.turn || !gLegal(st,seat).includes(card)) return null;
   st.hands[seat].splice(i,1);
   if(st.trick.length && gSuit(card)!==gSuit(st.trick[0].card)) st.voids[seat][gSuit(st.trick[0].card)] = true;   // niet bekend: deze speler heeft de kleur niet meer
+  if(!st.played.length) st.lead = card;
   st.trick.push({seat, card}); st.played.push(card);
   if(st.trick.length<4){ st.turn = (seat+1)%4; return {complete:false}; }
   const led = gSuit(st.trick[0].card);
@@ -6628,22 +6636,25 @@ function renderQTable(mine){
   if(!on) return;
   // links en rechts van de tafel: de leider met het contract, en de dummy met zijn kaarten aan de kant waar hij ligt
   const mini = h => '<ul class="hand">'+handHTML(h, q.only)+'</ul>';      // dezelfde opmaak als je eigen hand
-  let left, right;
+  let left, right, ctr = '';                              // het contract ligt midden op tafel
+  const DB = '<span class="dbadge">Dummy</span>';
   if(q.conv==='uitkomst'){
-    const c = q.d.contract, shown = /SA$/.test(c) ? c : bidHTML(c);
-    right = '<b class="cbadge">'+shown+'</b><span>Oost is leider</span>';
-    left = '<span>West wordt dummy</span>';
+    const c = q.d.contract; ctr = /SA$/.test(c) ? c : bidHTML(c);
+    right = '<span>Oost is leider</span>';
+    left = '<span>'+DB+'West</span>';
   }else if(q.conv==='signaal'){
-    right = '<b class="cbadge">3SA</b><span>Oost is leider</span>';
-    left = '<span>West is dummy</span>';
+    ctr = '3SA';
+    right = '<span>Oost is leider</span>';
+    left = '<span>'+DB+'West</span>';
   }else{
-    const badge = q.conv==='actief' ? '<b class="cbadge">'+bidHTML('4S')+'</b>' : (q.conv==='doorsterk' || q.sideDummy) ? '<b class="cbadge">3SA</b>' : '';
-    const dummySide = '<span>Dummy ('+(q.dummyRight ? 'Oost' : 'West')+')</span>'+mini(q.dummy);
-    const leaderSide = badge+'<span>'+(q.dummyRight ? 'West' : 'Oost')+' is leider</span>';
+    ctr = q.conv==='actief' ? bidHTML('4S') : (q.conv==='doorsterk' || q.sideDummy) ? '3SA' : '';
+    const dummySide = '<span>'+DB+(q.dummyRight ? 'Oost' : 'West')+'</span>'+mini(q.dummy);
+    const leaderSide = '<span>'+(q.dummyRight ? 'West' : 'Oost')+' is leider</span>';
     left = q.dummyRight ? leaderSide : dummySide;
     right = q.dummyRight ? dummySide : leaderSide;
   }
   $('qL').innerHTML = left; $('qR').innerHTML = right;
+  $('qctr').innerHTML = ctr ? '<b>'+ctr+'</b>' : '';
   const slot = {N:null, O:null, Z:mine || null, W:null};
   if(q.conv==='signaal' || q.sideDummy){ slot.N = q.d.slotN || null; slot.O = q.d.slotO || null; }
   if(q.conv==='handen'){
@@ -6997,7 +7008,7 @@ function next(fresh){
   $('mylabel').hidden = !!q.auction;      // bij het bieden wijst het vraagteken op de tafel je plek al aan
   if(play){
     $('dummyhand').innerHTML = handHTML(q.dummy, q.only);
-    $('dummylabel').textContent = q.dummyLabel || 'Dummy (Noord)';
+    { const dl = q.dummyLabel || 'Dummy (Noord)', mm = /^Dummy \((.+)\)$/.exec(dl); $('dummylabel').innerHTML = mm ? '<span class="dbadge">Dummy</span>'+mm[1] : dl; }
     $('dummy').classList.toggle('right', !!q.dummyRight);
   }
   renderQTable(null);
@@ -7696,6 +7707,34 @@ function gFinish(){
   $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. Je begon met '+G.top+' vaste slagen. '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
   $('gend').hidden = false;
   gRender();
+  gVerdict();
+}
+// Dubbel-dummyrekenaar (DDS) in een apart bestand: pas ophalen als je een heel spel speelt. Lukt dat niet, dan blijft het oordeel gewoon weg.
+let ddsWait = null;
+function ddsLoad(){
+  if(!ddsWait) ddsWait = new Promise((ok, no)=>{
+    const sc = document.createElement('script');
+    sc.src = 'dds.js'; sc.onload = ()=>{ try{ window.DDS.ready().then(ok, no); }catch(e){ no(e); } }; sc.onerror = no;
+    document.head.appendChild(sc);
+  });
+  ddsWait.catch(()=>{});
+  return ddsWait;
+}
+function gVerdict(){
+  const g = G, run = gRun;
+  if(!g || !g.start || g.lead==null) return;
+  ddsLoad().then(()=>{
+    if(run!==gRun || G!==g) return;
+    const hands = g.start.map(h=>h.slice()), t0 = performance.now();
+    hands[3].splice(hands[3].indexOf(g.lead), 1);
+    const max = window.DDS.solve(hands, 4, 3, [g.lead]), ms = Math.round(performance.now()-t0);
+    if(max<0) return;
+    const sl = n => n+' slag'+(n===1 ? '' : 'en'), d = max-g.ns;
+    const txt = d>0 ? 'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in; jij haalde er '+g.ns+'. Er zat'+(d===1 ? ' er 1' : 'en er '+d)+' meer in.'
+      : d===0 ? 'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in, en die heb je allemaal gehaald. Beter kan niet.'
+      : 'Met open kaarten zaten er na deze uitkomst tegen perfect tegenspel <b>'+sl(max)+'</b> in; jij haalde er '+g.ns+'. De tegenspelers lieten dus iets liggen.';
+    $('gresult').insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>');
+  }).catch(()=>{});
 }
 function gAdvance(){
   if(G.over){ gBusy = false; gFinish(); return; }
@@ -7725,6 +7764,7 @@ function gDo(seat, card){
 }
 function gStart(){
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
+  G.start = G.hands.map(h=>h.slice()); ddsLoad();
   $('gtip').hidden = true;
   $('gend').hidden = true;
   gAdvance();
@@ -8459,12 +8499,12 @@ function snapPrev(){
   const m = document.querySelector('main.table');
   if(!m || m.hidden || $('feedback').hidden) return;
   PREV.push(m.cloneNode(true)); if(PREV.length>10) PREV.shift();
-  $('prevbtn').hidden = false;
+  $('prevbtn').hidden = false; prevBtns();
 }
 function closePrev(){
   const v = document.getElementById('prevmain');
   if(!v) return;
-  v.remove(); prevAt = -1;
+  v.remove(); prevAt = -1; $('prevbtn').classList.remove('on'); prevBtns();
   $('game').hidden = prevGameHidden; document.querySelector('main.table').hidden = !prevGameHidden;
 }
 function openPrev(i){
@@ -8481,10 +8521,12 @@ function openPrev(i){
   const note = document.createElement('p'); note.className = 'prevnote'; note.textContent = 'Je kijkt terug: hand '+(prevAt+1)+' van de laatste '+PREV.length+'.';
   const fb = v.querySelector('.fbtext'); fb.insertBefore(note, fb.firstChild);
   nav.addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b || b.disabled) return; const d = +b.dataset.p; if(d===0) closePrev(); else openPrev(prevAt+d); });
-  live.hidden = true; $('game').hidden = true;
+  live.hidden = true; $('game').hidden = true; $('prevbtn').classList.add('on'); prevBtns();
   $('game').after(v);
 }
-$('prevbtn').addEventListener('click', ()=>{ if(prevAt<0) openPrev(PREV.length-1); else if(prevAt>0) openPrev(prevAt-1); else closePrev(); });
+function prevBtns(){ $('prevL').disabled = !PREV.length || prevAt===0; $('prevR').disabled = prevAt<0; }
+$('prevL').addEventListener('click', ()=>{ if(prevAt<0) openPrev(PREV.length-1); else if(prevAt>0) openPrev(prevAt-1); });
+$('prevR').addEventListener('click', ()=>{ if(prevAt<0) return; if(prevAt<PREV.length-1) openPrev(prevAt+1); else closePrev(); });
 { const answer0 = answer, next0 = next;
   answer = function(){ const r = answer0.apply(this, arguments); snapPrev(); return r; };
   next = function(){ closePrev(); return next0.apply(this, arguments); }; }
