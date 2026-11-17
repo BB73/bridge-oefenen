@@ -493,7 +493,9 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .crumbs button{font:inherit;color:var(--felt);background:none;border:0;padding:.15rem 0;text-decoration:underline;text-underline-offset:.15em;cursor:pointer}
 .crumbs span{color:var(--muted)}
 .crumbs b{font-weight:700}
-.homebtns{display:grid;gap:.6rem;margin:.2rem 0 .8rem}
+.homebtns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.2rem 0 .8rem} .homebtns > *{grid-column:1 / -1} .homebtns > .homebtn.half{grid-column:auto}
+.homecap{margin:0 0 -.25rem;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.homebtn.club{background:var(--felt);border-color:var(--felt);color:var(--on-felt)} .homebtn.club small{color:var(--on-felt);opacity:.85}
 .homebtn{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;width:100%;font:inherit;text-align:left;padding:1rem 1rem;border-radius:14px;border:2px solid var(--felt);background:var(--surface);color:var(--ink);cursor:pointer}
 .dhead{position:relative}
 .tipT{position:absolute;top:.3rem;right:.35rem;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}
@@ -502,7 +504,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .tipT[hidden]{display:none}
 .tiplbl{position:absolute;right:calc(100% + .45rem);top:50%;transform:translateY(-50%);padding:.2rem .6rem;border-radius:999px;background:#151515;color:#F2F2F0;font-family:var(--display);font-size:.9rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
 .tipT:hover .tiplbl, .tipT:focus-visible .tiplbl{opacity:1}
-@media (max-height:720px){ .homebtns{gap:.4rem;margin-bottom:.6rem} .homebtn{padding:.4rem .9rem;gap:0} .homebtn b{font-size:1.2rem} .homebtn small{font-size:.8rem;line-height:1.25} }
+@media (max-height:720px){ .homecap{font-size:.72rem;margin-bottom:-.2rem} .homebtn.half small{white-space:nowrap;font-size:.75rem} .homebtns{gap:.35rem;margin-bottom:.5rem} .homebtn{padding:.4rem .9rem;gap:0} .homebtn b{font-size:1.2rem} .homebtn small{font-size:.8rem;line-height:1.25} }
 .tipmail{display:inline-block;margin:.2rem 0 .5rem;padding:.6rem 1rem;border-radius:10px;background:var(--felt);color:#fff;font-weight:600;text-decoration:none}
 .homebtn b{font-family:var(--display);font-size:1.35rem}
 .homebtn small{font-size:.85rem;color:var(--muted)}
@@ -7178,12 +7180,14 @@ function renderModes(){
   const nPrS = state.conv==='spelmix' ? state.playSet.length : (PLAYABLE.includes(state.conv) || state.conv==='spel') ? 1 : 0;
   let pg = '';
   if(!T){
-    pg = '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
-       + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
+    pg = '<div class="homebtns"><p class="homecap">Bieden &amp; spelen oefenen</p><button class="homebtn half'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Volgens je systeemkaart')+'</small></button>'
+       + '<button class="homebtn half'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Leider, tegenspel')+'</small></button>'
+       + clubHomeBtn()
        + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+state.card.length+' afspraken · uitkomen · afdrukken</small></button>'
        + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
-    if(state.learn.on) pg = '<div class="homebtns"><button class="homebtn has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
-       + '<button class="homebtn has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+    if(state.learn.on) pg = '<div class="homebtns"><p class="homecap">Bieden &amp; spelen oefenen</p><button class="homebtn half has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
+       + '<button class="homebtn half has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+       + clubHomeBtn()
        + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
   }else if(T==='test' && !mode){
     const TS = state.test;
@@ -7267,7 +7271,6 @@ function renderModes(){
        + tools(allOf(T), T==='spelen' ? 'bij spelen' : cardMode ? '' : 'bij bieden', false).replace('Alles  van','Alles van');
     if(T==='bieden' && !cardMode) pg += '<div class="navtools"><button class="navclear all" data-allcard="1">Mijn hele systeemkaart oefenen</button></div>';
     if(T==='spelen' && extra.length) pg += '<p class="hint">Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.</p>';
-    if(T==='spelen') pg += '<button class="navclear all clubentry" data-clubopen="1">Clubavond: je eigen spellen van de club ›</button>';
   }else if(!sub){
     pg = subsOf.map((s,i)=>{ const v = vis(subKeys(s)); return setPage(cat.id, i) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : !v.length ? '' : v.length===1 ? convRow(v[0]) : navRow('data-subi="'+i+'"', s[0], subKeys(s)); }).join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', false);
   }else if(!pk){
@@ -7695,6 +7698,11 @@ function clubPct(b, m){ if(!m || !b.top || m.r.mpNZ==null || isNaN(m.r.mpNZ)) re
 // kleurtekens uit de pdf altijd als tekst (niet als emoji) en in de vier vaste kleuren
 const suitTxtHTML = t => String(t||'').replace(/([♠♥♦♣])[\uFE0E\uFE0F]?/g, (x, ch)=>{ const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[ch]; return '<span class="'+su+'">'+SYM[su]+'</span>'; });
 function clubContractHTML(c){ if(!c) return ''; if(/^pas/i.test(c)) return 'Pas'; const m = /^(\d)(SA|[♠♥♦♣])(x{0,2})/i.exec(c); if(!m) return c; const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[m[2]]; return m[1]+(su ? '<span class="'+su+'">'+SYM[su]+'</span>' : 'SA')+(m[3] ? m[3].toLowerCase() : ''); }
+function clubHomeBtn(){
+  let c = null; try{ c = clubData(); }catch(e){}
+  const n = c && c.boards ? Object.keys(c.boards).length : 0;
+  return '<button class="homebtn club" data-clubopen="1"><b>Clubspellen naspelen</b><small>'+(n ? (c.date ? c.date+' · ' : '')+n+' spellen' : 'Lees de uitslag-pdf van je club in en speel de spellen na')+'</small></button>';
+}
 function clubOpen(){
   const t = $('theory');
   $('theorytitle').textContent = 'Clubavond';
