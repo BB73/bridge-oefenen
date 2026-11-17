@@ -150,13 +150,26 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .rvn li.zij{color:var(--muted)}
 .rvnote{font-size:.8rem;color:var(--muted)}
 @media (prefers-color-scheme: dark){ .rvc.bad{background:#4A1D20} .rvn li.wij{color:#F2A0A5} }
-.clubgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(4.2rem,1fr));gap:.35rem;margin:.4rem 0}
+.clubgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin:.4rem 0}
+@media (max-height:760px){ .clubgrid{gap:.25rem;margin:.3rem 0} .clubgrid .clubb{padding:.15rem .15rem;gap:0} .clubgrid .clubb b{font-size:.92rem} .clubh{font-size:.92rem;margin-bottom:.15rem} .clubwho select{padding:.1rem .3rem} }
 .clubb{display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.35rem .2rem;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:inherit;font:inherit;cursor:pointer}
-.clubb b{font-size:1rem} .clubb small{font-size:.72rem;line-height:1.15}
+.clubb b{font-size:1rem} .clubb small{font-size:.72rem;line-height:1.15} .clubb .cbt{display:flex;width:100%;justify-content:space-between;align-items:baseline;padding:0 .2rem;box-sizing:border-box} .clubb .cbt small{font-weight:700}
+.clubwho{margin:.2rem 0} .rvnote .navclear{padding:0;font-size:inherit}
 .clubb.goed{border-color:var(--felt);background:#DDF0E5} .clubb.slecht{border-color:#C4202B;background:#FBE3E3}
 @media (prefers-color-scheme: dark){ .clubb.goed{background:#1E3A2B} .clubb.slecht{background:#4A1D20} }
-.clubh{margin:.1rem 0 .4rem} .clubwho select{font:inherit;padding:.2rem .3rem;border-radius:6px;max-width:100%}
+.clubh{margin:.1rem 0 .3rem;line-height:1.3} .clubwho select{font:inherit;padding:.2rem .3rem;border-radius:6px;max-width:100%}
 .clubsub{margin:.7rem 0 .25rem} .clubyou{margin:.3rem 0}
+.clubtop{margin:0 0 .2rem} .clubtop .navclear{padding:0}
+.rvnav.clubnav{display:grid;grid-template-columns:1fr auto auto auto 1fr;gap:.45rem;margin:.1rem 0 .35rem} .rvnav.clubnav .navclear{justify-self:start;padding:0;font-size:.88rem;white-space:nowrap} .rvnav.clubnav b{min-width:0;white-space:nowrap} .rvnav.clubnav b small{font-weight:400;color:var(--muted);font-size:.8em}
+.rvd.cl{gap:.15rem .3rem;margin:.1rem 0 .3rem} .rvd.cl .rvs{line-height:1.2}
+.clubhandsbtn{display:none}
+@media (max-height:760px){ .rvd.clubhands{display:none} .clubhandsbtn{display:inline-flex} }
+#theory .clubplay{gap:.4rem} #theory .clubplay .gview{padding-left:.65rem;padding-right:.65rem;font-size:.92rem}
+table.clubsum{width:100%;border-collapse:collapse;margin:.35rem 0 .1rem;font-size:.92rem}
+table.clubsum th,table.clubsum td{padding:.22rem .3rem;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+table.clubsum th{font-weight:600;color:var(--muted)} table.clubsum th.cap{color:var(--ink);font-weight:700;border-bottom:2px solid var(--line)} table.clubsum th.cap small{font-weight:400;color:var(--muted)}
+table.clubsum td:nth-child(3){text-align:right;font-variant-numeric:tabular-nums;font-weight:700} table.clubsum .clubpl{display:block;color:var(--muted);font-size:.75rem;font-weight:400;line-height:1.2}
+.clubplay + .clubsub{margin-top:.55rem}
 .clubdd, .clubres{border-collapse:collapse;font-size:.88rem;width:100%}
 .clubdd th, .clubdd td, .clubres th, .clubres td{border-bottom:1px solid var(--line);padding:.2rem .3rem;text-align:center}
 .clubres td:first-child, .clubres th:first-child{text-align:left}
@@ -7717,7 +7730,7 @@ function clubParse(items0){
 
 // ---------- Clubavond: scherm ----------
 const CLUBSEAT = ['N','O','Z','W'];
-let CV = {i:null, busy:0};
+let CV = {i:null, busy:0, view:''};
 function clubData(){ return state.club && state.club.boards ? state.club : null; }
 function clubPairs(c){ const s = new Set(); Object.values(c.boards).forEach(b=>Object.values(b.res).forEach(rs=>rs.forEach(r=>{ s.add(r.nz); s.add(r.ow); }))); return [...s].sort((a,b)=>a.localeCompare(b, 'nl')); }
 function clubMine(b){ const me = state.clubMe; if(!me) return null; for(const L of Object.keys(b.res)){ const r = b.res[L].find(r=>r.nz===me || r.ow===me); if(r) return {r, L, nz: r.nz===me}; } return null; }
@@ -7749,13 +7762,12 @@ function clubDraw(){
   }
   const boards = Object.values(c.boards).sort((a,b)=>a.nr-b.nr);
   const pairs = clubPairs(c);
-  const who = '<p class="clubwho">Jij speelde als: <select id="clubme"><option value="">kies je paar</option>'+pairs.map(p=>'<option'+(p===state.clubMe ? ' selected' : '')+'>'+p.replace(/</g,'&lt;')+'</option>').join('')+'</select></p>';
+  const who = '<p class="clubwho">Jullie paar: <select id="clubme"><option value="">kies je paar</option>'+pairs.map(p=>'<option'+(p===state.clubMe ? ' selected' : '')+'>'+p.replace(/</g,'&lt;')+'</option>').join('')+'</select></p>';
   if(CV.i===null){
-    const grid = boards.map(b=>{ const m = clubMine(b), pc = clubPct(b, m); return '<button class="clubb'+(pc===null ? '' : pc>=60 ? ' goed' : pc<=40 ? ' slecht' : '')+'" data-clubb="'+b.nr+'"><b>'+b.nr+'</b>'+(m ? '<small>'+clubContractHTML(m.r.c)+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</small><small>'+(pc===null ? '' : pc+'%')+'</small>' : '')+'</button>'; }).join('');
+    const grid = boards.map(b=>{ const m = clubMine(b), pc = clubPct(b, m); return '<button class="clubb'+(pc===null ? '' : pc>=60 ? ' goed' : pc<=40 ? ' slecht' : '')+'" data-clubb="'+b.nr+'"><span class="cbt"><b>'+b.nr+'</b>'+(m && pc!==null ? '<small>'+pc+'%</small>' : '')+'</span>'+(m ? '<small>'+clubContractHTML(m.r.c)+(m.r.d && !/^pas/i.test(m.r.c||'') ? ' '+m.r.d[0] : '')+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</small>' : '')+'</button>'; }).join('');
     let tot = null; const ms = boards.map(b=>clubPct(b, clubMine(b))).filter(x=>x!==null); if(ms.length) tot = Math.round(ms.reduce((a,b)=>a+b,0)/ms.length*10)/10;
-    el.innerHTML = '<p class="clubh"><b>'+(c.title||'Clubavond')+'</b><br>'+(c.date||'')+'</p>'+who
-      + (tot!==null ? '<p>Gemiddeld <b>'+String(tot).replace('.',',')+'%</b> over '+ms.length+' spellen.</p>' : '')
-      + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Tik op een spel. Groen: 60% of meer, rood: 40% of minder.</p>'+pick;
+    el.innerHTML = '<p class="clubh"><b>'+(c.title||'Clubavond')+'</b><br>'+(c.date||'')+(tot!==null ? ' · gemiddeld <b>'+String(tot).replace('.',',')+'%</b>' : '')+'</p>'+who
+      + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Per rij een ronde van vier spellen. Groen: 60% of meer, rood: 40% of minder. <button class="navclear" data-clubfile="1">Ander bestand kiezen</button></p>';
     return;
   }
   const b = c.boards[CV.i];
@@ -7776,15 +7788,83 @@ function clubDraw(){
   const nrs = boards.map(x=>x.nr), at = nrs.indexOf(b.nr);
   const arrow = d => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(d<0 ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7')+'" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const pc = clubPlayContract(b);
-  el.innerHTML = '<div class="rvnav"><button class="prevb" data-clubgo="'+(at>0 ? nrs[at-1] : '')+'" aria-label="Vorig spel"'+(at>0 ? '' : ' disabled')+'>'+arrow(-1)+'</button><b>Spel '+b.nr+' van '+nrs.length+'</b><button class="prevb" data-clubgo="'+(at<nrs.length-1 ? nrs[at+1] : '')+'" aria-label="Volgend spel"'+(at<nrs.length-1 ? '' : ' disabled')+'>'+arrow(1)+'</button></div>'
-    + '<div class="rvd">'+seats+mid+'</div>' + yours
-    + '<p class="clubsub"><b>Met open kaarten</b>'+(dd && dd.done ? '' : ' <span class="ddbusy">rekent…</span>')+'</p>'+ddT
-    + '<p class="rvnote">Per speler en kleur: hoeveel boven de zes slagen hij als leider maakt (– is minder dan 7 slagen).</p>'
-    + '<p class="clubsub"><b>Alle tafels</b>'+(m ? ' (lijn '+m.L+')' : '')+'</p>'+rt
-    + (pc ? '<p class="clubsub"><b>Naspelen</b>: '+clubContractHTML(pc.c)+' door '+NM[pc.decl]+(pc.from ? ' ('+pc.from+')' : '')+'</p><div class="clubplay"><button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Als tegenspeler</button></div>' : '')
-    + '<p class="clubsub"><b>Zelf bieden</b>: bied dit spel met de computer als partner en vergelijk met de tafels.</p><div class="clubplay"><button class="gview" data-clubbid="1">Bied dit spel</button></div>'
-    + '<p><button class="navclear" data-clubgo="lijst">Terug naar alle spellen</button></p>';
+  const nav = '<div class="rvnav clubnav"><button class="navclear" data-clubgo="lijst">‹ Alle spellen</button><button class="prevb" data-clubgo="'+(at>0 ? nrs[at-1] : '')+'" aria-label="Vorig spel"'+(at>0 ? '' : ' disabled')+'>'+arrow(-1)+'</button><b>Spel '+b.nr+'<small> van '+nrs.length+'</small></b><button class="prevb" data-clubgo="'+(at<nrs.length-1 ? nrs[at+1] : '')+'" aria-label="Volgend spel"'+(at<nrs.length-1 ? '' : ' disabled')+'>'+arrow(1)+'</button><span></span></div>';
+  const back = '<p class="clubtop"><button class="navclear" data-clubview="">‹ Terug naar spel '+b.nr+'</button></p>';
+  if(CV.view==='tafels'){
+    el.innerHTML = back + '<p class="clubsub"><b>Alle tafels</b>'+(m ? ' (lijn '+m.L+')' : '')+' · spel '+b.nr+'</p>'+rt;
+    return;
+  }
+  if(CV.view==='open'){
+    el.innerHTML = back + '<p class="clubsub"><b>Haalbaar met open kaarten</b> · spel '+b.nr+(dd && dd.done ? '' : ' <span class="ddbusy">rekent…</span>')+'</p>'+ddT
+      + '<p class="rvnote">Per speler en kleur: hoeveel boven de zes slagen hij als leider maakt (– is minder dan 7 slagen). Met open kaarten: alsof je alle vier de handen ziet.</p>'
+      + '<p class="rvnote"><b>Par</b> is het resultaat als beide kanten perfect bieden. Een <b>offerbod</b> is bewust down gaan omdat dat minder kost dan het contract van de tegenpartij.</p>';
+    clubDD(b); return;
+  }
+  if(CV.view==='handen'){
+    el.innerHTML = back + '<div class="rvd cl">'+seats+mid+'</div>' + yours;
+    return;
+  }
+  const sum = dd && dd.done ? clubSummaryHTML(b, m) : '<p class="clubsum"><span class="ddbusy">Met open kaarten rekenen…</span></p>';
+  el.innerHTML = nav
+    + '<div class="rvd cl clubhands">'+seats+mid+'</div>' + yours + sum
+    + '<div class="clubplay"><button class="gview clubhandsbtn" data-clubview="handen">Handen</button><button class="gview" data-clubview="tafels">Alle tafels ('+rows.length+')</button><button class="gview" data-clubview="open">Open kaarten</button></div>'
+    + '<p class="clubsub"><b>Naspelen</b>'+(pc ? ': '+clubContractHTML(pc.c)+' door '+NM[pc.decl] : '')+'</p>'
+    + '<div class="clubplay">'+(pc ? '<button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Tegenspel</button>' : '')+'<button class="gview" data-clubbid="1">Zelf bieden</button></div>';
   clubDD(b);
+}
+// Samenvatting: beste contract voor jullie, voor de tegenpartij, en het par-contract (beide kanten bieden perfect)
+function clubResParse(r){ const x = /^(\d)(SA|[♠♥♦♣])/i.exec((r && r.c)||''); const d = 'NOZW'.indexOf(((r && r.d)||'')[0]); return x && d>=0 ? {level:+x[1], trump: x[2].toUpperCase()==='SA' ? 4 : {'♠':0,'♥':1,'♦':2,'♣':3}[x[2]], decl:d} : null; }
+function clubBest(b, side){
+  // side 0 = NZ, 1 = OW; hoogste score die die kant met open kaarten haalt; bij gelijke score liever een contract dat ook gespeeld is
+  const mm = clubMine(b), played = ((mm ? b.res[mm.L] : Object.values(b.res).flat()) || []).map(clubResParse).filter(Boolean);
+  const vul = sideVul(b.vul, side); let best = null;
+  [side, side+2].forEach(seat=>[4,0,1,2,3].forEach(tr=>{
+    const t = b.dd[seat][tr]; if(t==null) return;
+    for(let l=1; l<=t-6; l++){
+      const sc = bridgeScore(l, tr, 0, vul, t), pl = played.filter(p=>p.level===l && p.trump===tr && p.decl%2===side).length, plSeat = played.some(p=>p.level===l && p.trump===tr && p.decl===seat);
+      const key = [sc, pl ? 1 : 0, plSeat ? 1 : 0, -l];
+      const better = !best || (()=>{ for(let i=0;i<key.length;i++){ if(key[i]!==best.key[i]) return key[i]>best.key[i]; } return false; })();
+      if(better) best = {key, level:l, trump:tr, decl:seat, score:sc, tricks:t, played:pl};
+    }
+  }));
+  return best;
+}
+function clubPar(b){
+  // minimax over de biedladder: elke kant mag hoger bieden of passen; wie down gaat, wordt gedoubleerd
+  const T = [0,1].map(side=>[0,1,2,3,4].map(tr=>Math.max(b.dd[side][tr]||0, b.dd[side+2][tr]||0)));
+  const DEN = [3,2,1,0,4];   // rangorde ♣ ♦ ♥ ♠ SA, als troefcode
+  const res = (k, side) => { const l = Math.floor(k/5)+1, tr = DEN[k%5], t = T[side][tr], v = sideVul(b.vul, side); const sc = t>=l+6 ? bridgeScore(l, tr, 0, v, t) : bridgeScore(l, tr, 1, v, t); return {v: side===0 ? sc : -sc, k, side, dbl: t<l+6, t}; };
+  const memo = {};
+  const V = (k, side) => {      // contract k van 'side' staat; de andere kant kiest
+    const key = k+'|'+side; if(memo[key]) return memo[key];
+    const o = 1-side; let best = res(k, side);
+    const passed = best;
+    for(let k2=k+1; k2<35; k2++){ const r = V(k2, o); if(o===0 ? r.v>best.v : r.v<best.v) best = r; else if(r.v===best.v && best===passed && !r.dbl && r.k>best.k) best = r; }   // gelijk: liever meebieden, zodat het par-contract het eindcontract van de strijd is
+    return memo[key] = best;
+  };
+  const better = (side, a, c) => side===0 ? a.v>c.v : a.v<c.v;
+  const tie = (a, c) => Math.floor(a.k/5)<Math.floor(c.k/5) || (Math.floor(a.k/5)===Math.floor(c.k/5) && a.k>c.k);   // gelijk: lager niveau, dan de hoogste kleur
+  const bids = side => { let best = null; for(let k=0;k<35;k++){ const r = V(k, side); if(!best || better(side, r, best) || (r.v===best.v && tie(r, best))) best = r; } return best; };
+  const first = b.dealer%2;
+  // de gevende kant opent of past; past hij, dan kiest de andere kant tussen openen en uitpassen (meebieden daarna zit in V)
+  const own = bids(first); let other = bids(1-first); const out = {v:0, k:-1};
+  if(!better(1-first, other, out)) other = out;
+  const best = better(first, own, other) ? own : other;
+  if(best.k<0) return {pass:true};
+  const l = Math.floor(best.k/5)+1, tr = [3,2,1,0,4][best.k%5];
+  return {level:l, trump:tr, side:best.side, dbl:best.dbl, v:best.v, tricks:best.t};
+}
+function clubSummaryHTML(b, m){
+  const us = m ? (m.nz ? 0 : 1) : 0, SN = ['N','O','Z','W'];
+  const ch = (l, tr) => l+(tr===4 ? 'SA' : '<span class="'+SUITS[tr]+'">'+SYM[SUITS[tr]]+'</span>');
+  const sideTxt = side => side===0 ? 'N/Z' : 'O/W';
+  const line = (lab, x, sign) => x ? '<tr><th>'+lab+'</th><td><b>'+ch(x.level, x.trump)+'</b> '+SN[x.decl]+(x.tricks-6>x.level ? ' +'+(x.tricks-6-x.level) : '')+'<small class="clubpl">'+(x.played ? 'gespeeld aan '+(x.played===1 ? '1 tafel' : x.played+' tafels') : 'niet gespeeld')+'</small></td><td>'+scoreTxt(sign*x.score)+'</td></tr>' : '<tr><th>'+lab+'</th><td colspan="2">geen contract dat maakt</td></tr>';
+  const a = clubBest(b, us), o = clubBest(b, 1-us), par = clubPar(b);
+  let parTxt = '';
+  if(par && par.pass) parTxt = '<tr><th>Par</th><td>uitgepast</td><td>0</td></tr>';
+  else if(par){ const sc = us===0 ? par.v : -par.v, down = par.level+6-par.tricks;
+    parTxt = '<tr><th>Par</th><td><b>'+ch(par.level, par.trump)+(par.dbl ? 'X' : '')+'</b> '+sideTxt(par.side)+(par.dbl ? ' −'+down : par.tricks-6>par.level ? ' +'+(par.tricks-6-par.level) : '')+'<small class="clubpl">'+(par.dbl ? 'offerbod van '+(par.side===us ? 'jullie' : 'hen') : par.side===us ? 'jullie spelen' : 'zij spelen')+'</small></td><td>'+scoreTxt(sc)+'</td></tr>'; }
+  return '<table class="clubsum"><tr><th colspan="3" class="cap">Wat zat erin? <small>(met open kaarten)</small></th></tr>'+line('Jullie best', a, 1)+line('Hun best', o, -1)+parTxt+'</table>';
 }
 // dubbel-dummy voor alle vier de leiders en vijf kleuren, stap voor stap zodat de app blijft reageren
 function clubDD(b){
@@ -7828,12 +7908,13 @@ function clubPlay(role){
   renderModes(); next(true);
 }
 document.addEventListener('click', e=>{
-  const x = e.target.closest && e.target.closest('[data-clubopen],[data-clubfile],[data-clubb],[data-clubgo],[data-clubplay]');
+  const x = e.target.closest && e.target.closest('[data-clubopen],[data-clubfile],[data-clubb],[data-clubgo],[data-clubplay],[data-clubview]');
   if(!x) return;
   if(x.dataset.clubopen!==undefined){ CV.i = null; clubOpen(); return; }
   if(x.dataset.clubfile!==undefined){ $('clubfile').click(); return; }
-  if(x.dataset.clubb!==undefined){ CV.i = +x.dataset.clubb; clubDraw(); $('theory').scrollTop = 0; return; }
-  if(x.dataset.clubgo!==undefined){ CV.i = x.dataset.clubgo==='lijst' || x.dataset.clubgo==='' ? null : +x.dataset.clubgo; clubDraw(); $('theory').scrollTop = 0; return; }
+  if(x.dataset.clubview!==undefined){ CV.view = x.dataset.clubview; clubDraw(); $('theory').scrollTop = 0; const bd = document.querySelector('#theory .dbody, #theorybody'); if(bd) bd.scrollTop = 0; return; }
+  if(x.dataset.clubb!==undefined){ CV.view = ''; CV.i = +x.dataset.clubb; clubDraw(); $('theory').scrollTop = 0; return; }
+  if(x.dataset.clubgo!==undefined){ CV.view = ''; CV.i = x.dataset.clubgo==='lijst' || x.dataset.clubgo==='' ? null : +x.dataset.clubgo; clubDraw(); $('theory').scrollTop = 0; return; }
   if(x.dataset.clubplay!==undefined) clubPlay(x.dataset.clubplay);
 });
 document.addEventListener('change', e=>{
