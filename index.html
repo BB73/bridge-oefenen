@@ -162,8 +162,18 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .clubres td:first-child, .clubres th:first-child{text-align:left}
 .clubres tr.me td{background:#FFF3C4;font-weight:700}
 @media (prefers-color-scheme: dark){ .clubres tr.me td{background:#4A3F12} }
+.gclubback{margin:0 0 .2rem} .gclubback .navclear{padding:0;font-size:.9rem}
 .clubplay{display:flex;gap:.5rem;flex-wrap:wrap} .clubplay .gview{margin:0}
 .clubentry{display:block;margin:.6rem 0 0;width:100%;text-align:left}
+.auct{width:100%;border-collapse:collapse;table-layout:fixed;margin:.2rem 0 .4rem;font-size:1rem}
+.auct th{font-size:.78rem;font-weight:600;color:var(--muted);padding:.15rem;border-bottom:1px solid var(--line)}
+.auct th small{display:block;font-size:.65rem;font-weight:500}
+.auct td{text-align:center;padding:.18rem 0;font-weight:700}
+.auct .abp{color:#1F8A55;font-weight:600} .auct .abx{color:#fff;background:#C0392B;border-radius:5px;padding:.05rem .4rem;font-weight:700} .auct .abq{display:inline-block;min-width:1.6rem;border:2px dashed var(--felt);border-radius:6px}
+.auct .abw{color:var(--muted)}
+.abtip{margin:.35rem 0;padding:.5rem .65rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:.9rem;line-height:1.35} .abtip{display:flex;gap:.55rem;align-items:flex-start} .abtip .tipmark{flex:none;width:2rem;height:2rem;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3)} .abtip p{margin:0 0 .2rem} .abtip p:last-child{margin-bottom:0}
+.abwhy{font-size:.88rem;margin:.2rem 0 .4rem;color:var(--muted)} .abres{margin:.3rem 0}
+#gbid .box{margin-top:.3rem}
 .ddpar{margin:.5rem 0 0;padding:.5rem .7rem;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:.9rem;line-height:1.35}
 .ddpar .ddh{display:block;margin-bottom:.15rem}
 .ddpar .ddbusy{font-weight:400;font-size:.8rem;color:var(--muted)}
@@ -430,6 +440,7 @@ main.table{--qk:3.15rem}
 .bid:disabled{cursor:default;opacity:.38}
 .bid.dbl{grid-column:span 2;background:var(--bad);border-color:var(--bad);color:var(--surface);border-top-width:1px}
 .box.withdbl .bid.pas{grid-column:span 3}
+.bid.rdbl{grid-column:span 2;background:#2E5FA8;border-color:#2E5FA8;color:#fff;border-top-width:1px}
 .bid.pas{grid-column:1 / -1;background:var(--felt);border-color:var(--felt);color:var(--on-felt);border-top-width:1px}
 button:focus-visible,summary:focus-visible{outline:3px solid var(--felt);outline-offset:2px}
 
@@ -485,11 +496,11 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .homebtns{display:grid;gap:.6rem;margin:.2rem 0 .8rem}
 .homebtn{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;width:100%;font:inherit;text-align:left;padding:1rem 1rem;border-radius:14px;border:2px solid var(--felt);background:var(--surface);color:var(--ink);cursor:pointer}
 .dhead{position:relative}
-.tipT{position:absolute;top:.3rem;right:.35rem;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%, #2A2416, #14110A);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.35);transition:transform .15s}
+.tipT{position:absolute;top:.3rem;right:.35rem;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}
 .tipT svg{display:block;width:100%;height:100%}
-.tipT:hover, .tipT:focus-visible{transform:scale(1.06);outline:none;box-shadow:0 0 0 2px #D4A62A, 0 1px 4px rgba(0,0,0,.35)}
+.tipT:hover, .tipT:focus-visible{transform:scale(1.06);outline:none;box-shadow:0 0 0 2px var(--felt), 0 1px 3px rgba(0,0,0,.3)}
 .tipT[hidden]{display:none}
-.tiplbl{position:absolute;right:calc(100% + .45rem);top:50%;transform:translateY(-50%);padding:.2rem .6rem;border-radius:999px;background:#14110A;color:#F1D36B;font-family:var(--display);font-size:.9rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.tiplbl{position:absolute;right:calc(100% + .45rem);top:50%;transform:translateY(-50%);padding:.2rem .6rem;border-radius:999px;background:#151515;color:#F2F2F0;font-family:var(--display);font-size:.9rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
 .tipT:hover .tiplbl, .tipT:focus-visible .tiplbl{opacity:1}
 @media (max-height:720px){ .homebtns{gap:.4rem;margin-bottom:.6rem} .homebtn{padding:.4rem .9rem;gap:0} .homebtn b{font-size:1.2rem} .homebtn small{font-size:.8rem;line-height:1.25} }
 .tipmail{display:inline-block;margin:.2rem 0 .5rem;padding:.6rem 1rem;border-radius:10px;background:var(--felt);color:#fff;font-weight:600;text-decoration:none}
@@ -721,7 +732,9 @@ summary{cursor:pointer;font-weight:700}
   </main>
 
   <section class="table game" id="game" hidden aria-label="Een heel spel spelen">
+    <p class="gclubback" id="gclubback" hidden><button class="navclear" data-clubback="1">‹ Terug naar de uitslagen van dit spel</button></p>
     <p class="gstatus" id="gstatus" aria-live="polite"></p>
+    <div id="gbid" hidden></div>
     <p class="handlabel" id="gnlabel"><span class="dbadge">Dummy</span>Noord</p>
     <ul class="hand ghand" id="gnorth"></ul>
     <div class="tablewrap">
@@ -739,6 +752,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
     <div class="gend" id="gend" hidden>
       <p id="gresult"></p>
+      <p class="gdef" id="gbidc">Eerst bieden: <button data-gbid="ja">Ja</button><button data-gbid="nee">Nee</button></p>
       <p class="gdef" id="grole">Jij bent: <button data-grole="leider">Leider</button><button data-grole="tegen">Tegenspeler</button></p>
       <p class="gdef" id="gct">Contract: <button data-gct="sa">3SA</button><button data-gct="troef">Troef</button><button data-gct="mix">Afwisselend</button></p>
       <p class="gdef" id="gdef" hidden><span id="gdeflab">Tegenspel:</span> <button data-gdef="vuist">Gewoon</button><button data-gdef="sterk">Sterk</button></p>
@@ -751,7 +765,7 @@ summary{cursor:pointer;font-weight:700}
 <dialog id="settings" aria-labelledby="settitle">
   <div class="dhead">
     <h2 id="settitle">Wat wil je oefenen?</h2>
-    <button class="tipT" id="tipT" data-tip="1" aria-label="Tips: geef een tip of fout door" title="Tips"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="tgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6E27A"/><stop offset=".35" stop-color="#D4A62A"/><stop offset=".6" stop-color="#FBEFA0"/><stop offset="1" stop-color="#A97A12"/></linearGradient></defs><circle cx="24" cy="24" r="22" fill="none" stroke="url(#tgold)" stroke-width="1.6"/><path d="M10.5 17.5c-2.6-.4-3.6-3.4-1.6-5 1.6-1.3 4-.6 4.3 1.2M11.5 15.5c3-4.6 8-3.6 12.5-2.6 5 1.1 9.5 2.2 13.5-1.4 1.2 2.6-.6 5.6-3.4 5.2-1.6-.2-2.4-1.6-1.8-2.9" fill="none" stroke="url(#tgold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.6 14.2c-.2 6.5-1.2 12.5-2.6 17.2-1 3.4-3 5.8-6 5.8-2.6 0-4-2.2-2.8-4 .9-1.3 2.9-1.2 3.4.3" fill="none" stroke="url(#tgold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tiplbl" aria-hidden="true">Tips</span></button>
+    <button class="tipT" id="tipT" data-tip="1" aria-label="Tips: geef een tip of fout door" title="Tips"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="tdisc" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#ECECE9"/><stop offset="1" stop-color="#CFCFCB"/></radialGradient></defs><circle cx="24" cy="24" r="22.5" fill="url(#tdisc)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M15.2 15.6H32.8M24 15.6V34.2" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round"/></svg><span class="tiplbl" aria-hidden="true">Tips</span></button>
     <nav class="crumbs" id="crumbs" aria-label="Waar je bent"></nav>
   </div>
   <div class="dbody" id="dbody">
@@ -2076,6 +2090,7 @@ function openingBid(h){
 }
 // 0 = geen stop, 1 = stop, 2 = dubbele stop in de kleur van de tegenpartij
 function stops(h, os){
+  if(SI[os]===undefined) return 0;
   const r = h.suits[SI[os]], n = r.length;
   const A = r.includes(14), K = r.includes(13), Q = r.includes(12), J = r.includes(11);
   if((A && K) || (A && Q && n>=3) || (K && Q && n>=3) || (A && J && n>=4)) return 2;
@@ -3485,7 +3500,7 @@ function gameNew(){
   if(CLUB_PRESET){
     const P = CLUB_PRESET; CLUB_PRESET = null;
     const hN = makeHand(P.hands[0]), hS = makeHand(P.hands[2]);
-    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label};
+    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul};
   }
   const want = state.gct==='sa' ? 'sa' : state.gct==='troef' ? 'troef' : (rnd(2) ? 'sa' : 'troef');
   for(;;){
@@ -7329,7 +7344,7 @@ function next(fresh){
   const isGame = state.conv==='spel';
   $('game').hidden = !isGame;
   document.querySelector('main.table').hidden = isGame;
-  if(isGame){ $('feedback').hidden = true; if(!G || fresh) gStart(); return; }
+  if(isGame){ $('feedback').hidden = true; if((!G && !BIDS) || fresh) gStart(); return; }
   if(!fresh && q && answered && q.hasNext){
     q = q.conv==='doublet' ? makeDQ(q.d, 3) : makeQ(q.d, q.idx+2);
   }else{
@@ -7677,6 +7692,8 @@ function clubData(){ return state.club && state.club.boards ? state.club : null;
 function clubPairs(c){ const s = new Set(); Object.values(c.boards).forEach(b=>Object.values(b.res).forEach(rs=>rs.forEach(r=>{ s.add(r.nz); s.add(r.ow); }))); return [...s].sort((a,b)=>a.localeCompare(b, 'nl')); }
 function clubMine(b){ const me = state.clubMe; if(!me) return null; for(const L of Object.keys(b.res)){ const r = b.res[L].find(r=>r.nz===me || r.ow===me); if(r) return {r, L, nz: r.nz===me}; } return null; }
 function clubPct(b, m){ if(!m || !b.top || m.r.mpNZ==null || isNaN(m.r.mpNZ)) return null; return Math.round(100*(m.nz ? m.r.mpNZ : m.r.mpOW)/b.top); }
+// kleurtekens uit de pdf altijd als tekst (niet als emoji) en in de vier vaste kleuren
+const suitTxtHTML = t => String(t||'').replace(/([♠♥♦♣])[\uFE0E\uFE0F]?/g, (x, ch)=>{ const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[ch]; return '<span class="'+su+'">'+SYM[su]+'</span>'; });
 function clubContractHTML(c){ if(!c) return ''; if(/^pas/i.test(c)) return 'Pas'; const m = /^(\d)(SA|[♠♥♦♣])(x{0,2})/i.exec(c); if(!m) return c; const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[m[2]]; return m[1]+(su ? '<span class="'+su+'">'+SYM[su]+'</span>' : 'SA')+(m[3] ? m[3].toLowerCase() : ''); }
 function clubOpen(){
   const t = $('theory');
@@ -7714,13 +7731,13 @@ function clubDraw(){
   const youSeats = m ? (m.nz ? [0,2] : [1,3]) : [];
   const seats = [0,1,2,3].map(s=>'<div class="rvh '+AR[s]+'"><div class="rvlab">'+NM[s]+(youSeats.includes(s) ? ' (jullie)' : '')+(b.dealer===s ? ' · gever' : '')+'</div>'+hand(s)+'</div>').join('');
   const mid = '<div class="rvmid"><b>Spel '+b.nr+'</b><small>'+(b.vul==='-' ? 'niemand kw.' : b.vul==='Allen' ? 'allen kw.' : b.vul+' kw.')+'</small></div>';
-  const yours = m ? '<p class="clubyou">Jullie: <b>'+clubContractHTML(m.r.c)+(m.r.d ? ' door '+m.r.d : '')+(m.r.r && m.r.r!=='-' ? ', '+m.r.r : '')+'</b>'+(m.r.lead ? ', uitkomst '+m.r.lead : '')+' · '+(m.r.score!=null ? ((m.nz ? m.r.score : -m.r.score)>0 ? '+' : '')+(m.nz ? m.r.score : -m.r.score) : '')+' · <b>'+(clubPct(b, m)===null ? '' : clubPct(b, m)+'%')+'</b></p>' : '';
+  const yours = m ? '<p class="clubyou">Jullie: <b>'+clubContractHTML(m.r.c)+(m.r.d ? ' door '+m.r.d : '')+(m.r.r && m.r.r!=='-' ? ', '+m.r.r : '')+'</b>'+(m.r.lead ? ', uitkomst '+suitTxtHTML(m.r.lead) : '')+' · '+(m.r.score!=null ? ((m.nz ? m.r.score : -m.r.score)>0 ? '+' : '')+(m.nz ? m.r.score : -m.r.score) : '')+' · <b>'+(clubPct(b, m)===null ? '' : clubPct(b, m)+'%')+'</b></p>' : '';
   // dubbel-dummytabel
   const dd = b.dd, SU = ['C','D','H','S'];
   const ddT = '<table class="clubdd"><tr><th></th>'+SU.map(s=>'<th class="'+s+'">'+SYM[s]+'</th>').join('')+'<th>SA</th></tr>'
     + [0,2,1,3].map(s=>'<tr><th>'+CLUBSEAT[s]+'</th>'+[3,2,1,0,4].map(tr=>{ const v = dd && dd[s] ? dd[s][tr] : null; return '<td>'+(v==null ? '·' : v>=7 ? v-6 : '–')+'</td>'; }).join('')+'</tr>').join('')+'</table>';
   const rows = (m ? b.res[m.L] : b.res[Object.keys(b.res)[0]]) || [];
-  const rt = '<table class="clubres"><tr><th>Contract</th><th></th><th>Uitk.</th><th>NZ</th><th>MP</th></tr>'+rows.map(r=>'<tr'+(m && r===m.r ? ' class="me"' : '')+'><td>'+clubContractHTML(r.c)+(r.d ? ' '+r.d : '')+'</td><td>'+(r.r && r.r!=='-' ? r.r : '')+'</td><td>'+(r.lead ? r.lead.replace(/^([♠♥♦♣])/, s=>'<span class="'+{'♠':'S','♥':'H','♦':'D','♣':'C'}[s]+'">'+s+'</span>') : '')+'</td><td>'+(r.score!=null ? (r.score>0 ? '+' : '')+r.score : '')+'</td><td>'+(r.mpNZ!=null && !isNaN(r.mpNZ) ? String(r.mpNZ).replace('.',',') : '')+'</td></tr>').join('')+'</table>';
+  const rt = '<table class="clubres"><tr><th>Contract</th><th></th><th>Uitk.</th><th>NZ</th><th>MP</th></tr>'+rows.map(r=>'<tr'+(m && r===m.r ? ' class="me"' : '')+'><td>'+clubContractHTML(r.c)+(r.d ? ' '+r.d : '')+'</td><td>'+(r.r && r.r!=='-' ? r.r : '')+'</td><td>'+suitTxtHTML(r.lead)+'</td><td>'+(r.score!=null ? (r.score>0 ? '+' : '')+r.score : '')+'</td><td>'+(r.mpNZ!=null && !isNaN(r.mpNZ) ? String(r.mpNZ).replace('.',',') : '')+'</td></tr>').join('')+'</table>';
   const nrs = boards.map(x=>x.nr), at = nrs.indexOf(b.nr);
   const arrow = d => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(d<0 ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7')+'" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const pc = clubPlayContract(b);
@@ -7730,6 +7747,7 @@ function clubDraw(){
     + '<p class="rvnote">Per speler en kleur: hoeveel boven de zes slagen hij als leider maakt (– is minder dan 7 slagen).</p>'
     + '<p class="clubsub"><b>Alle tafels</b>'+(m ? ' (lijn '+m.L+')' : '')+'</p>'+rt
     + (pc ? '<p class="clubsub"><b>Naspelen</b>: '+clubContractHTML(pc.c)+' door '+NM[pc.decl]+(pc.from ? ' ('+pc.from+')' : '')+'</p><div class="clubplay"><button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Als tegenspeler</button></div>' : '')
+    + '<p class="clubsub"><b>Zelf bieden</b>: bied dit spel met de computer als partner en vergelijk met de tafels.</p><div class="clubplay"><button class="gview" data-clubbid="1">Bied dit spel</button></div>'
     + '<p><button class="navclear" data-clubgo="lijst">Terug naar alle spellen</button></p>';
   clubDD(b);
 }
@@ -7768,7 +7786,7 @@ function clubPlay(role){
   const b = c.boards[CV.i], pc = clubPlayContract(b); if(!pc) return;
   const k = (2 - pc.decl + 4) % 4, hands = [[],[],[],[]];
   b.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
-  CLUB_PRESET = {hands, trump: pc.trump, level: pc.level, label: 'Spel '+b.nr};
+  CLUB_PRESET = {clubNr: b.nr, hands, trump: pc.trump, level: pc.level, dbl: (/(x+)\s*$/i.exec(pc.c||'')||['',''])[1].length, dvul: sideVul(b.vul, pc.decl%2), label: 'Spel '+b.nr};
   state.grole = role; state.conv = 'spel'; save();
   const t = $('theory'); if(t.open) t.close();
   if($('settings').open) $('settings').close();
@@ -7802,6 +7820,682 @@ document.addEventListener('change', e=>{
     }).catch(err=>{ $('theorybody').innerHTML = '<p>Dit bestand kon de app niet lezen.</p><button class="gview" data-clubfile="1">Ander bestand kiezen</button>'; });
   }
 });
+// ---------- Biedrobot: alle andere spelers bieden volgens de systeemkaart, ook met tegenbieden ----------
+// Stoelen in de volgorde van de rekenaar: 0 = Noord, 1 = Oost, 2 = Zuid, 3 = West.
+const BR = {
+  bal: h => Math.min(...h.len)>=2 && h.len.filter(n=>n===2).length<=1 && Math.max(...h.len)<=5,
+  hasJac: () => onCardK('jacoby') || !Array.isArray(state.card),
+  hasStay: () => onCardK('stayman') || !Array.isArray(state.card),
+  t1: () => onCardK('twee1'),
+  weak2: () => true,
+  lvl: b => +b[0], st: b => b[1],
+  up: (b, last) => bidRank(b) > bidRank(last||'pas'),
+};
+// Het laagste bod in een kleur boven het huidige bod
+function brCheapest(den, last){ for(let l=1;l<=7;l++){ const b = l+den; if(bidRank(b)>bidRank(last||'pas')) return b; } return null; }
+function brOpen(h){
+  const p = h.hcp, L = h.len, bal = BR.bal(h), five = L[0]>=5 || L[1]>=5;
+  if(p>=22) return {bid:'2C', why:'22 of meer punten: de sterke 2♣-opening'};
+  if(bal && p>=20 && p<=21) return {bid:'2N', why:'evenwichtig met 20–21 punten'};
+  if(bal && p>=15 && p<=17 && (!five || state.nt5)) return {bid:'1N', why:'evenwichtig met 15–17 punten'};
+  if(p>=12){
+    if(L[0]>=5 && L[0]>=L[1]) return {bid:'1S', why:'vijf of meer schoppen'};
+    if(L[1]>=5) return {bid:'1H', why:'vijf of meer harten'};
+    if(L[2]>L[3] || (L[2]===L[3] && L[2]>=4)) return {bid:'1D', why:'geen vijfkaart hoog, ruiten is de langste lage kleur'};
+    return {bid:'1C', why:'geen vijfkaart hoog'};
+  }
+  if(p>=6 && p<=10){
+    if(L[0]===6 && BR.weak2()) return {bid:'2S', why:'zwakke twee: zes schoppen, 6–10 punten'};
+    if(L[1]===6 && BR.weak2()) return {bid:'2H', why:'zwakke twee: zes harten, 6–10 punten'};
+    const s7 = L.findIndex(n=>n>=7); if(s7>=0) return {bid:'3'+SUITS[s7], why:'zeven kaarten en weinig punten: preëmptief'};
+  }
+  if(p===11 && L.some(n=>n>=6) && L[0]+L[1]>=5) return {bid: L[0]>=L[1] && L[0]>=5 ? '1S' : L[1]>=5 ? '1H' : '1'+SUITS[L.indexOf(Math.max(...L))], why:'11 punten met een lange kleur'};
+  return {bid:'pas', why:'te weinig voor een opening'};
+}
+// Antwoord op de opening van partner (Zuid); tegenstanders hebben gepast
+function brRespond(h, open){
+  const p = h.hcp, L = h.len, bal = BR.bal(h), o = open, os = o[1], oi = SI[os];
+  if(o==='1N' || o==='2N'){
+    const t = o==='1N' ? 2 : 3, need = o==='1N' ? 0 : 4;
+    if(BR.hasJac() && (L[0]>=5 || L[1]>=5) && p>=need){ const m = L[0]>L[1] || (L[0]===L[1] && p>=10) ? 0 : 1; return {bid: t+(m===0 ? 'H' : 'D'), why:'transfer naar '+SNAME[SUITS[m]]}; }
+    if(BR.hasStay() && (L[0]===4 || L[1]===4) && p>=(o==='1N' ? 8 : 4)) return {bid:t+'C', why:'Stayman: vierkaart hoog en genoeg punten'};
+    if(o==='1N'){ if(p<=7) return {bid:'pas', why:'0–7 punten'}; if(p<=9) return {bid:'2N', why:'8–9 punten: uitnodiging'}; return {bid:'3N', why:'10–15 punten: manche'}; }
+    return p>=4 ? {bid:'3N', why:'4 of meer punten: manche'} : {bid:'pas', why:'te weinig'};
+  }
+  if(o==='2C') return {bid:'2D', why:'wachtbod op de sterke 2♣'};
+  if(o[0]==='2' && (os==='H' || os==='S')){
+    if(L[oi]>=3 && p>=15) return {bid:'4'+os, why:'fit en genoeg voor de manche'};
+    if(L[oi]>=3 && p>=6) return {bid:'3'+os, why:'fit: preëmptief verhogen'};
+    if(p>=16 && bal) return {bid:'3N', why:'geen fit, maar genoeg voor 3SA'};
+    return {bid:'pas', why:'geen fit of te weinig'};
+  }
+  if(o[0]!=='1') return {bid:'pas', why:'pas op een preëmptieve opening'};
+  if(p<6) return {bid:'pas', why:'minder dan 6 punten'};
+  if(os==='H' || os==='S'){
+    if(L[oi]>=3){
+      const rs = raiseSpec(os);
+      if(p<=9) return {bid:'2'+os, why:'steun en 6–9 punten'};
+      if(p>=rs.lo && p<=rs.hi) return {bid:rs.bid, why:'steun en '+rs.lo+'–'+rs.hi+' punten'};
+      if(onCardK('jac2n') && p>=13) return {bid:'2N', why:'Jacoby 2SA: steun en mancheforcing'};
+      return {bid:'4'+os, why:'steun en genoeg voor de manche'};
+    }
+    if(os==='H' && L[0]>=4) return {bid:'1S', why:'vier of meer schoppen'};
+    const t1 = BR.t1(), lim = t1 ? 12 : 10;
+    if(p>=lim){ const c = [3,2,1].filter(i=>i!==oi && L[i]>=(i===1 ? 5 : 4) && bidRank('2'+SUITS[i])>bidRank(o)).sort((a,b)=>L[b]-L[a])[0]; if(c!==undefined) return {bid:'2'+SUITS[c], why:t1 ? 'nieuwe kleur op 2-niveau: mancheforcing (2 over 1)' : 'nieuwe kleur op 2-niveau, 10 of meer'}; }
+    if(!t1 && p>=13 && bal) return {bid:'3N', why:'13–15 punten, evenwichtig'};
+    return {bid:'1N', why: t1 ? '1SA forcing: 6–11 punten zonder steun' : '6–10 punten zonder steun'};
+  }
+  // lage kleur geopend
+  if(L[1]>=4 || L[0]>=4){ const m = L[1]>=4 && L[0]>=4 ? (L[0]>L[1] ? 0 : 1) : L[1]>=4 ? 1 : 0; return {bid:'1'+SUITS[m], why:'vierkaart '+SNAME[SUITS[m]]}; }
+  if(o==='1C' && L[2]>=4) return {bid:'1D', why:'vier of meer ruiten'};
+  if(bal || p<=10){ if(p<=10) return {bid:'1N', why:'6–10 punten'}; if(p<=12) return {bid:'2N', why:'11–12 punten'}; return {bid:'3N', why:'13–15 punten'}; }
+  if(L[oi]>=5 && !onCardK('inverted')) return {bid: p<=9 ? '2'+os : '3'+os, why:'steun voor partners lage kleur'};
+  return {bid: p<=12 ? '2N' : '3N', why:'zonder vierkaart hoog'};
+}
+// Herbieding van de openaar (Noord) na het antwoord van Zuid
+function brRebid(h, open, resp){
+  const p = h.hcp, L = h.len, bal = BR.bal(h), os = open[1], oi = SI[os], rs = resp[1], ri = SI[rs];
+  if(resp==='pas') return {bid:'pas', why:'partner past'};
+  if(open==='1N' || open==='2N'){
+    const t = +open[0]+1;
+    if(resp===(t)+'C' && open==='2N' || resp==='2C' && open==='1N'){ const lv = open==='1N' ? 2 : 3; if(L[1]>=4) return {bid:lv+'H', why:'Stayman: vier harten'}; if(L[0]>=4) return {bid:lv+'S', why:'Stayman: vier schoppen'}; return {bid:lv+'D', why:'Stayman: geen vierkaart hoog'}; }
+    if(resp===(open==='1N' ? '2D' : '3D')) return {bid:(open==='1N' ? '2' : '3')+'H', why:'transfer uitvoeren'};
+    if(resp===(open==='1N' ? '2H' : '3H')) return {bid:(open==='1N' ? '2' : '3')+'S', why:'transfer uitvoeren'};
+    if(resp==='2N') return p>=16 ? {bid:'3N', why:'maximum: manche'} : {bid:'pas', why:'minimum: uitnodiging afslaan'};
+    return {bid:'pas', why:'partner heeft het contract gekozen'};
+  }
+  if(open==='2C'){ if(bal && p<=24) return {bid:'2N', why:'22–24 evenwichtig'}; const s = L.indexOf(Math.max(...L)); return {bid: brCheapest(SUITS[s], resp), why:'langste kleur'}; }
+  if(open[0]==='2' || open[0]==='3') return {bid:'pas', why:'preëmptief geopend: partner beslist'};
+  // 1-niveau-openingen
+  if(rs===os && resp[0]==='2') return p>=18 ? {bid:'4'+(os==='H'||os==='S' ? os : 'N'), why:'18 of meer: manche'} : p>=15 ? {bid:'3'+os, why:'15–17: uitnodiging'} : {bid:'pas', why:'minimum'};
+  if(resp===raiseSpec(os).bid && (os==='H'||os==='S')) return p>=14 ? {bid:'4'+os, why:'genoeg voor de manche na de limietsteun'} : resp==='3'+os ? {bid:'pas', why:'minimum: uitnodiging afslaan'} : {bid:'3'+os, why:'minimum: afslaan'};
+  if(rs===os && resp[0]==='3') return p>=16 ? {bid:'3N', why:'genoeg voor de manche'} : {bid:'pas', why:'minimum'};
+  if(resp==='4'+os || resp==='3N' || resp[0]>='4') return {bid:'pas', why:'partner heeft het contract gekozen'};
+  if(resp==='2N' && onCardK('jac2n') && (os==='H'||os==='S')) return {bid:'4'+os, why:'na Jacoby 2SA: minimum, manche'};
+  if(resp==='1N'){
+    if(bal && p<=14) return {bid:'pas', why:'minimum, evenwichtig'};
+    if(L[oi]>=6) return {bid: p>=16 ? '3'+os : '2'+os, why:'zes kaarten in je kleur'};
+    const sec = [3,2,1,0].filter(i=>i!==oi && L[i]>=4 && (bidRank('2'+SUITS[i])<bidRank('2'+os) || p>=16));
+    if(sec.length) return {bid:'2'+SUITS[sec[0]], why:'tweede kleur'};
+    if(p>=18) return {bid:'2N', why:'18–19 punten'};
+    return {bid: BR.t1() ? '2'+(L[3]>=3 ? 'C' : 'D') : 'pas', why: BR.t1() ? '1SA forcing: kleinste kleur' : 'minimum'};
+  }
+  // nieuwe kleur van partner
+  if(ri!==undefined && rs!=='N'){
+    const isMaj = rs==='H' || rs==='S';
+    if(isMaj && L[ri]>=(resp[0]==='2' ? 3 : 4)) return resp[0]==='2' ? {bid: p>=15 ? '4'+rs : '3'+rs, why:'steun voor partners kleur'} : {bid: p>=18 ? '4'+rs : p>=15 ? '3'+rs : '2'+rs, why:'vier kaarten steun voor partner'};
+    if(resp[0]==='1'){
+      if(os!=='S' && rs!=='S' && L[0]>=4 && bidRank('1S')>bidRank(resp)) return {bid:'1S', why:'vier schoppen op 1-niveau'};
+      if(bal) return {bid: p<=14 ? '1N' : p>=18 ? '2N' : (L[oi]>=5 ? '2'+os : '1N'), why: p<=14 ? '12–14 evenwichtig' : p>=18 ? '18–19 evenwichtig' : 'herhaal je kleur'};
+      if(L[oi]>=6) return {bid: p>=16 ? '3'+os : '2'+os, why:'zes kaarten'};
+      const sec = [3,2,1,0].filter(i=>i!==oi && i!==ri && L[i]>=4 && (bidRank('2'+SUITS[i])<bidRank('2'+os) || p>=16));
+      if(sec.length) return {bid: brCheapest(SUITS[sec[0]], resp), why:'tweede kleur'};
+      return {bid:'2'+os, why:'herhaal je kleur'};
+    }
+    // 2-niveau-antwoord
+    if(L[ri]>=4 && !isMaj) return {bid:'3'+rs, why:'steun voor partners kleur'};
+    if(L[oi]>=6) return {bid:'2'+os, why:'zes kaarten'};
+    const sec = [3,2,1,0].filter(i=>i!==oi && i!==ri && L[i]>=4 && bidRank('2'+SUITS[i])>bidRank(resp));
+    if(sec.length) return {bid:'2'+SUITS[sec[0]], why:'tweede kleur'};
+    if(bal) return {bid: BR.t1() || p>=15 ? '2N' : '2N', why:'evenwichtig'};
+    return {bid: brCheapest(os, resp), why:'herhaal je kleur'};
+  }
+  if(resp==='2N') return p>=14 ? {bid:'3N', why:'genoeg voor de manche'} : {bid:'pas', why:'minimum'};
+  return {bid:'pas', why:'geen reden om verder te bieden'};
+}
+// Wat weten we over Zuid (de gebruiker) uit zijn biedingen? Grof: punten van–tot en minimale lengtes.
+function brModel(calls, dealer){
+  const m = {lo:0, hi:37, len:[0,0,0,0], bal:false}, ours = [];
+  calls.forEach((b, i)=>{ const seat = (dealer+i)%4; if(b!=='pas' && (seat===0 || seat===2)) ours.push({seat, b, i}); });
+  const S = ours.filter(x=>x.seat===2), N = ours.filter(x=>x.seat===0);
+  const passedFirst = calls.some((b,i)=>(dealer+i)%4===2 && b==='pas' && !ours.some(x=>x.i<i));
+  if(passedFirst){ m.hi = 11; }
+  const set = (lo, hi) => { m.lo = Math.max(m.lo, lo); m.hi = Math.min(m.hi, hi); if(m.lo>m.hi) m.hi = m.lo; };
+  const atLeast = (si, n) => { m.len[si] = Math.max(m.len[si], n); };
+  if(!S.length) return m;
+  const zOpened = !N.length || S[0].i < N[0].i;
+  const fi = calls.findIndex(c=>c!=='pas'), theyOpen = fi>=0 && ((dealer+fi)%4===1 || (dealer+fi)%4===3), theirOpen = theyOpen ? calls[fi] : null;
+  S.forEach((x, k)=>{
+    const b = x.b, d = b[1], lvl = +b[0], si = SI[d];
+    if(theyOpen && k===0){
+      const before = calls.slice(0, x.i).filter(c=>c!=='pas' && c!=='X' && c!=='XX').pop();
+      const cheap = d && d!=='N' && b===brCheapest(d, before);
+      if(b==='X'){ if(!N.length || N[0].i > x.i) set(12,37); else set(6,37); return; }   // informatiedoublet of negatief/straf
+      if(N.length && N[0].i < x.i){
+        const nb = N[0].b;
+        if(nb==='X'){   // antwoord op Noords informatiedoublet
+          if(d==='N') lvl===1 ? set(6,10) : lvl===2 ? set(11,12) : set(13,16);
+          else if(d===theirOpen[1]) set(12,37);
+          else { cheap ? set(0,8) : set(9,11); atLeast(si, 4); }
+          return;
+        }
+        if(d===nb[1]){ set(6,9); atLeast(si, 3); return; }               // steun voor Noords volgbod
+        if(d===theirOpen[1]){ set(10,37); atLeast(SI[nb[1]], 3); return; } // cuebid: steun met 10+
+        if(d==='N'){ set(9,14); m.bal = true; return; }
+        set(10,16); atLeast(si, 5); return;
+      }
+      // volgbod van Zuid zelf
+      if(theirOpen[0]==='1' && theirOpen[1]!=='N' && (b==='2'+theirOpen[1] || b==='2N') && N.every(y=>y.i>x.i)){
+        const U = [0,1,2,3].filter(i=>SUITS[i]!==theirOpen[1]), pr = b==='2N' ? [U[1],U[2]] : [U[0],U[1]];
+        set(8,11); atLeast(pr[0], 5); atLeast(pr[1], 5); return;
+      }
+      if(d==='N'){ set(15,18); m.bal = true; return; }
+      if(cheap){ lvl===1 ? set(8,16) : set(10,16); atLeast(si, 5); }
+      else { set(6,10); atLeast(si, 6); }   // sprong: zwak
+      return;
+    }
+    if(theyOpen && k>=1){ if(d && d!=='N') atLeast(si, 4); return; }
+    if(zOpened && k===0){
+      if(b==='1N'){ set(15,17); m.bal = true; } else if(b==='2N'){ set(20,21); m.bal = true; } else if(b==='2C') set(22,37);
+      else if(lvl===1){ set(12,21); atLeast(si, d==='H'||d==='S' ? 5 : 3); }
+      else if(lvl===2){ set(6,10); atLeast(si, 6); } else if(lvl===3){ set(6,10); atLeast(si, 7); }
+      return;
+    }
+    const nOpen = N.length ? N[0].b : null;
+    if(!zOpened && k===0){
+      if(b==='1N') set(6, BR.t1() && (nOpen[1]==='H'||nOpen[1]==='S') ? 11 : 10);
+      else if(b==='2N') set(11,12); else if(b==='3N') set(13,15);
+      else if(d===nOpen[1]){ if(lvl===2) set(6,9); else if(lvl===3) set(10,12); else set(6,12); atLeast(si, 3); }
+      else if(nOpen==='1N' && b==='2C'){ set(8,37); }
+      else if(nOpen==='1N' && (b==='2D' || b==='2H')){ atLeast(b==='2D' ? 1 : 0, 5); set(0,37); }
+      else if(lvl===1){ set(6,37); atLeast(si, 4); }
+      else if(lvl===2){ set(BR.t1() ? 12 : 10, 37); atLeast(si, 4); }
+      return;
+    }
+    // herbieding van de opener: beperkt de sterkte
+    if(zOpened && k===1 && N.length && lvl){
+      const prev = S[0].b, nb = N[0].b, jump = lvl > +brCheapest(d, calls.slice(0, x.i).reverse().find(c=>c!=='pas' && c!=='X' && c!=='XX'))[0];
+      if(d==='N'){ m.bal = true; if(jump) set(18,19); else if(lvl===1) set(12,14); else if(lvl===2 && nb[0]!=='1') set(12,14); }
+      else if(d===nb[1]){ jump ? set(15,17) : set(12,14); atLeast(si, d==='H'||d==='S' ? 4 : 4); }
+      else if(d===prev[1]){ jump ? set(16,18) : set(12,15); atLeast(si, 6); }
+      else if(nb[0]==='1' && prev[0]==='1'){ const rev = lvl===2 && SI[d] < SI[prev[1]]; rev ? set(16,21) : jump ? set(19,21) : set(12,17); atLeast(si, 4); }
+      return;
+    }
+    // latere biedingen: nieuwe kleur = vier kaarten, steun = drie
+    if(d==='N'){ m.bal = true; return; }
+    const pBid = N.some(y=>y.b[1]===d);
+    if(pBid) atLeast(si, 3); else atLeast(si, 4);
+  });
+  return m;
+}
+// Latere ronden: Noord kiest het eindcontract op basis van zijn hand en wat Zuid liet zien
+function brPlace(h, calls, dealer, last){
+  const m = brModel(calls, dealer), p = h.hcp, mid = Math.round((m.lo + Math.min(m.hi, m.lo+6))/2), tot = p + mid;
+  const fit = [0,1,2,3].map(i=>h.len[i]+Math.max(m.len[i], h.len[i]>=6 ? 2 : 0));   // eigen zeskaart: reken op twee kaarten bij partner
+  const ourLast = [...calls].reverse().find(b=>b!=='pas');
+  const major = [0,1].filter(i=>fit[i]>=8).sort((a,b)=>fit[b]-fit[a])[0];
+  const minor = [2,3].filter(i=>fit[i]>=8).sort((a,b)=>fit[b]-fit[a])[0];
+  let target;
+  if(tot>=33 && (major!==undefined || BR.bal(h))){
+    const asked = calls.some((x,i)=>x==='4N' && ((dealer+i)%4===0 || (dealer+i)%4===2));
+    if(!asked && bidRank('4N')>bidRank(last||'pas') && (major!==undefined || minor!==undefined)) return {bid:'4N', why: brAskConv()==='rkc' ? 'RKC: vraagt naar sleutelkaarten' : 'Blackwood: vraagt naar azen'};
+    target = major!==undefined ? '6'+SUITS[major] : '6N';
+  }
+  else if(tot>=25 && p + m.lo < 25 && m.hi - m.lo <= 6 && !brInvited(calls, dealer)){
+    const inv = major!==undefined ? '3'+SUITS[major] : '2N';
+    if(bidRank(inv) > bidRank(last||'pas') && bidRank(inv) > bidRank(ourLast||'pas')) return {bid:inv, why:'uitnodiging voor de manche: partner beslist met minimum of maximum'};
+    target = major!==undefined ? '4'+SUITS[major] : (minor!==undefined && !BR.bal(h) && tot>=28) ? '5'+SUITS[minor] : '3N';
+  }
+  else if(tot>=25) target = major!==undefined ? '4'+SUITS[major] : (minor!==undefined && !BR.bal(h) && tot>=28) ? '5'+SUITS[minor] : '3N';
+  else if(tot>=23) target = major!==undefined ? '3'+SUITS[major] : '2N';
+  else target = major!==undefined ? '2'+SUITS[major] : minor!==undefined ? '3'+SUITS[minor] : null;
+  // al op of boven het doel en in een redelijke denominatie: passen
+  if(!target) return {bid:'pas', why:'samen te weinig voor meer'};
+  if(bidRank(ourLast)>=bidRank(target)) {
+    if(ourLast[1]===target[1] || ourLast[1]==='N' || +ourLast[0]>=+target[0]) return {bid:'pas', why:'het contract is goed genoeg'};
+  }
+  const b = bidRank(target)>bidRank(last) ? target : brCheapest(target[1], last);
+  if(!b || +b[0]>(tot>=33 ? 6 : tot>=25 ? 5 : 3)) return {bid:'pas', why:'hoger wordt te riskant'};
+  return {bid:b, why: tot>=25 ? 'samen genoeg voor de manche' : 'samen genoeg voor een deelcontract in de fit'};
+}
+// Was het laatste bod van partner (Zuid) een uitnodiging? 2SA of 3 in de gezamenlijke kleur, als tweede bod, zonder tussenbod ervoor
+function brInviteBid(calls, dealer){
+  const all = calls.map((b,i)=>({b, s:(dealer+i)%4, i}));
+  const S = all.filter(x=>x.s===2 && x.b!=='pas'), N = all.filter(x=>x.s===0 && x.b!=='pas');
+  if(S.length<2 || !N.length) return null;
+  const x = S[S.length-1];
+  if(all[x.i-1] && all[x.i-1].b!=='pas') return null;   // tussenbod: competitief, geen uitnodiging
+  if(x.b==='2N') return x;
+  if(x.b[0]==='3' && x.b[1]!=='N' && N.some(y=>y.b[1]===x.b[1]) && S.slice(0,-1).some(y=>y.b[1]===x.b[1]) || (x.b[0]==='3' && x.b[1]!=='N' && N.some(y=>y.b[1]===x.b[1]) && S.length>=2)) return x;
+  return null;
+}
+function brGF(calls, dealer){
+  // 2 over 1: opening 1-in-kleur, direct daarna (zonder tussenbod) een nieuwe kleur op 2-niveau van partner = mancheforcing
+  if(!BR.t1()) return false;
+  const i = calls.findIndex(c=>c!=='pas'); if(i<0 || !/^1[CDHS]$/.test(calls[i])) return false;
+  const opSide = (dealer+i)%2, r = calls[i+2];
+  return calls[i+1]==='pas' && !!r && /^2[CDH]$/.test(r) && SI[r[1]] > SI[calls[i][1]];
+}
+function brInvited(calls, dealer){
+  if(brGF(calls, dealer)) return true;   // mancheforcing: niet uitnodigen
+  // heeft onze kant al uitgenodigd? dan niet nog eens
+  const all = calls.map((b,i)=>({b, s:(dealer+i)%4}));
+  return all.some(x=>(x.s===0||x.s===2) && (x.b==='2N' || /^3[CDHS]$/.test(x.b))) && calls.length>6;
+}
+// Azen vragen: welke conventie, en hoeveel azen of sleutelkaarten heeft deze hand?
+const brAskConv = () => onCardK('rkcb') || !onCardK('blackwood') ? 'rkc' : 'bw';
+function brKeys(h, trump){ const a = [0,1,2,3].filter(i=>h.suits[i].includes(14)).length; return trump==null ? a : a + (h.suits[trump].includes(13) ? 1 : 0); }
+function brTrump(calls, dealer){
+  // de kleur die beide partners noemden; anders de laatst genoemde kleur van onze kant
+  const ours = calls.map((b,i)=>({b, s:(dealer+i)%4})).filter(x=>(x.s===0 || x.s===2) && /^[1-7][CDHS]$/.test(x.b));
+  const by = s => new Set(ours.filter(x=>x.s===s).map(x=>x.b[1]));
+  const both = [...by(0)].filter(d=>by(2).has(d));
+  if(both.length) return SI[both[both.length-1]];
+  return null;
+}
+function brAnswer4N(h, calls, dealer){
+  const tr = brTrump(calls, dealer), conv = brAskConv();
+  if(conv==='rkc' && tr!=null){
+    const kc = brKeys(h, tr), q = h.suits[tr].includes(12) || h.len[tr]>=5;
+    if(kc===2 || kc===5) return {bid: q ? '5S' : '5H', why: 'RKC: twee sleutelkaarten '+(q ? 'met' : 'zonder')+' troefvrouw'};
+    const low = kc===1 || kc===4;
+    return {bid: (RKC==='1430')===low ? '5C' : '5D', why:'RKC '+RKC+': '+(low ? '1 of 4' : '0 of 3')+' sleutelkaarten'};
+  }
+  const a = brKeys(h, null);
+  return {bid: ['5C','5D','5H','5S','5C'][a], why:'Blackwood: '+(a===0 || a===4 ? 'geen of vier' : a===1 ? 'één' : a===2 ? 'twee' : 'drie')+(a===1 ? ' aas' : ' azen')};
+}
+function brAfterAnswer(h, calls, dealer, ans){
+  const tr = brTrump(calls, dealer), conv = brAskConv(), m = brModel(calls, dealer);
+  const strong = m.lo>=13;
+  let pk;
+  if(conv==='rkc' && tr!=null){
+    const map1430 = {'5C':[1,4], '5D':[0,3], '5H':[2,2], '5S':[2,2]}, map3014 = {'5C':[0,3], '5D':[1,4], '5H':[2,2], '5S':[2,2]};
+    const opt = (RKC==='1430' ? map1430 : map3014)[ans] || [0,0];
+    pk = strong ? opt[1] : opt[0];
+    const mine = brKeys(h, tr), miss = 5 - mine - pk, den = SUITS[tr];
+    if(miss>=2) return {bid: bidRank('5'+den)>bidRank(ans) ? '5'+den : 'pas', why:'er ontbreken twee sleutelkaarten: stoppen op 5'};
+    return {bid:'6'+den, why: miss===1 ? 'er ontbreekt één sleutelkaart: klein slem' : 'alle sleutelkaarten: klein slem'};
+  }
+  const opt = {'5C':[0,4], '5D':[1,1], '5H':[2,2], '5S':[3,3]}[ans] || [0,0];
+  pk = strong ? opt[1] : opt[0];
+  const miss = 4 - brKeys(h, null) - pk, den = tr!=null ? SUITS[tr] : 'N';
+  if(miss>=2) return {bid: bidRank('5'+den)>bidRank(ans) ? '5'+den : 'pas', why:'er ontbreken twee azen: stoppen'};
+  return {bid:'6'+den, why: miss===1 ? 'er ontbreekt één aas: klein slem' : 'alle azen: klein slem'};
+}
+// De directe tegenpartij-acties: volgbod of doublet over hun opening
+// Antwoord op partners informatiedoublet als dblAnswer niet past: hun opening op 2- of 3-niveau, of een sterke hand
+function brAnsTO(h, open, last){
+  const p = h.hcp, os = open[1], oi = SI[os], lvl = +open[0];
+  const un = [0,1,2,3].filter(i=>i!==oi);
+  const best = [...un].sort((a,b)=>(h.len[b]+(b<=1 ? .5 : 0))-(h.len[a]+(a<=1 ? .5 : 0)))[0], su = SUITS[best], L = h.len[best];
+  const tot = p + (lvl>=3 ? 13 : 12), major = best<=1, bal = BR.bal(h), st = stops(h, os);
+  const short = h.len[oi]<=1;
+  if(tot>=31 && L>=6 && major && short) return {bid:'6'+su, why:'partner doubleerde met 13 of meer; samen minstens 31 punten, een zeskaart en kort in hun kleur: klein slem'};
+  if(tot>=25){
+    if(major && (L>=5 || (L===4 && p>=10))) return {bid:'4'+su, why:'samen genoeg voor de manche, met '+L+' kaarten '+SNAME[su]};
+    if(bal && st>=1 && bidRank('3N')>bidRank(last)) return {bid:'3N', why:'samen genoeg voor de manche, met een stop in hun kleur'};
+    if(!major && L>=5 && tot>=28) return {bid:'5'+su, why:'samen genoeg voor de manche in de lage kleur'};
+    if(bidRank('4'+os)>bidRank(last) && lvl<=2) return {bid:brCheapest(os, last), why:'cuebid: sterke hand, partner vertelt meer'};
+  }
+  const b = brCheapest(su, last);
+  if(lvl>=2 && p<=5 && +b[0]>=4) return {bid:'pas', why:'te zwak om zo hoog te bieden: het doublet blijft staan'};
+  return {bid:b, why: p<=8 ? 'antwoord op partners doublet: je beste kleur, 0–8 punten' : 'antwoord op partners doublet: je beste kleur'};
+}
+function brOverOpen(h, open){
+  if(open!=='1N' && +open[0]>=2){
+    const p = h.hcp, oi = SI[open[1]], un = [0,1,2,3].filter(i=>i!==oi);
+    if(p>=16 && BR.bal(h) && stops(h, open[1])>=1 && bidRank('3N')>bidRank(open)) return {bid:'3N', why:'evenwichtig, 16 of meer, met stop in hun kleur'};
+    if(p>=13 && (un.every(i=>h.len[i]>=3) && h.len[oi]<=2 || (h.len[0]>=4 && h.len[1]>=4 && oi>=2 && h.len[oi]<=3))) return {bid:'X', why:'informatiedoublet: 13 of meer, steun voor de andere kleuren'};
+    const six = un.filter(i=>h.len[i]>=6 || (h.len[i]>=5 && +open[0]===2)).sort((a,b)=>h.len[b]-h.len[a])[0];
+    if(six!==undefined && p>=(+open[0]===2 ? 11 : 13)){ const bb = brCheapest(SUITS[six], open); if(+bb[0]<=4) return {bid:bb, why:'volgbod met een goede '+(h.len[six]>=6 ? 'zeskaart' : 'vijfkaart')}; }
+    if(p>=17) return {bid:'X', why:'sterke hand: doublet'};
+    return {bid:'pas', why:'geen geschikt bod'};
+  }
+  if(open==='1N') return {bid:'pas', why:'geen geschikt bod'};
+  const a = +open[0]===1 ? dblAction(h, open) : null;
+  if(a && a.bid) return {bid:a.bid, why: a.bid==='X' ? 'informatiedoublet: korte '+SNAME[open[1]]+', steun voor de andere kleuren' : a.bid==='pas' ? 'geen volgbod of doublet' : 'volgbod met een goede vijfkaart'};
+  const p = h.hcp, os = open[1], oi = SI[os];
+  if(open[0]==='1' && p>=8 && p<=11){
+    const U = [0,1,2,3].filter(i=>i!==oi), two = (a,b)=>h.len[a]>=5 && h.len[b]>=5 && [a,b].every(i=>h.suits[i].filter(r=>r>=10).length>=2);
+    if(onCardK('uppercue') && two(U[0],U[1])) return {bid:'2'+os, why:'Upper cuebid: vijf-vijf in '+SNAME[SUITS[U[0]]]+' en '+SNAME[SUITS[U[1]]]};
+    if(onCardK('unusual') && two(U[1],U[2])) return {bid:'2N', why:'Unusual 2SA: vijf-vijf in '+SNAME[SUITS[U[1]]]+' en '+SNAME[SUITS[U[2]]]};
+  }
+  const v = volgAction(h, open);
+  if(v && v.bid && v.bid!=='pas') return {bid:v.bid, why:'volgbod'};
+  if(p>=15 && BR.bal(h) && stops(h, os)>=1) return {bid: brCheapest('N', open), why:'evenwichtig, 15 of meer, met stop in hun kleur'};
+  if(p>=13 && h.len[oi]<=2 && [0,1,2,3].every(i=>i===oi || h.len[i]>=3)) return {bid:'X', why:'informatiedoublet'};
+  if(p>=16) return {bid:'X', why:'sterke hand: doublet'};
+  const ls = [0,1,2,3].filter(i=>i!==oi && h.len[i]>=5).sort((a,b)=>h.len[b]-h.len[a])[0];
+  if(ls!==undefined && p>=12){ const bb = brCheapest(SUITS[ls], open); if(+bb[0]<=3) return {bid:bb, why:'volgbod met een vijfkaart'}; }
+  return {bid:'pas', why:'geen geschikt bod'};
+}
+function brBid(h, calls, dealer){
+  const seat = (dealer+calls.length)%4;
+  if(seat!==0) return {bid:'pas', why:''};
+  const all = calls.map((b,i)=>({b, seat:(dealer+i)%4, i}));
+  const bids = all.filter(x=>x.b!=='pas');
+  const lastC = [...all].reverse().find(x=>x.b!=='pas'), last = [...calls].reverse().find(b=>b!=='pas' && b!=='X' && b!=='XX') || null;
+  const our = all.filter(x=>x.b!=='pas' && (x.seat===0 || x.seat===2)), their = all.filter(x=>x.b!=='pas' && (x.seat===1 || x.seat===3));
+  const N = our.filter(x=>x.seat===0), S = our.filter(x=>x.seat===2);
+  const lastAct = [...all].reverse().find(x=>x.b!=='pas');
+  const canX = lastAct && lastAct.b!=='X' && lastAct.b!=='XX' && (lastAct.seat===1 || lastAct.seat===3);
+  const canXX = lastAct && lastAct.b==='X' && (lastAct.seat===1 || lastAct.seat===3);
+  const legal = r => (r.bid==='pas' || (r.bid==='X' && canX) || (r.bid==='XX' && canXX) || (r.bid!=='X' && r.bid!=='XX' && (!last || bidRank(r.bid)>bidRank(last)))) ? r : {bid:'pas', why:r.why};
+  if(!bids.length) return brOpen(h);
+  // azen vragen en beantwoorden
+  if(S.length && S[S.length-1].b==='4N' && (!N.length || N[N.length-1].i<S[S.length-1].i)){
+    const quant = !brTrump(calls, dealer) && our.every(x=>/N$/.test(x.b));
+    if(quant) return legal(h.hcp>=16 ? {bid:'6N', why:'4SA was een uitnodiging voor 6SA: maximum'} : {bid:'pas', why:'4SA was een uitnodiging voor 6SA: minimum'});
+    return legal(brAnswer4N(h, calls, dealer));
+  }
+  if(N.length && N[N.length-1].b==='4N' && S.length && S[S.length-1].i>N[N.length-1].i && /^5[CDHS]$/.test(S[S.length-1].b)) return legal(brAfterAnswer(h, calls, dealer, S[S.length-1].b));
+  // partner nodigt uit: accepteer met de bovenkant van wat je liet zien
+  const inv = brInviteBid(calls, dealer);
+  if(inv && N.length){
+    const me = brModel(calls, (dealer+2)%4), pm = brModel(calls, dealer);
+    const need = Math.ceil((me.lo + Math.min(me.hi, me.lo+6))/2);
+    const fitM = [0,1].filter(i=>h.len[i] + pm.len[i]>=8).sort((a,b)=>(h.len[b]+pm.len[b])-(h.len[a]+pm.len[a]))[0];
+    const d = inv.b[1];
+    if(h.hcp >= need){
+      const g = d==='N' ? (fitM!==undefined ? '4'+SUITS[fitM] : '3N') : (d==='H'||d==='S') ? '4'+d : '3N';
+      return legal({bid:g, why:'partner nodigt uit en je hebt de bovenkant ('+need+' of meer): manche'});
+    }
+    if(d==='N' && fitM!==undefined) return legal({bid:'3'+SUITS[fitM], why:'uitnodiging afgeslagen: minimum, wel een fit'});
+    return {bid:'pas', why:'partner nodigt uit, maar je hebt een minimum'};
+  }
+  const theyOpened = bids[0].seat===1 || bids[0].seat===3;
+  if(theyOpened){
+    const open = bids[0].b;
+    if(!our.length){
+      // Noord zit direct achter hun opening (en zij boden verder niets)
+      if(their.length===1 && lastC.seat===3) return legal(brOverOpen(h, open));
+      if(their.length===1 && lastC.seat===1 && h.hcp>=13){ const r = brOverOpen(h, open); return legal(r); }   // heropenen achter twee passen
+      return {bid:'pas', why:'geen bod'};
+    }
+    if(!N.length && S.length===1){
+      const sb = S[0].b, p = h.hcp, os = open[1];
+      if(sb==='X'){
+        if(lastC.seat===3 && lastC.b!=='pas' && p<9) return {bid:'pas', why:'zwak, en partner hoeft niet meer te horen: de tegenpartij bood'};
+        const a = open[0]==='1' && open[1]!=='N' && p<=16 ? dblAnswer(h, open) : null;
+        if(a && a.bid) return legal({bid:a.bid, why:'antwoord op partners informatiedoublet'});
+        return legal(brAnsTO(h, open, last));
+      }
+      if(open[0]==='1' && open[1]!=='N' && (sb==='2'+os || sb==='2N')){
+        const U = [0,1,2,3].filter(i=>i!==SI[os]), pr = sb==='2N' ? [U[1],U[2]] : [U[0],U[1]];
+        const best = h.len[pr[0]]>=h.len[pr[1]] ? pr[0] : pr[1], su = SUITS[best];
+        if(p>=11 && h.len[best]>=4 && (su==='H'||su==='S')) return legal({bid:'4'+su, why:'partner heeft vijf-vijf; met steun en '+p+' punten de manche'});
+        if(lastC.seat===3 && lastC.b!=='pas' && h.len[best]<3) return {bid:'pas', why:'partner heeft vijf-vijf, maar je past geen van beide kleuren goed'};
+        return legal({bid: brCheapest(su, last), why:'kies de beste van partners twee kleuren: '+SNAME[su]});
+      }
+      if(/^[1-3][CDHS]$/.test(sb)){
+        const ys = sb[1], yi = SI[ys];
+        if(h.len[yi]>=3){
+          if(p>=13 && (ys==='H'||ys==='S')) return legal({bid:'4'+ys, why:'steun voor partners volgbod en genoeg voor de manche'});
+          if(p>=10){ const cue = brCheapest(os, last); if(cue && +cue[0]<=3) return legal({bid:cue, why:'cuebid: steun met 10 of meer punten'}); }
+          if(p>=6) return legal({bid: brCheapest(ys, last), why:'steun voor partners volgbod'});
+        }
+        if(p>=9 && stops(h, os)>=1 && BR.bal(h)) return legal({bid: p>=13 ? '3N' : brCheapest('N', last), why:'stop in hun kleur'});
+        const nw = [0,1,2,3].find(i=>SUITS[i]!==os && i!==yi && h.len[i]>=5);
+        if(nw!==undefined && p>=10) return legal({bid: brCheapest(SUITS[nw], last), why:'eigen vijfkaart'});
+        return {bid:'pas', why:'geen steun en niet genoeg'};
+      }
+      return legal(brPlace(h, calls, dealer, last));
+    }
+    return legal(brPlace(h, calls, dealer, last));
+  }
+  // wij openden
+  const weOpenedS = bids[0].seat===2;
+  if(weOpenedS && !N.length){
+    const open = bids[0].b, w = all.filter(x=>x.seat===3 && x.i>bids[0].i && x.b!=='pas').pop(), p = h.hcp;
+    if(!w) return legal(brRespond(h, open));
+    if(w.b==='X'){
+      if(p>=10) return legal({bid:'XX', why:'redoublet: 10 of meer punten'});
+      const r = brRespond(h, open); return legal(r);
+    }
+    // volgbod van West
+    const ob = w.b, os = ob[1], o = open[1], oi = SI[o], lvl = +ob[0];
+    if(ob==='1N' || os==='N'){ return p>=9 ? legal({bid:'X', why:'strafdoublet op hun 1SA met 9 of meer'}) : {bid:'pas', why:'te weinig'}; }
+    const fitN = (o==='H'||o==='S') ? 3 : 5;
+    if(h.len[oi]>=fitN){
+      if(p>=13 && (o==='H'||o==='S')) return legal({bid:'4'+o, why:'steun en genoeg voor de manche'});
+      if(p>=10){ const cue = brCheapest(os, last); if(cue && +cue[0]<=3) return legal({bid:cue, why:'cuebid in hun kleur: steun met 10 of meer punten'}); }
+      if(p>=6) return legal({bid: brCheapest(o, last), why:'steun voor partner'});
+    }
+    const m5 = [0,1].find(i=>SUITS[i]!==o && SUITS[i]!==os && h.len[i]>=5);
+    if(m5!==undefined && p>=6){ const b = brCheapest(SUITS[m5], last); if(+b[0]===1) return legal({bid:b, why:'nieuwe kleur: vijf of meer kaarten'}); if(p>=10 && +b[0]===2) return legal({bid:b, why:'nieuwe kleur op 2-niveau, 10 of meer'}); }
+    const unM = [0,1].filter(i=>SUITS[i]!==o && SUITS[i]!==os && h.len[i]>=4);
+    if(unM.length && p>=6 && lvl<=2 && onCardK('negatief')) return legal({bid:'X', why:'negatief doublet: vier kaarten in de ongeboden hoge kleur'});
+    const nw = [0,1,2,3].filter(i=>SUITS[i]!==o && SUITS[i]!==os && h.len[i]>=5).sort((a,b)=>h.len[b]-h.len[a])[0];
+    if(nw!==undefined){ const b = brCheapest(SUITS[nw], last); if(+b[0]===1 && p>=6) return {bid:b, why:'nieuwe kleur'}; if(+b[0]===2 && p>=10) return legal({bid:b, why:'nieuwe kleur op 2-niveau, 10 of meer'}); }
+    if(stops(h, os)>=1 && p>=8){ const b = p>=13 ? '3N' : p>=11 ? '2N' : brCheapest('N', last); return legal({bid:b, why:'stop in hun kleur'}); }
+    return {bid:'pas', why:'niets geschikts'};
+  }
+  // Noord opende; herbieding (ook als de tegenpartij tussenbeide kwam)
+  if(N.length===1 && N[0].i===bids[0].i && S.length===1 && S[0].i>N[0].i){
+    const sb = S[0].b, open = N[0].b, p = h.hcp;
+    if(sb==='X'){
+      const ob = their.length ? their[their.length-1].b : null, os = ob ? ob[1] : null;
+      if(os==='N') return {bid:'pas', why:'partner doubleert hun SA om te straffen'};
+      const unM = [0,1].find(i=>SUITS[i]!==open[1] && SUITS[i]!==os && h.len[i]>=4);
+      if(unM!==undefined) return legal({bid: p>=17 ? (+brCheapest(SUITS[unM], last)[0]+1)+SUITS[unM] : brCheapest(SUITS[unM], last), why:'partners negatief doublet: vier kaarten in de ongeboden hoge kleur'});
+      if(os && stops(h, os)>=1) return legal({bid: p>=18 ? '3N' : brCheapest('N', last), why:'stop in hun kleur'});
+      return legal({bid: brCheapest(open[1], last), why:'herhaal je kleur'});
+    }
+    const r = brRebid(h, open, sb);
+    if(r.bid==='pas' || !last || bidRank(r.bid)>bidRank(last)) return r;
+    return legal(brPlace(h, calls, dealer, last));
+  }
+  if(N.length===1 && !S.length) return {bid:'pas', why:'partner past'};
+  // vierde kleur: drie kleuren geboden door ons, geen fit, mancheforcing kracht, geen stop in de vierde
+  if(onCardK('vierde') && !their.length && N.length===1 && S.length===2 && S[0].i<N[0].i){
+    const suits = [S[0].b[1], N[0].b[1], S[1].b[1]];
+    if(suits.every(d=>d!=='N') && new Set(suits).size===3 && h.hcp>=12){
+      const four = SUITS.find(d=>!suits.includes(d)), fi = SI[four];
+      const fitAny = suits.some(d=>h.len[SI[d]]+ (d===S[0].b[1] ? 5 : 4) >= 8 && (d==='H'||d==='S'));
+      if(!fitAny && stops(h, four)===0){ const b = brCheapest(four, last); if(+b[0]<=3) return {bid:b, why:'vierde kleur: forcing, vraagt partner om meer te vertellen'}; }
+    }
+  }
+  // antwoord op partners vierde kleur
+  if(onCardK('vierde') && !their.length && N.length===2 && S.length===2 && N[0].i<S[0].i){
+    const suits = [N[0].b[1], S[0].b[1], N[1].b[1]], fb = S[1].b;
+    if(new Set(suits).size===3 && !suits.includes(fb[1]) && fb[1]!=='N'){
+      if(stops(h, fb[1])>=1) return legal({bid: h.hcp>=15 ? '3N' : brCheapest('N', last), why:'stop in de vierde kleur'});
+      const rs = S[0].b[1]; if(h.len[SI[rs]]>=3) return legal({bid: brCheapest(rs, last), why:'driekaart steun voor partners eerste kleur'});
+      return legal({bid: brCheapest(N[0].b[1], last), why:'herhaal je kleur'});
+    }
+  }
+  const r = brPlace(h, calls, dealer, last);
+  if(r.bid==='4N') return r;
+  const sLast = S[S.length-1];
+  if(r.bid==='pas' && sLast && sLast.i>(N[N.length-1]||{i:-1}).i && last===sLast.b && +last[0]<=3 && last[1]!=='N' && !N.some(x=>x.b[1]===last[1]) && bidRank(last)<bidRank('3N') && !their.length){
+    const fitS = h.len[SI[last[1]]]>=3;
+    return legal(fitS ? {bid: brCheapest(last[1], last), why:'steun voor partners nieuwe kleur'} : {bid: brCheapest('N', last) || 'pas', why:'nieuwe kleur van partner is forcing'});
+  }
+  return legal(r);
+}
+// Is de bieding voorbij? En wat is het contract?
+function brDone(calls){ if(calls.length>=4 && calls.every(b=>b==='pas')) return true; const i = calls.map(b=>b!=='pas').lastIndexOf(true); return i>=0 && calls.length-i>=4; }
+function brContract(calls, dealer){
+  const li = calls.map(b=>b!=='pas' && b!=='X' && b!=='XX').lastIndexOf(true);
+  if(li<0) return null;
+  const b = calls[li], side = (dealer+li)%2, den = b[1];
+  const fi = calls.findIndex((x,i)=>x[1]===den && x!=='pas' && x!=='X' && x!=='XX' && (dealer+i)%2===side);
+  return {bid:b, level:+b[0], trump: den==='N' ? 4 : SI[den], decl:(dealer+fi)%4};
+}
+// ---------- Eerst bieden, dan spelen ----------
+let BIDS = null;
+// Bridgescore voor de leider (wedstrijdscore): positief = gemaakt, negatief = down
+function bridgeScore(level, trump, dbl, vul, tricks){
+  const need = level+6, m = dbl===2 ? 4 : dbl ? 2 : 1;
+  if(tricks>=need){
+    const tv = trump>=2 && trump<=3 ? 20 : 30;
+    const cp = (level*tv + (trump===4 ? 10 : 0))*m;
+    let sc = cp + (cp>=100 ? (vul ? 500 : 300) : 50);
+    if(level===6) sc += vul ? 750 : 500;
+    if(level===7) sc += vul ? 1500 : 1000;
+    if(dbl) sc += dbl===2 ? 100 : 50;
+    const ov = tricks-need;
+    sc += ov * (dbl ? (vul ? 200 : 100)*(dbl===2 ? 2 : 1) : tv);
+    return sc;
+  }
+  const u = need-tricks;
+  if(!dbl) return -u*(vul ? 100 : 50);
+  let p = 0;
+  for(let i=1;i<=u;i++) p += vul ? (i===1 ? 200 : 300) : (i===1 ? 100 : i<=3 ? 200 : 300);
+  return -p*(dbl===2 ? 2 : 1);
+}
+const sideVul = (vul, side) => vul==='Allen' || (side===0 ? vul==='NZ' : vul==='OW');   // side 0 = NZ, 1 = OW
+const scoreTxt = n => (n>0 ? '+' : n<0 ? '−' : '')+Math.abs(n);
+// de sierlijke gouden T als teken voor een tip
+const TIP_T = '<svg viewBox="0 0 48 48" class="tipmark" role="img" aria-label="Tip"><defs><radialGradient id="tdisc2" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#ECECE9"/><stop offset="1" stop-color="#CFCFCB"/></radialGradient></defs><circle cx="24" cy="24" r="22.5" fill="url(#tdisc2)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M15.2 15.6H32.8M24 15.6V34.2" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round"/></svg>';
+const VULTXT = v => v==='-' || !v ? 'niemand kwetsbaar' : v==='Allen' ? 'allen kwetsbaar' : v+' kwetsbaar';
+function bidStartRandom(){
+  for(;;){
+    const d = Array.from({length:52},(_,i)=>i);
+    for(let i=51;i>0;i--){ const j = rnd(i+1); const z = d[i]; d[i] = d[j]; d[j] = z; }
+    const H = [0,1,2,3].map(k=>d.slice(k*13,k*13+13)), pN = makeHand(H[0]).hcp, pS = makeHand(H[2]).hcp;
+    if(pN+pS<20 || pS<6) continue;
+    return bidStart({hands:H, dealer:rnd(4), vul:['-','NZ','OW','Allen'][rnd(4)]});
+  }
+}
+function bidStart(o){
+  gRun++; G = null; gBusy = false;
+  BIDS = Object.assign({calls:[], why:[], done:false}, o);
+  $('gtip').hidden = true; $('gend').hidden = true;
+  bidAdvance();
+}
+function bidAdvance(){
+  const B = BIDS; if(!B) return;
+  if(brDone(B.calls)){ B.done = true; bidRender(); bidSummary(); return; }
+  const seat = (B.dealer+B.calls.length)%4;
+  bidRender();
+  if(seat===2) return;
+  const run = gRun;
+  setTimeout(()=>{
+    if(run!==gRun || BIDS!==B) return;
+    let r = brBid(makeHand(B.hands[seat]), B.calls, (B.dealer-seat+4)%4) || {bid:'pas', why:''};
+    if(!bidLegal(B, r.bid)) r = {bid:'pas', why:''};
+    B.calls.push(r.bid); B.why.push(r.why || '');
+    bidAdvance();
+  }, seat===0 ? 700 : 600);
+}
+function bidLegal(B, b){
+  if(b==='pas') return true;
+  const turn = (B.dealer+B.calls.length)%4;
+  const acts = B.calls.map((x,i)=>({x, s:(B.dealer+i)%4})).filter(o=>o.x!=='pas');
+  const la = acts[acts.length-1], lastBid = [...acts].reverse().find(o=>o.x!=='X' && o.x!=='XX');
+  const opp = la && (la.s+turn)%2===1;
+  if(b==='X') return !!(la && opp && la.x!=='X' && la.x!=='XX');
+  if(b==='XX') return !!(la && opp && la.x==='X');
+  return !lastBid || bidRank(b)>bidRank(lastBid.x);
+}
+function bidRender(){
+  const B = BIDS, def = !!B;
+  gClubBack();
+  ['gnlabel','gnorth'].forEach(id=>{ $(id).hidden = def; });
+  document.querySelector('#game .tablewrap').hidden = def;
+  $('gbid').hidden = !def;
+  if(!def) return;
+  $('gslabel').textContent = 'Jouw hand (Zuid)';
+  $('gsouth').innerHTML = handHTML(makeHand(B.hands[2]));
+  const order = [3,0,1,2], NM = ['Noord','Oost','Zuid','West'];
+  const rows = []; let row = new Array(4).fill('');
+  let col = order.indexOf(B.dealer);
+  const cells = [];
+  for(let i=0;i<col;i++) cells.push('<td></td>');
+  B.calls.forEach((b, i)=>{ const seat = (B.dealer+i)%4; cells.push('<td>'+(b==='pas' ? '<span class="abp">pas</span>' : b==='X' || b==='XX' ? '<span class="abx">'+b+'</span>' : '<span class="abb">'+bidHTML(b)+'</span>')+'</td>'); });
+  const turn = (B.dealer+B.calls.length)%4;
+  if(!B.done) cells.push('<td>'+(turn===2 ? '<span class="abq">?</span>' : '<span class="abw">…</span>')+'</td>');
+  let html = '<table class="auct"><tr>'+order.map(s=>'<th>'+NM[s]+(s===2 ? ' (jij)' : '')+(s===B.dealer ? '<small>gever</small>' : '')+'</th>').join('')+'</tr>';
+  for(let i=0;i<cells.length;i+=4) html += '<tr>'+cells.slice(i,i+4).join('')+'</tr>';
+  html += '</table>';
+  // laatste uitleg van partner
+  const explain = who => { const ni = B.calls.map((b,i)=>who.includes((B.dealer+i)%4) && b!=='pas' ? i : -1).filter(i=>i>=0).pop(); if(ni===undefined || !B.why[ni]) return ''; const sn = NM[(B.dealer+ni)%4]; return '<p class="abwhy">'+(who.length===1 ? 'Partner' : sn)+': '+bidHTML(B.calls[ni])+' – '+B.why[ni]+'.</p>'; };
+  const pw = explain([0]) + explain([1,3]);
+  let box = '';
+  if(!B.done && turn===2){
+    const last = [...B.calls].reverse().find(x=>x!=='pas' && x!=='X' && x!=='XX'), from = last ? Math.max(1, +last[0] + (last[1]==='N' ? 1 : 0)) : 1;
+    for(let l=from; l<=Math.min(7, from+3); l++) for(const d of DEN){ const b = l+d; box += '<button class="bid d-'+d+'" data-abid="'+b+'"'+(last && bidRank(b)<=bidRank(last) ? ' disabled' : '')+'>'+bidHTML(b)+'</button>'; }
+    box = '<div class="box'+(bidLegal(B,'X') || bidLegal(B,'XX') ? ' withdbl' : '')+'">'+box+'<button class="bid pas" data-abid="pas">Pas</button>'+(bidLegal(B,'X') ? '<button class="bid dbl" data-abid="X">X</button>' : '')+(bidLegal(B,'XX') ? '<button class="bid rdbl" data-abid="XX">XX</button>' : '')+'</div>';
+  }
+  $('gbid').innerHTML = html + pw + (B.done ? '<div id="bidsum"></div>' : box);
+  $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? 'De bieding is klaar.' : turn===2 ? 'Jij bent aan de beurt. Partner en de tegenstanders bieden volgens je systeemkaart; ook tegenbieden, doublet en azen vragen komen voor.' : NM[turn]+' is aan de beurt…');
+}
+function bidSummary(){
+  const B = BIDS, el = $('bidsum'); if(!el) return;
+  const ct = brContract(B.calls, B.dealer), NM = ['Noord','Oost','Zuid','West'];
+  const chtml = c => c.level+(c.trump===4 ? 'SA' : '<span class="'+SUITS[c.trump]+'">'+SYM[SUITS[c.trump]]+'</span>');
+  let h = ct ? '<p class="abres">Contract: <b>'+chtml(ct)+(ct.dbl===2 ? ' XX' : ct.dbl ? ' X' : '')+'</b> door '+NM[ct.decl]+(ct.decl%2 ? ' (jullie verdedigen)' : '')+'.</p>' : '<p class="abres">Iedereen paste: het spel is uitgepast.</p>';
+  const tips = Object.entries(B.adv||{}).filter(([i, a])=>a && a.bid!==B.calls[i]).map(([i, a])=>'Je bood '+(B.calls[i]==='pas' ? 'pas' : bidHTML(B.calls[i]))+'; volgens je systeemkaart was '+(a.bid==='pas' ? 'pas' : bidHTML(a.bid))+' beter'+(a.why ? ' ('+a.why+')' : '')+'.');
+  B.tipN = tips.length;
+  if(tips.length) h += '<div class="abtip">'+TIP_T+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
+  h += '<p id="bidopen" class="abwhy">Met open kaarten rekenen…</p>';
+  if(B.tables) h += '<p class="abwhy">Aan de tafels van jouw lijn: '+B.tables+'</p>';
+  h += '<div class="clubplay">'+(ct ? '<button class="gview" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
+  el.innerHTML = h;
+  const run = gRun;
+  ddsLoad().then(()=>{
+    if(run!==gRun || BIDS!==B) return;
+    const H = B.hands.map(x=>x.slice());
+    let txt = '';
+    if(ct){ const t = 13-window.DDS.solve(H, ct.trump, (ct.decl+1)%4, []), need = ct.level+6;
+      txt = 'Met open kaarten maakt '+chtml(ct)+' door '+NM[ct.decl]+' <b>'+t+' slagen</b>: '+(t>=need ? (t===need ? 'precies gemaakt.' : 'gemaakt met '+(t-need)+' overslag'+(t-need>1 ? 'en' : '')+'.') : (need-t)+' down.');
+      const sc = bridgeScore(ct.level, ct.trump, ct.dbl||0, sideVul(B.vul, ct.decl%2), t), us = ct.decl%2===0 ? sc : -sc;
+      txt += ' Dat is <b>'+scoreTxt(us)+'</b> voor jullie.'; }
+    // het beste contract voor NZ: manche of hoger dat maakt, anders het hoogste deelcontract
+    let best = null;
+    [4,0,1,2,3].forEach(tr=>{ [0,2].forEach(s=>{ const t = 13-window.DDS.solve(H, tr, (s+1)%4, []), lvl = t-6;
+      if(lvl<1) return;
+      const game = tr===4 ? 3 : tr<=1 ? 4 : 5, val = (lvl>=7 ? 3 : lvl>=6 ? 2 : lvl>=game ? 1 : 0)*100 + (tr===4 ? 3 : tr<=1 ? 2 : 1)*10 + lvl;
+      if(!best || val>best.val) best = {tr, s, lvl: lvl>=7 ? 7 : lvl>=6 ? 6 : lvl>=game ? game : lvl, t, val}; }); });
+    if(best){
+      const bestSc = bridgeScore(best.lvl, best.tr, 0, sideVul(B.vul, 0), best.t);
+      const brk = (lvl, tr) => lvl>=7 ? 3 : lvl===6 ? 2 : lvl>=(tr===4 ? 3 : tr<=1 ? 4 : 5) ? 1 : 0;
+      let cur = 0, curB = 0; if(ct){ const t = 13-window.DDS.solve(H, ct.trump, (ct.decl+1)%4, []), sc = bridgeScore(ct.level, ct.trump, ct.dbl||0, sideVul(B.vul, ct.decl%2), t); cur = ct.decl%2===0 ? sc : -sc; if(ct.decl%2===0 && t>=ct.level+6) curB = brk(ct.level, ct.trump); }
+      if(bestSc - cur >= 300 && Math.min(brk(best.lvl, best.tr), 2) > curB && !B.tipN){
+        const el = $('bidsum'), d = document.createElement('div'); d.className = 'abtip';
+        d.innerHTML = TIP_T+'<div><p>Er zat flink meer in. Jouw biedingen volgden je systeemkaart, dus aan jou lag het niet: hier liet partner het liggen. Kijk naar de handen hieronder bij het naspelen.</p></div>';
+        if(el) el.insertBefore(d, el.firstChild.nextSibling);
+      }
+    }
+    if(best) txt += ' Het beste contract voor jullie volgens open kaarten: <b>'+best.lvl+(best.tr===4 ? 'SA' : '<span class="'+SUITS[best.tr]+'">'+SYM[SUITS[best.tr]]+'</span>')+'</b> ('+best.t+' slagen, '+scoreTxt(bridgeScore(best.lvl, best.tr, 0, sideVul(B.vul, 0), best.t))+').';
+    const o = $('bidopen'); if(o) o.innerHTML = txt;
+  }).catch(()=>{ const o = $('bidopen'); if(o) o.textContent = ''; });
+}
+document.addEventListener('click', e=>{
+  const x = e.target.closest && e.target.closest('[data-abid],[data-abplay],[data-abnew],[data-clubbid],[data-clubback]');
+  if(!x) return;
+  if(x.dataset.abid!==undefined){
+    const B = BIDS; if(!B || B.done || (B.dealer+B.calls.length)%4!==2 || !bidLegal(B, x.dataset.abid)) return;
+    let adv = null; try{ adv = brBid(makeHand(B.hands[2]), B.calls, (B.dealer+2)%4); }catch(err){}
+    if(adv && !bidLegal(B, adv.bid)) adv = {bid:'pas', why:adv.why};
+    (B.adv = B.adv || {})[B.calls.length] = adv;
+    B.calls.push(x.dataset.abid); B.why.push(''); bidAdvance(); return;
+  }
+  if(x.dataset.abplay!==undefined){
+    const B = BIDS, ct = B && brContract(B.calls, B.dealer); if(!ct) return;
+    const k = (2 - ct.decl + 4) % 4, hands = [[],[],[],[]];
+    B.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
+    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), label: B.club || ''};
+    BIDS = null; state.grole = ct.decl%2===0 ? 'leider' : 'tegen'; save(); bidRender(); gStart(); return;
+  }
+  if(x.dataset.clubback!==undefined){
+    const nr = BIDS ? BIDS.clubNr : G && G.clubNr; if(!nr) return;
+    gRun++; BIDS = null; bidRender(); CV.i = nr; gStart(); clubOpen(); return;
+  }
+  if(x.dataset.abnew!==undefined){
+    const nr = BIDS && BIDS.clubNr; BIDS = null; bidRender();
+    if(nr){ CV.i = nr; gStart(); clubOpen(); } else gStart();
+    return;
+  }
+  if(x.dataset.clubbid!==undefined){
+    const c = clubData(); if(!c || CV.i===null) return;
+    const b = c.boards[CV.i], m = clubMine(b), k = m && !m.nz ? 1 : 0, hands = [[],[],[],[]];
+    b.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
+    const vul = k ? ({NZ:'OW', OW:'NZ'}[b.vul] || b.vul) : b.vul;
+    // wat werd er aan de tafels van jouw lijn gespeeld (door jullie kant)?
+    const rows = m ? b.res[m.L] : [], ourSide = m ? (m.nz ? 'NZ' : 'OW') : 'NZ', cnt = {};
+    rows.forEach(r=>{ const dside = /^[NZ]/.test(r.d||'') ? 'NZ' : /^[OW]/.test(r.d||'') ? 'OW' : null;
+      const key = /^pas/i.test(r.c) ? 'uitgepast' : dside===ourSide ? clubContractHTML(r.c.replace(/x+$/i,'')) : 'tegenpartij speelde';
+      cnt[key] = (cnt[key]||0)+1; });
+    const tables = Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([k,n])=>k+(n>1 ? ' ('+n+'×)' : '')).join(', ');
+    const t = $('theory'); if(t.open) t.close(); if($('settings').open) $('settings').close();
+    state.conv = 'spel'; save(); renderModes();
+    $('game').hidden = false; document.querySelector('main.table').hidden = true; $('feedback').hidden = true;
+    bidStart({hands, dealer:(b.dealer+k)%4, vul, club:'Spel '+b.nr, clubNr:b.nr, tables: tables || null});
+  }
+});
+function bidStartRandomOrGame(){ if(state.gbid==='ja' && state.grole!=='tegen') bidStartRandom(); else gStart(); }
 const THEORY = {puppet2:['Puppet Stayman'], puppet1:['Puppet Stayman'], zwak2h:['Zwakke twee','Antwoorden op de zwakke twee'], zwak2a:['Zwakke twee','Antwoorden op de zwakke twee'], openen:['Openen'], stayman:['Opening','Stayman','Uitnodigingen'], jacoby:['Opening','Jacoby','Uitnodigingen'],
   geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], steun:['Steunen: storend'], rkcb:['RKC'], exclusion:['Exclusion'], gerber:['Gerber'], acol2:['Acol-tweeën'], benji:['Benjamin'], leaping:['Wereldconventie'], bergen:['Bergen-raises'], jac2n:['Jacoby 2SA'], splinter:['Splinters'], montreal:['Montreal relay'], walsh:['Walsh'], twalsh:['Transfer Walsh'], bart:['Bart'], gazzilli:['Gazzilli'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], checkback:['Checkback'], blackwood:['Blackwood'], nadbl:['Na een informatiedoublet'], ophouden:['Spelen: ophouden'], gevaar:['Spelen: de gevaarlijke'], entree:['Spelen: entrees'], veilig:['Spelen: veiligheidsspel'], dekken:['Tegenspel: honneur'], regel11:['Tegenspel: de regel van 11'], dsnit:['Spelen: dubbele snit'], combi:['Spelen: kansen combineren'], vrij:['Spelen: lange kleur'], weggooi:['Spelen: weggooien'], telhand:['Spelen: de hand uittellen'], terug:['Tegenspel: terugspelen'], lengte:['Tegenspel: lengtesignaal'], ophoudt:['Tegenspel: je aas ophouden'], actief:['Tegenspel: actief of passief'], landy:['Landy'], mlandy:['Multi-Landy'], multi:['Multi 2'], nmf:['New Minor'], vierde:['Vierde kleur'], reverse:['Reverse'], texas:['Texas'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
 ['openen','zwak2h','zwak2a','volgbod','multi','muiderberg','uppercue','unusual','wet'].forEach(k=>{ if(THEORY[k]) THEORY[k].push('Kwetsbaarheid'); });
@@ -8402,7 +9096,7 @@ let G = null, gShown = [null,null,null,null], gBusy = false, gRun = 0, gPending 
 const SEATNAME = ['Noord','Oost','Zuid','West'];
 // Leider: jij speelt Noord (dummy) en Zuid. Tegenspeler: jij speelt West of Oost (G.me), de computer de rest.
 const gLevel = g => g.level || (g.trump===4 ? 3 : 4);
-const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trump]+'">'+SYM[SUITS[g.trump]]+'</span>');
+const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trump]+'">'+SYM[SUITS[g.trump]]+'</span>')+(g.dbl===2 ? ' XX' : g.dbl ? ' X' : '');
 const gMine = seat => G && (G.role==='tegen' ? seat===G.me : seat%2===0);
 function gHandHTML(seat){
   const myTurn = G && !G.over && !gBusy && G.turn===seat && gMine(seat), legal = myTurn ? gLegal(G, seat) : [];
@@ -8412,7 +9106,13 @@ function gHandHTML(seat){
     return '<li><span class="sym '+s+'">'+SYM[s]+'</span>'+(btns ? '<span class="ranks tap">'+btns+'</span>' : '<span class="void">geen</span>')+'</li>';
   }).join('');
 }
+function gClubBack(){
+  const nr = BIDS ? BIDS.clubNr : G && G.clubNr, el = $('gclubback');
+  if(el) el.hidden = !nr;
+}
 function gRender(){
+  if(!G) return;
+  gClubBack();
   const def = G.role==='tegen';
   ['gnorth','gsouth'].forEach((id,k)=>{
     const seat = k===0 ? 0 : (def ? G.me : 2), el = $(id);
@@ -8449,13 +9149,20 @@ function gRender(){
   $('gstatus').innerHTML = (def ? 'Jullie '+G.ew+', leider '+G.ns+' · down bij '+(14-G.need) : 'Jij '+G.ns+', zij '+G.ew+' · nodig '+G.need)+(who ? '<br>'+who : '');
   $('gcontract').innerHTML = gCHTML(G);
 }
+function gScoreTxt(){
+  const sc = v => bridgeScore(gLevel(G), G.trump, G.dbl||0, v, G.ns), def = G.role==='tegen' ? -1 : 1;
+  if(G.dvul===undefined) return ' Score: <b>'+scoreTxt(def*sc(false))+'</b> niet kwetsbaar, '+scoreTxt(def*sc(true))+' kwetsbaar.';
+  return ' Score: <b>'+scoreTxt(def*sc(G.dvul))+'</b>'+(G.dvul ? ' (leider kwetsbaar)' : ' (leider niet kwetsbaar)')+'.';
+}
 function gFinish(){
   const diff = G.ns-G.need;
   if(G.role==='tegen'){
     $('gresult').innerHTML = (diff<0 ? '<b>Down gespeeld</b>: jullie haalden '+G.ew+' slagen, de leider kwam '+(-diff)+' tekort.' : '<b>Contract gemaakt</b> door de leider: jullie haalden '+G.ew+' slagen, er waren er '+(14-G.need)+' nodig.')+' '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
+    $('gresult').innerHTML += gScoreTxt();
     $('gend').hidden = false; gRender(); gDefRender(); gVerdict(); return;
   }
   $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. '+(G.trump===4 ? 'Je begon met '+G.top+' vaste slagen. ' : 'Je begon met '+G.los+' verliezer'+(G.los===1 ? '' : 's')+' in je hand. ')+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
+  $('gresult').innerHTML += gScoreTxt();
   $('gend').hidden = false;
   gRender();
   gDefRender();
@@ -8473,6 +9180,7 @@ function ddsLoad(){
   return ddsWait;
 }
 function gDefRender(){
+  $('gbidc').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gbid==='ja' ? 'ja' : 'nee')===b.dataset.gbid)));
   $('grole').hidden = !ddsOK();
   $('grole').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.grole==='tegen' ? 'tegen' : 'leider')===b.dataset.grole)));
   $('gct').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gct==='sa' || state.gct==='troef' ? state.gct : 'mix')===b.dataset.gct)));
@@ -8638,6 +9346,8 @@ function gDo(seat, card){
   }else gAdvance();
 }
 function gStart(){
+  if(!CLUB_PRESET && state.gbid==='ja' && state.grole!=='tegen'){ bidStartRandom(); return; }
+  if(BIDS){ BIDS = null; bidRender(); }
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
   G.role = state.grole==='tegen' ? 'tegen' : 'leider'; G.me = G.role==='tegen' ? (rnd(2) ? 3 : 1) : 2;
   G.start = G.hands.map(h=>h.slice()); G.log = []; ddsLoad();
@@ -8659,6 +9369,7 @@ function gStart(){
   });
 });
 $('gnew').addEventListener('click', gStart);
+$('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gbid = b.dataset.gbid; save(); gDefRender(); });
 $('grole').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.grole = b.dataset.grole; save(); gDefRender(); });
 $('gct').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gct = b.dataset.gct; save(); gDefRender(); });
 $('gdef').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gdef = b.dataset.gdef; save(); gDefRender(); });
