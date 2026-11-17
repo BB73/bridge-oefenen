@@ -5042,5 +5042,22 @@ window.DDS = (function(){
     m._free(rp); m._free(dp);
     return best;
   }
-  return {ready: ready, solve: solve};
+  // Per kaart die de speler aan de beurt kan spelen: het aantal slagen dat zijn partij dan nog haalt. DDS meldt van gelijkwaardige kaarten alleen de hoogste; de lagere krijgen dezelfde uitkomst.
+  function solveAll(hands, trump, leader, trick, legal){
+    var R = '23456789TJQKA', m = inst;
+    var pbn = 'N:' + hands.map(function(h){ return [0,1,2,3].map(function(s){ return h.filter(function(c){ return Math.floor(c/13)===s; }).map(function(c){ return c%13; }).sort(function(a,b){ return b-a; }).map(function(r){ return R[r]; }).join(''); }).join('.'); }).join(' ');
+    var dp = m.allocateUTF8(pbn), rp = m._malloc(13*12), t = [0,0,0,0,0,0], rep = [], i, out = {};
+    for(i=0;i<13;i++) m.setValue(rp+i*4, -1, 'i32');
+    (trick||[]).forEach(function(c,k){ t[k*2] = Math.floor(c/13); t[k*2+1] = c%13+2; });
+    m._dds_solve_board(trump, leader, t[0],t[1],t[2],t[3],t[4],t[5], dp, rp);
+    for(i=0;i<13;i++){ var r = m.getValue(rp+i*12,'i32'); if(r<=0) break; rep.push([m.getValue(rp+i*12+4,'i32'), r, m.getValue(rp+i*12+8,'i32')]); }
+    m._free(rp); m._free(dp);
+    legal.forEach(function(c){
+      var su = Math.floor(c/13), rk = c%13+2, best = null;
+      rep.forEach(function(x){ if(x[0]===su && x[1]>=rk && (best===null || x[1]<best[1])) best = x; });
+      out[c] = best ? best[2] : -1;
+    });
+    return out;
+  }
+  return {ready: ready, solve: solve, solveAll: solveAll, ok: function(){ return !!inst; }};
 })();

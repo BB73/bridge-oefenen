@@ -112,6 +112,9 @@ button.score .swide{font-weight:400;color:var(--muted)}
 #dummy.right{margin-left:auto;width:max-content;min-width:50%}
 .odds{display:block;margin-top:.35rem;font-weight:700}
 .acetip{display:block;margin:0 0 .5rem;padding:.45rem .6rem;border-left:4px solid currentColor;border-radius:6px;background:color-mix(in srgb, currentColor 9%, transparent)}
+.gdef{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.gdef button{font:inherit;font-size:.9rem;padding:.3rem .8rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}
+.gdef button[aria-pressed="true"]{background:var(--accent, #1F6B47);border-color:transparent;color:#fff;font-weight:600}
 .gdd small{display:block;margin-top:.3rem;font-size:.78em;opacity:.7}
 .gstatus{flex:none;margin:0 0 .35rem;font-family:var(--display);font-weight:500;font-size:1.05rem;font-size:clamp(.95rem,2.5dvh,1.2rem);line-height:1.25;min-height:2.5em}
 .ghand li{font-size:1.1rem;line-height:1;margin:.22rem 0;align-items:center;gap:.5rem}
@@ -596,6 +599,7 @@ summary{cursor:pointer;font-weight:700}
     </div>
     <div class="gend" id="gend" hidden>
       <p id="gresult"></p>
+      <p class="gdef" id="gdef" hidden>Tegenspel: <button data-gdef="vuist">Gewoon</button><button data-gdef="sterk">Sterk</button></p>
       <button class="next" id="gnew">Nieuw spel</button>
     </div>
   </section>
@@ -3874,7 +3878,48 @@ function ddSolve(h, turn, trick, memo, alpha, beta){
 // ---------- Tips tijdens het hele spel ----------
 // Laatste zes slagen: de kaarten die de leider niet ziet worden een aantal keren willekeurig verdeeld over West en Oost
 // (met wat al bekend is over kleuren die op zijn); per verdeling wordt het spel met open kaarten uitgerekend.
+const ddsOK = () => !!(window.DDS && window.DDS.ok && window.DDS.ok());
+// Met DDS: de kaarten van de twee stoelen die deze speler niet ziet worden een aantal keren willekeurig verdeeld (met wat bekend is over kleuren die op zijn);
+// per verdeling rekent DDS voor elke kaart uit hoeveel slagen de eigen partij nog haalt. Het gemiddelde telt. Werkt vanaf de eerste slag.
+function gEvalDDS(st, seat, hidA, hidB, samples, budget){
+  const legal = gLegal(st, seat), sum = {}; legal.forEach(c=>{ sum[c] = 0; });
+  const pool = st.hands[hidA].concat(st.hands[hidB]), nA = st.hands[hidA].length;
+  const trick = st.trick.map(t=>t.card), leader = st.trick.length ? st.trick[0].seat : seat;
+  const t0 = Date.now(); let done = 0;
+  for(let n=0;n<samples;n++){
+    if(n>=1 && Date.now()-t0>budget) break;
+    const A = [], B = [], free = [];
+    pool.forEach(c=>{ const s = gSuit(c); if(st.voids[hidA][s] && !st.voids[hidB][s]) B.push(c); else if(st.voids[hidB][s] && !st.voids[hidA][s]) A.push(c); else free.push(c); });
+    for(let i=free.length-1;i>0;i--){ const j = rnd(i+1); const z = free[i]; free[i] = free[j]; free[j] = z; }
+    free.forEach(c=>{ if(A.length<nA) A.push(c); else B.push(c); });
+    while(A.length>nA) B.push(A.pop()); while(A.length<nA) A.push(B.pop());
+    const hands = st.hands.map(h=>h.slice()); hands[hidA] = A; hands[hidB] = B;
+    const r = window.DDS.solveAll(hands, 4, leader, trick, legal);
+    if(legal.some(c=>r[c]<0)) continue;
+    legal.forEach(c=>{ sum[c] += r[c]; }); done++;
+  }
+  if(!done) return null;
+  legal.forEach(c=>{ sum[c] /= done; });
+  sum.n = done;
+  return sum;
+}
+// Sterk tegenspel: de vuistregelkaart blijft staan als die volgens de berekening niets kost; anders de beste kaart (de laagste van de gelijkwaardige).
+function gAIStrong(st, seat){
+  const rule = gAI(st, seat), legal = gLegal(st, seat);
+  if(!ddsOK() || !st.played.length || legal.length<2) return rule;
+  let ev = null;
+  try{ ev = gEvalDDS(st, seat, 2, (seat+2)%4, 12, 250); }catch(e){ ev = null; }
+  if(!ev) return rule;
+  let best = -1; legal.forEach(c=>{ if(ev[c]>best) best = ev[c]; });
+  if(ev[rule]>=best-0.25) return rule;
+  const top = legal.filter(c=>ev[c]>=best-1e-9);
+  return top.reduce((a,b)=>gRank(b)<gRank(a) ? b : a);
+}
 function gTipEval(st, seat, samples){
+  if(ddsOK()){
+    try{ const ev = gEvalDDS(st, seat, 1, 3, st.hands[seat].length<=7 ? 20 : 12, 300); if(ev) return ev; }catch(e){}
+    if(st.hands[seat].length>7) return null;
+  }
   const legal = gLegal(st, seat);
   const pool = st.hands[1].concat(st.hands[3]), nE = st.hands[1].length;
   const sum = {}; legal.forEach(c=>{ sum[c] = 0; });
@@ -3990,11 +4035,11 @@ function gTip(st, seat, card, evReady){
   const legal = gLegal(st, seat);
   if(legal.length<2) return null;
   const n = st.hands[seat].length;
-  if(n<=7){
-    const ev = evReady || gTipEval(st, seat, n<=5 ? 20 : n===6 ? 10 : 6);
+  const ev = (n<=7 || ddsOK()) ? (evReady || gTipEval(st, seat, n<=5 ? 20 : n===6 ? 10 : 6)) : null;
+  if(ev){
     let best = legal[0];
     legal.forEach(c=>{ if(ev[c]>ev[best]+1e-9) best = c; });
-    if(ev[best]-ev[card]>=(n===7 ? 0.75 : 0.5)){
+    if(ev[best]-ev[card]>=(n>=8 ? 1 : n===7 ? 0.75 : 0.5) && (n<=7 || ev.n>=4)){
       const f = x => x.toFixed(1).replace('.', ','), cardTxt = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
       return {rule:'berekend', best, text:'Weet je het zeker? Waarom niet '+cardTxt(best)+'? Met '+cardTxt(card)+' maak je van de slagen die nog komen gemiddeld '+f(ev[card])+', met '+cardTxt(best)+' gemiddeld '+f(ev[best])+'.'};
     }
@@ -7707,6 +7752,7 @@ function gFinish(){
   $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. Je begon met '+G.top+' vaste slagen. '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
   $('gend').hidden = false;
   gRender();
+  gDefRender();
   gVerdict();
 }
 // Dubbel-dummyrekenaar (DDS) in een apart bestand: pas ophalen als je een heel spel speelt. Lukt dat niet, dan blijft het oordeel gewoon weg.
@@ -7720,11 +7766,16 @@ function ddsLoad(){
   ddsWait.catch(()=>{});
   return ddsWait;
 }
+function gDefRender(){
+  $('gdef').hidden = !ddsOK();
+  $('gdef').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gdef==='sterk' ? 'sterk' : 'vuist')===b.dataset.gdef)));
+}
 function gVerdict(){
   const g = G, run = gRun;
   if(!g || !g.start || g.lead==null) return;
   ddsLoad().then(()=>{
     if(run!==gRun || G!==g) return;
+    gDefRender();
     const hands = g.start.map(h=>h.slice()), t0 = performance.now();
     hands[3].splice(hands[3].indexOf(g.lead), 1);
     const max = window.DDS.solve(hands, 4, 3, [g.lead]), ms = Math.round(performance.now()-t0);
@@ -7741,12 +7792,12 @@ function gAdvance(){
   if(G.turn===1 || G.turn===3){
     gBusy = true; gRender();
     const run = gRun;
-    setTimeout(()=>{ if(run!==gRun || state.conv!=='spel') return; const seat = G.turn; gDo(seat, gAI(G, seat)); }, 600);
+    setTimeout(()=>{ if(run!==gRun || state.conv!=='spel') return; const seat = G.turn; gDo(seat, state.gdef==='sterk' ? gAIStrong(G, seat) : gAI(G, seat)); }, 600);
   }else{
     gBusy = false; gRender();
     // alvast uitrekenen terwijl je nadenkt, zodat de vraag er meteen is als je een kaart aantikt
     const run = gRun, at = G.played.length, seat = G.turn, n = G.hands[seat].length;
-    if(n<=7 && gLegal(G, seat).length>1) setTimeout(()=>{
+    if((n<=7 || ddsOK()) && gLegal(G, seat).length>1) setTimeout(()=>{
       if(run!==gRun || !G || G.over || G.played.length!==at || G.turn!==seat || state.conv!=='spel') return;
       G.pre = {at, seat, ev:gTipEval(G, seat, n<=5 ? 20 : n===6 ? 10 : 6)};
     }, 80);
@@ -7783,6 +7834,7 @@ function gStart(){
   });
 });
 $('gnew').addEventListener('click', gStart);
+$('gdef').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gdef = b.dataset.gdef; save(); gDefRender(); });
 $('gtipback').addEventListener('click', ()=>{ $('gtip').hidden = true; gPending = null; gBusy = false; gRender(); });
 $('gtipgo').addEventListener('click', ()=>{ const p = gPending; $('gtip').hidden = true; gPending = null; gBusy = false; if(p) gDo(p.seat, p.card); });
 const dlg = $('settings');
