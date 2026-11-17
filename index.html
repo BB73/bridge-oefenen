@@ -159,8 +159,9 @@ button.score .swide{font-weight:400;color:var(--muted)}
 @media (prefers-color-scheme: dark){ .clubb.goed{background:#1E3A2B} .clubb.slecht{background:#4A1D20} }
 .clubh{margin:.1rem 0 .3rem;line-height:1.3} .clubwho select{font:inherit;padding:.2rem .3rem;border-radius:6px;max-width:100%}
 .clubsub{margin:.7rem 0 .25rem} .clubyou{margin:.3rem 0}
-.drophint{display:none;margin:.5rem 0;padding:.8rem;border:2px dashed var(--line);border-radius:10px;text-align:center;color:var(--muted)}
-@media (hover:hover) and (pointer:fine){ .drophint{display:block} }
+.drophint{display:none;width:100%;margin:.5rem 0;padding:.8rem;border:2px dashed var(--line);border-radius:10px;text-align:center;color:var(--muted);background:transparent;font:inherit;cursor:pointer}
+.drophint.small{padding:.45rem;margin:.3rem 0 0;font-size:.85rem}
+@media (hover:hover) and (pointer:fine){ .drophint{display:block} .nodrop{display:none} }
 body.dropping #theory, body.dropping .drophint{outline:3px dashed var(--felt);outline-offset:-6px}
 .clubtop{margin:0 0 .2rem} .clubtop .navclear{padding:0}
 .rvnav.clubnav{display:grid;grid-template-columns:1fr auto auto auto 1fr;gap:.45rem;margin:.1rem 0 .35rem} .rvnav.clubnav .navclear{justify-self:start;padding:0;font-size:.88rem;white-space:nowrap} .rvnav.clubnav b{min-width:0;white-space:nowrap} .rvnav.clubnav b small{font-weight:400;color:var(--muted);font-size:.8em}
@@ -7770,7 +7771,8 @@ function clubDraw(){
     const grid = boards.map(b=>{ const m = clubMine(b), pc = clubPct(b, m); return '<button class="clubb'+(pc===null ? '' : pc>=60 ? ' goed' : pc<=40 ? ' slecht' : '')+'" data-clubb="'+b.nr+'"><span class="cbt"><b>'+b.nr+'</b>'+(m && pc!==null ? '<small>'+pc+'%</small>' : '')+'</span>'+(m ? '<small>'+clubContractHTML(m.r.c)+(m.r.d && !/^pas/i.test(m.r.c||'') ? ' '+m.r.d[0] : '')+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</small>' : '')+'</button>'; }).join('');
     let tot = null; const ms = boards.map(b=>clubPct(b, clubMine(b))).filter(x=>x!==null); if(ms.length) tot = Math.round(ms.reduce((a,b)=>a+b,0)/ms.length*10)/10;
     el.innerHTML = '<p class="clubh"><b>'+(c.title||'Clubavond')+'</b><br>'+(c.date||'')+(tot!==null ? ' · gemiddeld <b>'+String(tot).replace('.',',')+'%</b>' : '')+'</p>'+who
-      + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Per rij een ronde van vier spellen. Groen: 60% of meer, rood: 40% of minder. <button class="navclear" data-clubfile="1">Ander bestand kiezen</button></p>';
+      + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Per rij een ronde van vier spellen. Groen: 60% of meer, rood: 40% of minder. <button class="navclear nodrop" data-clubfile="1">Ander bestand kiezen</button></p>'
+      + '<button class="drophint small" data-clubfile="1">Nieuwe clubavond? Sleep de pdf hierheen of klik om te kiezen.</button>';
     return;
   }
   const b = c.boards[CV.i];
