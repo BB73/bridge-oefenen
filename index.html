@@ -354,6 +354,15 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .crumbs b{font-weight:700}
 .homebtns{display:grid;gap:.6rem;margin:.2rem 0 .8rem}
 .homebtn{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem;width:100%;font:inherit;text-align:left;padding:1rem 1rem;border-radius:14px;border:2px solid var(--felt);background:var(--surface);color:var(--ink);cursor:pointer}
+.dhead{position:relative}
+.tipT{position:absolute;top:.3rem;right:.35rem;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%, #2A2416, #14110A);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.35);transition:transform .15s}
+.tipT svg{display:block;width:100%;height:100%}
+.tipT:hover, .tipT:focus-visible{transform:scale(1.06);outline:none;box-shadow:0 0 0 2px #D4A62A, 0 1px 4px rgba(0,0,0,.35)}
+.tipT[hidden]{display:none}
+.tiplbl{position:absolute;right:calc(100% + .45rem);top:50%;transform:translateY(-50%);padding:.2rem .6rem;border-radius:999px;background:#14110A;color:#F1D36B;font-family:var(--display);font-size:.9rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.tipT:hover .tiplbl, .tipT:focus-visible .tiplbl{opacity:1}
+@media (max-height:720px){ .homebtns{gap:.4rem;margin-bottom:.6rem} .homebtn{padding:.4rem .9rem;gap:0} .homebtn b{font-size:1.2rem} .homebtn small{font-size:.8rem;line-height:1.25} }
+.tipmail{display:inline-block;margin:.2rem 0 .5rem;padding:.6rem 1rem;border-radius:10px;background:var(--felt);color:#fff;font-weight:600;text-decoration:none}
 .homebtn b{font-family:var(--display);font-size:1.35rem}
 .homebtn small{font-size:.85rem;color:var(--muted)}
 .homebtn.has{background:color-mix(in srgb, var(--felt) 10%, var(--surface))}
@@ -608,6 +617,7 @@ summary{cursor:pointer;font-weight:700}
 <dialog id="settings" aria-labelledby="settitle">
   <div class="dhead">
     <h2 id="settitle">Wat wil je oefenen?</h2>
+    <button class="tipT" id="tipT" data-tip="1" aria-label="Tips: geef een tip of fout door" title="Tips"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="tgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6E27A"/><stop offset=".35" stop-color="#D4A62A"/><stop offset=".6" stop-color="#FBEFA0"/><stop offset="1" stop-color="#A97A12"/></linearGradient></defs><circle cx="24" cy="24" r="22" fill="none" stroke="url(#tgold)" stroke-width="1.6"/><path d="M10.5 17.5c-2.6-.4-3.6-3.4-1.6-5 1.6-1.3 4-.6 4.3 1.2M11.5 15.5c3-4.6 8-3.6 12.5-2.6 5 1.1 9.5 2.2 13.5-1.4 1.2 2.6-.6 5.6-3.4 5.2-1.6-.2-2.4-1.6-1.8-2.9" fill="none" stroke="url(#tgold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M25.6 14.2c-.2 6.5-1.2 12.5-2.6 17.2-1 3.4-3 5.8-6 5.8-2.6 0-4-2.2-2.8-4 .9-1.3 2.9-1.2 3.4.3" fill="none" stroke="url(#tgold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="tiplbl" aria-hidden="true">Tips</span></button>
     <nav class="crumbs" id="crumbs" aria-label="Waar je bent"></nav>
   </div>
   <div class="dbody" id="dbody">
@@ -6945,6 +6955,7 @@ function renderModes(){
   }
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
+  $('tipT').hidden = !!T;
   $('settitle').textContent = T==='test' ? 'Challenge jezelf' : learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
   $('homeextra').hidden = !!T;
   const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadpbox'],['sigbox']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
@@ -7710,6 +7721,20 @@ $('resbody').addEventListener('click', e=>{
   state.step = 'alles';
   save(); renderModes(); closeResults(); next(true);
 });
+const TIPMAIL = 'mailto:basbolk@gmail.com?subject=Tip%20voor%20Bridge%20oefenen&body=Waar%20in%20de%20app%20%28welk%20onderdeel%2C%20welke%20oefening%29%3A%0A%0AWat%20zag%20ik%3A%0A%0AWat%20had%20ik%20verwacht%20of%20wat%20zou%20prettiger%20zijn%3A%0A%0A';
+function openTip(){
+  const t = $('theory');
+  $('theorytitle').textContent = 'Tip of fout doorgeven';
+  $('theorybody').innerHTML = '<p>Alle tips zijn welkom: iets klopt niet, iets is onduidelijk, of iets kijkt niet prettig.</p>'
+    + '<p>Hoe duidelijker je het beschrijft, hoe beter ik het kan verwerken. Schrijf erbij in welk onderdeel het zit, wat je zag en wat je had verwacht. Een schermafbeelding helpt.</p>'
+    + '<p><a class="tipmail" href="'+TIPMAIL+'" target="_blank" rel="noopener">Mail je tip</a></p>'
+    + '<p>Opent je mailprogramma niet? Stuur je bericht dan naar <b>basbolk@gmail.com</b>.</p>';
+  $('theoryclose').textContent = 'Sluiten';
+  if(t.showModal) t.showModal(); else t.setAttribute('open','');
+  t.scrollTop = 0;
+}
+$('theory').addEventListener('close', ()=>{ $('theoryclose').textContent = 'Terug naar de hand'; });
+document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-tip]')) openTip(); });
 $('theoryclose').addEventListener('click', ()=>{ const t = $('theory'); if(t.close) t.close(); else t.removeAttribute('open'); });
 $('theory').addEventListener('click', e=>{ if(e.target===$('theory') && $('theory').close) $('theory').close(); });
 
