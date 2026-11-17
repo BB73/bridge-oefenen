@@ -150,6 +150,20 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .rvn li.zij{color:var(--muted)}
 .rvnote{font-size:.8rem;color:var(--muted)}
 @media (prefers-color-scheme: dark){ .rvc.bad{background:#4A1D20} .rvn li.wij{color:#F2A0A5} }
+.clubgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(4.2rem,1fr));gap:.35rem;margin:.4rem 0}
+.clubb{display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.35rem .2rem;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:inherit;font:inherit;cursor:pointer}
+.clubb b{font-size:1rem} .clubb small{font-size:.72rem;line-height:1.15}
+.clubb.goed{border-color:var(--felt);background:#DDF0E5} .clubb.slecht{border-color:#C4202B;background:#FBE3E3}
+@media (prefers-color-scheme: dark){ .clubb.goed{background:#1E3A2B} .clubb.slecht{background:#4A1D20} }
+.clubh{margin:.1rem 0 .4rem} .clubwho select{font:inherit;padding:.2rem .3rem;border-radius:6px;max-width:100%}
+.clubsub{margin:.7rem 0 .25rem} .clubyou{margin:.3rem 0}
+.clubdd, .clubres{border-collapse:collapse;font-size:.88rem;width:100%}
+.clubdd th, .clubdd td, .clubres th, .clubres td{border-bottom:1px solid var(--line);padding:.2rem .3rem;text-align:center}
+.clubres td:first-child, .clubres th:first-child{text-align:left}
+.clubres tr.me td{background:#FFF3C4;font-weight:700}
+@media (prefers-color-scheme: dark){ .clubres tr.me td{background:#4A3F12} }
+.clubplay{display:flex;gap:.5rem;flex-wrap:wrap} .clubplay .gview{margin:0}
+.clubentry{display:block;margin:.6rem 0 0;width:100%;text-align:left}
 .ddpar{margin:.5rem 0 0;padding:.5rem .7rem;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:.9rem;line-height:1.35}
 .ddpar .ddh{display:block;margin-bottom:.15rem}
 .ddpar .ddbusy{font-weight:400;font-size:.8rem;color:var(--muted)}
@@ -733,6 +747,7 @@ summary{cursor:pointer;font-weight:700}
   </section>
 </div>
 
+<input type="file" id="clubfile" accept="application/pdf,.pdf" hidden>
 <dialog id="settings" aria-labelledby="settitle">
   <div class="dhead">
     <h2 id="settitle">Wat wil je oefenen?</h2>
@@ -3467,6 +3482,11 @@ function gLosers(h, d){
   return n;
 }
 function gameNew(){
+  if(CLUB_PRESET){
+    const P = CLUB_PRESET; CLUB_PRESET = null;
+    const hN = makeHand(P.hands[0]), hS = makeHand(P.hands[2]);
+    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label};
+  }
   const want = state.gct==='sa' ? 'sa' : state.gct==='troef' ? 'troef' : (rnd(2) ? 'sa' : 'troef');
   for(;;){
     const deck = Array.from({length:52},(_,i)=>i);
@@ -7232,6 +7252,7 @@ function renderModes(){
        + tools(allOf(T), T==='spelen' ? 'bij spelen' : cardMode ? '' : 'bij bieden', false).replace('Alles  van','Alles van');
     if(T==='bieden' && !cardMode) pg += '<div class="navtools"><button class="navclear all" data-allcard="1">Mijn hele systeemkaart oefenen</button></div>';
     if(T==='spelen' && extra.length) pg += '<p class="hint">Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.</p>';
+    if(T==='spelen') pg += '<button class="navclear all clubentry" data-clubopen="1">Clubavond: je eigen spellen van de club ›</button>';
   }else if(!sub){
     pg = subsOf.map((s,i)=>{ const v = vis(subKeys(s)); return setPage(cat.id, i) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : !v.length ? '' : v.length===1 ? convRow(v[0]) : navRow('data-subi="'+i+'"', s[0], subKeys(s)); }).join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', false);
   }else if(!pk){
@@ -7487,6 +7508,300 @@ function ddParShow(qq){
   };
   ddsLoad().then(()=>{ if(run===ddParRun && q===qq) setTimeout(step, 30); }).catch(()=>{});
 }
+// ---------- Clubavond: de frequentiestaat (pdf van het NBB-rekenprogramma) inlezen ----------
+// Een kleine pdf-lezer: genoeg voor de pdf's van het NBB-rekenprogramma (klassieke xref, Flate, CID-fonts met ToUnicode).
+async function pdfInflate(bytes){
+  const ds = new DecompressionStream('deflate');
+  const buf = await new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer();
+  return new Uint8Array(buf);
+}
+const latin1 = u8 => { let s = ''; for(let i=0;i<u8.length;i+=8192) s += String.fromCharCode.apply(null, u8.subarray(i, i+8192)); return s; };
+async function pdfTextItems(ab){
+  const u8 = new Uint8Array(ab), s = latin1(u8), objs = {};
+  const re = /(\d+)\s+0\s+obj\b/g; let m; const starts = [];
+  while((m = re.exec(s))) starts.push([+m[1], m.index + m[0].length]);
+  starts.forEach(([n, st], i)=>{ const end = s.indexOf('endobj', st); objs[n] = {st, end}; });
+  const body = n => objs[n] ? s.slice(objs[n].st, objs[n].end) : '';
+  const ref = (txt, key) => { const r = new RegExp('/'+key+'\\s+(\\d+)\\s+0\\s+R').exec(txt); return r ? +r[1] : null; };
+  const streamOf = async n => {
+    const b = body(n), k = b.indexOf('stream'); if(k<0) return '';
+    let a = objs[n].st + k + 6; if(s[a]==='\r') a++; if(s[a]==='\n') a++;
+    let len = /\/Length\s+(\d+)(\s+0\s+R)?/.exec(b), L;
+    if(len && !len[2]) L = +len[1]; else if(len){ const lb = body(+len[1]).trim(); L = parseInt(lb); }
+    else L = s.indexOf('endstream', a) - a;
+    let bytes = u8.subarray(a, a+L);
+    if(/\/FlateDecode/.test(b.slice(0, k))){ bytes = await pdfInflate(bytes); }
+    return latin1(bytes);
+  };
+  // pagina's in volgorde via de Kids-boom
+  const rootN = ref(s.slice(s.lastIndexOf('trailer')), 'Root'), pagesN = ref(body(rootN), 'Pages');
+  const pages = [];
+  const walk = n => { const b = body(n); if(/\/Type\s*\/Pages\b/.test(b)){ const k = /\/Kids\s*\[([^\]]*)\]/.exec(b); if(k) k[1].replace(/(\d+)\s+0\s+R/g, (_, x)=>{ walk(+x); return ''; }); } else pages.push(n); };
+  walk(pagesN);
+  const cmaps = {};
+  const fontMap = async fontN => {
+    if(cmaps[fontN]) return cmaps[fontN];
+    const tu = ref(body(fontN), 'ToUnicode'), map = {};
+    if(tu){
+      const c = await streamOf(tu);
+      c.replace(/beginbfchar([\s\S]*?)endbfchar/g, (_, x)=>{ x.replace(/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g, (_, a, b)=>{ map[parseInt(a,16)] = hexU(b); return ''; }); return ''; });
+      c.replace(/beginbfrange([\s\S]*?)endbfrange/g, (_, x)=>{ x.replace(/<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>/g, (_, a, b, d)=>{ const lo = parseInt(a,16), hi = parseInt(b,16), st = parseInt(d,16); for(let i=lo;i<=hi;i++) map[i] = String.fromCodePoint(st+i-lo); return ''; }); return ''; });
+    }
+    return cmaps[fontN] = map;
+  };
+  const hexU = h => { let o = ''; for(let i=0;i<h.length;i+=4) o += String.fromCharCode(parseInt(h.substr(i,4),16)); return o; };
+  const items = [];
+  for(let pi=0; pi<pages.length; pi++){
+    const pb = body(pages[pi]);
+    let res = /\/Resources\s+(\d+)\s+0\s+R/.exec(pb), rb = res ? body(+res[1]) : pb;
+    let fb = /\/Font\s*(\d+)\s+0\s+R/.exec(rb); fb = fb ? body(+fb[1]) : ((/\/Font\s*<<([\s\S]*?)>>/.exec(rb)||[])[1] || '');
+    const fonts = {}; fb.replace(/\/(\w+)\s+(\d+)\s+0\s+R/g, (_, nm, n)=>{ fonts[nm] = +n; return ''; });
+    const cs = [];
+    const cm = /\/Contents\s*(\[[^\]]*\]|\d+\s+0\s+R)/.exec(pb);
+    if(cm) cm[1].replace(/(\d+)\s+0\s+R/g, (_, n)=>{ cs.push(+n); return ''; });
+    let content = ''; for(const n of cs) content += await streamOf(n) + '\n';
+    // tokens
+    const tk = /\/[^\s\/\[\]<>()]+|<[0-9A-Fa-f\s]*>|\((?:\\.|[^\\)])*\)|\[|\]|-?\d*\.?\d+|[A-Za-z'"*]+/g;
+    let stack = [], arr = null, font = null, tx = 0, ty = 0, lx = 0, ly = 0, map = {};
+    const decode = t => {
+      if(t[0]==='<'){ const h = t.slice(1,-1).replace(/\s/g,''); let o = ''; for(let i=0;i<h.length;i+=4){ const c = parseInt(h.substr(i,4),16); o += map[c] !== undefined ? map[c] : ''; } return o; }
+      if(t[0]==='(') return t.slice(1,-1).replace(/\\(.)/g, '$1');
+      return '';
+    };
+    let tm;
+    while((tm = tk.exec(content))){
+      const t = tm[0];
+      if(t==='['){ arr = []; continue; }
+      if(t===']'){ stack.push(arr); arr = null; continue; }
+      if(arr){ arr.push(t); continue; }
+      if(/^[A-Za-z'"*]+$/.test(t)){
+        const op = t;
+        if(op==='BT'){ tx = ty = lx = ly = 0; }
+        else if(op==='Tf'){ const nm = stack[stack.length-2]; if(nm && nm[0]==='/' && fonts[nm.slice(1)]) map = await fontMap(fonts[nm.slice(1)]); }
+        else if(op==='Td' || op==='TD'){ const y = +stack[stack.length-1], x = +stack[stack.length-2]; lx += x; ly += y; tx = lx; ty = ly; }
+        else if(op==='Tm'){ lx = tx = +stack[stack.length-2]; ly = ty = +stack[stack.length-1]; }
+        else if(op==='Tj' || op==="'"){ const txt = decode(stack[stack.length-1]||''); if(txt) items.push({p:pi, x:tx, y:ty, t:txt}); }
+        else if(op==='TJ'){ const a = stack[stack.length-1]; if(Array.isArray(a)){ const txt = a.map(x=>(x[0]==='<'||x[0]==='(') ? decode(x) : '').join(''); if(txt) items.push({p:pi, x:tx, y:ty, t:txt}); } }
+        stack = [];
+      }else stack.push(t);
+    }
+  }
+  return items;
+}
+// De frequentiestaat ontleden: per spel de vier handen, gever, kwetsbaarheid en de uitslagen aan alle tafels
+function clubParse(items0){
+  const out = {title:'', date:'', boards:{}};
+  // losse stukjes op dezelfde regel samenvoegen: '♠' + 'V652', '3' + 'SA', '♣' + 'B'
+  const items = [];
+  const byP = {}; items0.forEach(it=>{ (byP[it.p] = byP[it.p] || []).push(it); });
+  Object.keys(byP).forEach(pk=>{
+    const its = byP[pk].slice().sort((a,b)=>a.x-b.x), used = new Set();
+    its.forEach((it, k)=>{
+      if(used.has(k)) return;
+      const cur = {p:+pk, x:it.x, y:it.y, t:it.t}; used.add(k);
+      let lastX = it.x;
+      for(;;){
+        if(!(cur.t.length<=2 || /[♠♥♦♣]$/.test(cur.t))) break;
+        let nx = -1;
+        for(let q=k+1;q<its.length;q++){ if(used.has(q)) continue; const o = its[q]; if(o.x-lastX>=10) break; if(o.x>=lastX && Math.abs(o.y-cur.y)<2.2){ nx = q; break; } }
+        if(nx<0) break;
+        cur.t += its[nx].t; lastX = its[nx].x; used.add(nx);
+      }
+      items.push(cur);
+    });
+  });
+  const SU = {'♠':0,'♥':1,'♦':2,'♣':3}, RK = {A:14,H:13,V:12,B:11};
+  const pages = {}; items.forEach(it=>{ (pages[it.p] = pages[it.p] || []).push(it); });
+  Object.keys(pages).forEach(pk=>{
+    const its = pages[pk];
+    const z = its.find(i=>/^Zitting:/.test(i.t)), zv = z && its.filter(i=>Math.abs(i.y-z.y)<2 && i.x>z.x).sort((a,b)=>a.x-b.x)[0];
+    if(zv && !out.title) out.title = zv.t.trim();
+    const d = its.find(i=>/^Datum:/.test(i.t)), dv = d && its.filter(i=>Math.abs(i.y-d.y)<2 && i.x>d.x).sort((a,b)=>a.x-b.x)[0];
+    if(dv && !out.date) out.date = dv.t.trim();
+    const lijn = its.filter(i=>/^Lijn\s+\w/.test(i.t)).sort((a,b)=>b.y-a.y);
+    const heads = its.filter(i=>/^Spel:\s*\d+/.test(i.t)).sort((a,b)=>b.y-a.y);
+    heads.forEach((h, hi)=>{
+      const nr = +/\d+/.exec(h.t)[0];
+      let rest = h.t.replace(/^Spel:\s*\d+\s*/, '');
+      if(!rest){ const nx = its.filter(i=>Math.abs(i.y-h.y)<2 && i.x>h.x && i.x<h.x+80).sort((a,b)=>a.x-b.x)[0]; rest = nx ? nx.t : ''; }
+      const dk = /([NOZW])\s*\/\s*(\S+)/.exec(rest);
+      const yTop = h.y, yBot = hi+1<heads.length ? heads[hi+1].y : -1e9;
+      const ln = lijn.filter(l=>l.y>yTop).sort((a,b)=>a.y-b.y)[0];
+      const line = ln ? ln.t.replace(/^Lijn\s+/, '').trim() : (out.lastLine || 'A'); out.lastLine = line;
+      const topI = its.find(i=>/^Top:/.test(i.t) && Math.abs(i.y-h.y)<3);
+      const region = its.filter(i=>i.y<yTop-1 && i.y>yBot+1);
+      const ch = region.find(i=>i.t.trim()==='Contract');
+      const split = ch ? ch.x-25 : 200;
+      // handen: regels die met een kleursymbool beginnen
+      const suitIt = region.filter(i=>i.x<split && /^[♠♥♦♣]/.test(i.t.trim()));
+      if(suitIt.length<16) return;
+      suitIt.sort((a,b)=>b.y-a.y || a.x-b.x);
+      const hands = [[],[],[],[]];
+      const put = (seat, it) => { const t = it.t.trim(), si = SU[t[0]]; const r = t.slice(1).replace(/\s/g,''); if(r==='-'||r==='—'||!r) return; let k = 0; while(k<r.length){ let v; if(r.startsWith('10',k)){ v = 10; k += 2; } else { const c = r[k]; v = RK[c] || +c; k++; } if(v>=2 && v<=14) hands[seat].push(si*13+v-2); } };
+      const n = suitIt.slice(0,4), s = suitIt.slice(-4), mid = suitIt.slice(4,-4);
+      n.forEach(i=>put(0,i)); s.forEach(i=>put(2,i));
+      const xs = mid.map(i=>i.x).sort((a,b)=>a-b), cut = (xs[0]+xs[xs.length-1])/2;
+      mid.forEach(i=>put(i.x<cut ? 3 : 1, i));
+      const all = new Set(hands.flat());
+      if(hands.some(h=>h.length!==13) || all.size!==52) return;
+      // uitslagen: regels rechts van de handen
+      const rows = {}; region.filter(i=>i.x>=split).forEach(i=>{ const k = Math.round(i.y); const key = Object.keys(rows).find(y=>Math.abs(+y-i.y)<2) || k; (rows[key] = rows[key] || []).push(i); });
+      const res = []; let last = null;
+      Object.keys(rows).map(Number).sort((a,b)=>b-a).forEach(y=>{
+        const r = rows[y].sort((a,b)=>a.x-b.x), names = r.filter(i=>/&/.test(i.t));
+        if(names.length<2) return;
+        const iN = r.indexOf(names[0]), iO = r.indexOf(names[1]);
+        const pre = r.slice(0, iN).map(i=>i.t.trim()).join(' ').split(/\s+/).filter(Boolean), post = r.slice(iO+1).map(i=>i.t.trim()).join(' ').split(/\s+/).filter(Boolean);
+        const row = {c: pre[0] || '', nz: names[0].t.trim(), ow: names[1].t.trim()};
+        let k = 1;
+        if(pre[1] && /^x{1,2}$/i.test(pre[1])){ row.c += pre[1].toLowerCase(); k = 2; }
+        if(/^pas/i.test(row.c)){ row.c = 'Pas'; if(pre[k]==='-') k++; }
+        else if(row.c){ row.r = pre[k++] || ''; row.d = pre[k++] || ''; if(pre[k] && /^[♠♥♦♣]/.test(pre[k])) row.lead = pre[k++]; }
+        if(pre[k] && /^[+-]?\d+$/.test(pre[k]) && (pre[k][0]==='+' || pre[k][0]==='-' || pre[k]==='0')){ row.score = +pre[k++]; row.n = +pre[k++]; row.mpNZ = parseFloat((pre[k++]||'').replace(',','.')); row.mpOW = parseFloat((post[0]||'').replace(',','.')); last = row; }
+        else if(last){ row.score = last.score; row.mpNZ = last.mpNZ; row.mpOW = last.mpOW; }
+        res.push(row);
+      });
+      const b = out.boards[nr] || (out.boards[nr] = {nr, dealer: dk ? 'NOZW'.indexOf(dk[1]) : 0, vul: dk ? dk[2] : '-', hands, top: topI ? +/\d+/.exec(topI.t.replace(/^Top:\s*/,''))||0 : 0, res:{}});
+      if(topI){ const tv = /Top:\s*(\d+)/.exec(topI.t); if(tv) b.top = +tv[1]; else { const nx = its.filter(i=>Math.abs(i.y-topI.y)<2 && i.x>topI.x).sort((a,b)=>a.x-b.x)[0]; if(nx) b.top = +nx.t; } }
+      b.res[line] = res;
+    });
+  });
+  delete out.lastLine;
+  return out;
+}
+
+// ---------- Clubavond: scherm ----------
+const CLUBSEAT = ['N','O','Z','W'];
+let CV = {i:null, busy:0};
+function clubData(){ return state.club && state.club.boards ? state.club : null; }
+function clubPairs(c){ const s = new Set(); Object.values(c.boards).forEach(b=>Object.values(b.res).forEach(rs=>rs.forEach(r=>{ s.add(r.nz); s.add(r.ow); }))); return [...s].sort((a,b)=>a.localeCompare(b, 'nl')); }
+function clubMine(b){ const me = state.clubMe; if(!me) return null; for(const L of Object.keys(b.res)){ const r = b.res[L].find(r=>r.nz===me || r.ow===me); if(r) return {r, L, nz: r.nz===me}; } return null; }
+function clubPct(b, m){ if(!m || !b.top || m.r.mpNZ==null || isNaN(m.r.mpNZ)) return null; return Math.round(100*(m.nz ? m.r.mpNZ : m.r.mpOW)/b.top); }
+function clubContractHTML(c){ if(!c) return ''; if(/^pas/i.test(c)) return 'Pas'; const m = /^(\d)(SA|[♠♥♦♣])(x{0,2})/i.exec(c); if(!m) return c; const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[m[2]]; return m[1]+(su ? '<span class="'+su+'">'+SYM[su]+'</span>' : 'SA')+(m[3] ? m[3].toLowerCase() : ''); }
+function clubOpen(){
+  const t = $('theory');
+  $('theorytitle').textContent = 'Clubavond';
+  clubDraw();
+  $('theoryclose').textContent = 'Sluiten';
+  if(t.showModal && !t.open) t.showModal(); else t.setAttribute('open','');
+  t.scrollTop = 0;
+}
+function clubDraw(){
+  const c = clubData(), el = $('theorybody');
+  const pick = '<button class="gview" data-clubfile="1">'+(c ? 'Ander bestand kiezen' : 'Frequentiestaat kiezen')+'</button>';
+  if(!c){
+    el.innerHTML = '<p>Na elke clubavond krijg je van de club een mail met pdf-bijlagen. Bewaar de bijlage <b>Gedetailleerde frequentiestaat</b> op je telefoon of computer en kies hem hier.</p>'
+      + '<p>De app leest de spellen en de uitslagen van alle tafels. Per spel zie je dan wat er met open kaarten in zat, en kun je het spel naspelen als leider of tegenspeler.</p>'
+      + pick + '<p class="rvnote">Werkt met de pdf\'s van het NBB-rekenprogramma. Het bestand blijft op je eigen toestel; er wordt niets verstuurd.</p>';
+    return;
+  }
+  const boards = Object.values(c.boards).sort((a,b)=>a.nr-b.nr);
+  const pairs = clubPairs(c);
+  const who = '<p class="clubwho">Jij speelde als: <select id="clubme"><option value="">kies je paar</option>'+pairs.map(p=>'<option'+(p===state.clubMe ? ' selected' : '')+'>'+p.replace(/</g,'&lt;')+'</option>').join('')+'</select></p>';
+  if(CV.i===null){
+    const grid = boards.map(b=>{ const m = clubMine(b), pc = clubPct(b, m); return '<button class="clubb'+(pc===null ? '' : pc>=60 ? ' goed' : pc<=40 ? ' slecht' : '')+'" data-clubb="'+b.nr+'"><b>'+b.nr+'</b>'+(m ? '<small>'+clubContractHTML(m.r.c)+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</small><small>'+(pc===null ? '' : pc+'%')+'</small>' : '')+'</button>'; }).join('');
+    let tot = null; const ms = boards.map(b=>clubPct(b, clubMine(b))).filter(x=>x!==null); if(ms.length) tot = Math.round(ms.reduce((a,b)=>a+b,0)/ms.length*10)/10;
+    el.innerHTML = '<p class="clubh"><b>'+(c.title||'Clubavond')+'</b><br>'+(c.date||'')+'</p>'+who
+      + (tot!==null ? '<p>Gemiddeld <b>'+String(tot).replace('.',',')+'%</b> over '+ms.length+' spellen.</p>' : '')
+      + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Tik op een spel. Groen: 60% of meer, rood: 40% of minder.</p>'+pick;
+    return;
+  }
+  const b = c.boards[CV.i];
+  const m = clubMine(b);
+  const ct = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
+  const hand = seat => SUITS.map((su, si)=>{ const cs = b.hands[seat].filter(x=>gSuit(x)===si).sort((x,y)=>gRank(y)-gRank(x)); return '<div class="rvs"><i class="'+su+'">'+SYM[su]+'</i>'+(cs.length ? cs.map(x=>'<span>'+(RANK[gRank(x)]||gRank(x))+'</span>').join('') : '<span class="rvv">–</span>')+'</div>'; }).join('');
+  const NM = ['Noord','Oost','Zuid','West'], AR = ['n','o','z','w'];
+  const youSeats = m ? (m.nz ? [0,2] : [1,3]) : [];
+  const seats = [0,1,2,3].map(s=>'<div class="rvh '+AR[s]+'"><div class="rvlab">'+NM[s]+(youSeats.includes(s) ? ' (jullie)' : '')+(b.dealer===s ? ' · gever' : '')+'</div>'+hand(s)+'</div>').join('');
+  const mid = '<div class="rvmid"><b>Spel '+b.nr+'</b><small>'+(b.vul==='-' ? 'niemand kw.' : b.vul==='Allen' ? 'allen kw.' : b.vul+' kw.')+'</small></div>';
+  const yours = m ? '<p class="clubyou">Jullie: <b>'+clubContractHTML(m.r.c)+(m.r.d ? ' door '+m.r.d : '')+(m.r.r && m.r.r!=='-' ? ', '+m.r.r : '')+'</b>'+(m.r.lead ? ', uitkomst '+m.r.lead : '')+' · '+(m.r.score!=null ? ((m.nz ? m.r.score : -m.r.score)>0 ? '+' : '')+(m.nz ? m.r.score : -m.r.score) : '')+' · <b>'+(clubPct(b, m)===null ? '' : clubPct(b, m)+'%')+'</b></p>' : '';
+  // dubbel-dummytabel
+  const dd = b.dd, SU = ['C','D','H','S'];
+  const ddT = '<table class="clubdd"><tr><th></th>'+SU.map(s=>'<th class="'+s+'">'+SYM[s]+'</th>').join('')+'<th>SA</th></tr>'
+    + [0,2,1,3].map(s=>'<tr><th>'+CLUBSEAT[s]+'</th>'+[3,2,1,0,4].map(tr=>{ const v = dd && dd[s] ? dd[s][tr] : null; return '<td>'+(v==null ? '·' : v>=7 ? v-6 : '–')+'</td>'; }).join('')+'</tr>').join('')+'</table>';
+  const rows = (m ? b.res[m.L] : b.res[Object.keys(b.res)[0]]) || [];
+  const rt = '<table class="clubres"><tr><th>Contract</th><th></th><th>Uitk.</th><th>NZ</th><th>MP</th></tr>'+rows.map(r=>'<tr'+(m && r===m.r ? ' class="me"' : '')+'><td>'+clubContractHTML(r.c)+(r.d ? ' '+r.d : '')+'</td><td>'+(r.r && r.r!=='-' ? r.r : '')+'</td><td>'+(r.lead ? r.lead.replace(/^([♠♥♦♣])/, s=>'<span class="'+{'♠':'S','♥':'H','♦':'D','♣':'C'}[s]+'">'+s+'</span>') : '')+'</td><td>'+(r.score!=null ? (r.score>0 ? '+' : '')+r.score : '')+'</td><td>'+(r.mpNZ!=null && !isNaN(r.mpNZ) ? String(r.mpNZ).replace('.',',') : '')+'</td></tr>').join('')+'</table>';
+  const nrs = boards.map(x=>x.nr), at = nrs.indexOf(b.nr);
+  const arrow = d => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(d<0 ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7')+'" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const pc = clubPlayContract(b);
+  el.innerHTML = '<div class="rvnav"><button class="prevb" data-clubgo="'+(at>0 ? nrs[at-1] : '')+'" aria-label="Vorig spel"'+(at>0 ? '' : ' disabled')+'>'+arrow(-1)+'</button><b>Spel '+b.nr+' van '+nrs.length+'</b><button class="prevb" data-clubgo="'+(at<nrs.length-1 ? nrs[at+1] : '')+'" aria-label="Volgend spel"'+(at<nrs.length-1 ? '' : ' disabled')+'>'+arrow(1)+'</button></div>'
+    + '<div class="rvd">'+seats+mid+'</div>' + yours
+    + '<p class="clubsub"><b>Met open kaarten</b>'+(dd && dd.done ? '' : ' <span class="ddbusy">rekent…</span>')+'</p>'+ddT
+    + '<p class="rvnote">Per speler en kleur: hoeveel boven de zes slagen hij als leider maakt (– is minder dan 7 slagen).</p>'
+    + '<p class="clubsub"><b>Alle tafels</b>'+(m ? ' (lijn '+m.L+')' : '')+'</p>'+rt
+    + (pc ? '<p class="clubsub"><b>Naspelen</b>: '+clubContractHTML(pc.c)+' door '+NM[pc.decl]+(pc.from ? ' ('+pc.from+')' : '')+'</p><div class="clubplay"><button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Als tegenspeler</button></div>' : '')
+    + '<p><button class="navclear" data-clubgo="lijst">Terug naar alle spellen</button></p>';
+  clubDD(b);
+}
+// dubbel-dummy voor alle vier de leiders en vijf kleuren, stap voor stap zodat de app blijft reageren
+function clubDD(b){
+  if(b.dd && b.dd.done) return;
+  const run = ++CV.busy;
+  ddsLoad().then(()=>{
+    if(!b.dd) b.dd = {0:{},1:{},2:{},3:{}};
+    const todo = []; [0,1,2,3].forEach(s=>[4,0,1,2,3].forEach(tr=>{ if(b.dd[s][tr]==null) todo.push([s,tr]); }));
+    const step = () => {
+      if(run!==CV.busy || CV.i!==b.nr) return;
+      const t = todo.shift();
+      if(!t){ b.dd.done = true; save(); if($('theory').open) clubDraw(); return; }
+      const [s, tr] = t, v = window.DDS.solve(b.hands.map(h=>h.slice()), tr, (s+1)%4, []);
+      if(v>=0) b.dd[s][tr] = 13-v;
+      const cell = document.querySelector('.clubdd tr:nth-child('+(2+[0,2,1,3].indexOf(s))+') td:nth-child('+(2+[3,2,1,0,4].indexOf(tr))+')');
+      if(cell) cell.textContent = b.dd[s][tr]>=7 ? b.dd[s][tr]-6 : '–';
+      setTimeout(step, 10);
+    };
+    setTimeout(step, 30);
+  }).catch(()=>{});
+}
+// welk contract spelen we na: dat van jouw tafel, anders het vaakst gespeelde
+function clubPlayContract(b){
+  const m = clubMine(b), parse = r => { const x = /^(\d)(SA|[♠♥♦♣])/i.exec(r.c||''); const d = 'NOZW'.indexOf((r.d||'')[0]); return x && d>=0 ? {c:r.c, level:+x[1], trump: x[2].toUpperCase()==='SA' ? 4 : {'♠':0,'♥':1,'♦':2,'♣':3}[x[2]], decl:d} : null; };
+  if(m){ const p = parse(m.r); if(p){ p.from = 'zoals aan jullie tafel'; return p; } }
+  const cnt = {}; Object.values(b.res).flat().forEach(r=>{ const p = parse(r); if(p){ const k = p.level+'|'+p.trump+'|'+p.decl; (cnt[k] = cnt[k] || {p, n:0}).n++; } });
+  const best = Object.values(cnt).sort((a,b)=>b.n-a.n)[0];
+  if(best){ best.p.from = 'het vaakst gespeeld'; return best.p; }
+  return null;
+}
+let CLUB_PRESET = null;
+function clubPlay(role){
+  const c = clubData(); if(!c || CV.i===null) return;
+  const b = c.boards[CV.i], pc = clubPlayContract(b); if(!pc) return;
+  const k = (2 - pc.decl + 4) % 4, hands = [[],[],[],[]];
+  b.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
+  CLUB_PRESET = {hands, trump: pc.trump, level: pc.level, label: 'Spel '+b.nr};
+  state.grole = role; state.conv = 'spel'; save();
+  const t = $('theory'); if(t.open) t.close();
+  if($('settings').open) $('settings').close();
+  renderModes(); next(true);
+}
+document.addEventListener('click', e=>{
+  const x = e.target.closest && e.target.closest('[data-clubopen],[data-clubfile],[data-clubb],[data-clubgo],[data-clubplay]');
+  if(!x) return;
+  if(x.dataset.clubopen!==undefined){ CV.i = null; clubOpen(); return; }
+  if(x.dataset.clubfile!==undefined){ $('clubfile').click(); return; }
+  if(x.dataset.clubb!==undefined){ CV.i = +x.dataset.clubb; clubDraw(); $('theory').scrollTop = 0; return; }
+  if(x.dataset.clubgo!==undefined){ CV.i = x.dataset.clubgo==='lijst' || x.dataset.clubgo==='' ? null : +x.dataset.clubgo; clubDraw(); $('theory').scrollTop = 0; return; }
+  if(x.dataset.clubplay!==undefined) clubPlay(x.dataset.clubplay);
+});
+document.addEventListener('change', e=>{
+  if(e.target && e.target.id==='clubme'){ state.clubMe = e.target.value || null; save(); clubDraw(); }
+  if(e.target && e.target.id==='clubfile'){
+    const f = e.target.files && e.target.files[0]; e.target.value = '';
+    if(!f) return;
+    $('theorybody').innerHTML = '<p>Bezig met lezen…</p>';
+    f.arrayBuffer().then(ab=>pdfTextItems(ab)).then(items=>{
+      const c = clubParse(items);
+      if(!Object.keys(c.boards).length){
+        const sv = items.some(i=>/^Spel:/.test(i.t));
+        $('theorybody').innerHTML = '<p>In dit bestand vond de app geen spellen met uitslagen.'+(sv ? ' Dit lijkt de spelverdeling. Kies de <b>Gedetailleerde frequentiestaat</b>: daar staan de uitslagen ook in.' : ' Kies de bijlage <b>Gedetailleerde frequentiestaat</b> uit de mail van de club.')+'</p><button class="gview" data-clubfile="1">Ander bestand kiezen</button>';
+        return;
+      }
+      state.club = c;
+      if(state.clubMe && !clubPairs(c).includes(state.clubMe)) state.clubMe = null;
+      save(); CV.i = null; clubDraw();
+    }).catch(err=>{ $('theorybody').innerHTML = '<p>Dit bestand kon de app niet lezen.</p><button class="gview" data-clubfile="1">Ander bestand kiezen</button>'; });
+  }
+});
 const THEORY = {puppet2:['Puppet Stayman'], puppet1:['Puppet Stayman'], zwak2h:['Zwakke twee','Antwoorden op de zwakke twee'], zwak2a:['Zwakke twee','Antwoorden op de zwakke twee'], openen:['Openen'], stayman:['Opening','Stayman','Uitnodigingen'], jacoby:['Opening','Jacoby','Uitnodigingen'],
   geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], steun:['Steunen: storend'], rkcb:['RKC'], exclusion:['Exclusion'], gerber:['Gerber'], acol2:['Acol-tweeën'], benji:['Benjamin'], leaping:['Wereldconventie'], bergen:['Bergen-raises'], jac2n:['Jacoby 2SA'], splinter:['Splinters'], montreal:['Montreal relay'], walsh:['Walsh'], twalsh:['Transfer Walsh'], bart:['Bart'], gazzilli:['Gazzilli'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], checkback:['Checkback'], blackwood:['Blackwood'], nadbl:['Na een informatiedoublet'], ophouden:['Spelen: ophouden'], gevaar:['Spelen: de gevaarlijke'], entree:['Spelen: entrees'], veilig:['Spelen: veiligheidsspel'], dekken:['Tegenspel: honneur'], regel11:['Tegenspel: de regel van 11'], dsnit:['Spelen: dubbele snit'], combi:['Spelen: kansen combineren'], vrij:['Spelen: lange kleur'], weggooi:['Spelen: weggooien'], telhand:['Spelen: de hand uittellen'], terug:['Tegenspel: terugspelen'], lengte:['Tegenspel: lengtesignaal'], ophoudt:['Tegenspel: je aas ophouden'], actief:['Tegenspel: actief of passief'], landy:['Landy'], mlandy:['Multi-Landy'], multi:['Multi 2'], nmf:['New Minor'], vierde:['Vierde kleur'], reverse:['Reverse'], texas:['Texas'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
 ['openen','zwak2h','zwak2a','volgbod','multi','muiderberg','uppercue','unusual','wet'].forEach(k=>{ if(THEORY[k]) THEORY[k].push('Kwetsbaarheid'); });
@@ -8086,6 +8401,8 @@ $('theory').addEventListener('click', e=>{ if(e.target===$('theory') && $('theor
 let G = null, gShown = [null,null,null,null], gBusy = false, gRun = 0, gPending = null;
 const SEATNAME = ['Noord','Oost','Zuid','West'];
 // Leider: jij speelt Noord (dummy) en Zuid. Tegenspeler: jij speelt West of Oost (G.me), de computer de rest.
+const gLevel = g => g.level || (g.trump===4 ? 3 : 4);
+const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trump]+'">'+SYM[SUITS[g.trump]]+'</span>');
 const gMine = seat => G && (G.role==='tegen' ? seat===G.me : seat%2===0);
 function gHandHTML(seat){
   const myTurn = G && !G.over && !gBusy && G.turn===seat && gMine(seat), legal = myTurn ? gLegal(G, seat) : [];
@@ -8121,7 +8438,7 @@ function gRender(){
     if(def){
       const down = 14-G.need;
       if(gBusy) who = !gMine(G.turn) && gShown.filter(x=>x!==null).length<4 ? (G.turn===0 ? 'De leider speelt uit de dummy' : G.turn===2 ? 'Zuid (leider) is aan de beurt' : 'Partner is aan de beurt') : '';
-      else if(!G.played.length) who = 'Jij komt uit tegen '+(G.trump===4 ? '3SA' : '4'+SNAME[SUITS[G.trump]])+' van Zuid. Om hem down te spelen hebben jullie '+down+' slagen nodig.';
+      else if(!G.played.length) who = (G.club ? G.club+': j' : 'J')+'ij komt uit tegen '+gLevel(G)+(G.trump===4 ? 'SA' : ' '+SNAME[SUITS[G.trump]])+' van Zuid. Om hem down te spelen hebben jullie '+down+' slagen nodig.';
       else who = 'Jouw beurt. Jullie hebben '+down+' slagen nodig om hem down te spelen.';
     }
     else if(gBusy) who = (G.turn===1 || G.turn===3) && gShown.filter(x=>x!==null).length<4 ? SEATNAME[G.turn]+' is aan de beurt' : '';
@@ -8130,7 +8447,7 @@ function gRender(){
     else who = G.turn===0 ? 'Speel een kaart uit de dummy' : 'Speel een kaart uit je hand';
   }
   $('gstatus').innerHTML = (def ? 'Jullie '+G.ew+', leider '+G.ns+' · down bij '+(14-G.need) : 'Jij '+G.ns+', zij '+G.ew+' · nodig '+G.need)+(who ? '<br>'+who : '');
-  $('gcontract').innerHTML = G.trump===4 ? '3SA' : '4<span class="'+SUITS[G.trump]+'">'+SYM[SUITS[G.trump]]+'</span>';
+  $('gcontract').innerHTML = gCHTML(G);
 }
 function gFinish(){
   const diff = G.ns-G.need;
@@ -8203,7 +8520,7 @@ function gReviewOpen(){
       + (me ? 'Jij liet er <b>'+me+'</b> liggen' : 'Jij speelde foutloos')+(pa ? ', partner <b>'+pa+'</b>' : '')+(dc ? ', de leider gaf er <b>'+dc+'</b> weg' : '')
       + (ew>=0 && ew-me-pa+dc===g.ew ? (me || pa || dc ? ': '+ew+(me ? ' − '+me : '')+(pa ? ' − '+pa : '')+(dc ? ' + '+dc : '')+' = '+g.ew+'.' : '. Jullie haalden ze allemaal.') : '.');
     const first = rows.findIndex(t=>t.plays.some(p=>p.loss>0 && p.seat===g.me));
-    RV = {rows, sum, i: first>=0 ? first : 0, trump: g.trump, role: 'tegen', me: g.me};
+    RV = {rows, sum, i: first>=0 ? first : 0, trump: g.trump, ch: gCHTML(g), role: 'tegen', me: g.me};
   }else{
   let mine = 0, theirs = 0;
   rows.forEach(t=>t.plays.forEach((p, k)=>{ if(p.loss>0){ if(p.seat%2===0) mine += p.loss; else if(!(t.n===1 && k===0)) theirs += p.loss; } }));
@@ -8214,7 +8531,7 @@ function gReviewOpen(){
     + (dd>=0 && dd-mine+theirs===g.ns ? (mine || theirs ? ': '+dd+(mine ? ' − '+mine : '')+(theirs ? ' + '+theirs : '')+' = '+g.ns+'.' : '. Je haalde ze allemaal.') : '.');
   // begin bij de eerste slag met een fout van jou, anders bij slag 1
   const first = rows.findIndex(t=>t.plays.some(p=>p.loss>0 && p.seat%2===0));
-  RV = {rows, sum, i: first>=0 ? first : 0, trump: g.trump, role: 'leider', me: 2};
+  RV = {rows, sum, i: first>=0 ? first : 0, trump: g.trump, ch: gCHTML(g), role: 'leider', me: 2};
   }
   const t = $('theory');
   $('theorytitle').textContent = 'Terugkijken per slag';
@@ -8237,7 +8554,7 @@ function gReviewDraw(){
   }).join('');
   const seats = [0,1,2,3].map(seat=>'<div class="rvh '+AREA[seat]+'"><div class="rvlab">'+NAME[seat]+'</div>'+hand(seat)+'</div>').join('');
   const lead = t.plays[0].seat;
-  const mid = '<div class="rvmid"><b>'+(R.trump===4 ? '3SA' : '4<span class="'+SUITS[R.trump]+'">'+SYM[SUITS[R.trump]]+'</span>')+'</b><small>'+['Noord','Oost','Zuid','West'][lead]+' komt uit</small></div>';
+  const mid = '<div class="rvmid"><b>'+R.ch+'</b><small>'+['Noord','Oost','Zuid','West'][lead]+' komt uit</small></div>';
   const notes = t.plays.filter(p=>p.loss>0).map(p=>{
     const alt = p.best.slice(0,2).map(ct).join(' of ');
     if(def){
