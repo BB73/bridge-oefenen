@@ -151,10 +151,10 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .rvnote{font-size:.8rem;color:var(--muted)}
 @media (prefers-color-scheme: dark){ .rvc.bad{background:#4A1D20} .rvn li.wij{color:#F2A0A5} }
 .clubgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin:.4rem 0}
-@media (max-height:760px){ .clubgrid{gap:.25rem;margin:.3rem 0} .clubgrid .clubb{padding:.15rem .15rem;gap:0} .clubgrid .clubb b{font-size:.92rem} .clubh{font-size:.92rem;margin-bottom:.15rem} .clubwho select{padding:.1rem .3rem} }
+@media (max-height:760px){ #theory .drophint.small{padding:.25rem;font-size:.78rem;margin-top:.15rem} #theory .clubh + .clubwho{margin-top:0} .clubgrid{gap:.25rem;margin:.3rem 0} .clubgrid .clubb{padding:.15rem .15rem;gap:0} .clubgrid .clubb b{font-size:.92rem} .clubh{font-size:.92rem;margin-bottom:.15rem} .clubwho select{padding:.1rem .3rem} }
 .clubb{display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.35rem .2rem;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:inherit;font:inherit;cursor:pointer}
 .clubb b{font-size:1rem} .clubb small{font-size:.72rem;line-height:1.15} .clubb .cbt{display:flex;width:100%;justify-content:space-between;align-items:baseline;padding:0 .2rem;box-sizing:border-box} .clubb .cbt small{font-weight:700}
-.clubwho{margin:.2rem 0} .rvnote .navclear{padding:0;font-size:inherit}
+.clubwho{margin:.2rem 0} .pickhint{color:var(--muted);font-size:.8rem} .rvnote .navclear{padding:0;font-size:inherit}
 .clubb.goed{border-color:var(--felt);background:#DDF0E5} .clubb.slecht{border-color:#C4202B;background:#FBE3E3}
 @media (prefers-color-scheme: dark){ .clubb.goed{background:#1E3A2B} .clubb.slecht{background:#4A1D20} }
 .clubh{margin:.1rem 0 .3rem;line-height:1.3} .clubwho select{font:inherit;padding:.2rem .3rem;border-radius:6px;max-width:100%}
@@ -951,7 +951,7 @@ summary{cursor:pointer;font-weight:700}
     <button class="reset" id="reset">Score wissen</button>
   </div>
 
-  <details>
+  <details id="rulesdet">
     <summary>De afspraken waarmee deze app rekent</summary>
 <div class="rules">
       <h3>Opening</h3>
@@ -7205,6 +7205,7 @@ function renderModes(){
   else if(T==='test'){ cr.push(['Challenge jezelf', 1]); if(mode) cr.push([mode==='toets' ? 'Test je systeemkaart' : mode==='fris' ? 'Opfrisser butler of paren' : 'Leerpad basisregels', 2]); if(mode==='fris' && nav[2]) cr.push([nav[2]==='butler' ? 'Butler' : 'Paren', 3]); }
   else if(T==='bieden' && cardMode){ cr.push(['Mijn systeemkaart', 'k']); cr.push(['Bieden', 2]); }
   else if(T==='doel') cr.push(['Bieden & spelen', 1]);
+  else if(T==='regels') cr.push(['De afspraken', 1]);
   else if(T){ cr.push(['Bieden & spelen', 'o']); cr.push([(T==='bieden' ? 'Bieden' : 'Spelen')+(learnPage ? ': leerpad' : ''), 2]); }
   if(cat) cr.push([cat.name, visSubs.length>1 ? 3 : 4]);
   if(sub && visSubs.length>1) cr.push([sub[0], 4]);
@@ -7227,6 +7228,9 @@ function renderModes(){
     if(state.learn.on) pg = '<div class="homebtns"><button class="homebtn has" data-go="doel"><b>Bieden &amp; spelen</b><small>Leerpad: bieden stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+', spelen stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
+  }else if(T==='regels'){
+    const src = document.querySelector('#rulesdet .rules');
+    pg = '<h3 class="pagetitle">De afspraken waarmee deze app rekent</h3><div class="rules">'+(src ? src.innerHTML : '')+'</div><p><button class="gview" data-home="1">‹ Terug naar de hoofdpagina</button></p>';
   }else if(T==='doel'){
     pg = state.learn.on
       ? '<div class="homebtns"><button class="homebtn has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
@@ -7757,22 +7761,30 @@ function clubOpen(){
 }
 function clubDraw(){
   const c = clubData(), el = $('theorybody');
+  $('theoryclose').textContent = CV.i!==null && CV.view ? 'Terug naar spel '+CV.i : 'Sluiten';
   const pick = '<button class="gview" data-clubfile="1">'+(c ? 'Ander bestand kiezen' : 'Frequentiestaat kiezen')+'</button>';
   if(!c){
     el.innerHTML = '<p>Na elke clubavond krijg je van de club een mail met pdf-bijlagen. Bewaar de bijlage <b>Gedetailleerde frequentiestaat</b> op je telefoon of computer en kies hem hier.</p>'
       + '<p>De app leest de spellen en de uitslagen van alle tafels. Per spel zie je dan wat er met open kaarten in zat, en kun je het spel naspelen als leider of tegenspeler.</p>'
-      + pick + '<p class="drophint">Op een laptop kun je de pdf ook hierheen slepen.</p><p class="rvnote">Werkt met de pdf\'s van het NBB-rekenprogramma. Het bestand blijft op je eigen toestel; er wordt niets verstuurd.</p>';
+      + pick + '<p class="drophint">Op een laptop kun je de pdf ook hierheen slepen.</p><p class="rvnote">Werkt met de pdf\'s van het NBB-rekenprogramma. Het bestand blijft op je eigen toestel; er wordt niets van verstuurd.</p>';
     return;
   }
   const boards = Object.values(c.boards).sort((a,b)=>a.nr-b.nr);
   const pairs = clubPairs(c);
-  const who = '<p class="clubwho">Jullie paar: <select id="clubme"><option value="">kies je paar</option>'+pairs.map(p=>'<option'+(p===state.clubMe ? ' selected' : '')+'>'+p.replace(/</g,'&lt;')+'</option>').join('')+'</select></p>';
+  const sel = '<select id="clubme"><option value="">'+(state.clubMe ? 'geen paar' : 'kies (optioneel)')+'</option>'+pairs.map(p=>'<option'+(p===state.clubMe ? ' selected' : '')+'>'+p.replace(/</g,'&lt;')+'</option>').join('')+'</select>';
+  const me = state.clubMe && pairs.includes(state.clubMe);
+  // al gekozen: alleen tonen, met een kleine link om te wijzigen; nog niet gekozen: optioneel kiezen
+  // de lijst met paren klapt pas open als je erop tikt
+  const who = CV.pick
+    ? '<p class="clubwho">Jullie paar: '+sel+'</p>'
+    : me ? '<p class="clubwho">Jullie paar: <b>'+state.clubMe.replace(/</g,'&lt;')+'</b> · <button class="navclear" data-clubpick="1">wijzig</button></p>'
+         : '<p class="clubwho">Jullie paar: <button class="navclear" data-clubpick="1">kies (optioneel)</button> <small class="pickhint">dan zie je per spel jullie contract en percentage</small></p>';
   if(CV.i===null){
     const grid = boards.map(b=>{ const m = clubMine(b), pc = clubPct(b, m); return '<button class="clubb'+(pc===null ? '' : pc>=60 ? ' goed' : pc<=40 ? ' slecht' : '')+'" data-clubb="'+b.nr+'"><span class="cbt"><b>'+b.nr+'</b>'+(m && pc!==null ? '<small>'+pc+'%</small>' : '')+'</span>'+(m ? '<small>'+clubContractHTML(m.r.c)+(m.r.d && !/^pas/i.test(m.r.c||'') ? ' '+m.r.d[0] : '')+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</small>' : '')+'</button>'; }).join('');
     let tot = null; const ms = boards.map(b=>clubPct(b, clubMine(b))).filter(x=>x!==null); if(ms.length) tot = Math.round(ms.reduce((a,b)=>a+b,0)/ms.length*10)/10;
     el.innerHTML = '<p class="clubh"><b>'+(c.title||'Clubavond')+'</b><br>'+(c.date||'')+(tot!==null ? ' · gemiddeld <b>'+String(tot).replace('.',',')+'%</b>' : '')+'</p>'+who
       + '<div class="clubgrid">'+grid+'</div><p class="rvnote">Per rij een ronde van vier spellen. Groen: 60% of meer, rood: 40% of minder. <button class="navclear nodrop" data-clubfile="1">Ander bestand kiezen</button></p>'
-      + '<button class="drophint small" data-clubfile="1">Nieuwe clubavond? Sleep de pdf hierheen of klik om te kiezen.</button>';
+      + '<button class="drophint small" data-clubfile="1">Nieuwe clubavond? Sleep de pdf hierheen.</button>';
     return;
   }
   const b = c.boards[CV.i];
@@ -7913,17 +7925,19 @@ function clubPlay(role){
   renderModes(); next(true);
 }
 document.addEventListener('click', e=>{
-  const x = e.target.closest && e.target.closest('[data-clubopen],[data-clubfile],[data-clubb],[data-clubgo],[data-clubplay],[data-clubview]');
+  const x = e.target.closest && e.target.closest('[data-clubopen],[data-clubfile],[data-clubb],[data-clubgo],[data-clubplay],[data-clubview],[data-clubpick]');
   if(!x) return;
   if(x.dataset.clubopen!==undefined){ CV.i = null; clubOpen(); return; }
   if(x.dataset.clubfile!==undefined){ $('clubfile').click(); return; }
+  if(x.dataset.clubpick!==undefined){ CV.pick = true; clubDraw(); const sl = $('clubme'); if(sl){ sl.focus(); try{ sl.showPicker && sl.showPicker(); }catch(err){} } return; }
   if(x.dataset.clubview!==undefined){ CV.view = x.dataset.clubview; clubDraw(); $('theory').scrollTop = 0; const bd = document.querySelector('#theory .dbody, #theorybody'); if(bd) bd.scrollTop = 0; return; }
   if(x.dataset.clubb!==undefined){ CV.view = ''; CV.i = +x.dataset.clubb; clubDraw(); $('theory').scrollTop = 0; return; }
   if(x.dataset.clubgo!==undefined){ CV.view = ''; CV.i = x.dataset.clubgo==='lijst' || x.dataset.clubgo==='' ? null : +x.dataset.clubgo; clubDraw(); $('theory').scrollTop = 0; return; }
   if(x.dataset.clubplay!==undefined) clubPlay(x.dataset.clubplay);
 });
 document.addEventListener('change', e=>{
-  if(e.target && e.target.id==='clubme'){ state.clubMe = e.target.value || null; save(); clubDraw(); }
+  if(e.target && e.target.id==='clubme'){ state.clubMe = e.target.value || null; CV.pick = false; save(); clubDraw(); }
+  if(e.target && e.target.id==='clubme') return;
   if(e.target && e.target.id==='clubfile'){
     const f = e.target.files && e.target.files[0]; e.target.value = '';
     if(f) clubLoadFile(f);
@@ -7951,7 +7965,7 @@ function clubLoadFile(f){
         $('theorybody').innerHTML = '<p>In dit bestand vond de app geen spellen met uitslagen.'+(sv ? ' Dit lijkt de spelverdeling. Kies de <b>Gedetailleerde frequentiestaat</b>: daar staan de uitslagen ook in.' : ' Kies de bijlage <b>Gedetailleerde frequentiestaat</b> uit de mail van de club.')+'</p><button class="gview" data-clubfile="1">Ander bestand kiezen</button>';
         return;
       }
-      state.club = c;
+      state.club = c; gcEvent('clubavond-ingelezen');
       if(state.clubMe && !clubPairs(c).includes(state.clubMe)) state.clubMe = null;
       save(); CV.i = null; clubDraw();
     }).catch(err=>{ $('theorybody').innerHTML = '<p>Dit bestand kon de app niet lezen.</p><button class="gview" data-clubfile="1">Ander bestand kiezen</button>'; });
@@ -8556,6 +8570,7 @@ function bidRender(){
   $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? 'De bieding is klaar.' : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
 }
 function bidSummary(){
+  gcEvent(BIDS && BIDS.clubNr ? 'clubspel-geboden' : 'spel-geboden');
   const B = BIDS, el = $('bidsum'); if(!el) return;
   const ct = brContract(B.calls, B.dealer), NM = ['Noord','Oost','Zuid','West'];
   const chtml = c => c.level+(c.trump===4 ? 'SA' : '<span class="'+SUITS[c.trump]+'">'+SYM[SUITS[c.trump]]+'</span>');
@@ -9217,6 +9232,27 @@ $('resbody').addEventListener('click', e=>{
   state.step = 'alles';
   save(); renderModes(); closeResults(); next(true);
 });
+// ---------- Anoniem tellen (GoatCounter, zonder cookies): alleen op de echte site, niet in voorbeelden ----------
+const GC_ON = /(^|\.)github\.io$/.test(location.hostname);
+if(GC_ON){
+  const sc = document.createElement('script');
+  sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+  sc.setAttribute('data-goatcounter', 'https://basbolkbridge.goatcounter.com/count');
+  sc.onload = () => { try{ if(matchMedia('(display-mode: standalone)').matches) gcEvent('start-als-app'); }catch(e){} };
+  document.head.appendChild(sc);
+}
+const gcDone = {};
+function gcEvent(name, once){
+  if(!GC_ON || (once && gcDone[name])) return; gcDone[name] = true;
+  try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: name, title: name, event: true}); }catch(e){}
+}
+document.addEventListener('click', e=>{
+  if(e.target.closest && e.target.closest('[data-home]')){ nav = []; renderModes(); const d = $('dbody'); if(d) d.scrollTop = 0; return; }
+  const sm = e.target.closest && e.target.closest('#rulesdet > summary');
+  if(!sm) return;
+  e.preventDefault(); nav = ['regels']; renderModes();
+  const d = $('dbody') || document.querySelector('#settings .dbody'); if(d) d.scrollTop = 0;
+});
 const TIPMAIL = 'mailto:basbolk@gmail.com?subject=Tip%20voor%20Bridge%20oefenen&body=Waar%20in%20de%20app%20%28welk%20onderdeel%2C%20welke%20oefening%29%3A%0A%0AWat%20zag%20ik%3A%0A%0AWat%20had%20ik%20verwacht%20of%20wat%20zou%20prettiger%20zijn%3A%0A%0A';
 function openTip(){
   const t = $('theory');
@@ -9224,7 +9260,9 @@ function openTip(){
   $('theorybody').innerHTML = '<p>Alle tips zijn welkom: iets klopt niet, iets is onduidelijk, of iets kijkt niet prettig.</p>'
     + '<p>Hoe duidelijker je het beschrijft, hoe beter ik het kan verwerken. Schrijf erbij in welk onderdeel het zit, wat je zag en wat je had verwacht. Een schermafbeelding helpt.</p>'
     + '<p><a class="tipmail" href="'+TIPMAIL+'" target="_blank" rel="noopener">Mail je tip</a></p>'
-    + '<p>Opent je mailprogramma niet? Stuur je bericht dan naar <b>basbolk@gmail.com</b>.</p>';
+    + '<p>Opent je mailprogramma niet? Stuur je bericht dan naar <b>basbolk@gmail.com</b>.</p>'
+    + '<p class="rvnote">Privacy: de app telt anoniem hoe vaak hij gebruikt wordt (met GoatCounter, zonder cookies). Er worden geen persoonsgegevens, scores, systeemkaarten of spellen verstuurd.</p>';
+  gcEvent('tip-geopend');
   $('theoryclose').textContent = 'Sluiten';
   if(t.showModal) t.showModal(); else t.setAttribute('open','');
   t.scrollTop = 0;
@@ -9232,7 +9270,9 @@ function openTip(){
 $('theory').addEventListener('close', ()=>{ $('theoryclose').textContent = 'Terug naar de hand'; });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-tip]')) openTip(); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-greview]')) gReviewOpen(); });
-$('theoryclose').addEventListener('click', ()=>{ const t = $('theory'); if(t.close) t.close(); else t.removeAttribute('open'); });
+const clubSubBack = () => { if($('theorytitle').textContent==='Clubavond' && CV.i!==null && CV.view){ CV.view = ''; clubDraw(); return true; } return false; };
+$('theoryclose').addEventListener('click', ()=>{ if(clubSubBack()) return; const t = $('theory'); if(t.close) t.close(); else t.removeAttribute('open'); });
+$('theory').addEventListener('cancel', e=>{ if(clubSubBack()) e.preventDefault(); });
 $('theory').addEventListener('click', e=>{ if(e.target===$('theory') && $('theory').close) $('theory').close(); });
 
 // ---------- Heel spel: scherm ----------
@@ -9299,6 +9339,7 @@ function gScoreTxt(){
   return ' Score: <b>'+scoreTxt(def*sc(G.dvul))+'</b>'+(G.dvul ? ' (leider kwetsbaar)' : ' (leider niet kwetsbaar)')+'.';
 }
 function gFinish(){
+  gcEvent(G.club ? 'clubspel-gespeeld' : 'heel-spel-gespeeld');
   const diff = G.ns-G.need;
   if(G.role==='tegen'){
     $('gresult').innerHTML = (diff<0 ? '<b>Down gespeeld</b>: jullie haalden '+G.ew+' slagen, de leider kwam '+(-diff)+' tekort.' : '<b>Contract gemaakt</b> door de leider: jullie haalden '+G.ew+' slagen, er waren er '+(14-G.need)+' nodig.')+' '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
