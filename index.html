@@ -7275,7 +7275,8 @@ function renderModes(){
     pg = state.learn.on
       ? '<div class="homebtns"><button class="homebtn has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
         + '<button class="homebtn has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button></div>'
-      : '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
+      : '<p class="hint">Hier oefen je losse onderdelen: alleen de biedingen en spelsituaties die bij de afspraken op je systeemkaart horen.</p>'
+        + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
         + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button></div>';
   }else if(T==='test' && !mode){
     const TS = state.test;
