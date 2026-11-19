@@ -781,11 +781,23 @@ table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:
 .btip{margin:.4rem 0;padding:.5rem .65rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)} .btip p{margin:.2rem 0;line-height:1.35}
 .prebtns .homebtn{padding:.5rem .9rem} .prebtns .homebtn b{font-size:1.1rem}
 .asbtns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.6rem 0} .asbtns .gview{margin:0;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;min-height:2.8rem} .asbtns [data-as="native"], .asbtns > :last-child:nth-child(odd){grid-column:1 / -1}
-#samen{padding:1rem} #samenbody{display:flex;flex-direction:column;gap:.5rem;min-height:0}
+#samen{padding:1rem} #samenbody{display:flex;flex-direction:column;gap:.45rem;min-height:0} #samenbody > *{flex-shrink:0}
 .sm-row{display:flex;gap:.5rem;align-items:center} .sm-row input{flex:1;min-width:0;font:inherit;padding:.55rem .7rem;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 .sm-stat{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.9rem} .sm-p{display:inline-flex;align-items:center;gap:.3rem} .sm-p i{width:.55rem;height:.55rem;border-radius:50%;background:var(--line)} .sm-p.on i{background:#2E8B57}
 .sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
 .sm-msg{max-width:85%;padding:.35rem .6rem;border-radius:12px;background:var(--surface);border:1px solid var(--line);line-height:1.3;font-size:.92rem;align-self:flex-start;word-wrap:break-word} .sm-msg.me{align-self:flex-end;background:color-mix(in srgb, var(--felt) 14%, var(--surface));border-color:transparent} .sm-msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
+.smauc2{flex:1;font-size:.85rem} .smauc2 summary{cursor:pointer;color:var(--felt)} .smauc2[open]{flex-basis:100%}
+.smx{width:2.4rem;height:2.4rem;border-radius:50%;border:none;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.18);font-size:1.5rem;line-height:1;color:var(--ink);cursor:pointer;flex:none} #samen .dtitle{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.sm-tabs{display:flex;gap:.3rem} .sm-tabs button{flex:1;font:inherit;padding:.4rem;border:1.5px solid var(--felt);border-radius:10px;background:var(--surface);color:var(--felt);font-weight:700} .sm-tabs button.on{background:var(--felt);color:var(--on-felt)} .sm-tabs i{font-style:normal;background:#C0392B;color:#fff;border-radius:999px;padding:0 .4rem;font-size:.75rem;margin-left:.2rem}
+.smhead{margin:0;font-size:.85rem;line-height:1.3} .smlab{margin:.2rem 0 0;font-size:.8rem;color:var(--muted)}
+.smh{display:flex;flex-direction:column;gap:.15rem} .smr{display:flex;align-items:center;gap:.2rem;flex-wrap:wrap;min-height:1.9rem} .smr > i{font-style:normal;width:1.2rem;font-size:1.05rem}
+.smc{font:inherit;font-weight:700;min-width:1.85rem;height:1.85rem;padding:0 .25rem;border-radius:6px;border:1px solid var(--line);background:#FBFBF8;color:#141414;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem}
+button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);cursor:pointer} button.smc:disabled{opacity:.45} .smc.H{color:#C4202B} .smc.D{color:#C85F0A} .smc.C{color:#1E7A46} .smc.S{color:#1C3D8F}
+.smdash{color:var(--muted)} .smwait{margin:.2rem 0;font-size:.9rem;color:var(--muted)} .smwait.go{color:var(--felt);font-weight:700}
+.smtr{position:relative;height:5.2rem;border-radius:12px;background:#2F6B4F;margin:.25rem 0} .smtc{position:absolute;font-size:1rem;background:#FBFBF8;border-radius:5px;padding:.1rem .3rem;font-weight:700} .smtc.b{bottom:.3rem;left:50%;transform:translateX(-50%)} .smtc.t{top:.3rem;left:50%;transform:translateX(-50%)} .smtc.l{left:.5rem;top:50%;transform:translateY(-50%)} .smtc.r{right:.5rem;top:50%;transform:translateY(-50%)} .smtr.last .smtc{opacity:.75} .smtl{position:absolute;left:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem} .smtx{position:absolute;right:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem}
+.smauc{width:100%;border-collapse:collapse;font-size:.9rem;text-align:center} .smauc th{font-size:.75rem;color:var(--muted);font-weight:600;padding:.15rem} .smauc th.turn{color:var(--felt);text-decoration:underline} .smauc td{padding:.15rem;height:1.4rem}
+.smbb{display:flex;flex-direction:column;gap:.3rem} .smbb button{font:inherit;font-weight:700;min-height:2.2rem;border-radius:8px;border:1.5px solid var(--felt);background:var(--surface);color:var(--ink);flex:1} .smbb button.on{background:var(--felt);color:var(--on-felt)} .smbb button:disabled{opacity:.35} .smbl,.smbd,.smbx{display:flex;gap:.25rem}
+.small4{display:grid;grid-template-columns:1fr 1fr;gap:.15rem .6rem} .small4 .smh{gap:0} .small4 .smr{min-height:1.15rem;gap:.05rem} .small4 .smr > i{font-size:.85rem;width:1rem} .small4 .smc{min-width:auto;height:auto;padding:0 .08rem;border:none;background:none;font-size:.82rem} .small4 .smlab{margin:0;font-weight:700;color:var(--ink)}
 .sm-empty{color:var(--muted);font-size:.9rem;text-align:center;margin:auto 0}
 .close{margin-top:1rem;font:inherit;font-weight:700;width:100%;height:2.9rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 </style>
@@ -1855,9 +1867,8 @@ table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:
 </dialog>
 
 <dialog id="samen" aria-labelledby="samentitle">
-  <div class="dtitle"><h2 id="samentitle">Samen spelen</h2></div>
+  <div class="dtitle"><h2 id="samentitle">Samen spelen</h2><button class="smx" id="samenclose" aria-label="Sluiten">×</button></div>
   <div class="rules" id="samenbody"></div>
-  <button class="close" id="samenclose">Sluiten</button>
 </dialog>
 <dialog id="theory" aria-labelledby="theorytitle">
   <div class="dtitle"><h2 id="theorytitle"></h2><span class="navrb" id="thnav"></span></div>
@@ -11238,19 +11249,35 @@ function samenDraw(){
   const other = SM.seat==='Z' ? 'N' : 'Z', P = SM.players || {}, po = P[other];
   const pl = s => '<span class="sm-p'+(P[s] && P[s].online ? ' on' : '')+'"><i></i>'+(P[s] ? esc(P[s].name)+(s===SM.seat ? ' (jij)' : '') : 'wachten op je partner…')+'</span>';
   const msgs = SM.chat.slice(-8).map(m=>'<div class="sm-msg'+(m.seat===SM.seat ? ' me' : '')+'">'+(m.seat===SM.seat ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
-  el.innerHTML = '<div class="sm-stat">'+pl(SM.seat)+pl(other)+'</div>'
+  const G = SM.game, mode = SM.mode || 'oefen', locked = mode==='wedstrijd' && G && G.phase!=='done';
+  const unread = Math.max(0, SM.chat.length - (SM.seen||0)), tab = G ? (SM.tab || 'spel') : 'chat';
+  if(tab==='chat') SM.seen = SM.chat.length;
+  const tabs = G ? '<div class="sm-tabs"><button class="'+(tab==='spel' ? 'on' : '')+'" data-smtab="spel">Spel</button><button class="'+(tab==='chat' ? 'on' : '')+'" data-smtab="chat">Chat'+(unread && tab!=='chat' ? ' <i>'+unread+'</i>' : '')+'</button></div>' : '';
+  const chatHTML = '<div class="sm-chat" id="smchat">'+(msgs || '<p class="sm-empty">Nog geen berichten.</p>')+'</div>'
+    + (locked ? '<p class="hint">Wedstrijdstand: chatten kan weer na het spel.</p>'
+       : '<form class="sm-row" id="smform"><input id="smtext" maxlength="300" autocomplete="off" placeholder="Typ een bericht…" aria-label="Bericht"><button class="gview" type="submit">Stuur</button></form>');
+  const both = P[SM.seat] && po && po.online;
+  const lobby = '<p class="lbl">Overleggen tijdens het spel</p><nav class="modes" id="smmode"><button data-v="oefen" class="'+(mode==='oefen' ? 'on' : '')+'">Oefenen: chatten mag altijd</button><button data-v="wedstrijd" class="'+(mode==='wedstrijd' ? 'on' : '')+'">Wedstrijd: pas na het spel</button></nav>'
+    + '<button class="gview" id="smdeal"'+(both ? '' : ' disabled')+'>'+(both ? 'Spel starten' : 'Spel starten (wacht op je partner)')+'</button>';
+  el.innerHTML = (G ? '' : '<div class="sm-stat">'+pl(SM.seat)+pl(other)+'</div>')
     + (po ? '' : '<p class="hint">Stuur je partner de link. Zodra hij of zij meedoet, zie je dat hier.</p><button class="gview" id="smshare">Link naar je partner sturen</button>')
-    + '<div class="sm-chat" id="smchat">'+(msgs || '<p class="sm-empty">Nog geen berichten.</p>')+'</div>'
-    + '<form class="sm-row" id="smform"><input id="smtext" maxlength="300" autocomplete="off" placeholder="Typ een bericht…" aria-label="Bericht"><button class="gview" type="submit">Stuur</button></form>'
-    + '<p class="rvnote">Samen bieden en spelen tegen de computer komt in de volgende stap.</p>'
-    + '<button class="navclear" id="smleave">Kamer verlaten</button>';
+    + tabs
+    + (G && tab==='spel' ? smGameHTML(G) : chatHTML + (G ? '' : lobby))
+    + (!G || G.phase==='done' ? '<button class="navclear" id="smleave">Kamer verlaten</button>' : '');
   if($('smshare')) $('smshare').onclick = () => shareUrl(samenLink(), (state.myName||'Je partner')+' wil samen bridge spelen. Open de link om mee te doen.', 'Samen spelen', t=>{ const b = $('smshare'); if(b) b.textContent = t; }, 'Link naar de kamer');
-  $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
-  $('smleave').onclick = samenLeave;
+  if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
+  if($('smleave')) $('smleave').onclick = samenLeave;
+  if($('smdeal')) $('smdeal').onclick = () => smAct({type:'deal'});
+  if($('smmode')) $('smmode').onclick = e => { const b = e.target.closest('button'); if(b) SM.tr.update('meta', {mode:b.dataset.v}); };
+  if(tab==='chat'){ const c = $('smchat'); if(c) c.scrollTop = c.scrollHeight; }
 }
 function samenSub(){
   SM.offs.forEach(f=>f()); SM.offs = [];
   SM.offs.push(SM.tr.on('players', v=>{ SM.players = v || {}; samenDraw(); }));
+  SM.offs.push(SM.tr.on('meta/mode', v=>{ SM.mode = v || 'oefen'; samenDraw(); }));
+  SM.offs.push(SM.tr.on('game', v=>{ try{ SM.game = v ? JSON.parse(v) : null; }catch(e){ SM.game = null; } if(SM.seat==='Z' && !SMH.g && SM.game){ SMH.g = SM.game; try{ ddsLoad(); }catch(e){} setTimeout(smHostStep, 500); } if(SM.game && SM.game.phase==='done' && SM.lastDone!==SM.game.id){ SM.lastDone = SM.game.id; } samenDraw(); }));
+  if(SM.seat==='Z'){ let first = true;
+    SM.offs.push(SM.tr.on('acts', v=>{ if(first){ first = false; Object.values(v||{}).forEach(s=>{ try{ SMH.done[JSON.parse(s).id] = 1; }catch(e){} }); return; } smHostActs(v); })); }
   SM.offs.push(SM.tr.on('chat', v=>{ const focus = document.activeElement && document.activeElement.id==='smtext', txt = focus ? $('smtext').value : ''; SM.chat = Object.values(v || {}).sort((a,b)=>a.t-b.t); samenDraw(); if(focus){ $('smtext').focus(); $('smtext').value = txt; } }));
 }
 async function samenCreate(){
@@ -11269,7 +11296,142 @@ async function samenJoin(code){
     Object.assign(SM, {code, seat, tr, joinCode:null}); state.samen = {code, seat}; save(); tr.presence(seat); samenSub(); gcEvent('samen-meedoen');
   }catch(e){ SM.err = 'Verbinden lukte niet. Controleer je internet en probeer het opnieuw.'; samenDraw(); }
 }
-function samenLeave(){ if(SM.tr && SM.seat) SM.tr.leave(SM.seat); SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
+function samenLeave(){ if(SM.tr && SM.seat) SM.tr.leave(SM.seat); SM.game = null; SMH.g = null; SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
+// ---------- Samen spelen: het spel zelf. Zuid (wie de kamer maakte) rekent; Noord stuurt zijn zetten via de database. ----------
+const SMH = {g:null, done:{}, busy:false, board:0};
+const SM_SEAT = {N:0, Z:2}, SM_NM = ['Noord','Oost','Zuid','West'];
+function smAct(a){ if(!SM.tr) return; SM.tr.push('acts', JSON.stringify(Object.assign({by:SM.seat, id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)}, a))); }
+function smSave(){ SM.tr.set('game', JSON.stringify(SMH.g)); }
+function smDeal(){
+  SMH.board = (SMH.g ? SMH.g.board : 0)+1;
+  const n = SMH.board, dealer = (n-1)%4, vul = ['-','NZ','OW','Allen','NZ','OW','Allen','-','OW','Allen','-','NZ','Allen','-','NZ','OW'][(n-1)%16];
+  let H;
+  for(;;){ const d = Array.from({length:52},(_,i)=>i); for(let i=51;i>0;i--){ const j = rnd(i+1); const z = d[i]; d[i] = d[j]; d[j] = z; }
+    H = [0,1,2,3].map(k=>d.slice(k*13,k*13+13)); const p = makeHand(H[0]).hcp+makeHand(H[2]).hcp; if(p>=20) break; }
+  SM.tr.set('acts', null);
+  SMH.g = {id:Date.now().toString(36), board:n, phase:'bid', hands:H, orig:H.map(h=>h.slice()), dealer, vul, calls:[]};
+  try{ ddsLoad(); }catch(e){}
+  smSave(); smHostStep();
+}
+function smHostActs(v){
+  if(!v) return;
+  Object.values(v).map(s=>{ try{ return JSON.parse(s); }catch(e){ return null; } }).filter(a=>a && !SMH.done[a.id]).forEach(a=>{
+    SMH.done[a.id] = 1;
+    const g = SMH.g;
+    if(a.type==='deal'){ if(!g || g.phase==='done') smDeal(); return; }
+    if(!g || g.id!==a.game) return;
+    if(a.type==='bid' && g.phase==='bid'){ const seat = (g.dealer+g.calls.length)%4; if(seat!==SM_SEAT[a.by] || !bidLegal({dealer:g.dealer, calls:g.calls}, a.v)) return; g.calls.push(a.v); smAfterBid(); }
+    if(a.type==='card' && g.phase==='play'){ const real = (g.st.turn+g.rot)%4; if(smController(g, real)!==SM_SEAT[a.by]) return; smPlayCard(real, +a.v); }
+  });
+}
+function smController(g, real){ if(real%2===1) return null; return real===g.dummy ? g.decl : real; }
+function smAfterBid(){
+  const g = SMH.g;
+  if(brDone(g.calls)){
+    const c = brContract(g.calls, g.dealer);
+    if(!c){ g.phase = 'done'; g.result = {passed:true}; smSave(); return; }
+    const li = g.calls.map(b=>b!=='pas' && b!=='X' && b!=='XX').lastIndexOf(true), after = g.calls.slice(li+1);
+    g.dbl = after.includes('XX') ? 2 : after.includes('X') ? 1 : 0;
+    Object.assign(g, {phase:'play', contract:c.bid, level:c.level, trump:c.trump, decl:c.decl, dummy:(c.decl+2)%4, rot:(c.decl-2+4)%4});
+    const hs = [0,1,2,3].map(i=>g.hands[(i+g.rot)%4].slice());
+    const hN = makeHand(hs[0]), hS = makeHand(hs[2]);
+    g.st = {hands:hs, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:c.trump, level:c.level, contract:c.bid, need:c.level+6};
+    if(c.trump===4) g.st.top = topTricks(hN, hS).total; else g.st.los = gLosers(hS, hN);
+    g.tricks = []; g.last = null;
+  }
+  smSave(); smHostStep();
+}
+function smPlayCard(real, card){
+  const g = SMH.g, st = g.st, iseat = (real-g.rot+4)%4;
+  const prev = st.trick.map(x=>({seat:(x.seat+g.rot)%4, card:x.card}));
+  const r = gPlay(st, iseat, card); if(!r) return;
+  g.cur = st.trick.map(x=>({seat:(x.seat+g.rot)%4, card:x.card}));
+  if(r.complete){ g.lastTrick = {cards:prev.concat({seat:real, card}), winner:(r.winner+g.rot)%4}; g.cur = []; g.pause = 1; }
+  else g.pause = 0;
+  g.declTricks = st.ns; g.defTricks = st.ew;
+  if(st.over){
+    g.phase = 'done';
+    const vul = sideVul(g.vul, g.decl%2), sc = bridgeScore(g.level, g.trump, g.dbl||0, vul, st.ns);
+    g.result = {tricks:st.ns, score:sc, nz:g.decl%2===0 ? sc : -sc};
+    try{ if(ddsOK()){ const v = window.DDS.solve(g.orig.map(h=>h.slice()), g.trump, (g.decl+1)%4, []); if(v>=0) g.result.dd = 13-v; } }catch(e){}
+  }
+  smSave(); smHostStep();
+}
+function smHostStep(){
+  const g = SMH.g; if(!g || SMH.busy || g.phase==='done') return;
+  if(g.phase==='bid'){
+    const seat = (g.dealer+g.calls.length)%4; if(seat%2===0) return;
+    SMH.busy = true;
+    setTimeout(()=>{ SMH.busy = false; if(SMH.g!==g || g.phase!=='bid') return;
+      let r = brBid(makeHand(g.hands[seat]), g.calls, (g.dealer-seat+4)%4) || {bid:'pas'};
+      if(!bidLegal({dealer:g.dealer, calls:g.calls}, r.bid)) r = {bid:'pas'};
+      g.calls.push(r.bid); smAfterBid(); }, 800);
+    return;
+  }
+  const real = (g.st.turn+g.rot)%4; if(smController(g, real)!==null) return;
+  SMH.busy = true;
+  const wait = g.pause ? 1600 : 800;
+  setTimeout(()=>{ SMH.busy = false; if(SMH.g!==g || g.phase!=='play') return;
+    const is = g.st.turn; let c;
+    try{ c = is%2===0 ? gDeclAI(g.st, is) : gAIStrong(g.st, is); }catch(e){ c = gAI(g.st, is); }
+    smPlayCard(real, c); }, wait);
+}
+// --- tekenen
+function smCardBtn(c, on){ const s = SUITS[gSuit(c)]; return '<button class="smc '+s+'"'+(on ? ' data-smcard="'+c+'"' : ' disabled')+'>'+(RANK[gRank(c)]||gRank(c))+'</button>'; }
+function smHandRows(cards, legal){
+  return '<div class="smh">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
+    return '<div class="smr"><i class="'+SUITS[si]+'">'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>legal ? smCardBtn(c, legal.includes(c)) : '<span class="smc '+SUITS[si]+'">'+(RANK[gRank(c)]||gRank(c))+'</span>').join('') : '<span class="smdash">–</span>')+'</div>'; }).join('')+'</div>';
+}
+function smGameHTML(g){
+  const me = SM_SEAT[SM.seat], ptn = (me+2)%4, P = SM.players || {}, nm = s => s===me ? 'Jij' : s===ptn ? esc((P[s===0 ? 'N' : 'Z']||{}).name||'Partner') : SM_NM[s]+' (computer)';
+  const vulTxt = VULTXT(g.vul), head = '<p class="smhead"><b>Spel '+g.board+'</b> · gever '+SM_NM[g.dealer]+' · '+vulTxt+(g.contract ? ' · <b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+'</b> door '+(g.decl===me ? 'jou' : nm(g.decl))+'' : '')+'</p>';
+  if(g.phase==='bid'){
+    const turn = (g.dealer+g.calls.length)%4, cols = [3,0,1,2];
+    const cells = Array(cols.indexOf(g.dealer)).fill('').concat(g.calls.map(b=>b==='pas' ? 'pas' : bidHTML(b))); 
+    const rows = []; for(let i=0;i<cells.length;i+=4) rows.push(cells.slice(i,i+4)); if(!rows.length || rows[rows.length-1].length===4) rows.push([]);
+    const tbl = '<table class="smauc"><tr>'+cols.map(s=>'<th'+(s===turn ? ' class="turn"' : '')+'>'+(s===me ? 'Jij' : s===ptn ? nm(s) : SM_NM[s])+'</th>').join('')+'</tr>'+rows.slice(-4).map(r=>'<tr>'+[0,1,2,3].map(i=>'<td>'+(r[i]||'')+'</td>').join('')+'</tr>').join('')+'</table>';
+    return head + tbl + smHandRows(g.hands[me], null) + (turn===me ? smBidBox(g) : '<p class="smwait">'+(turn===ptn ? nm(ptn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
+  }
+  if(g.phase==='play'){
+    const st = g.st, real = (st.turn+g.rot)%4, ctrl = smController(g, real), mine = ctrl===me;
+    const hand = s => st.hands[(s-g.rot+4)%4];
+    const showDummy = st.played.length>0, dummyIsMe = g.dummy===me;
+    const legalFor = s => mine && real===s ? gLegal(st, (s-g.rot+4)%4) : [];
+    const pos = s => ['b','l','t','r'][(s-me+4)%4];
+    const showLast = !(g.cur && g.cur.length) && g.lastTrick, tc = showLast ? g.lastTrick.cards : (g.cur||[]);
+    const tr = '<div class="smtr'+(showLast ? ' last' : '')+'">'+(showLast ? '<span class="smtl">Slag naar '+(g.lastTrick.winner===me ? 'jou' : g.lastTrick.winner===ptn ? nm(ptn) : SM_NM[g.lastTrick.winner])+'</span>' : '')+tc.map(x=>'<span class="smtc '+pos(x.seat)+'">'+cardHTML(SUITS[gSuit(x.card)]+gRank(x.card))+'</span>').join('')+'<span class="smtx">'+(g.decl%2===me%2 ? 'Jullie ' : 'Zij ')+g.declTricks+' · '+(g.decl%2===me%2 ? 'zij ' : 'jullie ')+g.defTricks+'</span></div>';
+    let dummyHTML = '';
+    if(showDummy && !dummyIsMe) dummyHTML = '<p class="smlab">Dummy: '+(g.dummy===ptn ? nm(ptn) : SM_NM[g.dummy])+(mine && real===g.dummy ? ' · <b>jij speelt deze hand</b>' : '')+'</p>'+smHandRows(hand(g.dummy), legalFor(g.dummy));
+    const myLab = dummyIsMe ? '<p class="smlab">Jij bent dummy: '+nm(g.decl)+' speelt jouw kaarten.</p>' : '';
+    const wait = mine ? '<p class="smwait go">'+(real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+'</p>' : '<p class="smwait">'+(ctrl===ptn ? nm(ptn)+' is aan de beurt…'+((P[ptn===0 ? 'N' : 'Z']||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
+    return head + dummyHTML + tr + wait + myLab + smHandRows(hand(me), dummyIsMe ? null : legalFor(me));
+  }
+  // klaar
+  const R = g.result || {};
+  let res;
+  if(R.passed) res = '<p>Iedereen paste: geen spel.</p>';
+  else { const need = g.level+6, d = R.tricks-need;
+    res = '<p><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+' door '+SM_NM[g.decl]+' '+(d===0 ? 'C' : d>0 ? '+'+d : d)+'</b> · '+R.tricks+' slagen · '+(g.decl%2===me%2 ? 'jullie' : 'zij')+' scoren <b>'+scoreTxt(R.score)+'</b></p>'
+      + (R.dd!=null ? '<p class="hint">Met open kaarten zaten er '+R.dd+' slagen in voor '+SM_NM[g.decl]+'. '+(R.dd===R.tricks ? 'Precies gehaald.' : R.tricks<R.dd ? (g.decl%2===me%2 ? 'Jullie lieten er '+(R.dd-R.tricks)+' liggen.' : 'De computer liet er '+(R.dd-R.tricks)+' liggen.') : (g.decl%2===me%2 ? 'Jullie haalden er '+(R.tricks-R.dd)+' meer: knap, of de verdediging hielp mee.' : 'De computer haalde er '+(R.tricks-R.dd)+' meer dan nodig: let op jullie tegenspel.'))+'</p>' : ''); }
+  const all = '<div class="small4">'+[0,1,2,3].map(s=>'<div><p class="smlab">'+(s===me ? 'Jij' : s===ptn ? nm(s) : SM_NM[s])+'</p>'+smHandRows(g.orig[s], null)+'</div>').join('')+'</div>';
+  const auc = g.calls && g.calls.length ? '<details class="smauc2"><summary>Bieding bekijken</summary><p class="hint">'+g.calls.map((b,i)=>SM_NM[(g.dealer+i)%4][0]+' '+(b==='pas' ? 'pas' : bidHTML(b))).join(' · ')+'</p></details>' : '';
+  return head + res + all + '<div class="sm-row">'+auc+'<button class="gview" id="smnext">Volgend spel</button></div>';
+}
+function smBidBox(g){
+  const sel = SM.lvl || 0, ok = b => bidLegal({dealer:g.dealer, calls:g.calls}, b);
+  const lv = [1,2,3,4,5,6,7].map(l=>'<button data-smlvl="'+l+'"'+(['C','D','H','S','N'].some(d=>ok(l+d)) ? '' : ' disabled')+(sel===l ? ' class="on"' : '')+'>'+l+'</button>').join('');
+  const dn = sel ? ['C','D','H','S','N'].map(d=>'<button data-smbid="'+sel+d+'"'+(ok(sel+d) ? '' : ' disabled')+'>'+bidHTML(sel+d)+'</button>').join('') : '<span class="hint">Kies eerst een niveau</span>';
+  return '<div class="smbb"><div class="smbl">'+lv+'</div><div class="smbd">'+dn+'</div><div class="smbx"><button data-smbid="pas">Pas</button><button data-smbid="X"'+(ok('X') ? '' : ' disabled')+'>X</button><button data-smbid="XX"'+(ok('XX') ? '' : ' disabled')+'>XX</button></div></div>';
+}
+document.addEventListener('click', e=>{
+  const x = e.target.closest && e.target.closest('[data-smtab],[data-smlvl],[data-smbid],[data-smcard],#smnext'); if(!x || !$('samen').open) return;
+  const g = SM.game;
+  if(x.dataset.smtab){ SM.tab = x.dataset.smtab; samenDraw(); return; }
+  if(x.dataset.smlvl){ SM.lvl = +x.dataset.smlvl; samenDraw(); return; }
+  if(x.dataset.smbid && g){ SM.lvl = 0; smAct({type:'bid', v:x.dataset.smbid, game:g.id}); x.disabled = true; return; }
+  if(x.dataset.smcard && g){ smAct({type:'card', v:x.dataset.smcard, game:g.id}); x.disabled = true; return; }
+  if(x.id==='smnext'){ smAct({type:'deal'}); return; }
+});
 function samenOpen(){ const d = $('samen'); if(!d.open){ if($('settings').open) $('settings').close(); d.showModal ? d.showModal() : d.setAttribute('open',''); } samenDraw(); }
 $('samenclose').addEventListener('click', ()=>{ $('samen').close(); openMenu(); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-samen]')){ gcEvent('samen-open'); samenOpen(); } });
