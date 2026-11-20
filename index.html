@@ -836,6 +836,19 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .sqd.l,.sqd.r{top:2.1rem}
 .sqd.l{left:2.3rem}
 .sqd.r{right:2.3rem}
+.bst .bc{width:2rem;height:2.15rem;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:.12rem 0 0 .22rem;line-height:1.05;font-size:.9rem}
+.bst .bc .bks{font-size:.85rem}
+.bst .bc .bks.sa{font-size:.6rem;margin-top:.1rem}
+.bst .bc.p{font-size:.6rem;padding-top:.2rem}
+.bst .bc.x{font-size:.8rem}
+.bst .bc.xx{font-size:.62rem;padding-top:.2rem;padding-left:.15rem}
+.bst{--step:1.15rem}
+.bst[style]{--step:max(.95rem, min(1.15rem, calc((var(--w) - 10.5rem) / (var(--n) - 1))))}
+.bst .bc + .bc{margin:0 0 0 calc(var(--step) - 2rem)!important}
+.bst.b{top:calc(100% - 3.225rem)}
+.bst.t{top:3.225rem}
+.bst.l{left:3.225rem}
+.bst.r{left:calc(100% - 3.225rem)}
 .smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 40vh, 40dvh)} .smsq.sqb .st.l,.smsq.sqb .st.r{top:50%;max-width:23%}
 .aucb{border:none;font:inherit;color:#EAF3EE;cursor:pointer;pointer-events:auto !important} .aucb i{font-style:normal;font-size:.6rem}
 .aucov{z-index:5;background:#FFFFFF;box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;top:12%;bottom:12%;left:10%;right:10%} .aucov p{margin:.1rem 0 .2rem;font-size:.68rem;color:#56655E;text-align:center}
@@ -11550,7 +11563,7 @@ function smGameHTML(g){
   if(g.phase==='bid'){
     const turn = (g.dealer+g.calls.length)%4, last = g.calls.length-1;
     const bcard = i => { const b = g.calls[i], k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
-      return '<button class="bc '+k+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : bidHTML(b))+'</button>'; };
+      return '<button class="bc '+k+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : '<span class="bkl">'+b[0]+'</span>'+(b[1]==='N' ? '<span class="bks sa">SA</span>' : '<span class="bks '+b[1]+'">'+SYM[b[1]]+'</span>'))+'</button>'; };
     const stacks = [0,1,2,3].map(s=>{ const mine = g.calls.map((b,i)=>i).filter(i=>(g.dealer+i)%4===s); return mine.length ? '<div class="bst '+pos(s)+'"'+(mine.length>1 ? ' style="--n:'+mine.length+'"' : '')+'>'+mine.map(bcard).join('')+'</div>' : ''; }).join('');
     const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
     const sq = '<div class="smsq sqb">'+labels(turn)+stacks+'</div>';
