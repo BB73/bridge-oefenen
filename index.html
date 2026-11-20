@@ -781,12 +781,12 @@ table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:
 .btip{margin:.4rem 0;padding:.5rem .65rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)} .btip p{margin:.2rem 0;line-height:1.35}
 .prebtns .homebtn{padding:.5rem .9rem} .prebtns .homebtn b{font-size:1.1rem}
 .asbtns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.6rem 0} .asbtns .gview{margin:0;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;min-height:2.8rem} .asbtns [data-as="native"], .asbtns > :last-child:nth-child(odd){grid-column:1 / -1}
-#samen{padding:1rem} #samenbody{display:flex;flex-direction:column;gap:.45rem;min-height:0} #samenbody > *{flex-shrink:0}
+#samen{padding:1rem} #samenbody{display:flex;flex-direction:column;gap:.45rem;min-height:0} #samenbody > *{flex-shrink:0} #samenbody > p{margin:0}
 .sm-row{display:flex;gap:.5rem;align-items:center} .sm-row input{flex:1;min-width:0;font:inherit;padding:.55rem .7rem;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 .sm-stat{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.9rem} .sm-p{display:inline-flex;align-items:center;gap:.3rem} .sm-p i{width:.55rem;height:.55rem;border-radius:50%;background:var(--line)} .sm-p.on i{background:#2E8B57}
-.sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
+.smfree{border:none;background:none;color:var(--bad,#b3261e);font-size:1.1rem;line-height:1;padding:0 .2rem;cursor:pointer} .smvis{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;padding:.4rem .5rem;border-radius:10px;background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .smvis button{margin-left:.35rem;padding:.2rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer} .smhl{font-style:normal;font-size:.7rem;font-weight:700;color:var(--felt);border:1px solid var(--felt);border-radius:999px;padding:0 .3rem;margin-left:.25rem} .smhrow{margin:0;font-size:.85rem} .smhrow button,.smreq button{padding:.15rem .6rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer;margin-left:.2rem} .smreq{padding:.45rem .6rem;border-radius:10px;border:2px solid var(--felt);font-size:.9rem} .smreq p{margin:0 0 .3rem} .smc.tipc{outline:3px solid var(--felt);outline-offset:1px} .smreq.sm1{display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.3rem .5rem;font-size:.85rem} .smhlist{margin:.2rem 0 0;padding-left:1.1rem;font-size:.85rem} .smwait .tipb{margin-left:.3rem;padding:.1rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;font-size:.8rem;cursor:pointer} .sm-chat.lob{min-height:4rem;max-height:5.5rem} .sm-stat small{color:var(--muted,#666);font-size:.75rem} .sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
 .sm-msg{max-width:85%;padding:.35rem .6rem;border-radius:12px;background:var(--surface);border:1px solid var(--line);line-height:1.3;font-size:.92rem;align-self:flex-start;word-wrap:break-word} .sm-msg.me{align-self:flex-end;background:color-mix(in srgb, var(--felt) 14%, var(--surface));border-color:transparent} .sm-msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
-.smauc2{flex:1;font-size:.85rem} .smauc2 summary{cursor:pointer;color:var(--felt)} .smauc2[open]{flex-basis:100%}
+.smauc2{font-size:.85rem} #samenbody .sm-row .gview{flex:1} .smauc2 summary{cursor:pointer;color:var(--felt)} .smauc2[open]{flex-basis:100%}
 .smx{width:2.4rem;height:2.4rem;border-radius:50%;border:none;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.18);font-size:1.5rem;line-height:1;color:var(--ink);cursor:pointer;flex:none} #samen .dtitle{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .sm-tabs{display:flex;gap:.3rem} .sm-tabs button{flex:1;font:inherit;padding:.4rem;border:1.5px solid var(--felt);border-radius:10px;background:var(--surface);color:var(--felt);font-weight:700} .sm-tabs button.on{background:var(--felt);color:var(--on-felt)} .sm-tabs i{font-style:normal;background:#C0392B;color:#fff;border-radius:999px;padding:0 .4rem;font-size:.75rem;margin-left:.2rem}
 .smhead{margin:0;font-size:.85rem;line-height:1.3} .smlab{margin:.2rem 0 0;font-size:.8rem;color:var(--muted)}
@@ -796,8 +796,9 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
 .smdash{color:var(--muted)} .smwait{margin:.2rem 0;font-size:.9rem;color:var(--muted)} .smwait.go{color:var(--felt);font-weight:700}
 .smtr{position:relative;height:5.2rem;border-radius:12px;background:#2F6B4F;margin:.25rem 0} .smtc{position:absolute;font-size:1rem;background:#FBFBF8;border-radius:5px;padding:.1rem .3rem;font-weight:700} .smtc.b{bottom:.3rem;left:50%;transform:translateX(-50%)} .smtc.t{top:.3rem;left:50%;transform:translateX(-50%)} .smtc.l{left:.5rem;top:50%;transform:translateY(-50%)} .smtc.r{right:.5rem;top:50%;transform:translateY(-50%)} .smtr.last .smtc{opacity:.75} .smtl{position:absolute;left:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem} .smtx{position:absolute;right:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem}
 .smauc{width:100%;border-collapse:collapse;font-size:.9rem;text-align:center} .smauc th{font-size:.75rem;color:var(--muted);font-weight:600;padding:.15rem} .smauc th.turn{color:var(--felt);text-decoration:underline} .smauc td{padding:.15rem;height:1.4rem}
+.smcall{font:inherit;background:none;border:none;padding:0 .2rem;color:inherit;cursor:pointer;border-bottom:1px dotted var(--muted)} .smfb{font-size:.82rem;line-height:1.3;padding:.3rem .5rem;border-radius:8px;background:color-mix(in srgb, var(--felt) 9%, var(--surface))} .smfb p{margin:.1rem 0} .smbb .tipb{flex:.8;border-color:#B8860B;color:#7A5A00}
 .smbb{display:flex;flex-direction:column;gap:.3rem} .smbb button{font:inherit;font-weight:700;min-height:2.2rem;border-radius:8px;border:1.5px solid var(--felt);background:var(--surface);color:var(--ink);flex:1} .smbb button.on{background:var(--felt);color:var(--on-felt)} .smbb button:disabled{opacity:.35} .smbl,.smbd,.smbx{display:flex;gap:.25rem}
-.small4{display:grid;grid-template-columns:1fr 1fr;gap:.15rem .6rem} .small4 .smh{gap:0} .small4 .smr{min-height:1.15rem;gap:.05rem} .small4 .smr > i{font-size:.85rem;width:1rem} .small4 .smc{min-width:auto;height:auto;padding:0 .08rem;border:none;background:none;font-size:.82rem} .small4 .smlab{margin:0;font-weight:700;color:var(--ink)}
+.small4.rot{grid-template-columns:auto 1fr auto;grid-template-areas:"l t r" "l b r";gap:.3rem .3rem} .small4.rot .pt{grid-area:t;justify-self:center} .small4.rot .pl{grid-area:l;align-self:center} .small4.rot .pr{grid-area:r;align-self:center} .small4.rot .pb{grid-area:b;justify-self:center} .small4{display:grid;grid-template-columns:1fr 1fr;gap:.15rem .6rem} .small4 .smh{gap:0} .small4 .smr{min-height:1.15rem;gap:.05rem} .small4 .smr > i{font-size:.85rem;width:1rem} .small4 .smc{min-width:auto;height:auto;padding:0 .08rem;border:none;background:none;font-size:.82rem} .small4 .smlab{margin:0;font-weight:700;color:var(--ink)}
 .sm-empty{color:var(--muted);font-size:.9rem;text-align:center;margin:auto 0}
 .close{margin-top:1rem;font:inherit;font-weight:700;width:100%;height:2.9rem;border-radius:10px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 </style>
@@ -7289,7 +7290,8 @@ state.playSet = state.playSet.filter(k=>PLAYABLE.includes(k));
 if(state.conv==='spelmix' && state.playSet.length<2) state.conv = state.playSet[0] || 'tellen';
 if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
 tab = tabOf(state.conv);
-function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+let CLUB_OVR = null;      // tijdens de analyse van een samen gespeeld spel staat hier de echte clubavond
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(CLUB_OVR ? Object.assign({}, state, {club:CLUB_OVR.club, clubMe:CLUB_OVR.me}) : state)); }catch(e){} }
 
 let q = null, answered = false, qSrc = null;
 // ---------- Foutherhaling: een hand die je fout had komt een paar vragen later terug, tot hij goed gaat ----------
@@ -8212,6 +8214,7 @@ function clubOpen(){
   t.scrollTop = 0;
 }
 function clubDraw(){
+  if(CLUB_OVR && CV.i===null){ $('theory').close(); return; }
   const c = clubData(), el = $('theorybody');
   if(CV.i===null) $('theorytitle').textContent = 'Clubavond';
   $('theoryclose').textContent = CV.i!==null && CV.view ? 'Terug naar spel '+CV.i : 'Sluiten';
@@ -8348,9 +8351,10 @@ function clubDraw(){
       : (li.cost ? ' <span class="leadtag good">+'+li.cost+' voor jullie</span>' : '');
   el.innerHTML = nav
     + '<div class="rvd cl clubhands">'+seats+mid+'</div>' + yours.replace('%%LEAD%%', leadTag) + leadNote + sum
-    + '<div class="clubplay"><button class="gview clubhandsbtn" data-clubview="handen">Handen</button><button class="gview" data-clubview="tafels">Tafels ('+rows.length+')</button><button class="gview" data-clubview="open">Open kaarten</button><button class="gview" data-clubview="uitkomst">Uitkomst</button></div>'
-    + '<p class="clubsub"><b>Naspelen</b>'+(pc ? ': '+clubContractHTML(pc.c)+' door '+NM[pc.decl] : '')+'</p>'
-    + '<div class="clubplay">'+(pc ? '<button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Tegenspel</button>' : '')+'<button class="gview" data-clubbid="1">Zelf bieden</button></div>';
+    + '<div class="clubplay"><button class="gview clubhandsbtn" data-clubview="handen">Handen</button>'+(CLUB_OVR ? '' : '<button class="gview" data-clubview="tafels">Tafels ('+rows.length+')</button>')+'<button class="gview" data-clubview="open">Open kaarten</button><button class="gview" data-clubview="uitkomst">Uitkomst</button></div>'
+    + (CLUB_OVR ? '<div class="clubplay"><button class="gview" data-smback="1">Terug naar samen spelen</button></div>'
+      : '<p class="clubsub"><b>Naspelen</b>'+(pc ? ': '+clubContractHTML(pc.c)+' door '+NM[pc.decl] : '')+'</p>'
+      + '<div class="clubplay">'+(pc ? '<button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Tegenspel</button>' : '')+'<button class="gview" data-clubbid="1">Zelf bieden</button></div>');
   clubDD(b);
 }
 // Samenvatting: beste contract voor jullie, voor de tegenpartij, en het par-contract (beide kanten bieden perfect)
@@ -8623,7 +8627,7 @@ function clubStatBtns(c, BT){
 }
 function clubHistList(){ const H = state.clubHist && typeof state.clubHist==='object' ? state.clubHist : {}; return Object.values(H).filter(x=>x && x.pair===state.clubMe && x.tot!=null).sort((a,b)=>(a.iso||'').localeCompare(b.iso||'')); }
 function clubHistSet(c, fields){
-  if(!state.clubMe || !c) return;
+  if(!state.clubMe || !c || CLUB_OVR) return;
   const H = state.clubHist && typeof state.clubHist==='object' ? state.clubHist : (state.clubHist = {});
   const key = state.clubMe+'|'+(c.date||'')+'|'+(c.title||''), old = H[key] || {};
   const nw = Object.assign({}, old, {pair:state.clubMe, date:c.date||'', iso:clubISO(c.date), title:c.title||'', kind:clubButler(c) ? 'butler' : 'paren'}, fields);
@@ -11205,13 +11209,14 @@ function fbLoad(){
 // Een kamer: hetzelfde kleine koppelvlak voor Firebase en voor een lokale test (twee tabbladen in dezelfde browser)
 function samenTransport(code){
   if(FB_CONFIG && !SAMEN_TEST) return fbLoad().then(({db, uid})=>{
-    const ref = db.ref('rooms/'+code);
+    const ref = db.ref('rooms/'+code); let pres = null;
     return {uid,
       set:(p, v) => ref.child(p).set(v), update:(p, v) => ref.child(p).update(v), push:(p, v) => ref.child(p).push(v),
       get:p => ref.child(p).get().then(s=>s.val()),
       on:(p, cb) => { const r = ref.child(p); const h = s=>cb(s.val()); r.on('value', h); return ()=>r.off('value', h); },
-      presence:seat => { const me = ref.child('players/'+seat+'/online'); db.ref('.info/connected').on('value', s=>{ if(s.val()){ me.onDisconnect().set(false); me.set(true); } }); },
-      leave:seat => ref.child('players/'+seat+'/online').set(false)};
+      presence:p => { const me = ref.child(p+'/online'), c = db.ref('.info/connected'); if(pres){ c.off('value', pres.h); pres.me.onDisconnect().cancel(); }
+        pres = {me, h:s=>{ if(s.val()){ me.onDisconnect().set(false); me.set(true); } }}; c.on('value', pres.h); },
+      leave:p => { if(pres){ db.ref('.info/connected').off('value', pres.h); pres.me.onDisconnect().cancel(); pres = null; } return ref.child(p+'/online').set(false); }};
   });
   // lokale test: gegevens in localStorage, wijzigingen via BroadcastChannel
   const key = 'samen-'+code, bc = new BroadcastChannel(key), subs = [];
@@ -11219,63 +11224,122 @@ function samenTransport(code){
   const at = (o, p) => p.split('/').reduce((x,k)=>x==null ? null : x[k], o);
   const put = (p, fn) => { const o = load(); const ks = p.split('/'); let x = o; ks.slice(0,-1).forEach(k=>{ x = x[k] = x[k] || {}; }); fn(x, ks[ks.length-1]); localStorage.setItem(key, JSON.stringify(o)); bc.postMessage(1); fire(); };
   const fire = () => { const o = load(); subs.forEach(s=>s.cb(at(o, s.p) ?? null)); };
-  bc.onmessage = fire;
+  bc.onmessage = fire; addEventListener('storage', e=>{ if(e.key===key) fire(); });
   const uid = 'u'+Math.random().toString(36).slice(2, 10);
   return Promise.resolve({uid,
     set:(p, v) => put(p, (x,k)=>{ x[k] = v; }), update:(p, v) => put(p, (x,k)=>{ x[k] = Object.assign(x[k]||{}, v); }),
     push:(p, v) => put(p, (x,k)=>{ x[k] = x[k] || {}; x[k][Date.now().toString(36)+Math.random().toString(36).slice(2,5)] = v; }),
     get:p => Promise.resolve(at(load(), p) ?? null),
     on:(p, cb) => { const s = {p, cb}; subs.push(s); setTimeout(()=>cb(at(load(), p) ?? null), 0); return ()=>subs.splice(subs.indexOf(s), 1); },
-    presence:seat => { put('players/'+seat+'/online', (x,k)=>{ x[k] = true; }); addEventListener('pagehide', ()=>put('players/'+seat+'/online', (x,k)=>{ x[k] = false; })); },
-    leave:seat => put('players/'+seat+'/online', (x,k)=>{ x[k] = false; })});
+    presence:p => { put(p+'/online', (x,k)=>{ x[k] = true; }); addEventListener('pagehide', ()=>{ if(load() && at(load(), p)) put(p+'/online', (x,k)=>{ x[k] = false; }); }); },
+    leave:p => put(p+'/online', (x,k)=>{ x[k] = false; })});
 }
 const SAMEN_TEST = /samentest/.test(location.search);
 const SM = {code:null, seat:null, tr:null, players:{}, chat:[], offs:[], joinCode:null, err:''};
 const esc = s => String(s==null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function samenCode(){ const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; for(let i=0;i<8;i++) s += a[Math.floor(Math.random()*a.length)]; return s; }
 function samenLink(){ return APP_URL+'#samen='+SM.code; }
+function smMine(m){ return m.uid ? m.uid===(SM.tr||{}).uid : m.seat===SM.seat; }
 function samenDraw(){
   const el = $('samenbody'), ready = FB_CONFIG || SAMEN_TEST;
   if(!ready){ el.innerHTML = '<p>Samen spelen werkt zodra de database is gekoppeld. Dat komt binnenkort.</p>'; return; }
   if(!SM.code){
     const join = SM.joinCode;
-    el.innerHTML = '<p>'+(join ? 'Je partner nodigt je uit om samen te spelen. Vul je naam in en doe mee.' : 'Speel samen met je partner, ieder op je eigen telefoon. Je maakt een kamer en stuurt je partner de link.')+'</p>'
+    el.innerHTML = '<p>'+(join ? 'Je bent uitgenodigd om samen bridge te spelen. Vul je naam in en kom aan tafel. Wie de tafel opende, wijst je een stoel aan.' : 'Speel samen, ieder op je eigen telefoon. Je opent een tafel en stuurt de link. Wie binnenkomt, geef jij een stoel; lege stoelen speelt de computer.')+'</p>'
       + '<label class="lbl" for="smname">Je naam</label><div class="sm-row"><input id="smname" maxlength="24" autocomplete="given-name" value="'+esc(state.myName||'')+'" placeholder="Bijvoorbeeld Anne"></div>'
       + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '')
-      + '<button class="gview" id="smgo">'+(join ? 'Meedoen' : 'Kamer maken')+'</button>';
+      + '<button class="gview" id="smgo">'+(join ? 'Naar de tafel' : 'Tafel openen')+'</button>';
     $('smgo').onclick = () => { const n = $('smname').value.trim(); if(!n){ $('smname').focus(); return; } state.myName = n; save(); join ? samenJoin(join) : samenCreate(); };
     return;
   }
-  const other = SM.seat==='Z' ? 'N' : 'Z', P = SM.players || {}, po = P[other];
-  const pl = s => '<span class="sm-p'+(P[s] && P[s].online ? ' on' : '')+'"><i></i>'+(P[s] ? esc(P[s].name)+(s===SM.seat ? ' (jij)' : '') : 'wachten op je partner…')+'</span>';
-  const msgs = SM.chat.slice(-8).map(m=>'<div class="sm-msg'+(m.seat===SM.seat ? ' me' : '')+'">'+(m.seat===SM.seat ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
+  const P = SM.players || {}, host = SM.seat==='Z', mi = SM.seat ? SM_SEAT[SM.seat] : 2, order = [mi, (mi+2)%4, (mi+1)%4, (mi+3)%4].map(i=>SM_KEY[i]);
+  const pl = s => '<span class="sm-p'+(P[s] && P[s].online ? ' on' : '')+'"><i></i><small>'+SM_NM[SM_SEAT[s]]+'</small> '+(P[s] ? esc(P[s].name)+(s===SM.seat ? ' (jij)' : '')+(P[s].help ? '<em class="smhl">hulp</em>' : '')+(host && s!=='Z' ? '<button class="smfree" data-smfree="'+s+'" aria-label="Stoel van '+esc(P[s].name)+' vrijmaken">×</button>' : '') : SM.seat ? 'computer' : 'vrij')+'</span>';
+  const V = Object.entries(SM.visitors||{}).filter(([u,v])=>v && v.name && v.online && !SM_KEY.some(k=>P[k] && P[k].uid===u)).sort((a,b)=>(a[1].t||0)-(b[1].t||0));
+  const freeS = ['N','W','O'].filter(k=>!P[k]);
+  const visHTML = !host || !V.length ? '' : '<div class="smvis">'+V.slice(0,3).map(([u,v])=>'<div><b>'+esc(v.name)+'</b> wacht'+(freeS.length ? ': '+freeS.map(k=>'<button data-smassign="'+u+'" data-k="'+k+'">'+SM_NM[SM_SEAT[k]]+'</button>').join('') : '. Maak eerst een stoel vrij met ×.')+'</div>').join('')+'</div>';
+  const R = SM.hreq, mineH = SM.seat && P[SM.seat] && P[SM.seat].help, NO = SM.hno && SM.hno.k===SM.seat ? SM.hno : null;
+  const askMe = R && R.k && SM.seat && R.k!==SM.seat && !(R.ok||{})[SM.seat] && P[R.k];
+  const reqHTML = askMe ? '<div class="smreq"><p><b>'+esc(P[R.k].name)+'</b> wil met hulp spelen: tips en uitleg bij het bieden. Iedereen aan tafel moet akkoord gaan. Jij ook?</p><div><button data-smhok="1">Akkoord</button><button data-smhok="0">Liever niet</button></div></div>' : '';
+  const helpHTML = !SM.seat ? '' : '<p class="smhrow">'+(R && R.k===SM.seat ? 'Hulp gevraagd; de anderen moeten nog akkoord gaan. <button data-smhelp="x">Intrekken</button>'
+      : (NO ? esc(NO.name)+' wil liever zonder hulp. ' : '')+'Hulp bij het bieden: <b>'+(mineH ? 'aan' : 'uit')+'</b> <button data-smhelp="'+(mineH ? 'uit' : 'aan')+'">'+(mineH ? 'Uitzetten' : 'Vragen')+'</button>')+'</p>';
+  const stat = reqHTML+'<div class="sm-stat">'+order.map(pl).join('')+'</div>'+visHTML+helpHTML;
+  const humans = SM_KEY.filter(k=>P[k] && P[k].online).length, full = SM_KEY.every(k=>P[k] && P[k].online);
+  const msgs = SM.chat.slice(-8).map(m=>'<div class="sm-msg'+(smMine(m) ? ' me' : '')+'">'+(smMine(m) ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
   const G = SM.game, mode = SM.mode || 'oefen', locked = mode==='wedstrijd' && G && G.phase!=='done';
   const unread = Math.max(0, SM.chat.length - (SM.seen||0)), tab = G ? (SM.tab || 'spel') : 'chat';
   if(tab==='chat') SM.seen = SM.chat.length;
-  const tabs = G ? '<div class="sm-tabs"><button class="'+(tab==='spel' ? 'on' : '')+'" data-smtab="spel">Spel</button><button class="'+(tab==='chat' ? 'on' : '')+'" data-smtab="chat">Chat'+(unread && tab!=='chat' ? ' <i>'+unread+'</i>' : '')+'</button></div>' : '';
-  const chatHTML = '<div class="sm-chat" id="smchat">'+(msgs || '<p class="sm-empty">Nog geen berichten.</p>')+'</div>'
+  const tabs = G ? '<div class="sm-tabs"><button class="'+(tab==='spel' ? 'on' : '')+'" data-smtab="spel">Spel'+(tab==='chat' && G && SM.seat && smAskLine(G, s=>'') ? ' <i>!</i>' : '')+'</button><button class="'+(tab==='chat' ? 'on' : '')+'" data-smtab="chat">Chat'+(unread+V.length+(askMe ? 1 : 0) && tab!=='chat' ? ' <i>'+(unread+V.length+(askMe ? 1 : 0))+'</i>' : '')+'</button></div>' : '';
+  const chatHTML = '<div class="sm-chat'+(G && !visHTML && !reqHTML ? '' : ' lob')+'" id="smchat">'+(msgs || '<p class="sm-empty">Nog geen berichten.</p>')+'</div>'
     + (locked ? '<p class="hint">Wedstrijdstand: chatten kan weer na het spel.</p>'
        : '<form class="sm-row" id="smform"><input id="smtext" maxlength="300" autocomplete="off" placeholder="Typ een bericht…" aria-label="Bericht"><button class="gview" type="submit">Stuur</button></form>');
-  const both = P[SM.seat] && po && po.online;
-  const lobby = '<p class="lbl">Overleggen tijdens het spel</p><nav class="modes" id="smmode"><button data-v="oefen" class="'+(mode==='oefen' ? 'on' : '')+'">Oefenen: chatten mag altijd</button><button data-v="wedstrijd" class="'+(mode==='wedstrijd' ? 'on' : '')+'">Wedstrijd: pas na het spel</button></nav>'
-    + '<button class="gview" id="smdeal"'+(both ? '' : ' disabled')+'>'+(both ? 'Spel starten' : 'Spel starten (wacht op je partner)')+'</button>';
-  el.innerHTML = (G ? '' : '<div class="sm-stat">'+pl(SM.seat)+pl(other)+'</div>')
-    + (po ? '' : '<p class="hint">Stuur je partner de link. Zodra hij of zij meedoet, zie je dat hier.</p><button class="gview" id="smshare">Link naar je partner sturen</button>')
+  const both = humans>=2;
+  const lobby = '<p class="lbl">Chatten tijdens het spel</p><nav class="modes" id="smmode"><button data-v="oefen" class="'+(mode==='oefen' ? 'on' : '')+'">Oefenen: altijd</button><button data-v="wedstrijd" class="'+(mode==='wedstrijd' ? 'on' : '')+'">Wedstrijd: na het spel</button></nav>'
+    + '<button class="gview" id="smdeal"'+(both ? '' : ' disabled')+'>'+(both ? 'Spel starten' : 'Wacht op een medespeler')+'</button>';
+  if(!SM.seat){ const hn = esc((P.Z||{}).name||'De gastheer');
+    el.innerHTML = '<p>Je bent aan tafel. '+hn+' wijst je zo een stoel aan.'+(G && G.phase!=='done' ? ' Er wordt nu een spel gespeeld.' : '')+'</p>' + stat + chatHTML + '<button class="navclear" id="smleave">Tafel verlaten</button>';
+  } else el.innerHTML = (G ? '' : stat)
+    + (full || G || !host ? '' : (humans<2 && !V.length ? '<p class="hint">Stuur de link naar je partner, en eventueel naar tegenstanders. Wie binnenkomt, geef jij een stoel.</p>' : '')+'<button class="gview" id="smshare">'+(humans<2 ? 'Link sturen' : 'Nog iemand uitnodigen')+'</button>')
     + tabs
-    + (G && tab==='spel' ? smGameHTML(G) : chatHTML + (G ? '' : lobby))
-    + (!G || G.phase==='done' ? '<button class="navclear" id="smleave">Kamer verlaten</button>' : '');
+    + (G && tab==='spel' ? smGameHTML(G) : (G ? stat : '') + (reqHTML ? '' : chatHTML + (G ? '' : lobby)))
+    + (!G || tab==='chat' ? '<button class="navclear" id="smleave">Tafel verlaten</button>' : '');
   if($('smshare')) $('smshare').onclick = () => shareUrl(samenLink(), (state.myName||'Je partner')+' wil samen bridge spelen. Open de link om mee te doen.', 'Samen spelen', t=>{ const b = $('smshare'); if(b) b.textContent = t; }, 'Link naar de kamer');
-  if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
+  if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, uid:SM.tr.uid, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
   if($('smleave')) $('smleave').onclick = samenLeave;
+  el.querySelectorAll('[data-smhelp]').forEach(b=>b.onclick = ()=>smHelpClick(b.dataset.smhelp));
+  el.querySelectorAll('[data-smhok]').forEach(b=>b.onclick = ()=>smHelpAnswer(b.dataset.smhok==='1'));
+  if(G && SM.ctip && SM.ctip.g===G.id && G.phase==='play' && SM.ctip.n===G.st.played.length){ const b = el.querySelector('[data-smcard="'+SM.ctip.card+'"]'); if(b) b.classList.add('tipc'); }
+  el.querySelectorAll('[data-smassign]').forEach(b=>b.onclick = ()=>smAssign(b.dataset.smassign, b.dataset.k));
+  el.querySelectorAll('[data-smfree]').forEach(b=>b.onclick = ()=>smFree(b.dataset.smfree));
   if($('smdeal')) $('smdeal').onclick = () => smAct({type:'deal'});
   if($('smmode')) $('smmode').onclick = e => { const b = e.target.closest('button'); if(b) SM.tr.update('meta', {mode:b.dataset.v}); };
   if(tab==='chat'){ const c = $('smchat'); if(c) c.scrollTop = c.scrollHeight; }
 }
+function smHelpMe(){ const p = (SM.players||{})[SM.seat]; return !!(p && p.help); }
+// Hulp vragen: wie hulp wil, vraagt het; iedereen die aan tafel zit moet akkoord gaan. De gastheer rondt af.
+function smHelpClick(v){ const k = SM.seat, P = SM.players || {}; if(!k) return; SM.hno = null;
+  if(v==='uit'){ SM.tr.update('players/'+k, {help:false}); return; }
+  if(v==='x'){ SM.tr.set('meta/hreq', null); return; }
+  const others = SM_KEY.filter(s=>s!==k && P[s] && P[s].online);
+  if(!others.length){ SM.tr.update('players/'+k, {help:true}); return; }
+  SM.tr.set('meta/hreq', {k, ok:{[k]:true}, t:Date.now()}); gcEvent('samen-hulpvraag'); }
+function smHelpAnswer(yes){ const R = SM.hreq; if(!R || !SM.seat) return;
+  if(yes) SM.tr.set('meta/hreq/ok/'+SM.seat, true);
+  else { SM.tr.set('meta/hno', {k:R.k, name:state.myName||'', t:Date.now()}); SM.tr.set('meta/hreq', null); } }
+function smHelpResolve(){ const R = SM.hreq, P = SM.players || {}; if(SM.seat!=='Z' || !R || !R.k) return;
+  if(!P[R.k]){ SM.hreq = null; SM.tr.set('meta/hreq', null); return; }
+  if(SM_KEY.every(s=>!P[s] || !P[s].online || s===R.k || (R.ok||{})[s])){ SM.hreq = null; SM.tr.set('meta/hreq', null); SM.tr.update('players/'+R.k, {help:true}); } }
+// Eenmalige hulp bij één bod of één kaart: de anderen aan tafel moeten akkoord gaan. Elke gebruikte tip komt in de evaluatie.
+function smNow(g){ return !g ? null : g.phase==='bid' ? {kind:'bid', n:g.calls.length} : g.phase==='play' ? {kind:'card', n:g.st.played.length} : null; }
+function smReqLive(R, g){ const c = smNow(g); return !!(R && g && c && R.g===g.id && R.kind===c.kind && R.n===c.n); }
+function smOthers(k){ const P = SM.players || {}; return SM_KEY.filter(s=>s!==k && P[s] && P[s].online); }
+function smAskHelp(){ const g = SM.game, c = smNow(g), k = SM.seat; if(!c || !k) return;
+  if(!smOthers(k).length){ smGiveTip(true); return; }
+  SM.tr.set('meta/oreq', {k, g:g.id, kind:c.kind, n:c.n, ok:{[k]:true}, t:Date.now()}); gcEvent('samen-hulp-eenmalig'); }
+function smOnceAnswer(yes){ const R = SM.oreq; if(!R || !SM.seat) return;
+  if(yes) SM.tr.set('meta/oreq/ok/'+SM.seat, true); else SM.tr.set('meta/oreq/no', state.myName||SM_NM[SM_SEAT[SM.seat]]); }
+function smOnceResolve(){ const R = SM.oreq, P = SM.players || {}; if(SM.seat!=='Z' || !R || R.granted || R.no || !smReqLive(R, SM.game)) return;
+  const all = r => SM_KEY.every(s=>!P[s] || !P[s].online || s===r.k || (r.ok||{})[s]);
+  if(all(R)) SM.tr.get('meta/oreq').then(v=>{ if(v && v.t===R.t && !v.granted && !v.no && all(v)) SM.tr.set('meta/oreq/granted', true); }); }
+function smCardTip(g){ const st = g.st, is = st.turn, legal = gLegal(st, is); let ev = null, best = null;
+  try{ ev = gTipEval(st, is, st.hands[is].length<=5 ? 20 : 8); }catch(e){ ev = null; }
+  if(ev){ best = legal[0]; legal.forEach(c=>{ if(ev[c]>ev[best]+1e-9) best = c; }); }
+  if(best==null){ try{ best = is%2===0 ? gDeclAI(st, is) : gAIStrong(st, is); }catch(e){ best = gAI(st, is); } }
+  return {card:best, ev:ev ? ev[best] : null}; }
+function smGiveTip(asked){ const g = SM.game, c = smNow(g); if(!c) return;
+  if(c.kind==='bid'){ const s = smSuggest(g, SM_SEAT[SM.seat]); SM.tip = {g:g.id, n:c.n, bid:s.bid, why:s.why}; SM.fb = null; smAct({type:'help', kind:'bid', n:c.n, sug:s.bid, ask:asked, game:g.id}); }
+  else { const t = smCardTip(g); SM.ctip = {g:g.id, n:c.n, card:t.card, ev:t.ev}; smAct({type:'help', kind:'card', n:c.n, sug:t.card, ask:asked, game:g.id}); }
+  gcEvent(asked ? 'samen-hulp-gekregen' : 'samen-tip'); samenDraw(); }
 function samenSub(){
   SM.offs.forEach(f=>f()); SM.offs = [];
-  SM.offs.push(SM.tr.on('players', v=>{ SM.players = v || {}; samenDraw(); }));
+  SM.offs.push(SM.tr.on('players', v=>{ SM.players = Object.fromEntries(Object.entries(v || {}).filter(([k,x])=>x && x.uid)); smSeatSync(); smHelpResolve(); smOnceResolve(); samenDraw(); }));
+  SM.offs.push(SM.tr.on('visitors', v=>{ SM.visitors = v || {}; samenDraw(); }));
   SM.offs.push(SM.tr.on('meta/mode', v=>{ SM.mode = v || 'oefen'; samenDraw(); }));
-  SM.offs.push(SM.tr.on('game', v=>{ try{ SM.game = v ? JSON.parse(v) : null; }catch(e){ SM.game = null; } if(SM.seat==='Z' && !SMH.g && SM.game){ SMH.g = SM.game; try{ ddsLoad(); }catch(e){} setTimeout(smHostStep, 500); } if(SM.game && SM.game.phase==='done' && SM.lastDone!==SM.game.id){ SM.lastDone = SM.game.id; } samenDraw(); }));
+  SM.offs.push(SM.tr.on('meta/oreq', v=>{ SM.oreq = v; smOnceResolve();
+    if(v && v.granted && v.k===SM.seat && smReqLive(v, SM.game)){ SM.oreq = null; SM.tr.set('meta/oreq', null); smGiveTip(true); return; }
+    samenDraw(); }));
+  SM.offs.push(SM.tr.on('meta/hreq', v=>{ SM.hreq = v; smHelpResolve(); samenDraw(); }));
+  SM.offs.push(SM.tr.on('meta/hno', v=>{ SM.hno = v && Date.now()-v.t<600000 ? v : null; samenDraw(); }));
+  SM.offs.push(SM.tr.on('game', v=>{ try{ SM.game = v ? JSON.parse(v) : null; }catch(e){ SM.game = null; } if(SM.game && SM.game.phase==='play' && SM.seat){ try{ ddsLoad(); }catch(e){} } if(SM.seat==='Z' && !SMH.g && SM.game){ SMH.g = SM.game; try{ ddsLoad(); }catch(e){} setTimeout(smHostStep, 500); } if(SM.game && SM.game.phase==='done' && SM.lastDone!==SM.game.id){ SM.lastDone = SM.game.id; } samenDraw(); }));
   if(SM.seat==='Z'){ let first = true;
     SM.offs.push(SM.tr.on('acts', v=>{ if(first){ first = false; Object.values(v||{}).forEach(s=>{ try{ SMH.done[JSON.parse(s).id] = 1; }catch(e){} }); return; } smHostActs(v); })); }
   SM.offs.push(SM.tr.on('chat', v=>{ const focus = document.activeElement && document.activeElement.id==='smtext', txt = focus ? $('smtext').value : ''; SM.chat = Object.values(v || {}).sort((a,b)=>a.t-b.t); samenDraw(); if(focus){ $('smtext').focus(); $('smtext').value = txt; } }));
@@ -11284,32 +11348,45 @@ async function samenCreate(){
   try{ SM.err = ''; const code = samenCode(), tr = await samenTransport(code);
     await tr.set('meta', {created:Date.now(), host:tr.uid});
     await tr.set('players/Z', {name:state.myName, uid:tr.uid, online:true});
-    Object.assign(SM, {code, seat:'Z', tr}); state.samen = {code, seat:'Z'}; save(); tr.presence('Z'); samenSub(); gcEvent('samen-kamer');
+    Object.assign(SM, {code, seat:'Z', tr}); state.samen = {code, seat:'Z'}; save(); tr.presence('players/Z'); samenSub(); gcEvent('samen-kamer');
   }catch(e){ SM.err = 'Verbinden lukte niet. Controleer je internet en probeer het opnieuw.'; samenDraw(); }
 }
 async function samenJoin(code){
   try{ SM.err = ''; const tr = await samenTransport(code), meta = await tr.get('meta');
-    if(!meta){ SM.err = 'Deze kamer bestaat niet (meer). Vraag je partner om een nieuwe link.'; SM.joinCode = null; samenDraw(); return; }
-    const n = await tr.get('players/N'), seat = !n || n.uid===tr.uid || !n.online ? 'N' : null;
-    if(!seat){ SM.err = 'Er zitten al twee spelers in deze kamer.'; samenDraw(); return; }
-    await tr.set('players/N', {name:state.myName, uid:tr.uid, online:true});
-    Object.assign(SM, {code, seat, tr, joinCode:null}); state.samen = {code, seat}; save(); tr.presence(seat); samenSub(); gcEvent('samen-meedoen');
+    if(!meta){ SM.err = 'Deze kamer bestaat niet (meer). Vraag om een nieuwe link.'; SM.joinCode = null; samenDraw(); return; }
+    const P = await tr.get('players') || {}, mine = SM_KEY.find(k=>P[k] && P[k].uid===tr.uid) || null;
+    Object.assign(SM, {code, seat:mine, tr, joinCode:null}); state.samen = {code, seat:mine}; save();
+    if(mine){ await tr.update('players/'+mine, {name:state.myName||P[mine].name, online:true}); tr.presence('players/'+mine); }
+    else smVisit();
+    samenSub(); gcEvent('samen-meedoen');
   }catch(e){ SM.err = 'Verbinden lukte niet. Controleer je internet en probeer het opnieuw.'; samenDraw(); }
 }
-function samenLeave(){ if(SM.tr && SM.seat) SM.tr.leave(SM.seat); SM.game = null; SMH.g = null; SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
+// Bezoeker: wacht tot de gastheer een stoel aanwijst
+function smVisit(){ const tr = SM.tr; tr.set('visitors/'+tr.uid, {name:state.myName||'Gast', online:true, t:Date.now()}); tr.presence('visitors/'+tr.uid); }
+function smSeatSync(){
+  const P = SM.players || {}, uid = SM.tr.uid, k = SM_KEY.find(s=>P[s] && P[s].uid===uid) || null;
+  if(k && k!==SM.seat){ SM.seat = k; SM.tab = 'spel'; state.samen = {code:SM.code, seat:k}; save(); SM.tr.presence('players/'+k); }
+  else if(!k && SM.seat && SM.seat!=='Z'){ SM.seat = null; state.samen = {code:SM.code, seat:null}; save(); smVisit(); }
+}
+function smAssign(uid, k){ const v = (SM.visitors||{})[uid]; if(!v || (SM.players||{})[k]) return; SM.tr.set('players/'+k, {name:v.name, uid, online:!!v.online}); SM.tr.set('visitors/'+uid, null); gcEvent('samen-stoel'); }
+function smFree(k){ if(k==='Z') return; SM.tr.set('players/'+k, null);
+  const g = SMH.g, i = SM_SEAT[k]; if(g && g.humans && g.phase!=='done' && g.humans.includes(i)){ g.humans = g.humans.filter(x=>x!==i); smSave(); smHostStep(); } }
+function samenLeave(){ if(SM.tr){ if(SM.seat) SM.tr.leave('players/'+SM.seat); else { SM.tr.leave('visitors/'+SM.tr.uid); SM.tr.set('visitors/'+SM.tr.uid, null); } } SM.game = null; SMH.g = null; SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, visitors:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
 // ---------- Samen spelen: het spel zelf. Zuid (wie de kamer maakte) rekent; Noord stuurt zijn zetten via de database. ----------
 const SMH = {g:null, done:{}, busy:false, board:0};
-const SM_SEAT = {N:0, Z:2}, SM_NM = ['Noord','Oost','Zuid','West'];
+const SM_SEAT = {N:0, O:1, Z:2, W:3}, SM_KEY = ['N','O','Z','W'], SM_NM = ['Noord','Oost','Zuid','West'];
 function smAct(a){ if(!SM.tr) return; SM.tr.push('acts', JSON.stringify(Object.assign({by:SM.seat, id:Date.now().toString(36)+Math.random().toString(36).slice(2,6)}, a))); }
 function smSave(){ SM.tr.set('game', JSON.stringify(SMH.g)); }
 function smDeal(){
   SMH.board = (SMH.g ? SMH.g.board : 0)+1;
+  const P = SM.players || {}, humans = SM_KEY.map((k,i)=>P[k] && P[k].online ? i : -1).filter(i=>i>=0), ew = humans.some(i=>i%2===1);
+  if(!humans.includes(2)) humans.push(2);
   const n = SMH.board, dealer = (n-1)%4, vul = ['-','NZ','OW','Allen','NZ','OW','Allen','-','OW','Allen','-','NZ','Allen','-','NZ','OW'][(n-1)%16];
   let H;
   for(;;){ const d = Array.from({length:52},(_,i)=>i); for(let i=51;i>0;i--){ const j = rnd(i+1); const z = d[i]; d[i] = d[j]; d[j] = z; }
-    H = [0,1,2,3].map(k=>d.slice(k*13,k*13+13)); const p = makeHand(H[0]).hcp+makeHand(H[2]).hcp; if(p>=20) break; }
+    H = [0,1,2,3].map(k=>d.slice(k*13,k*13+13)); const p = makeHand(H[0]).hcp+makeHand(H[2]).hcp; if(p>=20 || ew) break; }
   SM.tr.set('acts', null);
-  SMH.g = {id:Date.now().toString(36), board:n, phase:'bid', hands:H, orig:H.map(h=>h.slice()), dealer, vul, calls:[]};
+  SMH.g = {id:Date.now().toString(36), board:n, phase:'bid', hands:H, orig:H.map(h=>h.slice()), dealer, vul, calls:[], humans:humans.sort()};
   try{ ddsLoad(); }catch(e){}
   smSave(); smHostStep();
 }
@@ -11320,11 +11397,13 @@ function smHostActs(v){
     const g = SMH.g;
     if(a.type==='deal'){ if(!g || g.phase==='done') smDeal(); return; }
     if(!g || g.id!==a.game) return;
-    if(a.type==='bid' && g.phase==='bid'){ const seat = (g.dealer+g.calls.length)%4; if(seat!==SM_SEAT[a.by] || !bidLegal({dealer:g.dealer, calls:g.calls}, a.v)) return; g.calls.push(a.v); smAfterBid(); }
+    if(a.type==='bid' && g.phase==='bid'){ const seat = (g.dealer+g.calls.length)%4; if(seat!==SM_SEAT[a.by] || !smHuman(g, seat) || !bidLegal({dealer:g.dealer, calls:g.calls}, a.v)) return; g.calls.push(a.v); smAfterBid(); }
+    if(a.type==='help'){ const c = smNow(g); if(c && c.kind===a.kind && c.n===a.n && SM_SEAT[a.by]!=null){ (g.helps = g.helps || []).push({s:SM_SEAT[a.by], kind:a.kind, n:a.n, sug:a.sug, ask:!!a.ask}); smSave(); } return; }
     if(a.type==='card' && g.phase==='play'){ const real = (g.st.turn+g.rot)%4; if(smController(g, real)!==SM_SEAT[a.by]) return; smPlayCard(real, +a.v); }
   });
 }
-function smController(g, real){ if(real%2===1) return null; return real===g.dummy ? g.decl : real; }
+function smHuman(g, s){ return g.humans ? g.humans.includes(s) : s%2===0; }
+function smController(g, real){ const c = real===g.dummy ? g.decl : real; return smHuman(g, c) ? c : null; }
 function smAfterBid(){
   const g = SMH.g;
   if(brDone(g.calls)){
@@ -11360,12 +11439,12 @@ function smPlayCard(real, card){
 function smHostStep(){
   const g = SMH.g; if(!g || SMH.busy || g.phase==='done') return;
   if(g.phase==='bid'){
-    const seat = (g.dealer+g.calls.length)%4; if(seat%2===0) return;
+    const seat = (g.dealer+g.calls.length)%4; if(smHuman(g, seat)) return;
     SMH.busy = true;
     setTimeout(()=>{ SMH.busy = false; if(SMH.g!==g || g.phase!=='bid') return;
       let r = brBid(makeHand(g.hands[seat]), g.calls, (g.dealer-seat+4)%4) || {bid:'pas'};
       if(!bidLegal({dealer:g.dealer, calls:g.calls}, r.bid)) r = {bid:'pas'};
-      g.calls.push(r.bid); smAfterBid(); }, 800);
+      (g.why = g.why || [])[g.calls.length] = r.why || ''; g.calls.push(r.bid); smAfterBid(); }, 800);
     return;
   }
   const real = (g.st.turn+g.rot)%4; if(smController(g, real)!==null) return;
@@ -11383,14 +11462,16 @@ function smHandRows(cards, legal){
     return '<div class="smr"><i class="'+SUITS[si]+'">'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>legal ? smCardBtn(c, legal.includes(c)) : '<span class="smc '+SUITS[si]+'">'+(RANK[gRank(c)]||gRank(c))+'</span>').join('') : '<span class="smdash">–</span>')+'</div>'; }).join('')+'</div>';
 }
 function smGameHTML(g){
-  const me = SM_SEAT[SM.seat], ptn = (me+2)%4, P = SM.players || {}, nm = s => s===me ? 'Jij' : s===ptn ? esc((P[s===0 ? 'N' : 'Z']||{}).name||'Partner') : SM_NM[s]+' (computer)';
+  const me = SM_SEAT[SM.seat], ptn = (me+2)%4, P = SM.players || {}, hu = s => smHuman(g, s), pn = s => esc((P[SM_KEY[s]]||{}).name||SM_NM[s]);
+  const nm = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s]+' (computer)', lb = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s];
   const vulTxt = VULTXT(g.vul), head = '<p class="smhead"><b>Spel '+g.board+'</b> · gever '+SM_NM[g.dealer]+' · '+vulTxt+(g.contract ? ' · <b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+'</b> door '+(g.decl===me ? 'jou' : nm(g.decl))+'' : '')+'</p>';
   if(g.phase==='bid'){
     const turn = (g.dealer+g.calls.length)%4, cols = [3,0,1,2];
-    const cells = Array(cols.indexOf(g.dealer)).fill('').concat(g.calls.map(b=>b==='pas' ? 'pas' : bidHTML(b))); 
+    const cells = Array(cols.indexOf(g.dealer)).fill('').concat(g.calls.map((b,i)=>'<button class="smcall" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : bidHTML(b))+'</button>'));
     const rows = []; for(let i=0;i<cells.length;i+=4) rows.push(cells.slice(i,i+4)); if(!rows.length || rows[rows.length-1].length===4) rows.push([]);
-    const tbl = '<table class="smauc"><tr>'+cols.map(s=>'<th'+(s===turn ? ' class="turn"' : '')+'>'+(s===me ? 'Jij' : s===ptn ? nm(s) : SM_NM[s])+'</th>').join('')+'</tr>'+rows.slice(-4).map(r=>'<tr>'+[0,1,2,3].map(i=>'<td>'+(r[i]||'')+'</td>').join('')+'</tr>').join('')+'</table>';
-    return head + tbl + smHandRows(g.hands[me], null) + (turn===me ? smBidBox(g) : '<p class="smwait">'+(turn===ptn ? nm(ptn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
+    const tbl = '<table class="smauc"><tr>'+cols.map(s=>'<th'+(s===turn ? ' class="turn"' : '')+'>'+lb(s)+'</th>').join('')+'</tr>'+rows.slice(-4).map(r=>'<tr>'+[0,1,2,3].map(i=>'<td>'+(r[i]||'')+'</td>').join('')+'</tr>').join('')+'</table>';
+    const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
+    return head + tbl + fb + smHandRows(g.hands[me], null) + (!hu(me) ? '<p class="smwait">Je doet mee vanaf het volgende spel; nu speelt de computer jouw stoel.</p>' : turn===me ? smBidBox(g, oef) : ask || '<p class="smwait">'+(hu(turn) ? pn(turn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
   }
   if(g.phase==='play'){
     const st = g.st, real = (st.turn+g.rot)%4, ctrl = smController(g, real), mine = ctrl===me;
@@ -11399,11 +11480,12 @@ function smGameHTML(g){
     const legalFor = s => mine && real===s ? gLegal(st, (s-g.rot+4)%4) : [];
     const pos = s => ['b','l','t','r'][(s-me+4)%4];
     const showLast = !(g.cur && g.cur.length) && g.lastTrick, tc = showLast ? g.lastTrick.cards : (g.cur||[]);
-    const tr = '<div class="smtr'+(showLast ? ' last' : '')+'">'+(showLast ? '<span class="smtl">Slag naar '+(g.lastTrick.winner===me ? 'jou' : g.lastTrick.winner===ptn ? nm(ptn) : SM_NM[g.lastTrick.winner])+'</span>' : '')+tc.map(x=>'<span class="smtc '+pos(x.seat)+'">'+cardHTML(SUITS[gSuit(x.card)]+gRank(x.card))+'</span>').join('')+'<span class="smtx">'+(g.decl%2===me%2 ? 'Jullie ' : 'Zij ')+g.declTricks+' · '+(g.decl%2===me%2 ? 'zij ' : 'jullie ')+g.defTricks+'</span></div>';
+    const tr = '<div class="smtr'+(showLast ? ' last' : '')+'">'+(showLast ? '<span class="smtl">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '')+tc.map(x=>'<span class="smtc '+pos(x.seat)+'">'+cardHTML(SUITS[gSuit(x.card)]+gRank(x.card))+'</span>').join('')+'<span class="smtx">'+(g.decl%2===me%2 ? 'Jullie ' : 'Zij ')+g.declTricks+' · '+(g.decl%2===me%2 ? 'zij ' : 'jullie ')+g.defTricks+'</span></div>';
     let dummyHTML = '';
-    if(showDummy && !dummyIsMe) dummyHTML = '<p class="smlab">Dummy: '+(g.dummy===ptn ? nm(ptn) : SM_NM[g.dummy])+(mine && real===g.dummy ? ' · <b>jij speelt deze hand</b>' : '')+'</p>'+smHandRows(hand(g.dummy), legalFor(g.dummy));
+    if(showDummy && !dummyIsMe) dummyHTML = '<p class="smlab">Dummy: '+lb(g.dummy)+(mine && real===g.dummy ? ' · <b>jij speelt deze hand</b>' : '')+'</p>'+smHandRows(hand(g.dummy), legalFor(g.dummy));
     const myLab = dummyIsMe ? '<p class="smlab">Jij bent dummy: '+nm(g.decl)+' speelt jouw kaarten.</p>' : '';
-    const wait = mine ? '<p class="smwait go">'+(real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+'</p>' : '<p class="smwait">'+(ctrl===ptn ? nm(ptn)+' is aan de beurt…'+((P[ptn===0 ? 'N' : 'Z']||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
+    const ct = SM.ctip && SM.ctip.g===g.id && SM.ctip.n===st.played.length ? SM.ctip : null, f1 = x => x.toFixed(1).replace('.', ',');
+    const wait = mine ? '<p class="smwait go">'+(ct ? 'Tip: speel '+cardHTML(SUITS[gSuit(ct.card)]+gRank(ct.card))+(ct.ev!=null ? ' (gem. nog '+f1(ct.ev)+' slagen)' : '') : real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+' '+smHelpBtn(g)+'</p>' : smAskLine(g, pn) || '<p class="smwait">'+(ctrl!==null ? pn(ctrl)+' is aan de beurt…'+((P[SM_KEY[ctrl]]||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
     return head + dummyHTML + tr + wait + myLab + smHandRows(hand(me), dummyIsMe ? null : legalFor(me));
   }
   // klaar
@@ -11411,33 +11493,89 @@ function smGameHTML(g){
   let res;
   if(R.passed) res = '<p>Iedereen paste: geen spel.</p>';
   else { const need = g.level+6, d = R.tricks-need;
-    res = '<p><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+' door '+SM_NM[g.decl]+' '+(d===0 ? 'C' : d>0 ? '+'+d : d)+'</b> · '+R.tricks+' slagen · '+(g.decl%2===me%2 ? 'jullie' : 'zij')+' scoren <b>'+scoreTxt(R.score)+'</b></p>'
-      + (R.dd!=null ? '<p class="hint">Met open kaarten zaten er '+R.dd+' slagen in voor '+SM_NM[g.decl]+'. '+(R.dd===R.tricks ? 'Precies gehaald.' : R.tricks<R.dd ? (g.decl%2===me%2 ? 'Jullie lieten er '+(R.dd-R.tricks)+' liggen.' : 'De computer liet er '+(R.dd-R.tricks)+' liggen.') : (g.decl%2===me%2 ? 'Jullie haalden er '+(R.tricks-R.dd)+' meer: knap, of de verdediging hielp mee.' : 'De computer haalde er '+(R.tricks-R.dd)+' meer dan nodig: let op jullie tegenspel.'))+'</p>' : ''); }
-  const all = '<div class="small4">'+[0,1,2,3].map(s=>'<div><p class="smlab">'+(s===me ? 'Jij' : s===ptn ? nm(s) : SM_NM[s])+'</p>'+smHandRows(g.orig[s], null)+'</div>').join('')+'</div>';
-  const auc = g.calls && g.calls.length ? '<details class="smauc2"><summary>Bieding bekijken</summary><p class="hint">'+g.calls.map((b,i)=>SM_NM[(g.dealer+i)%4][0]+' '+(b==='pas' ? 'pas' : bidHTML(b))).join(' · ')+'</p></details>' : '';
-  return head + res + all + '<div class="sm-row">'+auc+'<button class="gview" id="smnext">Volgend spel</button></div>';
+    res = '<p><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+' door '+lb(g.decl)+' '+(d===0 ? 'C' : d>0 ? '+'+d : d)+'</b> · '+R.tricks+' slagen · '+(g.decl%2===me%2 ? 'jullie' : 'zij')+' scoren <b>'+scoreTxt(R.score)+'</b></p>'
+      + (R.dd!=null ? '<p class="hint">Open kaarten: '+R.dd+' slagen voor '+SM_NM[g.decl]+'. '+(R.dd===R.tricks ? 'Precies gehaald.' : R.tricks<R.dd ? (g.decl%2===me%2 ? 'Jullie lieten er '+(R.dd-R.tricks)+' liggen.' : (hu(g.decl) ? 'De leider' : 'De computer')+' liet er '+(R.dd-R.tricks)+' liggen.') : (g.decl%2===me%2 ? 'Jullie haalden er '+(R.tricks-R.dd)+' meer.' : 'Let op jullie tegenspel.'))+'</p>' : ''); }
+  const all = '<div class="small4 rot">'+[[ptn,'t'],[(me+1)%4,'l'],[(me+3)%4,'r'],[me,'b']].map(([s,p])=>'<div class="p'+p+'"><p class="smlab">'+lb(s)+'</p>'+smHandRows(g.orig[s], null)+'</div>').join('')+'</div>';
+  const H = g.helps || [], hb = {}; H.forEach(h=>{ if(h.kind==='bid') hb[h.n] = 1; });
+  const ct = c => cardHTML(SUITS[gSuit(c)]+gRank(c)), played = (g.st && g.st.played) || [];
+  const hl = H.map(h=>'<li>'+lb(h.s)+(h.ask ? ' (gevraagd)' : '')+': '+(h.kind==='bid' ? 'bij '+(g.calls[h.n]==null ? 'het bod' : g.calls[h.n]==='pas' ? 'pas' : bidHTML(g.calls[h.n]))+', advies '+(h.sug==='pas' ? 'pas' : bidHTML(h.sug))+(g.calls[h.n]!=null && g.calls[h.n]!==h.sug ? ' — anders geboden' : '')
+      : 'slag '+(Math.floor(h.n/4)+1)+', advies '+ct(h.sug)+(played[h.n]!=null ? (played[h.n]===h.sug ? ', gevolgd' : ', gespeeld '+ct(played[h.n])) : ''))+'</li>').join('');
+  const auc = g.calls && g.calls.length ? '<details class="smauc2"><summary>Bieding'+(H.length ? ' en hulp ('+H.length+'×)' : '')+' bekijken</summary><p class="hint">'+g.calls.map((b,i)=>SM_NM[(g.dealer+i)%4][0]+' '+(b==='pas' ? 'pas' : bidHTML(b))+(hb[i] ? '*' : '')).join(' · ')+(H.length ? '<br>* met hulp' : '')+'</p>'+(H.length ? '<ul class="smhlist">'+hl+'</ul>' : '')+'</details>' : '';
+  return head + res + all + '<div class="sm-row">'+(R.passed ? '' : '<button class="gview" id="smana">Analyse</button>')+'<button class="gview" id="smnext">Volgend spel</button></div>' + auc;
 }
-function smBidBox(g){
+// Direct feedback tijdens het bieden (alleen in de oefenstand, en alleen op je eigen telefoon)
+function smSuggest(g, me){ let r = brBid(makeHand(g.hands[me]), g.calls, (g.dealer-me+4)%4) || {bid:'pas', why:''}; if(!bidLegal({dealer:g.dealer, calls:g.calls}, r.bid)) r = {bid:'pas', why:''}; return r; }
+function smBidFeedback(g, me, ptn, nm, hu){
+  const out = [], bh = b => b==='pas' ? 'pas' : bidHTML(b);
+  if(SM.info && SM.info.g===g.id && smHelpMe()){ const i = SM.info.i, s = (g.dealer+i)%4, b = g.calls[i];
+    if(!hu(s)) out.push(SM_NM[s]+' bood '+bh(b)+(g.why && g.why[i] ? ': '+esc(g.why[i]) : '.'));
+    else { const m = brModel(g.calls.slice(0, i+1), (g.dealer-((s+2)%4)+4)%4), L = m.len.map((n,k)=>n>=4 ? n+'+ '+SYM[SUITS[k]] : '').filter(Boolean);
+      out.push((s===me ? 'Jij bood ' : nm(s)+' bood ')+bh(b)+'. Dat toont ongeveer '+m.lo+'–'+Math.min(m.hi, 37)+' punten'+(L.length ? ', '+L.join(', ') : '')+(m.bal ? ', evenwichtig' : '')+'.'); } }
+  if(SM.fb && SM.fb.g===g.id){ const f = SM.fb;
+    out.push(f.mine===f.sug ? '✓ Goed: met '+bh(f.mine)+' bied je zoals de app het zou doen.' : 'Jij bood '+bh(f.mine)+'; de app had '+bh(f.sug)+' geboden'+(f.why ? ': '+esc(f.why) : '.')); }
+  if(SM.tip && SM.tip.g===g.id && SM.tip.n===g.calls.length) out.push('Tip: de app zou '+bh(SM.tip.bid)+' bieden'+(SM.tip.why ? ': '+esc(SM.tip.why) : '.'));
+  return out.length ? '<div class="smfb">'+out.map(x=>'<p>'+x+'</p>').join('')+'</div>' : '';
+}
+// De hulpknop: met vaste hulp direct een tip, anders eenmalig vragen
+function smHelpBtn(g){ const R = SM.oreq, c = smNow(g);
+  if(smHelpMe()) return '<button data-smtip="1" class="tipb">Tip</button>';
+  if(R && R.k===SM.seat && smReqLive(R, g)) return R.no ? '<button class="tipb" disabled>'+esc(R.no)+': nee</button>' : '<button class="tipb" disabled>Wacht…</button>';
+  if((SM.tip && SM.tip.g===g.id && SM.tip.n===c.n) || (SM.ctip && SM.ctip.g===g.id && SM.ctip.n===c.n)) return '';
+  return '<button data-smask="1" class="tipb">Hulp?</button>'; }
+// Wat anderen zien terwijl iemand om hulp vraagt
+function smAskLine(g, pn){ const R = SM.oreq;
+  if(!R || R.no || R.granted || !smReqLive(R, g) || R.k===SM.seat || !SM.seat || (R.ok||{})[SM.seat]) return '';
+  return '<div class="smreq sm1"><span><b>'+pn(SM_SEAT[R.k])+'</b> vraagt hulp bij '+(R.kind==='bid' ? 'dit bod' : 'deze kaart')+'. Akkoord?</span><span><button data-smook="1">Ja</button><button data-smook="0">Nee</button></span></div>'; }
+function smBidBox(g, oef){
   const sel = SM.lvl || 0, ok = b => bidLegal({dealer:g.dealer, calls:g.calls}, b);
   const lv = [1,2,3,4,5,6,7].map(l=>'<button data-smlvl="'+l+'"'+(['C','D','H','S','N'].some(d=>ok(l+d)) ? '' : ' disabled')+(sel===l ? ' class="on"' : '')+'>'+l+'</button>').join('');
   const dn = sel ? ['C','D','H','S','N'].map(d=>'<button data-smbid="'+sel+d+'"'+(ok(sel+d) ? '' : ' disabled')+'>'+bidHTML(sel+d)+'</button>').join('') : '<span class="hint">Kies eerst een niveau</span>';
-  return '<div class="smbb"><div class="smbl">'+lv+'</div><div class="smbd">'+dn+'</div><div class="smbx"><button data-smbid="pas">Pas</button><button data-smbid="X"'+(ok('X') ? '' : ' disabled')+'>X</button><button data-smbid="XX"'+(ok('XX') ? '' : ' disabled')+'>XX</button></div></div>';
+  return '<div class="smbb"><div class="smbl">'+lv+'</div><div class="smbd">'+dn+'</div><div class="smbx"><button data-smbid="pas">Pas</button><button data-smbid="X"'+(ok('X') ? '' : ' disabled')+'>X</button><button data-smbid="XX"'+(ok('XX') ? '' : ' disabled')+'>XX</button>'+smHelpBtn(g)+'</div></div>';
 }
 document.addEventListener('click', e=>{
-  const x = e.target.closest && e.target.closest('[data-smtab],[data-smlvl],[data-smbid],[data-smcard],#smnext'); if(!x || !$('samen').open) return;
+  const x = e.target.closest && e.target.closest('[data-smtab],[data-smlvl],[data-smbid],[data-smtip],[data-smask],[data-smook],[data-smcall],[data-smcard],#smnext,#smana'); if(!x || !$('samen').open) return;
   const g = SM.game;
   if(x.dataset.smtab){ SM.tab = x.dataset.smtab; samenDraw(); return; }
   if(x.dataset.smlvl){ SM.lvl = +x.dataset.smlvl; samenDraw(); return; }
-  if(x.dataset.smbid && g){ SM.lvl = 0; smAct({type:'bid', v:x.dataset.smbid, game:g.id}); x.disabled = true; return; }
+  if(x.dataset.smbid && g){ SM.lvl = 0; const me = SM_SEAT[SM.seat]; if(smHelpMe()){ const s = smSuggest(g, me); SM.fb = {g:g.id, mine:x.dataset.smbid, sug:s.bid, why:s.why}; } SM.tip = null; SM.info = null; gcEvent('samen-bod'); smAct({type:'bid', v:x.dataset.smbid, game:g.id}); x.disabled = true; return; }
+  if(x.dataset.smtip && g){ smGiveTip(false); return; }
+  if(x.dataset.smask && g){ smAskHelp(); return; }
+  if(x.dataset.smook && g){ smOnceAnswer(x.dataset.smook==='1'); return; }
+  if(x.dataset.smcall!=null && g){ SM.info = {g:g.id, i:+x.dataset.smcall}; samenDraw(); return; }
   if(x.dataset.smcard && g){ smAct({type:'card', v:x.dataset.smcard, game:g.id}); x.disabled = true; return; }
   if(x.id==='smnext'){ smAct({type:'deal'}); return; }
+  if(x.id==='smana' && g){ samenAnalyse(g); return; }
 });
+// ---------- Analyse van een samen gespeeld spel: hetzelfde scherm als bij een clubspel, alleen zonder andere tafels ----------
+function samenAnalyse(g){
+  if(CLUB_OVR) return;
+  const R = g.result || {}, SYMR = ['♠','♥','♦','♣'], us = SM_SEAT[SM.seat]%2, P = SM.players || {};
+  const tn = [1-us, 3-us].filter(i=>smHuman(g, i)).map(i=>(P[SM_KEY[i]]||{}).name).filter(Boolean), them = tn.length ? tn.join(' & ') : 'Computer';
+  const ct = g.contract ? g.level+(g.trump===4 ? 'SA' : SYMR[g.trump])+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '') : 'Pas';
+  const d = g.contract ? R.tricks-(g.level+6) : 0, lc = g.st && g.st.played && g.st.played.length ? g.st.played[0] : null;
+  const row = {c:ct, r:g.contract ? (d===0 ? 'C' : d>0 ? '+'+d : String(d)) : '', d:g.contract ? 'NOZW'[g.decl] : '', lead:lc!=null ? SYMR[gSuit(lc)]+(RANK[gRank(lc)]||gRank(lc)) : '', score:g.contract ? R.nz : 0, nz:us===0 ? 'Jullie' : them, ow:us===1 ? 'Jullie' : them, mpNZ:null, mpOW:null};
+  const b = {nr:g.board, hands:g.orig.map(h=>h.slice()), dealer:g.dealer, vul:g.vul, res:{A:[row]}};
+  const c = {title:'Samen spelen', date:'', kind:'paren', boards:{[g.board]:b}};
+  CLUB_OVR = {club:state.club, me:state.clubMe};
+  state.club = c; state.clubMe = 'Jullie';
+  $('samen').close();
+  CV.i = g.board; CV.view = ''; CV.ret = null; gcEvent('samen-analyse');
+  clubOpen(); clubBG();
+}
+function samenAnalyseEnd(){
+  if(!CLUB_OVR) return;
+  state.club = CLUB_OVR.club; state.clubMe = CLUB_OVR.me; CLUB_OVR = null; CV.i = null; CV.view = '';
+  if($('theory').open) $('theory').close();
+  samenOpen();
+}
+$('theory').addEventListener('close', ()=>{ if(CLUB_OVR) setTimeout(samenAnalyseEnd, 0); });
+document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-smback]')) samenAnalyseEnd(); });
 function samenOpen(){ const d = $('samen'); if(!d.open){ if($('settings').open) $('settings').close(); d.showModal ? d.showModal() : d.setAttribute('open',''); } samenDraw(); }
 $('samenclose').addEventListener('click', ()=>{ $('samen').close(); openMenu(); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-samen]')){ gcEvent('samen-open'); samenOpen(); } });
 { const m = /^#samen=([a-z0-9]{6,12})$/.exec(location.hash);
   if(m){ try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){}
-    if(!SAMEN_TEST && state.samen && state.samen.code===m[1]){ samenTransport(m[1]).then(tr=>{ Object.assign(SM, {code:m[1], seat:state.samen.seat, tr}); tr.presence(SM.seat); samenSub(); samenOpen(); }); }
+    if(!SAMEN_TEST && state.samen && state.samen.code===m[1]){ samenJoin(m[1]).then(samenOpen); }
     else { SM.joinCode = m[1]; setTimeout(samenOpen, 50); } } }
 // ---------- Rondleiding: drie schermpjes voor wie de app voor het eerst opent ----------
 const WEL = [
