@@ -781,10 +781,71 @@ table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:
 .btip{margin:.4rem 0;padding:.5rem .65rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)} .btip p{margin:.2rem 0;line-height:1.35}
 .prebtns .homebtn{padding:.5rem .9rem} .prebtns .homebtn b{font-size:1.1rem}
 .asbtns{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.6rem 0} .asbtns .gview{margin:0;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;min-height:2.8rem} .asbtns [data-as="native"], .asbtns > :last-child:nth-child(odd){grid-column:1 / -1}
-#samen{padding:1rem} #samenbody{display:flex;flex-direction:column;gap:.45rem;min-height:0} #samenbody > *{flex-shrink:0} #samenbody > p{margin:0}
+#samen{padding:1rem}
+@media (max-width:600px){ #samen .smh .smc{min-width:2.1rem;height:2.1rem;font-size:1.05rem} #samen .smr{min-height:2.15rem} #samen .small4 .smc{min-width:auto;height:auto;font-size:.82rem} #samen .small4 .smr{min-height:1.15rem} dialog#samen{width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100dvh;margin:0;border:0;border-radius:0;padding:max(.8rem, env(safe-area-inset-top)) .9rem max(.8rem, env(safe-area-inset-bottom))} }
+dialog#samen[open]{display:flex;flex-direction:column} #samen #samenbody{flex:1;overflow-y:auto} #samentitle{font-size:1.15rem}
+.sm-cross{display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"t t t" "l c r" "b b b";align-items:center;gap:.1rem .4rem;font-size:.88rem}
+.sm-cross .t{grid-area:t;justify-self:center} .sm-cross .l{grid-area:l;justify-self:end;text-align:right} .sm-cross .r{grid-area:r;justify-self:start} .sm-cross .b{grid-area:b;justify-self:center} .sm-cross .c{grid-area:c;width:2.4rem;height:1.5rem;border-radius:5px;background:#2F6B4F}
+.sm-cross .sm-p{max-width:100%;white-space:nowrap} .sm-cross .sm-p small{color:var(--muted);font-size:.72rem}
+.smvis > p{margin:0;font-size:.78rem;color:var(--muted)} .smvis > div{display:grid;grid-template-columns:4.6rem 1fr;align-items:center;gap:.3rem} .smvis > div b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .smvis > div span{display:flex;gap:.3rem;flex-wrap:nowrap} .smvis > div span button{margin-left:0}
+.vk{font-size:.75rem;font-weight:700;padding:.05rem .4rem;border-radius:999px;background:var(--panel);color:var(--muted)} .vk.on{background:#C0392B;color:#fff}
+.smauc th span{padding:.05rem .3rem;border-radius:4px} .smauc th span.vul, .smlab span.vul{background:#C0392B;color:#fff;padding:0 .3rem;border-radius:4px} .smauc th span.turn{outline:2px solid var(--felt);outline-offset:1px}
+.sml{display:inline-flex;align-items:center;gap:.2rem;white-space:nowrap;max-width:100%} .sml > b{font-weight:800} .sml.vul{background:#C0392B;color:#fff;border-radius:4px;padding:0 .3rem}
+.bd{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:.95rem;height:.95rem;border-radius:50%;font-size:.6rem;font-weight:800;background:#FFFFFF;color:#14211C;border:1px solid #14211C;line-height:1} .bd.l{background:#1C3D8F;color:#fff;border-color:#1C3D8F} .bd.d{background:#7A5A00;color:#fff;border-color:#7A5A00}
+.smleg{margin:0;font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:.25rem;flex-wrap:wrap} .smleg .vul{background:#C0392B;color:#fff;border-radius:4px;padding:0 .25rem}
+.smauc th .sml{font-size:.75rem;padding:0 .25rem;border-radius:4px} .smauc th .sml.turn{outline:2px solid var(--felt);outline-offset:1px}
+.smtw{display:grid;gap:.35rem;align-items:center} .smtw.l{grid-template-columns:auto 1fr} .smtw.r{grid-template-columns:1fr auto}
+.smdc{border:2px solid #7A5A00;border-radius:8px;padding:.2rem .35rem;background:var(--surface)} .smdc > p{margin:0 0 .1rem;font-size:.68rem;font-weight:800;color:#7A5A00;text-transform:uppercase;letter-spacing:.03em}
+#samen .smdc .smh{gap:0} #samen .smdc .smr{min-height:1.15rem;gap:.05rem;flex-wrap:nowrap} #samen .smdc .smr > i{font-size:.85rem;width:.95rem} #samen .smdc .smc{min-width:auto;height:auto;padding:0 .06rem;border:none;background:none;font-size:.85rem}
+.smsq{--w:min(calc(100vw - 2rem), 22rem, 52vh, 52dvh);position:relative;width:var(--w);height:var(--w);min-height:var(--w);margin:.15rem auto;background:#2F6B4F;border-radius:16px;box-shadow:inset 0 0 0 5px #24573F, 0 2px 6px rgba(0,0,0,.15);color:#EAF3EE;flex-shrink:0}
+.smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 37vh, 37dvh)} .sqa .smauc{table-layout:fixed}
+.smsq .st{position:absolute;font-size:.72rem;font-weight:700;background:rgba(0,0,0,.25);color:#F2F7F4;padding:0 .4rem;border-radius:999px;line-height:1.35rem;max-width:34%;overflow:hidden;text-overflow:ellipsis;z-index:2}
+.smsq .st.t{top:.45rem;left:50%;transform:translateX(-50%)} .smsq .st.b{bottom:.45rem;left:50%;transform:translateX(-50%)} .smsq .st.l{left:.45rem;top:33%;transform:translateY(-50%)} .smsq .st.r{right:.45rem;top:33%;transform:translateY(-50%)} .smsq .st,.smsq .cn,.smsq .sqm{pointer-events:none}
+.smsq .st.vul{background:#C0392B;color:#fff} .smsq .st.turn{background:#FFD54F;color:#14211C;box-shadow:0 0 0 2px #FFE58A} .smsq .st .bd{width:.85rem;height:.85rem;font-size:.55rem}
+.smsq.sqb .st.l,.smsq.sqb .st.r{max-width:22%;top:50%} .smsq.sqb .st.l{left:.3rem} .smsq.sqb .st.r{right:.3rem}
+.sqa{position:absolute;left:24%;right:24%;top:17%;bottom:17%;background:rgba(255,255,255,.95);border-radius:10px;color:#14211C;overflow:hidden;padding:.15rem}
+.sqa .smauc{font-size:.85rem} .sqa .smauc th{font-size:.7rem;color:#56655E;padding:.1rem 0} .sqa .smauc th.turn{color:#1E6A4E;text-decoration:underline;text-decoration-thickness:2px} .sqa .smauc th.vul{color:#C0392B} .sqa .smauc td{height:1.25rem;padding:0}
+.smsq .cn{position:absolute;font-size:.72rem;background:rgba(0,0,0,.22);padding:0 .4rem;border-radius:6px;line-height:1.3rem} .smsq .cn.c1{left:.45rem;top:.45rem} .smsq .cn.c2{right:.45rem;top:.45rem} .smsq .cn b{color:#fff}
+.smsq .sqm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:.7rem;white-space:nowrap;opacity:.9}
+.tcd{position:absolute;transform:translate(-50%,-50%);z-index:1} .tcd.t{left:50%;top:34%} .tcd.b{left:50%;top:70%} .tcd.l{left:37%;top:52%} .tcd.r{left:63%;top:52%} .smsq.last .tcd{opacity:.7}
+.pc{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.05rem;width:2.15rem;height:2.95rem;border-radius:6px;background:#FBFBF8;border:1px solid #BFC9C2;font:inherit;font-weight:800;line-height:1;padding:.3rem 0 0;color:#141414;box-sizing:border-box}
+.pc b{font-size:1rem} .pc i{font-style:normal;font-size:1rem} .pc.H{color:#C4202B} .pc.D{color:#C85F0A} .pc.C{color:#1E7A46} .pc.S{color:#1C3D8F}
+.prow{display:flex;justify-content:center;gap:2px;padding-top:4px} .prow .pc{flex:0 1 2.15rem;min-width:0}
+button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px);box-shadow:0 3px 0 var(--felt)} .pc.off{opacity:.4} .pc.tipc{outline:3px solid #FFD54F;outline-offset:1px}
+.sqd{position:absolute;z-index:1} .sqd.t{top:2.1rem;left:.5rem;right:.5rem;padding:.15rem;border-radius:8px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 2px #E0B84C} .sqd.t .prow{padding-top:2px} .sqd.t .pc{height:2.5rem;padding-top:.2rem}
+.sqd.l,.sqd.r{top:calc(33% + .9rem);background:rgba(255,255,255,.95);border:2px solid #C9A227;border-radius:7px;padding:.1rem .3rem;color:#14211C;font-size:.78rem;font-weight:800;max-width:30%} .sqd.l{left:.45rem} .sqd.r{right:.45rem}
+.sqd p{margin:0;font-size:.55rem;color:#7A5A00;letter-spacing:.04em;text-transform:uppercase} .pcol div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.15} .pcol i{font-style:normal;margin-right:.15rem} .pcol .H{color:#C4202B} .pcol .D{color:#C85F0A} .pcol .C{color:#1E7A46} .pcol .S{color:#1C3D8F}
+.bst{position:absolute;display:flex;z-index:1} .bst.t{top:2.15rem;left:50%;transform:translateX(-50%)} .bst.b{bottom:2.15rem;left:50%;transform:translateX(-50%)} .bst.l,.bst.r{flex-direction:column;top:50%;transform:translateY(-50%)} .bst.l{left:25%} .bst.r{right:25%}
+.bc{font:inherit;font-weight:800;font-size:.85rem;width:2.4rem;height:1.65rem;border-radius:4px;background:#FFFFFF;color:#14211C;border:1px solid #8FA39A;box-shadow:0 1px 2px rgba(0,0,0,.35);display:inline-flex;align-items:flex-start;justify-content:center;padding:.15rem 0 0;cursor:pointer;flex-shrink:0;box-sizing:border-box}
+.bst.t .bc + .bc,.bst.b .bc + .bc{margin-left:-.75rem} .bst.l .bc + .bc,.bst.r .bc + .bc{margin-top:-.8rem}
+.bc.p{background:#2E8B57;color:#fff;border-color:#1F6B42} .bc.x{background:#C0392B;color:#fff;border-color:#962D22} .bc.xx{background:#1C3D8F;color:#fff;border-color:#142C66} .bc.new{outline:2px solid #FFD54F;outline-offset:1px}
+.smsq .st,.smsq.sqb .st.l,.smsq.sqb .st.r{max-width:calc(var(--w) * .55);width:max-content;right:auto;bottom:auto}
+.smsq .st.b{left:50%;top:calc(100% - 1.125rem);transform:translate(-50%,-50%)}
+.smsq .st.t{left:50%;top:1.125rem;transform:translate(-50%,-50%)}
+.smsq .st.l,.smsq.sqb .st.l{left:1.125rem;top:50%;transform:translate(-50%,-50%) rotate(90deg)}
+.smsq .st.r,.smsq.sqb .st.r{left:calc(100% - 1.125rem);top:50%;transform:translate(-50%,-50%) rotate(-90deg)}
+.bst{--step:1.65rem;width:max-content;flex-direction:row!important;right:auto!important;bottom:auto!important}
+.bst[style]{--step:max(1.05rem, min(1.65rem, calc((var(--w) - 10.4rem) / (var(--n) - 1))))}
+.bst .bc + .bc{margin:0 0 0 calc(var(--step) - 2.4rem)!important}
+.bst .bc{justify-content:flex-start;padding-left:.25rem}
+.bst.b{left:50%;top:calc(100% - 2.975rem);transform:translate(-50%,-50%)}
+.bst.t{left:50%;top:2.975rem;transform:translate(-50%,-50%)}
+.bst.l{left:2.975rem;top:50%;transform:translate(-50%,-50%) rotate(90deg)}
+.bst.r{left:calc(100% - 2.975rem);top:50%;transform:translate(-50%,-50%) rotate(-90deg)}
+.sqd.t{left:2.2rem;right:2.2rem}
+.sqd.l,.sqd.r{top:2.1rem}
+.sqd.l{left:2.3rem}
+.sqd.r{right:2.3rem}
+.smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 40vh, 40dvh)} .smsq.sqb .st.l,.smsq.sqb .st.r{top:50%;max-width:23%}
+.aucb{border:none;font:inherit;color:#EAF3EE;cursor:pointer;pointer-events:auto !important} .aucb i{font-style:normal;font-size:.6rem}
+.aucov{z-index:5;background:#FFFFFF;box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;top:12%;bottom:12%;left:10%;right:10%} .aucov p{margin:.1rem 0 .2rem;font-size:.68rem;color:#56655E;text-align:center}
+.smauc2 .smauc{margin:.2rem 0;font-size:.85rem} .smauc2 .smauc th.vul{color:#C0392B} .smauc2 .smauc td{height:1.2rem}
+.smtn{position:absolute;font-size:.7rem;font-weight:700;color:#EAF3EE;background:rgba(0,0,0,.18);padding:0 .35rem;border-radius:999px;max-width:8.5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.25rem;gap:.2rem}
+.smtn.t{top:.25rem;left:50%;transform:translateX(-50%)} .smtn.b{bottom:.25rem;left:50%;transform:translateX(-50%)} .smtn.l{left:.4rem;top:calc(50% - 1.75rem)} .smtn.r{right:.4rem;top:calc(50% - 1.75rem)}
+.smtn.vul{background:#C0392B;color:#fff} .smtn.turn{background:#FFD54F;color:#14211C;box-shadow:0 0 0 2px #FFD54F} .smtn .bd{width:.85rem;height:.85rem;font-size:.55rem} #samenbody{display:flex;flex-direction:column;gap:.45rem;min-height:0} #samenbody > *{flex-shrink:0} #samenbody > p{margin:0}
 .sm-row{display:flex;gap:.5rem;align-items:center} .sm-row input{flex:1;min-width:0;font:inherit;padding:.55rem .7rem;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 .sm-stat{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.9rem} .sm-p{display:inline-flex;align-items:center;gap:.3rem} .sm-p i{width:.55rem;height:.55rem;border-radius:50%;background:var(--line)} .sm-p.on i{background:#2E8B57}
-.smfree{border:none;background:none;color:var(--bad,#b3261e);font-size:1.1rem;line-height:1;padding:0 .2rem;cursor:pointer} .smvis{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;padding:.4rem .5rem;border-radius:10px;background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .smvis button{margin-left:.35rem;padding:.2rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer} .smhl{font-style:normal;font-size:.7rem;font-weight:700;color:var(--felt);border:1px solid var(--felt);border-radius:999px;padding:0 .3rem;margin-left:.25rem} .smhrow{margin:0;font-size:.85rem} .smhrow button,.smreq button{padding:.15rem .6rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer;margin-left:.2rem} .smreq{padding:.45rem .6rem;border-radius:10px;border:2px solid var(--felt);font-size:.9rem} .smreq p{margin:0 0 .3rem} .smc.tipc{outline:3px solid var(--felt);outline-offset:1px} .smreq.sm1{display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.3rem .5rem;font-size:.85rem} .smhlist{margin:.2rem 0 0;padding-left:1.1rem;font-size:.85rem} .smwait .tipb{margin-left:.3rem;padding:.1rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;font-size:.8rem;cursor:pointer} .sm-chat.lob{min-height:4rem;max-height:5.5rem} .sm-stat small{color:var(--muted,#666);font-size:.75rem} .sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
+.smfree{border:none;background:none;color:var(--bad,#b3261e);font-size:1.1rem;line-height:1;padding:0 .2rem;cursor:pointer} .smvis{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;padding:.4rem .5rem;border-radius:10px;background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .smvis button{margin-left:.35rem;padding:.2rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer} .smhl{font-style:normal;font-size:.7rem;font-weight:700;color:var(--felt);border:1px solid var(--felt);border-radius:999px;padding:0 .3rem;margin-left:.25rem} .smhrow{margin:0;font-size:.85rem} .smhrow button,.smreq button{padding:.15rem .6rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer;margin-left:.2rem} .smreq{padding:.45rem .6rem;border-radius:10px;border:2px solid var(--felt);font-size:.9rem} .smreq p{margin:0 0 .3rem} .smc.tipc{outline:3px solid var(--felt);outline-offset:1px} .smreq.sm1{display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.3rem .5rem;font-size:.85rem} .smreq.sm1 > span:last-child{display:flex;gap:.3rem;flex-shrink:0} .smreq.sm1 button{margin-left:0} .smhlist{margin:.2rem 0 0;padding-left:1.1rem;font-size:.85rem} .smwait .tipb{margin-left:.3rem;padding:.1rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;font-size:.8rem;cursor:pointer} .sm-chat.lob{min-height:4rem;max-height:5.5rem} .sm-stat small{color:var(--muted,#666);font-size:.75rem} .sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
 .sm-msg{max-width:85%;padding:.35rem .6rem;border-radius:12px;background:var(--surface);border:1px solid var(--line);line-height:1.3;font-size:.92rem;align-self:flex-start;word-wrap:break-word} .sm-msg.me{align-self:flex-end;background:color-mix(in srgb, var(--felt) 14%, var(--surface));border-color:transparent} .sm-msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
 .smauc2{font-size:.85rem} #samenbody .sm-row .gview{flex:1} .smauc2 summary{cursor:pointer;color:var(--felt)} .smauc2[open]{flex-basis:100%}
 .smx{width:2.4rem;height:2.4rem;border-radius:50%;border:none;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.18);font-size:1.5rem;line-height:1;color:var(--ink);cursor:pointer;flex:none} #samen .dtitle{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
@@ -794,7 +855,8 @@ table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:
 .smc{font:inherit;font-weight:700;min-width:1.85rem;height:1.85rem;padding:0 .25rem;border-radius:6px;border:1px solid var(--line);background:#FBFBF8;color:#141414;display:inline-flex;align-items:center;justify-content:center;font-size:.95rem}
 button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);cursor:pointer} button.smc:disabled{opacity:.45} .smc.H{color:#C4202B} .smc.D{color:#C85F0A} .smc.C{color:#1E7A46} .smc.S{color:#1C3D8F}
 .smdash{color:var(--muted)} .smwait{margin:.2rem 0;font-size:.9rem;color:var(--muted)} .smwait.go{color:var(--felt);font-weight:700}
-.smtr{position:relative;height:5.2rem;border-radius:12px;background:#2F6B4F;margin:.25rem 0} .smtc{position:absolute;font-size:1rem;background:#FBFBF8;border-radius:5px;padding:.1rem .3rem;font-weight:700} .smtc.b{bottom:.3rem;left:50%;transform:translateX(-50%)} .smtc.t{top:.3rem;left:50%;transform:translateX(-50%)} .smtc.l{left:.5rem;top:50%;transform:translateY(-50%)} .smtc.r{right:.5rem;top:50%;transform:translateY(-50%)} .smtr.last .smtc{opacity:.75} .smtl{position:absolute;left:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem} .smtx{position:absolute;right:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem}
+.smdt{border:2px solid #7A5A00;border-radius:8px;padding:.15rem .35rem;position:relative} .smdt::before{content:'DUMMY';position:absolute;right:.4rem;top:.2rem;font-size:.62rem;font-weight:800;color:#7A5A00;letter-spacing:.03em}
+.smtr{position:relative;height:6.6rem;border-radius:12px;background:#2F6B4F;margin:.25rem 0} .smtc{position:absolute;font-size:1rem;background:#FBFBF8;border-radius:5px;padding:.1rem .3rem;font-weight:700} .smtc.b{bottom:1.55rem;left:50%;transform:translateX(-50%)} .smtc.t{top:1.55rem;left:50%;transform:translateX(-50%)} .smtc.l{left:.6rem;top:50%;transform:translateY(-35%)} .smtc.r{right:.6rem;top:50%;transform:translateY(-35%)} .smtr.last .smtc{opacity:.75} .smtl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;opacity:.9;max-width:40%;color:#EAF3EE;font-size:.72rem} .smtx{position:absolute;right:.5rem;bottom:.3rem;color:#EAF3EE;font-size:.72rem}
 .smauc{width:100%;border-collapse:collapse;font-size:.9rem;text-align:center} .smauc th{font-size:.75rem;color:var(--muted);font-weight:600;padding:.15rem} .smauc th.turn{color:var(--felt);text-decoration:underline} .smauc td{padding:.15rem;height:1.4rem}
 .smcall{font:inherit;background:none;border:none;padding:0 .2rem;color:inherit;cursor:pointer;border-bottom:1px dotted var(--muted)} .smfb{font-size:.82rem;line-height:1.3;padding:.3rem .5rem;border-radius:8px;background:color-mix(in srgb, var(--felt) 9%, var(--surface))} .smfb p{margin:.1rem 0} .smbb .tipb{flex:.8;border-color:#B8860B;color:#7A5A00}
 .smbb{display:flex;flex-direction:column;gap:.3rem} .smbb button{font:inherit;font-weight:700;min-height:2.2rem;border-radius:8px;border:1.5px solid var(--felt);background:var(--surface);color:var(--ink);flex:1} .smbb button.on{background:var(--felt);color:var(--on-felt)} .smbb button:disabled{opacity:.35} .smbl,.smbd,.smbx{display:flex;gap:.25rem}
@@ -11256,13 +11318,14 @@ function samenDraw(){
   const pl = s => '<span class="sm-p'+(P[s] && P[s].online ? ' on' : '')+'"><i></i><small>'+SM_NM[SM_SEAT[s]]+'</small> '+(P[s] ? esc(P[s].name)+(s===SM.seat ? ' (jij)' : '')+(P[s].help ? '<em class="smhl">hulp</em>' : '')+(host && s!=='Z' ? '<button class="smfree" data-smfree="'+s+'" aria-label="Stoel van '+esc(P[s].name)+' vrijmaken">×</button>' : '') : SM.seat ? 'computer' : 'vrij')+'</span>';
   const V = Object.entries(SM.visitors||{}).filter(([u,v])=>v && v.name && v.online && !SM_KEY.some(k=>P[k] && P[k].uid===u)).sort((a,b)=>(a[1].t||0)-(b[1].t||0));
   const freeS = ['N','W','O'].filter(k=>!P[k]);
-  const visHTML = !host || !V.length ? '' : '<div class="smvis">'+V.slice(0,3).map(([u,v])=>'<div><b>'+esc(v.name)+'</b> wacht'+(freeS.length ? ': '+freeS.map(k=>'<button data-smassign="'+u+'" data-k="'+k+'">'+SM_NM[SM_SEAT[k]]+'</button>').join('') : '. Maak eerst een stoel vrij met ×.')+'</div>').join('')+'</div>';
+  const visHTML = !host || !V.length ? '' : '<div class="smvis"><p>Wacht op een stoel:</p>'+V.slice(0,3).map(([u,v])=>'<div><b>'+esc(v.name)+'</b><span>'+(freeS.length ? freeS.map(k=>'<button data-smassign="'+u+'" data-k="'+k+'">'+SM_NM[SM_SEAT[k]]+'</button>').join('') : 'Maak eerst een stoel vrij met ×.')+'</span></div>').join('')+'</div>';
   const R = SM.hreq, mineH = SM.seat && P[SM.seat] && P[SM.seat].help, NO = SM.hno && SM.hno.k===SM.seat ? SM.hno : null;
   const askMe = R && R.k && SM.seat && R.k!==SM.seat && !(R.ok||{})[SM.seat] && P[R.k];
   const reqHTML = askMe ? '<div class="smreq"><p><b>'+esc(P[R.k].name)+'</b> wil met hulp spelen: tips en uitleg bij het bieden. Iedereen aan tafel moet akkoord gaan. Jij ook?</p><div><button data-smhok="1">Akkoord</button><button data-smhok="0">Liever niet</button></div></div>' : '';
   const helpHTML = !SM.seat ? '' : '<p class="smhrow">'+(R && R.k===SM.seat ? 'Hulp gevraagd; de anderen moeten nog akkoord gaan. <button data-smhelp="x">Intrekken</button>'
       : (NO ? esc(NO.name)+' wil liever zonder hulp. ' : '')+'Hulp bij het bieden: <b>'+(mineH ? 'aan' : 'uit')+'</b> <button data-smhelp="'+(mineH ? 'uit' : 'aan')+'">'+(mineH ? 'Uitzetten' : 'Vragen')+'</button>')+'</p>';
-  const stat = reqHTML+'<div class="sm-stat">'+order.map(pl).join('')+'</div>'+visHTML+helpHTML;
+  const cell = (k,p) => '<div class="sx '+p+'">'+pl(k)+'</div>';
+  const stat = reqHTML+'<div class="sm-cross">'+cell(order[1],'t')+cell(order[2],'l')+'<div class="sx c" aria-hidden="true"></div>'+cell(order[3],'r')+cell(order[0],'b')+'</div>'+visHTML+helpHTML;
   const humans = SM_KEY.filter(k=>P[k] && P[k].online).length, full = SM_KEY.every(k=>P[k] && P[k].online);
   const msgs = SM.chat.slice(-8).map(m=>'<div class="sm-msg'+(smMine(m) ? ' me' : '')+'">'+(smMine(m) ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
   const G = SM.game, mode = SM.mode || 'oefen', locked = mode==='wedstrijd' && G && G.phase!=='done';
@@ -11275,12 +11338,13 @@ function samenDraw(){
   const both = humans>=2;
   const lobby = '<p class="lbl">Chatten tijdens het spel</p><nav class="modes" id="smmode"><button data-v="oefen" class="'+(mode==='oefen' ? 'on' : '')+'">Oefenen: altijd</button><button data-v="wedstrijd" class="'+(mode==='wedstrijd' ? 'on' : '')+'">Wedstrijd: na het spel</button></nav>'
     + '<button class="gview" id="smdeal"'+(both ? '' : ' disabled')+'>'+(both ? 'Spel starten' : 'Wacht op een medespeler')+'</button>';
+  $('samentitle').textContent = G && SM.seat ? 'Spel '+G.board+' · gever '+SM_NM[G.dealer] : 'Samen spelen';
   if(!SM.seat){ const hn = esc((P.Z||{}).name||'De gastheer');
     el.innerHTML = '<p>Je bent aan tafel. '+hn+' wijst je zo een stoel aan.'+(G && G.phase!=='done' ? ' Er wordt nu een spel gespeeld.' : '')+'</p>' + stat + chatHTML + '<button class="navclear" id="smleave">Tafel verlaten</button>';
   } else el.innerHTML = (G ? '' : stat)
-    + (full || G || !host ? '' : (humans<2 && !V.length ? '<p class="hint">Stuur de link naar je partner, en eventueel naar tegenstanders. Wie binnenkomt, geef jij een stoel.</p>' : '')+'<button class="gview" id="smshare">'+(humans<2 ? 'Link sturen' : 'Nog iemand uitnodigen')+'</button>')
+    + (full || G || !host || V.length ? '' : (humans<2 && !V.length ? '<p class="hint">Stuur de link naar je partner, en eventueel naar tegenstanders. Wie binnenkomt, geef jij een stoel.</p>' : '')+'<button class="gview" id="smshare">'+(humans<2 ? 'Link sturen' : 'Nog iemand uitnodigen')+'</button>')
     + tabs
-    + (G && tab==='spel' ? smGameHTML(G) : (G ? stat : '') + (reqHTML ? '' : chatHTML + (G ? '' : lobby)))
+    + (G && tab==='spel' ? smGameHTML(G) : (G ? stat : '') + (reqHTML ? '' : (visHTML && V.length>1 ? '' : chatHTML) + (G ? '' : lobby)))
     + (!G || tab==='chat' ? '<button class="navclear" id="smleave">Tafel verlaten</button>' : '');
   if($('smshare')) $('smshare').onclick = () => shareUrl(samenLink(), (state.myName||'Je partner')+' wil samen bridge spelen. Open de link om mee te doen.', 'Samen spelen', t=>{ const b = $('smshare'); if(b) b.textContent = t; }, 'Link naar de kamer');
   if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, uid:SM.tr.uid, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
@@ -11461,46 +11525,68 @@ function smHandRows(cards, legal){
   return '<div class="smh">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
     return '<div class="smr"><i class="'+SUITS[si]+'">'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>legal ? smCardBtn(c, legal.includes(c)) : '<span class="smc '+SUITS[si]+'">'+(RANK[gRank(c)]||gRank(c))+'</span>').join('') : '<span class="smdash">–</span>')+'</div>'; }).join('')+'</div>';
 }
+// Het biedverloop als schema (W N O Z); star = biedingen waarbij hulp is gebruikt
+function smAucTbl(g, turn, star){ const cols = [3,0,1,2], L = ['N','O','Z','W'];
+  const cells = Array(cols.indexOf(g.dealer)).fill('').concat(g.calls.map((b,i)=>'<button class="smcall" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : bidHTML(b))+(star && star[i] ? '*' : '')+'</button>'));
+  const rows = []; for(let i=0;i<cells.length;i+=4) rows.push(cells.slice(i,i+4)); if(!rows.length || (turn!=null && rows[rows.length-1].length===4)) rows.push([]);
+  return '<table class="smauc"><tr>'+cols.map(s=>'<th class="'+(s===turn ? 'turn' : '')+(smVul(g, s) ? ' vul' : '')+'">'+L[s]+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+[0,1,2,3].map(i=>'<td>'+(r[i]||'')+'</td>').join('')+'</tr>').join('')+'</table>'; }
+function smVul(g, s){ return g.vul==='Allen' || (g.vul==='NZ' && s%2===0) || (g.vul==='OW' && s%2===1); }
 function smGameHTML(g){
   const me = SM_SEAT[SM.seat], ptn = (me+2)%4, P = SM.players || {}, hu = s => smHuman(g, s), pn = s => esc((P[SM_KEY[s]]||{}).name||SM_NM[s]);
   const nm = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s]+' (computer)', lb = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s];
-  const vulTxt = VULTXT(g.vul), head = '<p class="smhead"><b>Spel '+g.board+'</b> · gever '+SM_NM[g.dealer]+' · '+vulTxt+(g.contract ? ' · <b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+'</b> door '+(g.decl===me ? 'jou' : nm(g.decl))+'' : '')+'</p>';
+  const vs = s => smVul(g, s), us = vs(me), them = vs((me+1)%4), vulTxt = us && them ? 'Allen kwetsbaar' : us ? 'Jullie kwetsbaar' : them ? 'Zij kwetsbaar' : 'Niemand kwetsbaar';
+  const LET = ['N','O','Z','W'], inPlay = g.phase!=='bid' && g.contract;
+  const badges = s => (s===g.dealer ? '<i class="bd">G</i>' : '')+(inPlay && s===g.decl ? '<i class="bd l">L</i>' : '')+(inPlay && s===g.dummy ? '<i class="bd d">D</i>' : '');
+  const seat = (s, cls) => '<span class="sml'+(vs(s) ? ' vul' : '')+(cls ? ' '+cls : '')+'"><b>'+LET[s]+'</b> '+lb(s)+badges(s)+'</span>';
+  const tricks = g.phase==='play' ? ' · slagen: '+(g.decl%2===me%2 ? 'jullie '+g.declTricks+', zij '+g.defTricks : 'jullie '+g.defTricks+', zij '+g.declTricks) : '';
+  const head = '<p class="smleg"><i class="bd">G</i> gever'+(inPlay ? ' <i class="bd l">L</i> leider <i class="bd d">D</i> dummy' : '')+' · '+(us||them ? '<span class="vul">rood</span> = kwetsbaar' : 'niemand kwetsbaar')+'</p>';
+  // ---- vierkante tafel: jij onderaan, partner boven, tegenstanders links en rechts
+  const pos = s => ['b','l','t','r'][(s-me+4)%4];
+  const pcard = (c, how) => { const S = SUITS[gSuit(c)], inner = '<b>'+(RANK[gRank(c)]||gRank(c))+'</b><i>'+SYM[S]+'</i>';
+    return how==='play' ? '<button class="pc '+S+'" data-smcard="'+c+'">'+inner+'</button>' : '<span class="pc '+S+(how==='off' ? ' off' : '')+'">'+inner+'</span>'; };
+  const prow = (cards, legal, cls) => '<div class="prow'+(cls ? ' '+cls : '')+'">'+[0,1,2,3].map(si=>cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).map(c=>pcard(c, legal==null ? 'show' : legal.includes(c) ? 'play' : 'off')).join('')).join('')+'</div>';
+  const pcol = cards => '<div class="pcol">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>RANK[gRank(c)]||gRank(c)).join(' ') : '–')+'</div>'; }).join('')+'</div>';
+  const labels = t => [0,1,2,3].map(s=>seat(s, 'st '+pos(s)+(s===t ? ' turn' : ''))).join('');
   if(g.phase==='bid'){
-    const turn = (g.dealer+g.calls.length)%4, cols = [3,0,1,2];
-    const cells = Array(cols.indexOf(g.dealer)).fill('').concat(g.calls.map((b,i)=>'<button class="smcall" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : bidHTML(b))+'</button>'));
-    const rows = []; for(let i=0;i<cells.length;i+=4) rows.push(cells.slice(i,i+4)); if(!rows.length || rows[rows.length-1].length===4) rows.push([]);
-    const tbl = '<table class="smauc"><tr>'+cols.map(s=>'<th'+(s===turn ? ' class="turn"' : '')+'>'+lb(s)+'</th>').join('')+'</tr>'+rows.slice(-4).map(r=>'<tr>'+[0,1,2,3].map(i=>'<td>'+(r[i]||'')+'</td>').join('')+'</tr>').join('')+'</table>';
+    const turn = (g.dealer+g.calls.length)%4, last = g.calls.length-1;
+    const bcard = i => { const b = g.calls[i], k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
+      return '<button class="bc '+k+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : bidHTML(b))+'</button>'; };
+    const stacks = [0,1,2,3].map(s=>{ const mine = g.calls.map((b,i)=>i).filter(i=>(g.dealer+i)%4===s); return mine.length ? '<div class="bst '+pos(s)+'"'+(mine.length>1 ? ' style="--n:'+mine.length+'"' : '')+'>'+mine.map(bcard).join('')+'</div>' : ''; }).join('');
     const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
-    return head + tbl + fb + smHandRows(g.hands[me], null) + (!hu(me) ? '<p class="smwait">Je doet mee vanaf het volgende spel; nu speelt de computer jouw stoel.</p>' : turn===me ? smBidBox(g, oef) : ask || '<p class="smwait">'+(hu(turn) ? pn(turn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
+    const sq = '<div class="smsq sqb">'+labels(turn)+stacks+'</div>';
+    return head + sq + fb + prow(g.hands[me], null, 'mine') + (!hu(me) ? '<p class="smwait">Je doet mee vanaf het volgende spel; nu speelt de computer jouw stoel.</p>' : turn===me ? smBidBox(g, oef) : ask || '<p class="smwait">'+(hu(turn) ? pn(turn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
   }
   if(g.phase==='play'){
     const st = g.st, real = (st.turn+g.rot)%4, ctrl = smController(g, real), mine = ctrl===me;
     const hand = s => st.hands[(s-g.rot+4)%4];
-    const showDummy = st.played.length>0, dummyIsMe = g.dummy===me;
-    const legalFor = s => mine && real===s ? gLegal(st, (s-g.rot+4)%4) : [];
-    const pos = s => ['b','l','t','r'][(s-me+4)%4];
+    const showDummy = st.played.length>0, dummyIsMe = g.dummy===me, dp = pos(g.dummy);
+    const legalFor = s => mine && real===s ? gLegal(st, (s-g.rot+4)%4) : null;
     const showLast = !(g.cur && g.cur.length) && g.lastTrick, tc = showLast ? g.lastTrick.cards : (g.cur||[]);
-    const tr = '<div class="smtr'+(showLast ? ' last' : '')+'">'+(showLast ? '<span class="smtl">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '')+tc.map(x=>'<span class="smtc '+pos(x.seat)+'">'+cardHTML(SUITS[gSuit(x.card)]+gRank(x.card))+'</span>').join('')+'<span class="smtx">'+(g.decl%2===me%2 ? 'Jullie ' : 'Zij ')+g.declTricks+' · '+(g.decl%2===me%2 ? 'zij ' : 'jullie ')+g.defTricks+'</span></div>';
-    let dummyHTML = '';
-    if(showDummy && !dummyIsMe) dummyHTML = '<p class="smlab">Dummy: '+lb(g.dummy)+(mine && real===g.dummy ? ' · <b>jij speelt deze hand</b>' : '')+'</p>'+smHandRows(hand(g.dummy), legalFor(g.dummy));
-    const myLab = dummyIsMe ? '<p class="smlab">Jij bent dummy: '+nm(g.decl)+' speelt jouw kaarten.</p>' : '';
+    const ourT = g.decl%2===me%2 ? g.declTricks : g.defTricks, theirT = g.decl%2===me%2 ? g.defTricks : g.declTricks;
+    let dum = '';
+    if(showDummy && !dummyIsMe) dum = dp==='t' ? '<div class="sqd t">'+prow(hand(g.dummy), legalFor(g.dummy))+'</div>' : '<div class="sqd '+dp+'"><p>Dummy</p>'+pcol(hand(g.dummy))+'</div>';
+    const sq = '<div class="smsq play'+(showLast ? ' last' : '')+'">'+labels(showLast ? -1 : real)
+      + '<button class="cn c1 aucb" data-smauc="1" aria-label="Biedverloop bekijken"><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+'</b> '+LET[g.decl]+' <i>▾</i></button><span class="cn c2">Wij '+ourT+' · Zij '+theirT+'</span>'
+      + dum + tc.map(x=>'<span class="tcd '+pos(x.seat)+'">'+pcard(x.card, 'show')+'</span>').join('')
+      + (SM.showAuc ? '<div class="sqa aucov" data-smauc="1"><p>Biedverloop · tik om te sluiten</p>'+smAucTbl(g, null)+'</div>' : '')
+      + (showLast ? '<span class="sqm">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '') + '</div>';
     const ct = SM.ctip && SM.ctip.g===g.id && SM.ctip.n===st.played.length ? SM.ctip : null, f1 = x => x.toFixed(1).replace('.', ',');
-    const wait = mine ? '<p class="smwait go">'+(ct ? 'Tip: speel '+cardHTML(SUITS[gSuit(ct.card)]+gRank(ct.card))+(ct.ev!=null ? ' (gem. nog '+f1(ct.ev)+' slagen)' : '') : real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+' '+smHelpBtn(g)+'</p>' : smAskLine(g, pn) || '<p class="smwait">'+(ctrl!==null ? pn(ctrl)+' is aan de beurt…'+((P[SM_KEY[ctrl]]||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
-    return head + dummyHTML + tr + wait + myLab + smHandRows(hand(me), dummyIsMe ? null : legalFor(me));
+    const wait = mine ? '<p class="smwait go">'+(ct ? 'Tip: speel '+cardHTML(SUITS[gSuit(ct.card)]+gRank(ct.card))+(ct.ev!=null ? ' (gem. nog '+f1(ct.ev)+' slagen)' : '') : real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+' '+smHelpBtn(g)+'</p>' : smAskLine(g, pn) || '<p class="smwait">'+(dummyIsMe ? 'Jij bent dummy · ' : '')+(ctrl!==null ? pn(ctrl)+' is aan de beurt…'+((P[SM_KEY[ctrl]]||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
+    return head + sq + prow(hand(me), dummyIsMe ? null : legalFor(me), 'mine') + wait;
   }
   // klaar
   const R = g.result || {};
   let res;
   if(R.passed) res = '<p>Iedereen paste: geen spel.</p>';
   else { const need = g.level+6, d = R.tricks-need;
-    res = '<p><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+' door '+lb(g.decl)+' '+(d===0 ? 'C' : d>0 ? '+'+d : d)+'</b> · '+R.tricks+' slagen · '+(g.decl%2===me%2 ? 'jullie' : 'zij')+' scoren <b>'+scoreTxt(R.score)+'</b></p>'
+    res = '<p><b>'+bidHTML(g.contract)+(g.dbl===2 ? 'xx' : g.dbl ? 'x' : '')+' door '+(g.decl===me ? 'jou' : lb(g.decl))+' '+(d===0 ? 'C' : d>0 ? '+'+d : d)+'</b> · '+R.tricks+' slagen · '+(g.decl%2===me%2 ? 'jullie' : 'zij')+' scoren <b>'+scoreTxt(R.score)+'</b></p>'
       + (R.dd!=null ? '<p class="hint">Open kaarten: '+R.dd+' slagen voor '+SM_NM[g.decl]+'. '+(R.dd===R.tricks ? 'Precies gehaald.' : R.tricks<R.dd ? (g.decl%2===me%2 ? 'Jullie lieten er '+(R.dd-R.tricks)+' liggen.' : (hu(g.decl) ? 'De leider' : 'De computer')+' liet er '+(R.dd-R.tricks)+' liggen.') : (g.decl%2===me%2 ? 'Jullie haalden er '+(R.tricks-R.dd)+' meer.' : 'Let op jullie tegenspel.'))+'</p>' : ''); }
-  const all = '<div class="small4 rot">'+[[ptn,'t'],[(me+1)%4,'l'],[(me+3)%4,'r'],[me,'b']].map(([s,p])=>'<div class="p'+p+'"><p class="smlab">'+lb(s)+'</p>'+smHandRows(g.orig[s], null)+'</div>').join('')+'</div>';
+  const all = '<div class="small4 rot">'+[[ptn,'t'],[(me+1)%4,'l'],[(me+3)%4,'r'],[me,'b']].map(([s,p])=>'<div class="p'+p+'"><p class="smlab">'+seat(s)+'</p>'+smHandRows(g.orig[s], null)+'</div>').join('')+'</div>';
   const H = g.helps || [], hb = {}; H.forEach(h=>{ if(h.kind==='bid') hb[h.n] = 1; });
   const ct = c => cardHTML(SUITS[gSuit(c)]+gRank(c)), played = (g.st && g.st.played) || [];
   const hl = H.map(h=>'<li>'+lb(h.s)+(h.ask ? ' (gevraagd)' : '')+': '+(h.kind==='bid' ? 'bij '+(g.calls[h.n]==null ? 'het bod' : g.calls[h.n]==='pas' ? 'pas' : bidHTML(g.calls[h.n]))+', advies '+(h.sug==='pas' ? 'pas' : bidHTML(h.sug))+(g.calls[h.n]!=null && g.calls[h.n]!==h.sug ? ' — anders geboden' : '')
       : 'slag '+(Math.floor(h.n/4)+1)+', advies '+ct(h.sug)+(played[h.n]!=null ? (played[h.n]===h.sug ? ', gevolgd' : ', gespeeld '+ct(played[h.n])) : ''))+'</li>').join('');
-  const auc = g.calls && g.calls.length ? '<details class="smauc2"><summary>Bieding'+(H.length ? ' en hulp ('+H.length+'×)' : '')+' bekijken</summary><p class="hint">'+g.calls.map((b,i)=>SM_NM[(g.dealer+i)%4][0]+' '+(b==='pas' ? 'pas' : bidHTML(b))+(hb[i] ? '*' : '')).join(' · ')+(H.length ? '<br>* met hulp' : '')+'</p>'+(H.length ? '<ul class="smhlist">'+hl+'</ul>' : '')+'</details>' : '';
+  const auc = g.calls && g.calls.length ? '<details class="smauc2"><summary>Bieding'+(H.length ? ' en hulp ('+H.length+'×)' : '')+' bekijken</summary>'+smAucTbl(g, null, hb)+(H.length ? '<p class="hint">* met hulp</p>' : '')+(H.length ? '<ul class="smhlist">'+hl+'</ul>' : '')+'</details>' : '';
   return head + res + all + '<div class="sm-row">'+(R.passed ? '' : '<button class="gview" id="smana">Analyse</button>')+'<button class="gview" id="smnext">Volgend spel</button></div>' + auc;
 }
 // Direct feedback tijdens het bieden (alleen in de oefenstand, en alleen op je eigen telefoon)
@@ -11533,8 +11619,9 @@ function smBidBox(g, oef){
   return '<div class="smbb"><div class="smbl">'+lv+'</div><div class="smbd">'+dn+'</div><div class="smbx"><button data-smbid="pas">Pas</button><button data-smbid="X"'+(ok('X') ? '' : ' disabled')+'>X</button><button data-smbid="XX"'+(ok('XX') ? '' : ' disabled')+'>XX</button>'+smHelpBtn(g)+'</div></div>';
 }
 document.addEventListener('click', e=>{
-  const x = e.target.closest && e.target.closest('[data-smtab],[data-smlvl],[data-smbid],[data-smtip],[data-smask],[data-smook],[data-smcall],[data-smcard],#smnext,#smana'); if(!x || !$('samen').open) return;
+  const x = e.target.closest && e.target.closest('[data-smauc],[data-smtab],[data-smlvl],[data-smbid],[data-smtip],[data-smask],[data-smook],[data-smcall],[data-smcard],#smnext,#smana'); if(!x || !$('samen').open) return;
   const g = SM.game;
+  if(x.dataset.smauc){ SM.showAuc = !SM.showAuc; samenDraw(); return; }
   if(x.dataset.smtab){ SM.tab = x.dataset.smtab; samenDraw(); return; }
   if(x.dataset.smlvl){ SM.lvl = +x.dataset.smlvl; samenDraw(); return; }
   if(x.dataset.smbid && g){ SM.lvl = 0; const me = SM_SEAT[SM.seat]; if(smHelpMe()){ const s = smSuggest(g, me); SM.fb = {g:g.id, mine:x.dataset.smbid, sug:s.bid, why:s.why}; } SM.tip = null; SM.info = null; gcEvent('samen-bod'); smAct({type:'bid', v:x.dataset.smbid, game:g.id}); x.disabled = true; return; }
