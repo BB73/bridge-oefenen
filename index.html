@@ -856,6 +856,9 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 /* Tipknop op elk scherm: een klein lipje aan de rechterrand */
 .tipfab{position:fixed;right:0;top:46%;z-index:30;width:1.55rem;height:2.9rem;padding:0 0 0 .2rem;margin:0;border:1px solid rgba(0,0,0,.18);border-right:0;border-radius:1rem 0 0 1rem;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .tipfab[hidden]{display:none}
+.tipfab.wm{top:calc(46% + 3.3rem);height:1.7rem;border-radius:.85rem 0 0 .85rem;font:inherit;font-weight:800;font-size:.8rem;color:#151515;z-index:29}
+.ta-tabs{flex-wrap:wrap;gap:.3rem}
+.ta-tabs button{padding:.3rem .6rem;font-size:.85rem}
 .tipfab svg{width:1.05rem;height:1.05rem}
 .tipfab:focus-visible{outline:2px solid var(--felt)}
 @media print{.tipfab{display:none!important}}
@@ -2078,9 +2081,10 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
 </dialog>
 
 <dialog id="tipsadmin" aria-labelledby="tatitle">
-  <div class="dtitle"><h2 id="tatitle">Binnengekomen tips</h2><button class="smx" id="taclose" aria-label="Sluiten">×</button></div>
+  <div class="dtitle"><h2 id="tatitle">Webmaster</h2><button class="smx" id="taclose" aria-label="Sluiten">×</button></div>
   <div class="rules" id="tabody"></div>
 </dialog>
+<button class="tipfab wm" id="wmfab" hidden aria-label="Webmaster" title="Webmaster">M</button>
 <button class="tipfab" id="tipfab" data-tip="1" aria-label="Geef een tip aan de bouwer" title="Tip voor de bouwer"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 13H35M24 13V37" fill="none" stroke="#151515" stroke-width="6" stroke-linecap="round"/></svg></button>
 <dialog id="tipdlg" aria-labelledby="tiptitle">
   <div class="dhead"><h2 id="tiptitle">Tip voor de bouwer</h2></div>
@@ -10378,7 +10382,7 @@ async function tipShot(){
   const ds = tipOpenDlgs(), target = ds.length ? ds[ds.length-1] : document.body;
   await h2cLoad();
   const opt = {scale:Math.min(1.5, 900/innerWidth), logging:false, useCORS:true, backgroundColor:getComputedStyle(document.body).backgroundColor || '#FFFFFF',
-    ignoreElements:el=>el.id==='tipdlg' || el.id==='tipfab', onclone:tipColors};
+    ignoreElements:el=>el.id==='tipdlg' || el.id==='tipfab' || el.id==='wmfab', onclone:tipColors};
   if(target===document.body) Object.assign(opt, {x:scrollX, y:scrollY, width:innerWidth, height:innerHeight, windowWidth:innerWidth, windowHeight:innerHeight});
   const c = await html2canvas(target, opt);
   let cv = c;
@@ -10480,27 +10484,55 @@ document.addEventListener('click', e=>{ const a = e.target.closest && e.target.c
   state.noStats = !state.noStats; save(); a.textContent = state.noStats ? 'Toch delen' : 'Liever niet?'; });
 
 // beheer: overzicht van het gebruik
-async function taUsage(){
-  const el = $('tabody'); el.innerHTML = '<p>Gebruik ophalen…</p>';
-  let v;
-  try{ v = (await firebase.database().ref('usage').once('value')).val() || {}; }
-  catch(e){ el.innerHTML = taTabs()+'<p class="leadnote bad">Geen toegang tot het gebruik. Staan de nieuwe databaseregels erin?</p>'; return; }
-  const now = Date.now(), D = 86400000, L = Object.values(v);
-  const act = d => L.filter(x=>x.last && now-x.last<d*D).length;
-  const conv = {}; L.forEach(x=>Object.entries(x.c||{}).forEach(([k, y])=>{ const z = conv[k] || (conv[k] = {n:0, ok:0, p:0}); z.n += y.n||0; z.ok += y.ok||0; z.p++; }));
-  const ev = {}; L.forEach(x=>Object.entries(x.e||{}).forEach(([k, n])=>{ ev[k] = (ev[k]||0)+n; }));
-  const vers = {}, devs = {}; L.filter(x=>x.last && now-x.last<7*D).forEach(x=>{ vers[x.v||'?'] = (vers[x.v||'?']||0)+1; devs[x.dev||'?'] = (devs[x.dev||'?']||0)+1; });
-  const nm = k => (typeof CONVS!=='undefined' && CONVS[k]) || k;
-  const top = Object.entries(conv).sort((a,b)=>b[1].n-a[1].n);
-  const row = cells => '<tr>'+cells.map((c, i)=>'<td'+(i ? ' class="num"' : '')+'>'+c+'</td>').join('')+'</tr>';
-  el.innerHTML = taTabs()
-    + '<table class="ta-tab"><tr><th>Toestellen</th><th class="num">aantal</th></tr>'+row(['ooit gebruikt', L.length])+row(['vandaag actief', act(1)])+row(['laatste 7 dagen', act(7)])+row(['laatste 30 dagen', act(30)])+'</table>'
-    + '<p class="lbl">Oefeningen (meest gespeeld eerst)</p><table class="ta-tab"><tr><th>Oefening</th><th class="num">vragen</th><th class="num">goed</th><th class="num">spelers</th></tr>'
-    + top.map(([k, z])=>row([esc(nm(k)), z.n, z.n ? Math.round(100*z.ok/z.n)+'%' : '–', z.p])).join('') + '</table>'
-    + (Object.keys(ev).length ? '<p class="lbl">Gebeurtenissen</p><table class="ta-tab">'+Object.entries(ev).sort((a,b)=>b[1]-a[1]).map(([k, n])=>row([esc(k), n])).join('')+'</table>' : '')
-    + '<p class="lbl">Afgelopen 7 dagen</p><table class="ta-tab">'+Object.entries(devs).sort((a,b)=>b[1]-a[1]).map(([k, n])=>row([esc(k), n])).join('')+Object.entries(vers).sort((a,b)=>b[0].localeCompare(a[0])).map(([k, n])=>row([esc(k), n])).join('')+'</table>';
+const WM_MAIL = 'basbolk@gmail.com';
+const wmIs = () => { try{ const u = window.firebase && firebase.apps.length && firebase.auth().currentUser; return !!(u && u.email===WM_MAIL && u.emailVerified); }catch(e){ return false; } };
+function wmCheck(){ const ok = wmIs(), f = $('wmfab'); if(f.hidden===ok) f.hidden = !ok; if(ok && !state.wm){ state.wm = 1; save(); } }
+setInterval(wmCheck, 4000);
+setTimeout(()=>{ if((state.wm || state.acct) && FB_CONFIG && !SAMEN_TEST && navigator.onLine) fbLoad().then(wmCheck).catch(()=>{}); }, 2500);
+$('wmfab').addEventListener('click', ()=>{ TA.tab = 'use'; TAU.who = null; taOpen(); });
+// gegevens voor de overzichten
+async function taData(){
+  const el = $('tabody'); el.innerHTML = '<p>Gegevens ophalen…</p>';
+  try{ TAU.v = (await firebase.database().ref('usage').once('value')).val() || {}; }
+  catch(e){ el.innerHTML = taTabs()+'<p class="leadnote bad">Geen toegang tot het gebruik. Staan de nieuwe databaseregels erin?</p>'; return false; }
+  return true;
 }
-function taTabs(){ return '<nav class="modes ta-tabs">'+[['tips','Tips'],['use','Gebruik'],['who','Spelers']].map(([k,l])=>'<button data-tatab="'+k+'" aria-pressed="'+(TA.tab===k)+'">'+l+'</button>').join('')+'</nav>'; }
+const taRow = cells => '<tr>'+cells.map((c, i)=>'<td'+(i ? ' class="num"' : '')+'>'+c+'</td>').join('')+'</tr>';
+const taNm = k => (typeof CONVS!=='undefined' && CONVS[k]) || k;
+// Overzicht: hoeveel spelers, hoe actief, welke onderdelen
+async function taUsage(){
+  if(!(await taData())) return;
+  const el = $('tabody'), now = Date.now(), D = 86400000, L = Object.values(TAU.v);
+  const act = d => L.filter(x=>x.last && now-x.last<d*D).length, nw = d => L.filter(x=>x.first && now-x.first<d*D).length;
+  const tot = L.reduce((a, x)=>{ const t = taTot(x); a.n += t.n; a.ok += t.ok; a.opens += x.opens||0; return a; }, {n:0, ok:0, opens:0});
+  const feats = taFeat({}).map(([l], i)=>{ let n = 0, p = 0; L.forEach(x=>{ const v = taFeat(x)[i][1]; n += v; if(v) p++; }); return [l, n, p]; });
+  const vers = {}, devs = {}; L.filter(x=>x.last && now-x.last<7*D).forEach(x=>{ vers[x.v||'?'] = (vers[x.v||'?']||0)+1; devs[x.dev||'?'] = (devs[x.dev||'?']||0)+1; });
+  el.innerHTML = taTabs()
+    + '<table class="ta-tab"><tr><th>Spelers</th><th class="num">aantal</th></tr>'+taRow(['ooit', L.length])+taRow(['met account', L.filter(x=>x.name).length])+taRow(['vandaag actief', act(1)])+taRow(['laatste 7 dagen', act(7)])+taRow(['laatste 30 dagen', act(30)])+taRow(['nieuw in 7 dagen', nw(7)])+'</table>'
+    + '<table class="ta-tab"><tr><th>Totaal</th><th class="num"></th></tr>'+taRow(['keer geopend', tot.opens])+taRow(['vragen beantwoord', tot.n])+taRow(['goed', tot.n ? Math.round(100*tot.ok/tot.n)+'%' : '–'])+'</table>'
+    + '<table class="ta-tab"><tr><th>Onderdeel</th><th class="num">keer</th><th class="num">spelers</th></tr>'+feats.map(([l, n, p])=>taRow([l, n || '–', p || '–'])).join('')+'</table>'
+    + '<table class="ta-tab"><tr><th>Afgelopen 7 dagen</th><th class="num">spelers</th></tr>'+Object.entries(devs).sort((a,b)=>b[1]-a[1]).map(([k, n])=>taRow([esc(k), n])).join('')+Object.entries(vers).sort((a,b)=>b[0].localeCompare(a[0], 'nl', {numeric:true})).map(([k, n])=>taRow([esc(k), n])).join('')+'</table>';
+}
+// Oefeningen: wat wordt gespeeld en waar gaat het mis
+async function taConv(){
+  if(!(await taData())) return;
+  const conv = {}; Object.values(TAU.v).forEach(x=>Object.entries(x.c||{}).forEach(([k, y])=>{ const z = conv[k] || (conv[k] = {n:0, ok:0, p:0}); z.n += y.n||0; z.ok += y.ok||0; z.p++; }));
+  const srt = TA.csort || 'n', L = Object.entries(conv).sort((a,b)=>srt==='pct' ? (a[1].ok/a[1].n)-(b[1].ok/b[1].n) : srt==='p' ? b[1].p-a[1].p : b[1].n-a[1].n);
+  $('tabody').innerHTML = taTabs()+'<div class="ta-bar">'+[['n','Meest gespeeld'],['pct','Moeilijkst'],['p','Meeste spelers']].map(([k,l])=>'<button class="ta-btn'+(srt===k ? ' on' : '')+'" data-tacs="'+k+'">'+l+'</button>').join('')+'</div>'
+    + '<table class="ta-tab"><tr><th>Oefening</th><th class="num">vragen</th><th class="num">goed</th><th class="num">spelers</th></tr>'
+    + (L.map(([k, z])=>taRow([esc(taNm(k)), z.n, z.n ? Math.round(100*z.ok/z.n)+'%' : '–', z.p])).join('') || taRow(['nog niets', '', '', '']))+'</table>';
+}
+// Systeemkaarten: welke kaart en welke afspraken staan erop
+async function taCards(){
+  if(!(await taData())) return;
+  const L = Object.values(TAU.v).filter(x=>x.card!==undefined), pre = {}, on = {};
+  L.forEach(x=>{ pre[x.preset||'?'] = (pre[x.preset||'?']||0)+1; String(x.card||'').split(',').filter(Boolean).forEach(k=>{ on[k] = (on[k]||0)+1; }); });
+  $('tabody').innerHTML = taTabs()+'<table class="ta-tab"><tr><th>Systeemkaart</th><th class="num">spelers</th></tr>'+(Object.entries(pre).sort((a,b)=>b[1]-a[1]).map(([k, n])=>taRow([esc(k), n])).join('') || taRow(['nog niets', '']))+'</table>'
+    + '<table class="ta-tab"><tr><th>Afspraak op de kaart</th><th class="num">spelers</th><th class="num">deel</th></tr>'+Object.entries(on).sort((a,b)=>b[1]-a[1]).map(([k, n])=>taRow([esc(taNm(k)), n, Math.round(100*n/L.length)+'%'])).join('')+'</table>';
+}
+function taRoute(){ if(TA.tab==='use') taUsage(); else if(TA.tab==='who') taWho(); else if(TA.tab==='conv') taConv(); else if(TA.tab==='cards') taCards(); else taDraw(); }
+function taTabs(){ const nw = TA.list.filter(t=>(t.status||'nieuw')==='nieuw').length;
+  return '<nav class="modes ta-tabs">'+[['use','Overzicht'],['who','Spelers'],['conv','Oefeningen'],['cards','Kaarten'],['tips','Tips'+(nw ? ' ('+nw+')' : '')]].map(([k,l])=>'<button data-tatab="'+k+'" aria-pressed="'+(TA.tab===k)+'">'+l+'</button>').join('')+'</nav>'; }
 // beheer: per speler (toestel of account) wat hij gebruikt en hoe goed het gaat
 const TAU = {v:null, who:null};
 const taD = t => t ? new Date(t).toLocaleDateString('nl-NL', {day:'numeric', month:'short', year:'2-digit'}) : '–';
@@ -10546,14 +10578,16 @@ async function taLoad(){
     await fbLoad();
     let u = firebase.auth().currentUser;
     if(!u || u.isAnonymous){
-      el.innerHTML = '<p>Log in met het Google-account dat in de databaseregels staat.</p><button class="gview" id="tagoogle">Inloggen met Google</button>';
+      el.innerHTML = '<p>Deze pagina is alleen voor de webmaster. Log in bij <b>Samen spelen</b> met je account, of hier met Google.</p><button class="gview" id="tagoogle">Inloggen met Google</button>';
       $('tagoogle').onclick = async () => { try{ await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()); taLoad(); }catch(e){ el.insertAdjacentHTML('beforeend', '<p class="leadnote bad">Inloggen lukte niet: '+esc(e.code||e.message)+'</p>'); } };
       return;
     }
+    wmCheck();
+    if(!wmIs()){ el.innerHTML = '<p>Deze pagina is alleen voor de webmaster.</p><p class="ta-meta">Ingelogd als '+esc(u.email||'')+(u.emailVerified ? '' : ' (e-mailadres nog niet bevestigd)')+'</p>'; return; }
     const snap = await firebase.database().ref('tips').once('value'), v = snap.val() || {};
     TA.list = Object.entries(v).map(([id, t])=>Object.assign({id}, t)).sort((a,b)=>(b.t||0)-(a.t||0)); TA.err = '';
   }catch(e){ TA.list = []; TA.err = e.code==='PERMISSION_DENIED' || /permission/i.test(e.message||'') ? 'Geen toegang. Staat het e-mailadres van dit Google-account in de regels?' : (e.message||'Ophalen lukte niet'); }
-  taDraw();
+  taRoute();
 }
 function taDraw(){
   const el = $('tabody'), u = window.firebase && firebase.auth().currentUser;
@@ -10575,7 +10609,8 @@ $('tabody').addEventListener('click', async e=>{
   if(im){ im.classList.toggle('big'); return; }
   if(tr){ TAU.who = tr.dataset.tawho; taWhoDraw(); $('tabody').scrollTop = 0; return; }
   if(!b) return;
-  if(b.dataset.tatab){ TA.tab = b.dataset.tatab; TAU.who = null; if(TA.tab==='use') taUsage(); else if(TA.tab==='who') taWho(); else taDraw(); return; }
+  if(b.dataset.tatab){ TA.tab = b.dataset.tatab; TAU.who = null; taRoute(); return; }
+  if(b.dataset.tacs){ TA.csort = b.dataset.tacs; taConv(); return; }
   if(b.dataset.tawho!==undefined){ TAU.who = b.dataset.tawho || null; taWhoDraw(); return; }
   if(b.dataset.taf){ TA.filter = b.dataset.taf; taDraw(); return; }
   if(b.dataset.tar){ taLoad(); return; }
@@ -10586,7 +10621,7 @@ $('tabody').addEventListener('click', async e=>{
     catch(err){ TA.err = 'Opslaan lukte niet: '+(err.message||''); taDraw(); } }
 });
 $('taclose').addEventListener('click', ()=>{ $('tipsadmin').close(); if(location.hash==='#tips') try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){} });
-const taHash = () => { if(location.hash==='#tips') setTimeout(taOpen, 60); };
+const taHash = () => { if(location.hash==='#tips'){ TA.tab = 'tips'; setTimeout(taOpen, 60); } };
 window.addEventListener('hashchange', taHash); taHash();
 new MutationObserver(tipFabPlace).observe(document.body, {subtree:true, attributes:true, attributeFilter:['open','hidden']});
 tipFabPlace();
