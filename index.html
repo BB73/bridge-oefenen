@@ -11631,7 +11631,7 @@ const SAMEN_TEST = /samentest/.test(location.search);
 // Wachtwoord en e-mailadres beheert Firebase Authentication (versleuteld). In de database staan alleen:
 // names/<naam> = uid (zo blijft een naam uniek), users/<uid> = {name}, presence/<uid> (alleen leesbaar voor vrienden),
 // friends/<uid>/<vriend> = true, requests/<aan>/<van> = vriendverzoek, invites/<aan>/<van> = uitnodiging voor een tafel.
-const ACC = {user:null, name:'', unver:false, mailSent:0, online:{}, friends:{}, reqs:{}, invs:{}, offs:[], view:'', err:'', msg:'', busy:false, seenInv:{}};
+const ACC = {user:null, name:'', unver:false, mailSent:0, online:{}, skew:0, friends:{}, reqs:{}, invs:{}, offs:[], view:'', err:'', msg:'', busy:false, seenInv:{}};
 const accKey = n => n.trim().toLowerCase().replace(/\s+/g, '_');
 const accOk = n => /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 _\-]{1,19}$/.test(n.trim());
 const accIn = () => !!(ACC.user && !ACC.user.isAnonymous && ACC.name && !ACC.unver);
@@ -11658,8 +11658,15 @@ async function accStart(){
   const on = (r, h) => { r.on('value', h); ACC.offs.push(()=>r.off('value', h)); };
   // ik ben online zolang de app open is
   const me = db.ref('presence/'+u.uid), con = db.ref('.info/connected');
-  on(con, s=>{ if(s.val()){ me.onDisconnect().remove(); me.set({name:ACC.name, t:firebase.database.ServerValue.TIMESTAMP}); } });
-  ACC.offs.push(()=>{ try{ me.onDisconnect().cancel(); me.remove(); }catch(e){} });
+  // online = de app staat open en in beeld. Elke minuut een teken van leven; verdwijnt de app naar de achtergrond, dan offline.
+  let conn = false;
+  const beat = () => { if(conn && document.visibilityState==='visible') me.set({name:ACC.name, t:firebase.database.ServerValue.TIMESTAMP}).catch(()=>{}); };
+  on(con, s=>{ conn = !!s.val(); if(conn){ me.onDisconnect().remove(); beat(); } });
+  const vis = () => { if(document.visibilityState==='visible'){ beat(); accDraw(); } else me.remove().catch(()=>{}); };
+  document.addEventListener('visibilitychange', vis); addEventListener('pagehide', ()=>me.remove().catch(()=>{}));
+  const iv = setInterval(beat, 60000), tick = setInterval(accDraw, 60000);
+  on(db.ref('.info/serverTimeOffset'), s=>{ ACC.skew = s.val() || 0; });
+  ACC.offs.push(()=>{ clearInterval(iv); clearInterval(tick); document.removeEventListener('visibilitychange', vis); try{ me.onDisconnect().cancel(); me.remove(); }catch(e){} });
   // iedereen die online is (alleen voor bevestigde accounts leesbaar)
   { const r = db.ref('presence'), h = s=>{ const v = s.val() || {}; delete v[u.uid]; ACC.online = v; accDraw(); };
     r.on('value', h, ()=>{ ACC.online = {}; accDraw(); }); ACC.offs.push(()=>r.off('value', h)); }
@@ -11671,7 +11678,7 @@ async function accStart(){
     ids.filter(id=>!fsubs[id]).forEach(id=>{
       ACC.friends[id] = ACC.friends[id] || {name:'…', online:false};
       db.ref('users/'+id+'/name').once('value').then(n=>{ if(ACC.friends[id]){ ACC.friends[id].name = n.val() || '?'; accDraw(); } });
-      const r = db.ref('presence/'+id), h = p=>{ if(ACC.friends[id]){ ACC.friends[id].online = !!p.val(); accDraw(); } };
+      const r = db.ref('presence/'+id), h = p=>{ if(ACC.friends[id]){ ACC.friends[id].pres = p.val(); accDraw(); } };
       r.on('value', h, ()=>{}); fsubs[id] = ()=>r.off('value', h);
     });
     accDraw();
@@ -11742,8 +11749,12 @@ async function accAccept(id){ const db = firebase.database(), me = ACC.user.uid;
 async function accDecline(id){ await firebase.database().ref('requests/'+ACC.user.uid+'/'+id).remove(); }
 async function accUnfriend(id){ const db = firebase.database(), me = ACC.user.uid; await db.ref('friends/'+me+'/'+id).remove(); try{ await db.ref('friends/'+id+'/'+me).remove(); }catch(e){} }
 // schermpjes in het venster Samen spelen
+const accLive = p => !!(p && (!p.t || Date.now()+(ACC.skew||0)-p.t < 3*60000));
+function accFresh(){ Object.values(ACC.friends).forEach(f=>{ f.online = f.pres!==undefined ? accLive(f.pres) : !!f.online; }); }
 function accFriendsOnline(limit){
-  const all = Object.assign({}, ACC.online); Object.entries(ACC.friends).forEach(([id, f])=>{ if(f.online && !all[id]) all[id] = {name:f.name}; if(!f.online) delete all[id]; });
+  accFresh();
+  const all = {}; Object.entries(ACC.online).forEach(([id, p])=>{ if(accLive(p)) all[id] = p; });
+  Object.entries(ACC.friends).forEach(([id, f])=>{ if(f.online) all[id] = all[id] || {name:f.name}; else if(f.pres!==undefined) delete all[id]; });
   const on = Object.entries(all).map(([id, p])=>[id, {name:(ACC.friends[id] && ACC.friends[id].name!=='…' ? ACC.friends[id].name : p && p.name) || '?', fr:!!ACC.friends[id], req:!!ACC.reqs[id]}])
     .sort((a,b)=>(b[1].fr-a[1].fr) || a[1].name.localeCompare(b[1].name, 'nl', {sensitivity:'base'}));
   const atTable = new Set(Object.values(SM.players||{}).map(p=>p && p.uid).concat(Object.keys(SM.visitors||{})));
@@ -11770,7 +11781,7 @@ function accHTML(){
   if(v==='online'){ const fo = accFriendsOnline(0);
     return '<p class="lbl">Nu online ('+fo.n+')</p>'+msg+'<div class="aclist">'+(fo.html || '<p class="hint">Er is nu niemand anders online.</p>')+'</div><p class="acfoot"><button class="navclear" data-acv="">Terug</button></p>'; }
   if(v==='friends'){
-    const reqs = Object.entries(ACC.reqs), fr = Object.entries(ACC.friends).sort((a,b)=>(b[1].online-a[1].online) || a[1].name.localeCompare(b[1].name, 'nl', {sensitivity:'base'}));
+    accFresh(); const reqs = Object.entries(ACC.reqs), fr = Object.entries(ACC.friends).sort((a,b)=>(b[1].online-a[1].online) || a[1].name.localeCompare(b[1].name, 'nl', {sensitivity:'base'}));
     return '<p class="lbl">Vriend toevoegen</p><div class="sm-row"><input id="acfr" maxlength="20" placeholder="Naam van je vriend" aria-label="Naam van je vriend"><button class="gview" id="acfradd">Toevoegen</button></div>'
       + msg + (reqs.length ? '<p class="lbl">Vriendverzoeken</p>'+reqs.slice(0,3).map(([id, r])=>'<div class="acrow"><b>'+esc(r.name)+'</b><button class="ta-btn" data-acok="'+id+'">Accepteren</button><button class="ta-btn" data-acno="'+id+'">Nee</button></div>').join('') : '')
       + '<p class="lbl">Je vrienden'+(fr.length ? ' ('+fr.length+')' : '')+'</p>'
