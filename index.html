@@ -864,6 +864,17 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .tipstat:empty{display:none}
 .tipstat.err{color:#B3261E}
 .tipdone{font-size:1.05rem}
+.acin{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:8px;background:#FFFFFF;color:var(--ink);margin:0 0 .35rem}
+.acrow{display:flex;align-items:center;gap:.45rem;padding:.25rem 0;border-bottom:1px solid var(--line)}
+.acrow b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acrow small{color:var(--muted)}
+.acdot{width:.6rem;height:.6rem;border-radius:50%;background:#C9CCC8;flex:none}
+.acdot.on{background:#2E8B57}
+.aclist{max-height:min(14rem,32dvh);overflow-y:auto}
+.acfoot{font-size:.85rem;color:var(--muted);margin:.5rem 0 0}
+.acfoot .navclear{font-size:.85rem}
+.acinv{margin:.2rem 0 .4rem}
+.gview.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line);margin-top:.4rem}
 .tiprep{border-left:3px solid var(--felt);padding:.1rem 0 .1rem .6rem;margin:0 0 .7rem}
 .tiprep p{margin:.15rem 0}
 .tiprq{font-style:italic;color:var(--muted)}
@@ -924,7 +935,8 @@ a.ta-btn{text-decoration:none;display:inline-block}
 .bst.t{top:3.225rem}
 .bst.l{left:3.225rem}
 .bst.r{left:calc(100% - 3.225rem)}
-.smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 40vh, 40dvh)} .smsq.sqb .st.l,.smsq.sqb .st.r{top:50%;max-width:23%}
+.smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 40vh, 40dvh)}
+@media (max-height:700px){ .smsq.sqb{--w:min(calc(100vw - 2rem), 22rem, 35vh, 35dvh)} } .smsq.sqb .st.l,.smsq.sqb .st.r{top:50%;max-width:23%}
 .aucb{border:none;font:inherit;color:#EAF3EE;cursor:pointer;pointer-events:auto !important} .aucb i{font-style:normal;font-size:.6rem}
 .aucov{z-index:5;background:#FFFFFF;box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer;top:12%;bottom:12%;left:10%;right:10%} .aucov p{margin:.1rem 0 .2rem;font-size:.68rem;color:#56655E;text-align:center}
 .smauc2 .smauc{margin:.2rem 0;font-size:.85rem} .smauc2 .smauc th.vul{color:#C0392B} .smauc2 .smauc td{height:1.2rem}
@@ -11570,11 +11582,12 @@ const FB_CONFIG = {
   appId: "1:569839085009:web:cc0c1f28584aa70daf6cf0"
 };
 const FB_VER = '10.12.2';
-let FB = null;
+let FB = null, FBS = null;
 function fbLoad(){
   if(FB) return FB;
   const add = n => new Promise((ok, no)=>{ const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/firebase@'+FB_VER+'/'+n+'-compat.js'; s.onload = ok; s.onerror = ()=>no(new Error('laden mislukt')); document.head.appendChild(s); });
-  FB = add('firebase-app').then(()=>Promise.all([add('firebase-auth'), add('firebase-database')])).then(async ()=>{
+  if(!FBS){ FBS = add('firebase-app').then(()=>Promise.all([add('firebase-auth'), add('firebase-database')])); FBS.catch(()=>{ FBS = null; }); }
+  FB = FBS.then(async ()=>{
     if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
     const cur = await new Promise(ok=>{ const off = firebase.auth().onAuthStateChanged(u=>{ off(); ok(u); }); });
     const user = cur || (await firebase.auth().signInAnonymously()).user;
@@ -11612,6 +11625,144 @@ function samenTransport(code){
     leave:p => put(p+'/online', (x,k)=>{ x[k] = false; })});
 }
 const SAMEN_TEST = /samentest/.test(location.search);
+// ---------- Account, vrienden en wie er online is ----------
+// Wachtwoord en e-mailadres beheert Firebase Authentication (versleuteld). In de database staan alleen:
+// names/<naam> = uid (zo blijft een naam uniek), users/<uid> = {name}, presence/<uid> (alleen leesbaar voor vrienden),
+// friends/<uid>/<vriend> = true, requests/<aan>/<van> = vriendverzoek, invites/<aan>/<van> = uitnodiging voor een tafel.
+const ACC = {user:null, name:'', friends:{}, reqs:{}, invs:{}, offs:[], view:'', err:'', msg:'', busy:false, seenInv:{}};
+const accKey = n => n.trim().toLowerCase().replace(/\s+/g, '_');
+const accOk = n => /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 _\-]{1,19}$/.test(n.trim());
+const accIn = () => !!(ACC.user && !ACC.user.isAnonymous && ACC.name);
+function accErr(e){
+  const c = (e && e.code) || '';
+  return ({'auth/email-already-in-use':'Er is al een account met dit e-mailadres. Log in.', 'auth/invalid-email':'Dit e-mailadres klopt niet.', 'auth/weak-password':'Kies een wachtwoord van minstens 6 tekens.',
+    'auth/wrong-password':'E-mailadres of wachtwoord klopt niet.', 'auth/user-not-found':'E-mailadres of wachtwoord klopt niet.', 'auth/invalid-credential':'E-mailadres of wachtwoord klopt niet.',
+    'auth/invalid-login-credentials':'E-mailadres of wachtwoord klopt niet.', 'auth/too-many-requests':'Te veel pogingen. Probeer het over een paar minuten opnieuw.', 'auth/network-request-failed':'Geen verbinding. Controleer je internet.',
+    'auth/operation-not-allowed':'Aanmelden met e-mail staat nog niet aan in de database.', 'auth/credential-already-in-use':'Er is al een account met dit e-mailadres. Log in.'})[c] || ('Dat lukte niet ('+(c || e.message || 'onbekend')+').');
+}
+function accStop(){ ACC.offs.forEach(f=>{ try{ f(); }catch(e){} }); ACC.offs = []; ACC.friends = {}; ACC.reqs = {}; ACC.invs = {}; }
+async function accStart(){
+  accStop();
+  const {db} = await fbLoad(), u = firebase.auth().currentUser; ACC.user = u;
+  if(!u || u.isAnonymous){ ACC.name = ''; if(state.acct){ delete state.acct; save(); } return; }
+  const v = (await db.ref('users/'+u.uid).once('value')).val(); ACC.name = (v && v.name) || u.displayName || '';
+  if(!ACC.name) return;
+  state.acct = 1; state.myName = ACC.name; save();
+  const on = (r, h) => { r.on('value', h); ACC.offs.push(()=>r.off('value', h)); };
+  // ik ben online zolang de app open is
+  const me = db.ref('presence/'+u.uid), con = db.ref('.info/connected');
+  on(con, s=>{ if(s.val()){ me.onDisconnect().remove(); me.set({name:ACC.name, t:firebase.database.ServerValue.TIMESTAMP}); } });
+  ACC.offs.push(()=>{ try{ me.onDisconnect().cancel(); me.remove(); }catch(e){} });
+  // vrienden en of ze online zijn
+  const fsubs = {};
+  on(db.ref('friends/'+u.uid), s=>{
+    const ids = Object.keys(s.val() || {});
+    Object.keys(fsubs).filter(id=>!ids.includes(id)).forEach(id=>{ fsubs[id](); delete fsubs[id]; delete ACC.friends[id]; });
+    ids.filter(id=>!fsubs[id]).forEach(id=>{
+      ACC.friends[id] = ACC.friends[id] || {name:'…', online:false};
+      db.ref('users/'+id+'/name').once('value').then(n=>{ if(ACC.friends[id]){ ACC.friends[id].name = n.val() || '?'; accDraw(); } });
+      const r = db.ref('presence/'+id), h = p=>{ if(ACC.friends[id]){ ACC.friends[id].online = !!p.val(); accDraw(); } };
+      r.on('value', h, ()=>{}); fsubs[id] = ()=>r.off('value', h);
+    });
+    accDraw();
+  });
+  ACC.offs.push(()=>Object.values(fsubs).forEach(f=>f()));
+  on(db.ref('requests/'+u.uid), s=>{ ACC.reqs = s.val() || {}; accDraw(); });
+  on(db.ref('invites/'+u.uid), s=>{ ACC.invs = s.val() || {}; accInvite(); });
+}
+function accDraw(){ if($('samen').open) samenDraw(); }
+// een uitnodiging van een vriend: vragen of je aan tafel wilt
+function accInvite(){
+  const now = Date.now(), list = Object.entries(ACC.invs).filter(([f, v])=>v && v.code && now-(v.t||0)<20*60000 && !ACC.seenInv[f+v.t]);
+  if(!list.length || $('confirmdlg').open) return;
+  const [from, v] = list[0]; ACC.seenInv[from+v.t] = 1;
+  const drop = () => firebase.database().ref('invites/'+ACC.user.uid+'/'+from).remove();
+  askConfirm('Uitnodiging', '<p><b>'+esc(v.name||'Een vriend')+'</b> nodigt je uit om samen bridge te spelen.</p>', 'Naar de tafel', ()=>{
+    drop();
+    if(SM.code===v.code){ samenOpen(); return; }
+    if(SM.code) samenLeave();
+    state.myName = ACC.name; save(); samenOpen(); samenJoin(v.code);
+  }, 'Nee, dank je', drop);
+}
+async function accInviteFriend(id){
+  if(!SM.code) await samenCreate();
+  if(!SM.code) return;
+  await firebase.database().ref('invites/'+id+'/'+ACC.user.uid).set({name:ACC.name, code:SM.code, t:Date.now()});
+  ACC.msg = (ACC.friends[id] ? ACC.friends[id].name : 'Je vriend')+' is uitgenodigd.'; samenDraw();
+}
+async function accCreate(name, mail, pw){
+  if(!accOk(name)) throw {message:'Kies een naam van 2 tot 20 letters of cijfers.'};
+  const {db} = await fbLoad(), key = accKey(name);
+  if((await db.ref('names/'+key).once('value')).exists()) throw {message:'De naam '+name.trim()+' is al bezet. Kies een andere.'};
+  const auth = firebase.auth(), cur = auth.currentUser;
+  const cred = cur && cur.isAnonymous ? await cur.linkWithCredential(firebase.auth.EmailAuthProvider.credential(mail, pw)) : await auth.createUserWithEmailAndPassword(mail, pw);
+  const u = cred.user, t = await db.ref('names/'+key).transaction(x=>x===null ? u.uid : undefined);
+  if(!t.committed && t.snapshot.val()!==u.uid) throw {message:'De naam '+name.trim()+' is net bezet. Kies een andere.', keep:1};
+  await db.ref('users/'+u.uid).set({name:name.trim()});
+  try{ await u.updateProfile({displayName:name.trim()}); }catch(e){}
+  FB = null; await accStart();
+}
+async function accLogin(mail, pw){ await fbLoad(); await firebase.auth().signInWithEmailAndPassword(mail, pw); FB = null; await accStart(); }
+async function accLogout(){ accStop(); try{ await firebase.auth().signOut(); }catch(e){} FB = null; ACC.user = null; ACC.name = ''; delete state.acct; save(); }
+async function accAddFriend(name){
+  const {db} = await fbLoad(), id = (await db.ref('names/'+accKey(name)).once('value')).val();
+  if(!id) throw {message:'Er is niemand met de naam '+name.trim()+'.'};
+  if(id===ACC.user.uid) throw {message:'Dat ben je zelf.'};
+  if(ACC.friends[id]) throw {message:name.trim()+' is al je vriend.'};
+  const nm = (await db.ref('users/'+id+'/name').once('value')).val() || name.trim();
+  if(ACC.reqs[id]){ await accAccept(id); return nm+' is nu je vriend.'; }
+  await db.ref('requests/'+id+'/'+ACC.user.uid).set({name:ACC.name, t:Date.now()});
+  return 'Verzoek gestuurd. Zodra '+nm+' het accepteert, zijn jullie vrienden.';
+}
+async function accAccept(id){ const db = firebase.database(), me = ACC.user.uid;
+  await db.ref('friends/'+me+'/'+id).set(true); await db.ref('friends/'+id+'/'+me).set(true); await db.ref('requests/'+me+'/'+id).remove(); }
+async function accDecline(id){ await firebase.database().ref('requests/'+ACC.user.uid+'/'+id).remove(); }
+async function accUnfriend(id){ const db = firebase.database(), me = ACC.user.uid; await db.ref('friends/'+me+'/'+id).remove(); try{ await db.ref('friends/'+id+'/'+me).remove(); }catch(e){} }
+// schermpjes in het venster Samen spelen
+function accFriendsOnline(limit){
+  const on = Object.entries(ACC.friends).filter(([id, f])=>f.online).sort((a,b)=>a[1].name.localeCompare(b[1].name));
+  const atTable = new Set(Object.values(SM.players||{}).map(p=>p && p.uid).concat(Object.keys(SM.visitors||{})));
+  const rows = on.filter(([id])=>!atTable.has(id)).slice(0, limit);
+  return {n:on.length, html:rows.map(([id, f])=>'<div class="acrow"><span class="acdot on"></span><b>'+esc(f.name)+'</b><button class="ta-btn" data-accinv="'+id+'">Uitnodigen</button></div>').join('')};
+}
+function accHTML(){
+  const v = ACC.view, msg = (ACC.err ? '<p class="leadnote bad">'+esc(ACC.err)+'</p>' : '')+(ACC.msg ? '<p class="leadnote">'+esc(ACC.msg)+'</p>' : '');
+  if(v==='login' || v==='new'){
+    const isNew = v==='new';
+    return '<nav class="modes" id="acctab"><button data-acv="login" aria-pressed="'+!isNew+'">Inloggen</button><button data-acv="new" aria-pressed="'+isNew+'">Account maken</button></nav>'
+      + (isNew ? '<label class="lbl" for="acname">Je naam (anderen zien deze)</label><input class="acin" id="acname" maxlength="20" autocomplete="nickname" value="'+esc(state.myName||'')+'">' : '')
+      + '<label class="lbl" for="acmail">E-mailadres</label><input class="acin" id="acmail" type="email" autocomplete="email">'
+      + '<label class="lbl" for="acpw">Wachtwoord'+(isNew ? ' (minstens 6 tekens)' : '')+'</label><input class="acin" id="acpw" type="password" autocomplete="'+(isNew ? 'new-password' : 'current-password')+'">'
+      + msg + '<button class="gview" id="acgo"'+(ACC.busy ? ' disabled' : '')+'>'+(isNew ? 'Account maken' : 'Inloggen')+'</button>'
+      + '<p class="acfoot">'+(isNew ? 'Je e-mailadres en wachtwoord bewaart Google Firebase versleuteld; anderen zien alleen je naam. Alleen vrienden zien of je online bent.' : '<button class="navclear" id="acforgot">Wachtwoord vergeten?</button>')+' <button class="navclear" data-acv="">Terug</button></p>';
+  }
+  if(v==='friends'){
+    const reqs = Object.entries(ACC.reqs), fr = Object.entries(ACC.friends).sort((a,b)=>(b[1].online-a[1].online) || a[1].name.localeCompare(b[1].name));
+    return '<p class="lbl">Vriend toevoegen</p><div class="sm-row"><input id="acfr" maxlength="20" placeholder="Naam van je vriend" aria-label="Naam van je vriend"><button class="gview" id="acfradd">Toevoegen</button></div>'
+      + msg + (reqs.length ? '<p class="lbl">Vriendverzoeken</p>'+reqs.slice(0,3).map(([id, r])=>'<div class="acrow"><b>'+esc(r.name)+'</b><button class="ta-btn" data-acok="'+id+'">Accepteren</button><button class="ta-btn" data-acno="'+id+'">Nee</button></div>').join('') : '')
+      + '<p class="lbl">Je vrienden'+(fr.length ? ' ('+fr.length+')' : '')+'</p>'
+      + (fr.length ? '<div class="aclist">'+fr.map(([id, f])=>'<div class="acrow"><span class="acdot'+(f.online ? ' on' : '')+'"></span><b>'+esc(f.name)+'</b>'+(f.online ? '<button class="ta-btn" data-accinv="'+id+'">Uitnodigen</button>' : '<small>offline</small>')+'<button class="smfree" data-acdel="'+id+'" aria-label="'+esc(f.name)+' verwijderen als vriend">×</button></div>').join('')+'</div>' : '<p class="hint">Nog geen vrienden. Vraag hun naam in de app en voeg ze hier toe.</p>')
+      + '<p class="acfoot">Ingelogd als <b>'+esc(ACC.name)+'</b> · <button class="navclear" id="acout">Uitloggen</button> · <button class="navclear" data-acv="">Terug</button></p>';
+  }
+  return '';
+}
+function accBind(el){
+  const go = async (fn, after) => { ACC.err = ''; ACC.msg = ''; ACC.busy = true; samenDraw(); try{ const m = await fn(); if(typeof m==='string') ACC.msg = m; if(after!==undefined) ACC.view = after; }catch(e){ ACC.err = e && e.message && !e.code ? e.message : accErr(e); } ACC.busy = false; samenDraw(); };
+  el.querySelectorAll('[data-acv]').forEach(b=>b.onclick = () => { ACC.view = b.dataset.acv; ACC.err = ''; ACC.msg = ''; samenDraw(); });
+  if($('acgo')) $('acgo').onclick = () => { const mail = $('acmail').value.trim(), pw = $('acpw').value;
+    if(ACC.view==='new'){ const n = $('acname').value; go(()=>accCreate(n, mail, pw), ''); } else go(()=>accLogin(mail, pw), ''); };
+  if($('acforgot')) $('acforgot').onclick = () => { const mail = $('acmail').value.trim(); if(!mail){ ACC.err = 'Vul eerst je e-mailadres in.'; samenDraw(); return; }
+    go(async()=>{ await fbLoad(); await firebase.auth().sendPasswordResetEmail(mail); return 'Je krijgt een mail om een nieuw wachtwoord te kiezen.'; }); };
+  if($('acfradd')) $('acfradd').onclick = () => { const n = $('acfr').value; if(n.trim()) go(()=>accAddFriend(n)); };
+  if($('acout')) $('acout').onclick = () => go(async()=>{ await accLogout(); }, '');
+  el.querySelectorAll('[data-acok]').forEach(b=>b.onclick = () => go(()=>accAccept(b.dataset.acok)));
+  el.querySelectorAll('[data-acno]').forEach(b=>b.onclick = () => go(()=>accDecline(b.dataset.acno)));
+  el.querySelectorAll('[data-acdel]').forEach(b=>b.onclick = () => { const f = ACC.friends[b.dataset.acdel]; askConfirm('Vriend verwijderen?', '<p>'+esc(f ? f.name : '')+' staat dan niet meer in je vriendenlijst.</p>', 'Verwijderen', ()=>go(()=>accUnfriend(b.dataset.acdel))); });
+  el.querySelectorAll('[data-accinv]').forEach(b=>b.onclick = () => go(()=>accInviteFriend(b.dataset.accinv)));
+}
+// bij het openen van de app: wie een account heeft, komt meteen online
+setTimeout(()=>{ if(state.acct && FB_CONFIG && !SAMEN_TEST && navigator.onLine) accStart().catch(()=>{}); }, 1500);
+
 const SM = {code:null, seat:null, tr:null, players:{}, chat:[], offs:[], joinCode:null, err:''};
 const esc = s => String(s==null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function samenCode(){ const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; for(let i=0;i<8;i++) s += a[Math.floor(Math.random()*a.length)]; return s; }
@@ -11620,12 +11771,24 @@ function smMine(m){ return m.uid ? m.uid===(SM.tr||{}).uid : m.seat===SM.seat; }
 function samenDraw(){
   const el = $('samenbody'), ready = FB_CONFIG || SAMEN_TEST;
   if(!ready){ el.innerHTML = '<p>Samen spelen werkt zodra de database is gekoppeld. Dat komt binnenkort.</p>'; return; }
+  if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); return; }
+  if(!SM.code && accIn() && !SM.joinCode){
+    const fo = accFriendsOnline(4), nreq = Object.keys(ACC.reqs).length;
+    el.innerHTML = '<p>Hoi <b>'+esc(ACC.name)+'</b>. Open een tafel en nodig vrienden uit, of stuur de link.</p>'
+      + '<p class="lbl">Vrienden online'+(fo.n ? ' ('+fo.n+')' : '')+'</p>'+(fo.html || '<p class="hint">Er is nu geen vriend online.</p>')
+      + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '') + (SM.note ? '<p class="leadnote">'+SM.note+'</p>' : '') + (ACC.msg ? '<p class="leadnote">'+esc(ACC.msg)+'</p>' : '')
+      + '<button class="gview" id="smgo">Tafel openen</button><button class="gview alt" data-acv="friends">Vrienden'+(nreq ? ' · '+nreq+' verzoek'+(nreq===1 ? '' : 'en') : '')+'</button>';
+    $('smgo').onclick = () => { SM.note = ''; state.myName = ACC.name; save(); samenCreate(); };
+    accBind(el); return;
+  }
   if(!SM.code){
     const join = SM.joinCode;
     el.innerHTML = '<p>'+(join ? 'Je bent uitgenodigd om samen bridge te spelen. Vul je naam in en kom aan tafel. Wie de tafel opende, wijst je een stoel aan.' : 'Speel samen, ieder op je eigen telefoon. Je opent een tafel en stuurt de link. Wie binnenkomt, geef jij een stoel; lege stoelen speelt de computer.')+'</p>'
       + '<label class="lbl" for="smname">Je naam</label><div class="sm-row"><input id="smname" maxlength="24" autocomplete="given-name" value="'+esc(state.myName||'')+'" placeholder="Bijvoorbeeld Anne"></div>'
       + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '') + (SM.note ? '<p class="leadnote">'+SM.note+'</p>' : '')
-      + '<button class="gview" id="smgo">'+(join ? 'Naar de tafel' : 'Tafel openen')+'</button>';
+      + '<button class="gview" id="smgo">'+(join ? 'Naar de tafel' : 'Tafel openen')+'</button>'
+      + (join || SAMEN_TEST ? '' : '<p class="acfoot">Met een account zie je welke vrienden online zijn en nodig je ze direct uit. <button class="navclear" data-acv="login">Inloggen of account maken</button></p>');
+    accBind(el);
     $('smgo').onclick = () => { const n = $('smname').value.trim(); if(!n){ $('smname').focus(); return; } SM.note = ''; state.myName = n; save(); join ? samenJoin(join) : samenCreate(); };
     return;
   }
@@ -11661,6 +11824,7 @@ function samenDraw(){
     + tabs
     + (G && tab==='spel' ? smGameHTML(G) : (G ? stat : '') + (reqHTML ? '' : (visHTML && V.length>1 ? '' : chatHTML) + (G ? '' : lobby)))
     + (!G || tab==='chat' ? '<button class="navclear" id="smleave">'+(SM.seat==='Z' ? 'Tafel sluiten' : 'Tafel verlaten')+'</button>' : '');
+  if(host && !G && accIn() && !SM_KEY.every(k=>(SM.players||{})[k])){ const fo = accFriendsOnline(3); if(fo.html && $('smshare')) $('smshare').insertAdjacentHTML('afterend', '<div class="acinv"><p class="lbl">Vrienden online</p>'+fo.html+'</div>'); accBind(el); }
   if($('smshare')) $('smshare').onclick = () => shareUrl(samenLink(), (state.myName||'Je partner')+' wil samen bridge spelen. Open de link om mee te doen.', 'Samen spelen', t=>{ const b = $('smshare'); if(b) b.textContent = t; }, 'Link naar de kamer');
   if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, uid:SM.tr.uid, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
   if($('smleave')) $('smleave').onclick = () => samenStopAsk(false);
