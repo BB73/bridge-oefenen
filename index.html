@@ -13,13 +13,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:"Suits";src:local("Arial"),local("ArialMT"),local("Segoe UI Symbol"),local("SegoeUISymbol"),local("Noto Sans Symbols 2"),local("NotoSansSymbols2-Regular"),local("DejaVu Sans"),local("DejaVuSans");unicode-range:U+2660-2667}
+
 :root{
   --bg:#E9EFEA; --surface:#FFFFFF; --panel:#EEF1EE; --ink:#14211C; --muted:#56655E; --line:#C9D4CD;
   --felt:#1E6A4E; --on-felt:#FFFFFF;
   --s:#1B3F8F; --h:#C4202B; --d:#C85F0A; --c:#1E6A4E;
   --good:#1E6A4E; --good-bg:#DDEFE5; --bad:#B3261E; --bad-bg:#F8DFDC;
-  --display:"Bricolage Grotesque","Trebuchet MS",Verdana,sans-serif;
-  --body:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif;
+  --display:"Suits","Bricolage Grotesque","Trebuchet MS",Verdana,sans-serif;
+  --body:"Suits","Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
@@ -422,6 +424,23 @@ main.table > .action:has(> .feedback:not([hidden])){flex:1 1 0;min-height:11rem}
   #game{max-width:40rem;width:100%;margin:0 auto;overflow-y:auto}
   .gtip, .gend{max-width:38rem}
 }
+
+/* Brede schermen: net als op de telefoon tafel, daaronder de hand en daaronder het biedbakje; maten schalen mee met de schermhoogte */
+@media (min-width: 760px){
+  main.table{display:flex;flex-direction:column;align-items:center}
+  main.table > *{max-width:40rem}
+  main.table > .prompt{max-width:none;width:100%}
+  main.table > .action, main.table > .qwrap{width:100%}
+  main.table > .action{align-self:center;margin-top:.4rem;flex:1 0 auto;justify-content:flex-start}
+  main.table .bsq, main.table .nsq, main.table .qsq{width:clamp(8rem,24dvh,12.5rem)!important;height:clamp(8rem,24dvh,12.5rem)!important}
+  .hand li{font-size:clamp(1.05rem,3.2dvh,1.5rem)}
+  .bid{height:clamp(1.9rem,4.8dvh,3rem)}
+}
+/* met twee volledige handen (dummy en jij) past het niet onder elkaar: dan tafel en handen links, antwoorden rechts */
+@media (min-width: 760px){
+  main.table:has(> #dummy:not([hidden]) li + li){display:grid;align-items:stretch}
+  main.table:has(> #dummy:not([hidden]) li + li) > .action{align-self:center;flex:none}
+}
 .gend{flex:none;margin-top:.4rem}
 .gtip, .gend{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom, 0px));z-index:20;max-width:32.5rem;margin:0 auto;max-height:70vh;max-height:70dvh;overflow-y:auto;box-shadow:0 6px 24px rgba(0,0,0,.45)}
 .gend{padding:.7rem .75rem;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
@@ -819,6 +838,7 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .bc{font:inherit;font-weight:800;font-size:.85rem;width:2.4rem;height:1.65rem;border-radius:4px;background:#FFFFFF;color:#14211C;border:1px solid #8FA39A;box-shadow:0 1px 2px rgba(0,0,0,.35);display:inline-flex;align-items:flex-start;justify-content:center;padding:.15rem 0 0;cursor:pointer;flex-shrink:0;box-sizing:border-box}
 .bst.t .bc + .bc,.bst.b .bc + .bc{margin-left:-.75rem} .bst.l .bc + .bc,.bst.r .bc + .bc{margin-top:-.8rem}
 .bc.p{background:#2E8B57;color:#fff;border-color:#1F6B42} .bc.x{background:#C0392B;color:#fff;border-color:#962D22} .bc.xx{background:#1C3D8F;color:#fff;border-color:#142C66} .bc.new{outline:2px solid #FFD54F;outline-offset:1px}
+.smw{font-weight:400;opacity:.85}
 .smsq .st,.smsq.sqb .st.l,.smsq.sqb .st.r{max-width:calc(var(--w) * .55);width:max-content;right:auto;bottom:auto}
 .smsq .st.b{left:50%;top:calc(100% - 1.125rem);transform:translate(-50%,-50%)}
 .smsq .st.t{left:50%;top:1.125rem;transform:translate(-50%,-50%)}
@@ -11550,7 +11570,7 @@ function smGameHTML(g){
   const vs = s => smVul(g, s), us = vs(me), them = vs((me+1)%4), vulTxt = us && them ? 'Allen kwetsbaar' : us ? 'Jullie kwetsbaar' : them ? 'Zij kwetsbaar' : 'Niemand kwetsbaar';
   const LET = ['N','O','Z','W'], inPlay = g.phase!=='bid' && g.contract;
   const badges = s => (s===g.dealer ? '<i class="bd">G</i>' : '')+(inPlay && s===g.decl ? '<i class="bd l">L</i>' : '')+(inPlay && s===g.dummy ? '<i class="bd d">D</i>' : '');
-  const seat = (s, cls) => '<span class="sml'+(vs(s) ? ' vul' : '')+(cls ? ' '+cls : '')+'"><b>'+LET[s]+'</b> '+lb(s)+badges(s)+'</span>';
+  const seat = (s, cls) => '<span class="sml'+(vs(s) ? ' vul' : '')+(cls ? ' '+cls : '')+'">'+lb(s)+' <span class="smw">('+LET[s]+')</span>'+badges(s)+'</span>';
   const tricks = g.phase==='play' ? ' · slagen: '+(g.decl%2===me%2 ? 'jullie '+g.declTricks+', zij '+g.defTricks : 'jullie '+g.defTricks+', zij '+g.declTricks) : '';
   const head = '<p class="smleg"><i class="bd">G</i> gever'+(inPlay ? ' <i class="bd l">L</i> leider <i class="bd d">D</i> dummy' : '')+' · '+(us||them ? '<span class="vul">rood</span> = kwetsbaar' : 'niemand kwetsbaar')+'</p>';
   // ---- vierkante tafel: jij onderaan, partner boven, tegenstanders links en rechts
