@@ -901,7 +901,8 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .sm-row{display:flex;gap:.5rem;align-items:center} .sm-row input{flex:1;min-width:0;font:inherit;padding:.55rem .7rem;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
 .sm-stat{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.9rem} .sm-p{display:inline-flex;align-items:center;gap:.3rem} .sm-p i{width:.55rem;height:.55rem;border-radius:50%;background:var(--line)} .sm-p.on i{background:#2E8B57}
 .smfree{border:none;background:none;color:var(--bad,#b3261e);font-size:1.1rem;line-height:1;padding:0 .2rem;cursor:pointer} .smvis{display:flex;flex-direction:column;gap:.3rem;font-size:.9rem;padding:.4rem .5rem;border-radius:10px;background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .smvis button{margin-left:.35rem;padding:.2rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer} .smhl{font-style:normal;font-size:.7rem;font-weight:700;color:var(--felt);border:1px solid var(--felt);border-radius:999px;padding:0 .3rem;margin-left:.25rem} .smhrow{margin:0;font-size:.85rem} .smhrow button,.smreq button{padding:.15rem .6rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;cursor:pointer;margin-left:.2rem} .smreq{padding:.45rem .6rem;border-radius:10px;border:2px solid var(--felt);font-size:.9rem} .smreq p{margin:0 0 .3rem} .smc.tipc{outline:3px solid var(--felt);outline-offset:1px} .smreq.sm1{display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.3rem .5rem;font-size:.85rem} .smreq.sm1 > span:last-child{display:flex;gap:.3rem;flex-shrink:0} .smreq.sm1 button{margin-left:0} .smhlist{margin:.2rem 0 0;padding-left:1.1rem;font-size:.85rem} .smwait .tipb{margin-left:.3rem;padding:.1rem .55rem;border-radius:999px;border:1px solid var(--felt);background:var(--surface);color:var(--felt);font:inherit;font-weight:600;font-size:.8rem;cursor:pointer} .sm-chat.lob{min-height:4rem;max-height:5.5rem} .sm-stat small{color:var(--muted,#666);font-size:.75rem} .sm-chat{display:flex;flex-direction:column;gap:.3rem;min-height:9rem;max-height:40vh;overflow:hidden;justify-content:flex-end;padding:.5rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb, var(--felt) 5%, var(--surface))}
-.sm-msg{max-width:85%;padding:.35rem .6rem;border-radius:12px;background:var(--surface);border:1px solid var(--line);line-height:1.3;font-size:.92rem;align-self:flex-start;word-wrap:break-word} .sm-msg.me{align-self:flex-end;background:color-mix(in srgb, var(--felt) 14%, var(--surface));border-color:transparent} .sm-msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
+.sm-msg{max-width:85%;padding:.35rem .6rem;border-radius:12px;background:var(--surface);border:1px solid var(--line);line-height:1.3;font-size:.92rem;align-self:flex-start;word-wrap:break-word} .sm-msg.me{align-self:flex-end;background:color-mix(in srgb, var(--felt) 14%, var(--surface));border-color:transparent} .sm-msg.sys{align-self:center;max-width:95%;background:transparent;border:0;color:var(--muted);font-style:italic;font-size:.85rem;text-align:center}
+.sm-msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:600}
 .smauc2{font-size:.85rem} #samenbody .sm-row .gview{flex:1} .smauc2 summary{cursor:pointer;color:var(--felt)} .smauc2[open]{flex-basis:100%}
 .smx{width:2.4rem;height:2.4rem;border-radius:50%;border:none;background:var(--surface);box-shadow:0 1px 4px rgba(0,0,0,.18);font-size:1.5rem;line-height:1;color:var(--ink);cursor:pointer;flex:none} #samen .dtitle{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .sm-tabs{display:flex;gap:.3rem} .sm-tabs button{flex:1;font:inherit;padding:.4rem;border:1.5px solid var(--felt);border-radius:10px;background:var(--surface);color:var(--felt);font-weight:700} .sm-tabs button.on{background:var(--felt);color:var(--on-felt)} .sm-tabs i{font-style:normal;background:#C0392B;color:#fff;border-radius:999px;padding:0 .4rem;font-size:.75rem;margin-left:.2rem}
@@ -10297,9 +10298,10 @@ $('tipcancel').addEventListener('click', tipClose);
 function tipFabPlace(){
   const f = $('tipfab'), ds = tipOpenDlgs(), top = ds[ds.length-1], host = top || document.body;
   if(f.parentNode!==host) host.appendChild(f);
-  f.hidden = $('tipdlg').open || !!(top && /^(settings|welcome|confirmdlg|shareimp)$/.test(top.id));
+  const tt = $('tipT'), ownTip = top && top.id==='settings' && tt && !tt.hidden && tt.offsetParent;
+  const hide = $('tipdlg').open || !!ownTip || !!(top && /^(welcome|confirmdlg|shareimp)$/.test(top.id)); if(f.hidden!==hide) f.hidden = hide;
 }
-new MutationObserver(tipFabPlace).observe(document.body, {subtree:true, attributes:true, attributeFilter:['open']});
+new MutationObserver(tipFabPlace).observe(document.body, {subtree:true, attributes:true, attributeFilter:['open','hidden']});
 tipFabPlace();
 $('theory').addEventListener('close', ()=>{ $('theoryclose').textContent = 'Terug naar de hand'; });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-tip]')) openTip(); });
@@ -11375,9 +11377,10 @@ renderModes(); renderScore(); next(true);
 openMenu();
 if(Array.isArray(state.navAfter)){ nav = state.navAfter; delete state.navAfter; save(); renderModes(); }
 let CONFIRM_FN = null;
-function askConfirm(title, html, yes, fn){ $('cftitle').textContent = title; $('cfbody').innerHTML = html; $('cfyes').textContent = yes; CONFIRM_FN = fn; const d = $('confirmdlg'); if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
-$('cfno').addEventListener('click', ()=>{ CONFIRM_FN = null; $('confirmdlg').close(); });
-$('cfyes').addEventListener('click', ()=>{ const f = CONFIRM_FN; CONFIRM_FN = null; $('confirmdlg').close(); if(f) f(); });
+let CONFIRM_NO = null;
+function askConfirm(title, html, yes, fn, no, nofn){ $('cftitle').textContent = title; $('cfbody').innerHTML = html; $('cfyes').textContent = yes; $('cfno').textContent = no || 'Annuleren'; CONFIRM_FN = fn; CONFIRM_NO = nofn || null; const d = $('confirmdlg'); if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
+$('cfno').addEventListener('click', ()=>{ const f = CONFIRM_NO; CONFIRM_FN = null; CONFIRM_NO = null; $('confirmdlg').close(); if(f) f(); });
+$('cfyes').addEventListener('click', ()=>{ const f = CONFIRM_FN; CONFIRM_FN = null; CONFIRM_NO = null; $('confirmdlg').close(); if(f) f(); });
 setTimeout(()=>{ try{ if(clubData()) clubBG(); }catch(e){} }, 2500);
 // ---------- Samen spelen: een kamer in de database waar jij en je partner elkaar vinden en chatten ----------
 // Vul hier de gegevens van het Firebase-project in (Projectinstellingen › Jouw apps › Configuratie).
@@ -11444,9 +11447,9 @@ function samenDraw(){
     const join = SM.joinCode;
     el.innerHTML = '<p>'+(join ? 'Je bent uitgenodigd om samen bridge te spelen. Vul je naam in en kom aan tafel. Wie de tafel opende, wijst je een stoel aan.' : 'Speel samen, ieder op je eigen telefoon. Je opent een tafel en stuurt de link. Wie binnenkomt, geef jij een stoel; lege stoelen speelt de computer.')+'</p>'
       + '<label class="lbl" for="smname">Je naam</label><div class="sm-row"><input id="smname" maxlength="24" autocomplete="given-name" value="'+esc(state.myName||'')+'" placeholder="Bijvoorbeeld Anne"></div>'
-      + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '')
+      + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '') + (SM.note ? '<p class="leadnote">'+SM.note+'</p>' : '')
       + '<button class="gview" id="smgo">'+(join ? 'Naar de tafel' : 'Tafel openen')+'</button>';
-    $('smgo').onclick = () => { const n = $('smname').value.trim(); if(!n){ $('smname').focus(); return; } state.myName = n; save(); join ? samenJoin(join) : samenCreate(); };
+    $('smgo').onclick = () => { const n = $('smname').value.trim(); if(!n){ $('smname').focus(); return; } SM.note = ''; state.myName = n; save(); join ? samenJoin(join) : samenCreate(); };
     return;
   }
   const P = SM.players || {}, host = SM.seat==='Z', mi = SM.seat ? SM_SEAT[SM.seat] : 2, order = [mi, (mi+2)%4, (mi+1)%4, (mi+3)%4].map(i=>SM_KEY[i]);
@@ -11462,7 +11465,7 @@ function samenDraw(){
   const cell = (k,p) => '<div class="sx '+p+'">'+pl(k)+'</div>';
   const stat = reqHTML+'<div class="sm-cross">'+cell(order[1],'t')+cell(order[2],'l')+'<div class="sx c" aria-hidden="true"></div>'+cell(order[3],'r')+cell(order[0],'b')+'</div>'+visHTML+helpHTML;
   const humans = SM_KEY.filter(k=>P[k] && P[k].online).length, full = SM_KEY.every(k=>P[k] && P[k].online);
-  const msgs = SM.chat.slice(-8).map(m=>'<div class="sm-msg'+(smMine(m) ? ' me' : '')+'">'+(smMine(m) ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
+  const msgs = SM.chat.slice(-8).map(m=>m.sys ? '<div class="sm-msg sys">'+esc(m.text)+'</div>' : '<div class="sm-msg'+(smMine(m) ? ' me' : '')+'">'+(smMine(m) ? '' : '<b>'+esc(m.name)+'</b>')+esc(m.text)+'</div>').join('');
   const G = SM.game, mode = SM.mode || 'oefen', locked = mode==='wedstrijd' && G && G.phase!=='done';
   const unread = Math.max(0, SM.chat.length - (SM.seen||0)), tab = G ? (SM.tab || 'spel') : 'chat';
   if(tab==='chat') SM.seen = SM.chat.length;
@@ -11530,8 +11533,9 @@ function smGiveTip(asked){ const g = SM.game, c = smNow(g); if(!c) return;
   gcEvent(asked ? 'samen-hulp-gekregen' : 'samen-tip'); samenDraw(); }
 function samenSub(){
   SM.offs.forEach(f=>f()); SM.offs = [];
-  SM.offs.push(SM.tr.on('players', v=>{ SM.players = Object.fromEntries(Object.entries(v || {}).filter(([k,x])=>x && x.uid)); smSeatSync(); smHelpResolve(); smOnceResolve(); samenDraw(); }));
+  SM.offs.push(SM.tr.on('players', v=>{ const prev = SM.players || {}; SM.players = Object.fromEntries(Object.entries(v || {}).filter(([k,x])=>x && x.uid)); smGone(prev); smSeatSync(); smHelpResolve(); smOnceResolve(); samenDraw(); }));
   SM.offs.push(SM.tr.on('visitors', v=>{ SM.visitors = v || {}; samenDraw(); }));
+  SM.offs.push(SM.tr.on('meta/closed', v=>{ if(!v || SM.seat==='Z') return; if(!SM.code || SM.closing) return; SM.closing = true; SM.note = esc(v.name||'De gastheer')+' heeft de tafel gesloten.'; SM.offs.forEach(f=>f()); SM.offs = []; samenLeave(true); SM.closing = false; }));
   SM.offs.push(SM.tr.on('meta/mode', v=>{ SM.mode = v || 'oefen'; samenDraw(); }));
   SM.offs.push(SM.tr.on('meta/oreq', v=>{ SM.oreq = v; smOnceResolve();
     if(v && v.granted && v.k===SM.seat && smReqLive(v, SM.game)){ SM.oreq = null; SM.tr.set('meta/oreq', null); smGiveTip(true); return; }
@@ -11568,9 +11572,16 @@ function smSeatSync(){
   else if(!k && SM.seat && SM.seat!=='Z'){ SM.seat = null; state.samen = {code:SM.code, seat:null}; save(); smVisit(); }
 }
 function smAssign(uid, k){ const v = (SM.visitors||{})[uid]; if(!v || (SM.players||{})[k]) return; SM.tr.set('players/'+k, {name:v.name, uid, online:!!v.online}); SM.tr.set('visitors/'+uid, null); gcEvent('samen-stoel'); }
+function smGone(prev){ const g = SMH.g, P = SM.players || {}; if(SM.seat!=='Z' || !g || !g.humans || g.phase==='done') return;
+  const gone = g.humans.filter(i=>i!==2 && prev[SM_KEY[i]] && !P[SM_KEY[i]]); if(!gone.length) return;
+  g.humans = g.humans.filter(i=>!gone.includes(i)); smSave(); smHostStep(); }
 function smFree(k){ if(k==='Z') return; SM.tr.set('players/'+k, null);
   const g = SMH.g, i = SM_SEAT[k]; if(g && g.humans && g.phase!=='done' && g.humans.includes(i)){ g.humans = g.humans.filter(x=>x!==i); smSave(); smHostStep(); } }
-function samenLeave(){ if(SM.tr){ if(SM.seat) SM.tr.leave('players/'+SM.seat); else { SM.tr.leave('visitors/'+SM.tr.uid); SM.tr.set('visitors/'+SM.tr.uid, null); } } SM.game = null; SMH.g = null; SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, visitors:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
+function samenLeave(quiet){ if(SM.tr && !quiet){ const nm = state.myName || (SM.seat ? SM_NM[SM_SEAT[SM.seat]] : 'Een bezoeker'), g = SM.game, busy = g && g.phase!=='done';
+    if(SM.seat==='Z') SM.tr.set('meta/closed', {name:nm, t:Date.now()});
+    else if(SM.seat) SM.tr.push('chat', {sys:1, uid:SM.tr.uid, name:nm, text:nm+(busy ? ' is gestopt. De computer speelt '+SM_NM[SM_SEAT[SM.seat]]+' verder.' : ' heeft de tafel verlaten.'), t:Date.now()}); }
+  if(SM.tr && quiet){ if(SM.seat) SM.tr.leave('players/'+SM.seat); else SM.tr.leave('visitors/'+SM.tr.uid); }
+  else if(SM.tr){ if(SM.seat){ SM.tr.leave('players/'+SM.seat); if(SM.seat!=='Z') SM.tr.set('players/'+SM.seat, null); } else { SM.tr.leave('visitors/'+SM.tr.uid); SM.tr.set('visitors/'+SM.tr.uid, null); } } SM.game = null; SMH.g = null; SM.offs.forEach(f=>f()); Object.assign(SM, {code:null, seat:null, tr:null, players:{}, visitors:{}, chat:[], offs:[]}); delete state.samen; save(); samenDraw(); }
 // ---------- Samen spelen: het spel zelf. Zuid (wie de kamer maakte) rekent; Noord stuurt zijn zetten via de database. ----------
 const SMH = {g:null, done:{}, busy:false, board:0};
 const SM_SEAT = {N:0, O:1, Z:2, W:3}, SM_KEY = ['N','O','Z','W'], SM_NM = ['Noord','Oost','Zuid','West'];
@@ -11793,7 +11804,11 @@ function samenAnalyseEnd(){
 $('theory').addEventListener('close', ()=>{ if(CLUB_OVR) setTimeout(samenAnalyseEnd, 0); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-smback]')) samenAnalyseEnd(); });
 function samenOpen(){ const d = $('samen'); if(!d.open){ if($('settings').open) $('settings').close(); d.showModal ? d.showModal() : d.setAttribute('open',''); } samenDraw(); }
-$('samenclose').addEventListener('click', ()=>{ $('samen').close(); openMenu(); });
+$('samenclose').addEventListener('click', ()=>{ const shut = () => { $('samen').close(); openMenu(); };
+  if(!SM.code){ shut(); return; }
+  const g = SM.game, busy = g && g.phase!=='done', host = SM.seat==='Z';
+  askConfirm('Stoppen?', '<p><b>Tafel verlaten</b>: je stopt met samen spelen. '+(host ? 'Jij hebt de tafel geopend, dus de tafel wordt voor iedereen gesloten.' : busy && SM.seat ? 'De computer speelt jouw plaats verder.' : 'De anderen zien dat je weg bent.')+'</p><p><b>Alleen sluiten</b>: je blijft aan tafel en komt terug via Samen spelen.</p>',
+    'Tafel verlaten', ()=>{ samenLeave(); shut(); }, 'Alleen sluiten', shut); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-samen]')){ gcEvent('samen-open'); samenOpen(); } });
 { const m = /^#samen=([a-z0-9]{6,12})$/.exec(location.hash);
   if(m){ try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){}
