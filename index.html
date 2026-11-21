@@ -11650,7 +11650,10 @@ async function accStart(){
   const v = (await db.ref('users/'+u.uid).once('value')).val(); ACC.name = (v && v.name) || u.displayName || '';
   if(!ACC.name) return;
   state.acct = 1; state.myName = ACC.name; save();
-  ACC.unver = !u.emailVerified;
+  try{ await u.reload(); }catch(e){}
+  ACC.unver = !firebase.auth().currentUser.emailVerified;
+  // net bevestigd? dan het toegangsbewijs vernieuwen, anders weigert de database het online zetten
+  if(!ACC.unver){ try{ const t = await u.getIdTokenResult(); if(!t.claims.email_verified) await u.getIdToken(true); }catch(e){} }
   if(ACC.unver){ accDraw(); return; }                 // vrienden en online pas na het bevestigen van je e-mailadres
   const on = (r, h) => { r.on('value', h); ACC.offs.push(()=>r.off('value', h)); };
   // ik ben online zolang de app open is
@@ -11658,7 +11661,8 @@ async function accStart(){
   on(con, s=>{ if(s.val()){ me.onDisconnect().remove(); me.set({name:ACC.name, t:firebase.database.ServerValue.TIMESTAMP}); } });
   ACC.offs.push(()=>{ try{ me.onDisconnect().cancel(); me.remove(); }catch(e){} });
   // iedereen die online is (alleen voor bevestigde accounts leesbaar)
-  on(db.ref('presence'), s=>{ const v = s.val() || {}; delete v[u.uid]; ACC.online = v; Object.keys(ACC.friends).forEach(id=>{ ACC.friends[id].online = !!v[id]; }); accDraw(); });
+  { const r = db.ref('presence'), h = s=>{ const v = s.val() || {}; delete v[u.uid]; ACC.online = v; accDraw(); };
+    r.on('value', h, ()=>{ ACC.online = {}; accDraw(); }); ACC.offs.push(()=>r.off('value', h)); }
   // vrienden
   const fsubs = {};
   on(db.ref('friends/'+u.uid), s=>{
@@ -11667,7 +11671,8 @@ async function accStart(){
     ids.filter(id=>!fsubs[id]).forEach(id=>{
       ACC.friends[id] = ACC.friends[id] || {name:'…', online:false};
       db.ref('users/'+id+'/name').once('value').then(n=>{ if(ACC.friends[id]){ ACC.friends[id].name = n.val() || '?'; accDraw(); } });
-      ACC.friends[id].online = !!ACC.online[id]; fsubs[id] = ()=>{};
+      const r = db.ref('presence/'+id), h = p=>{ if(ACC.friends[id]){ ACC.friends[id].online = !!p.val(); accDraw(); } };
+      r.on('value', h, ()=>{}); fsubs[id] = ()=>r.off('value', h);
     });
     accDraw();
   });
@@ -11738,7 +11743,8 @@ async function accDecline(id){ await firebase.database().ref('requests/'+ACC.use
 async function accUnfriend(id){ const db = firebase.database(), me = ACC.user.uid; await db.ref('friends/'+me+'/'+id).remove(); try{ await db.ref('friends/'+id+'/'+me).remove(); }catch(e){} }
 // schermpjes in het venster Samen spelen
 function accFriendsOnline(limit){
-  const on = Object.entries(ACC.online).map(([id, p])=>[id, {name:(ACC.friends[id] && ACC.friends[id].name!=='…' ? ACC.friends[id].name : p && p.name) || '?', fr:!!ACC.friends[id], req:!!ACC.reqs[id]}])
+  const all = Object.assign({}, ACC.online); Object.entries(ACC.friends).forEach(([id, f])=>{ if(f.online && !all[id]) all[id] = {name:f.name}; if(!f.online) delete all[id]; });
+  const on = Object.entries(all).map(([id, p])=>[id, {name:(ACC.friends[id] && ACC.friends[id].name!=='…' ? ACC.friends[id].name : p && p.name) || '?', fr:!!ACC.friends[id], req:!!ACC.reqs[id]}])
     .sort((a,b)=>(b[1].fr-a[1].fr) || a[1].name.localeCompare(b[1].name, 'nl', {sensitivity:'base'}));
   const atTable = new Set(Object.values(SM.players||{}).map(p=>p && p.uid).concat(Object.keys(SM.visitors||{})));
   const free = on.filter(([id])=>!atTable.has(id)), rows = limit ? free.slice(0, limit) : free;
