@@ -427,7 +427,8 @@ main.table > .action:has(> .feedback:not([hidden])){flex:1 1 0;min-height:11rem}
 
 /* Brede schermen: net als op de telefoon tafel, daaronder de hand en daaronder het biedbakje; maten schalen mee met de schermhoogte */
 @media (min-width: 760px){
-  main.table{display:flex;flex-direction:column;align-items:center}
+  main.table{display:flex;flex-direction:column;align-items:center;width:100%}
+  .wrap{max-width:40rem}
   main.table > *{max-width:40rem}
   main.table > .prompt{max-width:none;width:100%}
   main.table > .action, main.table > .qwrap{width:100%}
@@ -438,7 +439,7 @@ main.table > .action:has(> .feedback:not([hidden])){flex:1 1 0;min-height:11rem}
 }
 /* met twee volledige handen (dummy en jij) past het niet onder elkaar: dan tafel en handen links, antwoorden rechts */
 @media (min-width: 760px){
-  main.table:has(> #dummy:not([hidden]) li + li){display:grid;align-items:stretch}
+  main.table:has(> #dummy:not([hidden]) li + li){display:grid;align-items:stretch;grid-template-columns:auto minmax(0,1fr);column-gap:1.5rem}
   main.table:has(> #dummy:not([hidden]) li + li) > .action{align-self:center;flex:none}
 }
 .gend{flex:none;margin-top:.4rem}
@@ -838,6 +839,27 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .bc{font:inherit;font-weight:800;font-size:.85rem;width:2.4rem;height:1.65rem;border-radius:4px;background:#FFFFFF;color:#14211C;border:1px solid #8FA39A;box-shadow:0 1px 2px rgba(0,0,0,.35);display:inline-flex;align-items:flex-start;justify-content:center;padding:.15rem 0 0;cursor:pointer;flex-shrink:0;box-sizing:border-box}
 .bst.t .bc + .bc,.bst.b .bc + .bc{margin-left:-.75rem} .bst.l .bc + .bc,.bst.r .bc + .bc{margin-top:-.8rem}
 .bc.p{background:#2E8B57;color:#fff;border-color:#1F6B42} .bc.x{background:#C0392B;color:#fff;border-color:#962D22} .bc.xx{background:#1C3D8F;color:#fff;border-color:#142C66} .bc.new{outline:2px solid #FFD54F;outline-offset:1px}
+/* Tipknop op elk scherm: een klein lipje aan de rechterrand */
+.tipfab{position:fixed;right:0;top:46%;z-index:30;width:1.55rem;height:2.9rem;padding:0 0 0 .2rem;margin:0;border:1px solid rgba(0,0,0,.18);border-right:0;border-radius:1rem 0 0 1rem;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.tipfab[hidden]{display:none}
+.tipfab svg{width:1.05rem;height:1.05rem}
+.tipfab:focus-visible{outline:2px solid var(--felt)}
+@media print{.tipfab{display:none!important}}
+#tipdlg .dbody{display:flex;flex-direction:column;gap:.45rem}
+.tipintro{margin:0}
+.tipshot{display:flex;align-items:center;justify-content:center;min-height:3rem;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:.3rem}
+.tipshot img{display:block;max-width:100%;max-height:min(11rem,22dvh);border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+#tipshotmsg{font-size:.85rem;color:var(--muted)}
+.tipchk{display:flex;align-items:center;gap:.4rem;font-size:.9rem}
+#tipmsg, #tipmail{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:8px;background:#FFFFFF;color:var(--ink)}
+#tipmsg{resize:vertical;min-height:4.2rem}
+.tiphint{margin:0;font-size:.8rem;color:var(--muted)}
+.tipstat{margin:0;font-size:.9rem;font-weight:600}
+.tipstat:empty{display:none}
+.tipstat.err{color:#B3261E}
+.tipdone{font-size:1.05rem}
+[data-tipform][hidden]{display:none!important}
+
 .smw{font-weight:400;opacity:.85}
 .smsq .st,.smsq.sqb .st.l,.smsq.sqb .st.r{max-width:calc(var(--w) * .55);width:max-content;right:auto;bottom:auto}
 .smsq .st.b{left:50%;top:calc(100% - 1.125rem);transform:translate(-50%,-50%)}
@@ -1972,6 +1994,20 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
   <button class="close" id="theoryclose">Terug naar de hand</button>
 </dialog>
 
+<button class="tipfab" id="tipfab" data-tip="1" aria-label="Geef een tip aan de bouwer" title="Tip voor de bouwer"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 13H35M24 13V37" fill="none" stroke="#151515" stroke-width="6" stroke-linecap="round"/></svg></button>
+<dialog id="tipdlg" aria-labelledby="tiptitle">
+  <div class="dhead"><h2 id="tiptitle">Tip voor de bouwer</h2></div>
+  <div class="dbody" id="tipbody">
+    <p data-tipform class="tipintro">Fijn dat je meedenkt! Elke tip wordt gelezen en helpt de app beter te maken.</p>
+    <div data-tipform class="tipshot"><img id="tipimg" alt="Schermafbeelding van waar je was" hidden><span id="tipshotmsg">Schermafbeelding maken…</span></div>
+    <label data-tipform class="tipchk"><input type="checkbox" id="tipwithimg" checked> Schermafbeelding meesturen</label>
+    <textarea data-tipform id="tipmsg" rows="3" maxlength="1900" placeholder="Wat zag je, en wat had je verwacht of wat zou beter zijn?" aria-label="Je tip"></textarea>
+    <input data-tipform type="email" id="tipmail" placeholder="Je e-mailadres (niet verplicht)" autocomplete="email" aria-label="Je e-mailadres, niet verplicht">
+    <p data-tipform class="tiphint">Vul je e-mailadres in als je bericht wilt krijgen zodra je tip is verwerkt.</p>
+    <p class="tipstat" id="tipstat" aria-live="polite"></p>
+  </div>
+  <div class="dfoot"><div class="wfoot"><button class="reset" id="tipcancel">Annuleren</button><button class="close" id="tipsend">Versturen</button></div></div>
+</dialog>
 <script>
 // ENGINE-START
 const SUITS = ['S','H','D','C'];
@@ -10185,20 +10221,86 @@ document.addEventListener('click', e=>{
   // vanaf het speelscherm: terug naar de pagina waar je je oefening koos
   nav = lastNav.slice(); renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); $('dbody').scrollTop = 0;
 });
-const TIPMAIL = 'mailto:basbolk@gmail.com?subject=Tip%20voor%20Bridge%20oefenen&body=Waar%20in%20de%20app%20%28welk%20onderdeel%2C%20welke%20oefening%29%3A%0A%0AWat%20zag%20ik%3A%0A%0AWat%20had%20ik%20verwacht%20of%20wat%20zou%20prettiger%20zijn%3A%0A%0A';
-function openTip(){
-  const t = $('theory');
-  $('theorytitle').textContent = 'Tip of fout doorgeven';
-  $('theorybody').innerHTML = '<p>Alle tips zijn welkom: iets klopt niet, iets is onduidelijk, of iets kijkt niet prettig.</p>'
-    + '<p>Hoe duidelijker je het beschrijft, hoe beter ik het kan verwerken. Schrijf erbij in welk onderdeel het zit, wat je zag en wat je had verwacht. Een schermafbeelding helpt.</p>'
-    + '<p><a class="tipmail" href="'+TIPMAIL+'" target="_blank" rel="noopener">Mail je tip</a></p>'
-    + '<p>Opent je mailprogramma niet? Stuur je bericht dan naar <b>basbolk@gmail.com</b>.</p>'
-    + '<p class="rvnote">Privacy: de app telt anoniem hoe vaak hij gebruikt wordt (met GoatCounter, zonder cookies). Er worden geen persoonsgegevens, scores, systeemkaarten of spellen verstuurd.</p>';
-  gcEvent('tip-geopend');
-  $('theoryclose').textContent = 'Sluiten';
-  if(t.showModal) t.showModal(); else t.setAttribute('open','');
-  t.scrollTop = 0;
+// ---------- Tips voor de bouwer: op elk scherm, met een schermafbeelding van vóór de tik ----------
+const TIPMAIL = 'basbolk@gmail.com';
+let TIP = {img:'', where:'', run:0}, h2cP = null;
+const tipOpenDlgs = () => [...document.querySelectorAll('dialog[open]')].filter(d=>d.id!=='tipdlg');
+function tipWhere(){
+  const parts = tipOpenDlgs().map(d=>{ const h = d.querySelector('h2, h3'); return d.id+(h && h.textContent.trim() ? ': '+h.textContent.trim() : ''); });
+  if(!parts.length){
+    if($('game') && !$('game').hidden) parts.push('heel spel: '+(($('gstatus')||{}).textContent||'').trim());
+    else parts.push('oefening: '+(($('prompt')||{}).textContent||'').trim());
+  }
+  return parts.join(' | ').slice(0, 300);
 }
+function h2cLoad(){
+  if(window.html2canvas) return Promise.resolve();
+  if(!h2cP) h2cP = new Promise((ok, no)=>{ const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload = ok; s.onerror = ()=>{ h2cP = null; no(new Error('laden mislukt')); }; document.head.appendChild(s); });
+  return h2cP;
+}
+async function tipShot(){
+  const ds = tipOpenDlgs(), target = ds.length ? ds[ds.length-1] : document.body;
+  await h2cLoad();
+  const opt = {scale:Math.min(1.5, 900/innerWidth), logging:false, useCORS:true, backgroundColor:getComputedStyle(document.body).backgroundColor || '#FFFFFF',
+    ignoreElements:el=>el.id==='tipdlg' || el.id==='tipfab'};
+  if(target===document.body) Object.assign(opt, {x:scrollX, y:scrollY, width:innerWidth, height:innerHeight, windowWidth:innerWidth, windowHeight:innerHeight});
+  const c = await html2canvas(target, opt);
+  let cv = c;
+  if(c.width>720){ cv = document.createElement('canvas'); cv.width = 720; cv.height = Math.round(c.height*720/c.width); cv.getContext('2d').drawImage(c, 0, 0, cv.width, cv.height); }
+  return cv.toDataURL('image/jpeg', .6);
+}
+function openTip(){
+  const run = ++TIP.run;
+  TIP.img = ''; TIP.where = tipWhere();
+  $('tipbody').querySelectorAll('[data-tipform]').forEach(e=>e.hidden = false);
+  $('tipimg').hidden = true; $('tipimg').removeAttribute('src');
+  $('tipshotmsg').hidden = false; $('tipshotmsg').textContent = 'Schermafbeelding maken…';
+  $('tipwithimg').checked = true; $('tipwithimg').disabled = false;
+  $('tipstat').textContent = ''; $('tipstat').className = 'tipstat';
+  $('tipsend').disabled = false; $('tipsend').textContent = 'Versturen'; $('tipsend').dataset.done = '';
+  $('tipcancel').hidden = false;
+  // eerst de schermafbeelding starten (het lipje en dit venster tellen niet mee), dan het venster openen
+  const shot = tipShot();
+  const d = $('tipdlg'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
+  shot.then(u=>{ if(run!==TIP.run) return; TIP.img = u; $('tipimg').src = u; $('tipimg').hidden = false; $('tipshotmsg').hidden = true; })
+    .catch(()=>{ if(run!==TIP.run) return; $('tipshotmsg').textContent = 'Een schermafbeelding lukte niet. Je tip kun je wel versturen.'; $('tipwithimg').checked = false; $('tipwithimg').disabled = true; });
+  gcEvent('tip-geopend');
+}
+function tipClose(){ const d = $('tipdlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
+async function tipSend(){
+  if($('tipsend').dataset.done){ tipClose(); return; }
+  const msg = $('tipmsg').value.trim(), mail = $('tipmail').value.trim(), st = $('tipstat');
+  st.className = 'tipstat err';
+  if(msg.length<3){ st.textContent = 'Schrijf eerst je tip.'; $('tipmsg').focus(); return; }
+  if(mail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){ st.textContent = 'Dit e-mailadres klopt niet. Laat het leeg als je geen bericht terug wilt.'; $('tipmail').focus(); return; }
+  $('tipsend').disabled = true; st.className = 'tipstat'; st.textContent = 'Versturen…';
+  let ver = ''; try{ const t = await (await fetch('sw.js', {cache:'no-store'})).text(); ver = (/bridge-v\d+/.exec(t)||[''])[0]; }catch(e){}
+  const tip = {msg, mail, img:($('tipwithimg').checked && TIP.img) || '', where:TIP.where, ver, scr:innerWidth+'x'+innerHeight, ua:navigator.userAgent.slice(0, 160), status:'nieuw'};
+  try{
+    if(SAMEN_TEST){ const all = JSON.parse(localStorage.getItem('tipstest')||'[]'); tip.t = Date.now(); all.push(tip); localStorage.setItem('tipstest', JSON.stringify(all)); }
+    else { const {db} = await fbLoad(); tip.t = firebase.database.ServerValue.TIMESTAMP; await db.ref('tips').push(tip); }
+  }catch(e){
+    $('tipsend').disabled = false; st.className = 'tipstat err';
+    st.innerHTML = 'Versturen lukte niet. Heb je internet? Probeer het zo nog eens, of mail je tip naar <b>'+TIPMAIL+'</b>.';
+    return;
+  }
+  $('tipmsg').value = '';
+  $('tipbody').querySelectorAll('[data-tipform]').forEach(e=>e.hidden = true);
+  st.className = 'tipstat tipdone';
+  st.textContent = mail ? 'Dank je wel! Je tip is binnen. Je krijgt bericht zodra er iets mee gedaan is.' : 'Dank je wel! Je tip is binnen en wordt gelezen.';
+  $('tipsend').disabled = false; $('tipsend').textContent = 'Sluiten'; $('tipsend').dataset.done = '1'; $('tipcancel').hidden = true;
+  gcEvent('tip-verstuurd');
+}
+$('tipsend').addEventListener('click', tipSend);
+$('tipcancel').addEventListener('click', tipClose);
+// het lipje staat altijd bovenop: in het bovenste open venster, anders op de pagina
+function tipFabPlace(){
+  const f = $('tipfab'), ds = tipOpenDlgs(), top = ds[ds.length-1], host = top || document.body;
+  if(f.parentNode!==host) host.appendChild(f);
+  f.hidden = $('tipdlg').open || !!(top && /^(settings|welcome|confirmdlg|shareimp)$/.test(top.id));
+}
+new MutationObserver(tipFabPlace).observe(document.body, {subtree:true, attributes:true, attributeFilter:['open']});
+tipFabPlace();
 $('theory').addEventListener('close', ()=>{ $('theoryclose').textContent = 'Terug naar de hand'; });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-tip]')) openTip(); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-greview]')) gReviewOpen(); });
@@ -11699,7 +11801,7 @@ document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest(
     else { SM.joinCode = m[1]; setTimeout(samenOpen, 50); } } }
 // ---------- Rondleiding: drie schermpjes voor wie de app voor het eerst opent ----------
 const WEL = [
-  ['Welkom!', '<p>Met deze app oefen je bridge: bieden, afspelen en tegenspelen. Na elk antwoord krijg je uitleg waarom.</p><ul><li>Gratis, je hebt geen account nodig</li><li>Je voortgang blijft bewaard op dit apparaat</li><li>Werkt ook zonder internet</li></ul>'],
+  ['Welkom!', '<p>Met deze app oefen je bridge: bieden, afspelen en tegenspelen. Na elk antwoord krijg je uitleg waarom.</p><ul><li>Gratis, je hebt geen account nodig</li><li>Je voortgang blijft bewaard op dit apparaat</li><li>Werkt ook zonder internet</li></ul><p class="wtip">Je bouwt mee! Met het lipje <b>T</b> aan de rechterrand stuur je op elk scherm een tip of fout naar de bouwer. Elke tip wordt gelezen en zeer gewaardeerd.</p>'],
   ['Begin bij je systeemkaart', '<p>Onder <b>Mijn systeemkaart</b> zet je aan welke afspraken jij en je partner spelen, zoals Stayman, Jacoby of de zwakke twee. De app oefent alleen wat erop staat. Begin eventueel met een standaardkaart, zoals die van Berry Westra.</p><p class="wtip">Net begonnen met bridge? Kies <b>Challenge jezelf</b> en volg het leerpad voor beginners.</p>'],
   ['Oefenen en naspelen', '<p><b>Bieden &amp; spelen</b>: oefen losse onderdelen, zo vaak als je wilt.</p><p><b>Clubspellen naspelen</b>: open de uitslag-pdf van je club en zie per spel wat erin zat, wie wat speelde en hoe je het zelf had kunnen bieden en spelen.</p><p class="wtip">Tip: zet de app op je beginscherm. Op de iPhone via Delen › Zet op beginscherm, op Android via het menu › App installeren. Via App delen op de home stuur je hem door.</p>']
 ];
