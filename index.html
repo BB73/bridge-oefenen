@@ -793,7 +793,7 @@ summary{cursor:pointer;font-weight:700}
 .wfoot{display:flex;align-items:center;gap:.6rem} .wfoot .close{margin-top:0;flex:1} .wfoot .reset{flex:none}
 .wdots{display:flex;justify-content:center;gap:.4rem;margin:0 0 .6rem} .wdots i{width:.5rem;height:.5rem;border-radius:50%;background:var(--line)} .wdots i.on{background:var(--felt)}
 .rept{display:inline-block;margin-right:.45rem;padding:.05rem .45rem;border-radius:999px;background:#FFF3C4;color:#5A4500;font-size:.8em;font-weight:700;vertical-align:.08em}
-.histc{display:block;width:100%;height:auto;max-height:4.6rem;margin:0 0 .3rem} .histc .hax{stroke:var(--line);stroke-width:1} .histc .hup{fill:#2E8B57} .histc .hdn{fill:#C0392B} .histc text{font:600 9px system-ui,sans-serif;fill:var(--muted);text-anchor:middle} .histc .hlab{text-anchor:end;font-size:8px}
+.histc{display:block;width:100%;height:auto;max-height:6.2rem;margin:0 0 .3rem} .histc .hax{stroke:var(--line);stroke-width:1} .histc .hup{fill:#2E8B57} .histc .hdn{fill:#C0392B} .histc text{font:600 9px system-ui,sans-serif;fill:var(--muted);text-anchor:middle} .histc .hlab{text-anchor:end;font-size:8px}
 table.histt th, table.histt td{text-align:center;padding:.25rem .3rem;font-size:.85rem} table.histt th:first-child, table.histt td:first-child{text-align:left}
 .serpick{display:flex;flex-direction:column;gap:.35rem;margin:.4rem 0} .serrow{display:flex;align-items:center;gap:.3rem;flex-wrap:wrap} .serrow > i{font-style:normal;width:1.3rem;font-size:1.2rem} .serrow .lchip{cursor:pointer;font:inherit;font-size:1.05rem;min-width:2.6rem;padding:.35rem .25rem} .serrow .lchip b{font-weight:700;font-size:1.1rem} .lchip.pick{box-shadow:0 0 0 3px #2563EB}
 .cstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;margin:.35rem 0 .45rem} .cstat{font:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:2.6rem;padding:.2rem .3rem;border-radius:10px;border:1.5px solid var(--felt);background:var(--surface);color:var(--felt);cursor:pointer;line-height:1.15} .cstat b{font-size:.9rem;font-weight:700} .cstat small{font-size:.72rem;color:var(--muted)}
@@ -859,6 +859,11 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .tipstat.err{color:#B3261E}
 .tipdone{font-size:1.05rem}
 [data-tipform][hidden]{display:none!important}
+.histz{margin:.2rem 0 .5rem;font-size:.92rem}
+.histleg{margin:-.15rem 0 .4rem;font-size:.78rem;color:var(--muted)}
+.histc .hline{fill:none;stroke:var(--felt);stroke-width:2;stroke-linejoin:round}
+.histc .hdate{font-size:8px;fill:var(--muted)}
+
 #tipsadmin{width:min(46rem,96vw)}
 #tabody{padding:.2rem .9rem .9rem;overflow-y:auto}
 #tipsadmin .dtitle{padding:.7rem .9rem .3rem}
@@ -1602,7 +1607,7 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
       <h3>Puppet Stayman</h3>
       <ul>
         <li>Na 2SA, en als je dat afspreekt ook na 1SA, vraagt 3<span class="C">♣︎</span> of de openaar een vijfkaart harten of schoppen heeft. Je hebt er manchekracht voor nodig.</li>
-        <li>Je vraagt met een vierkaart hoog, of met een driekaart hoog en een korte kleur ernaast. Met een vlakke 4-3-3-3 zonder vierkaart hoog, of zonder driekaart hoog, bied je 3SA.</li>
+        <li>Je vraagt met een vierkaart hoog, of met een driekaart hoog en een korte kleur ernaast. Zonder driekaart hoog bied je 3SA. Met een vlakke verdeling (4-3-3-3) zonder vierkaart hoog mag allebei: vragen naar een 5-3 fit, of meteen 3SA, wat veel spelers doen omdat een 5-3 fit dan zelden een slag meer oplevert.</li>
         <li>De openaar: 3<span class="H">♥︎</span> of 3<span class="S">♠︎</span> met een vijfkaart; 3<span class="D">♦︎</span> zonder vijfkaart maar met een vierkaart hoog; 3SA zonder vier- of vijfkaart hoog.</li>
         <li>Na 3<span class="D">♦︎</span> biedt de vrager de hoge kleur die hij níet heeft: 3<span class="H">♥︎</span> met vier schoppen, 3<span class="S">♠︎</span> met vier harten. Zo speelt de sterke hand. 4<span class="D">♦︎</span> toont beide vierkaarten, 3SA geen van beide.</li>
         <li>Na 3<span class="H">♥︎</span> of 3<span class="S">♠︎</span> van de openaar: de manche in die kleur met drie of meer kaarten mee, anders 3SA.</li>
@@ -5078,8 +5083,11 @@ function newPU2C(stepKey){
       let why = intro;
       if(want==='2C') why += 'Jij hebt '+pts(p)+' en '+(four ? 'een vierkaart hoog' : 'een driekaart hoog met een korte kleur ernaast')+': vraag met '+B('2C')+'. Je vindt zo een 4-4 fit en ook een 5-3 fit.';
       else if(want==='pas') why += 'Met '+pts(p)+' ben je daar te zwak voor, en een vijfkaart om naartoe te vluchten heb je niet. Pas.';
-      else why += 'Jij hebt '+pts(p)+', maar '+(shape(h)==='4333' ? 'een vlakke 4-3-3-3 zonder vierkaart hoog' : 'geen drie- of vierkaart hoog om een fit mee te vinden')+'. Bied dan SA: '+(want==='2N' ? '2SA, uitnodigend, met 8–9 punten.' : '3SA, met 10 of meer punten.');
-      return mkQ(key, 1, {why, kind:'v-'+want, prompt:'Jullie spelen Puppet Stayman met '+B('2C')+'. Partner opent 1SA en Oost past. Wat bied je?'}, h, n.h, want, 'std', '1N', {start:1, calls:['1N','pas']});
+      const also = (want==='3N' || want==='2N') && shape(h)==='4333' && (h.len[0]===3 || h.len[1]===3);
+      if(want==='2N' || want==='3N') why += 'Jij hebt '+pts(p)+', maar '+(shape(h)==='4333' ? 'een vlakke verdeling (4-3-3-3) zonder vierkaart hoog' : 'geen drie- of vierkaart hoog om een fit mee te vinden')+'. Bied dan SA: '+(want==='2N' ? '2SA, uitnodigend, met 8–9 punten.' : '3SA, met 10 of meer punten.')+(also ? ' Met een driekaart hoog mag je ook met '+B('2C')+' naar een 5-3 fit zoeken; dat is ook goed. Veel spelers bieden met zo’n vlakke hand toch gewoon SA, omdat een 5-3 fit dan zelden een slag meer oplevert.' : '');
+      const q1 = mkQ(key, 1, {why, kind:'v-'+want, prompt:'Jullie spelen Puppet Stayman met '+B('2C')+'. Partner opent 1SA en Oost past. Wat bied je?'}, h, n.h, want, 'std', '1N', {start:1, calls:['1N','pas']});
+      if(also) q1.accept = ['2C'];
+      return q1;
     }
     if(step===2){
       const five = rnd(2)===0;
@@ -5176,8 +5184,11 @@ function newPUQ(stepKey, two){
       const h = me.h, [s,hh] = h.len, flat = shape(h)==='4333';
       let why = intro;
       if(want==='3C') why += 'Jij hebt '+pts(h.hcp)+', genoeg voor de manche, en '+(s===4 || hh===4 ? 'een vierkaart hoog' : 'een driekaart hoog met een korte kleur ernaast')+'. Een fit in een hoge kleur kan dus beter zijn dan 3SA: vraag met '+B('3C')+'. Je vindt zo zowel een 4-4 fit als een 5-3 fit.';
-      else why += 'Jij hebt '+pts(h.hcp)+', genoeg voor de manche, maar '+(flat ? 'een vlakke 4-3-3-3 zonder vierkaart hoog: daarmee speelt 3SA meestal net zo goed als een 5-3 fit' : 'geen driekaart of vierkaart in harten of schoppen: een fit in een hoge kleur is er niet')+'. Bied meteen 3SA.';
-      return mkQ(key, 1, {why, kind:'v-'+want, prompt:'Jullie spelen Puppet Stayman. Partner opent '+oname+' en Oost past. Wat bied je?'}, h, n.h, want, 'std', open, {start:1, calls:[open,'pas']});
+      const also = want==='3N' && flat && (s===3 || hh===3);
+      if(want!=='3C') why += 'Jij hebt '+pts(h.hcp)+', genoeg voor de manche, maar '+(flat ? 'een vlakke verdeling (4-3-3-3) zonder vierkaart hoog: daarmee speelt 3SA meestal net zo goed als een 5-3 fit' : 'geen driekaart of vierkaart in harten of schoppen: een fit in een hoge kleur is er niet')+'. Bied meteen 3SA.'+(also ? ' Met een driekaart hoog mag je ook met '+B('3C')+' naar een 5-3 fit zoeken; dat is ook goed. Veel spelers bieden met zo’n vlakke hand toch meteen 3SA, omdat een 5-3 fit dan zelden een slag meer oplevert.' : '');
+      const q1 = mkQ(key, 1, {why, kind:'v-'+want, prompt:'Jullie spelen Puppet Stayman. Partner opent '+oname+' en Oost past. Wat bied je?'}, h, n.h, want, 'std', open, {start:1, calls:[open,'pas']});
+      if(also) q1.accept = ['3C'];
+      return q1;
     }
     if(step===2){
       const want = ['5M','5M','4M','4M','geen'][rnd(5)];
@@ -8061,7 +8072,7 @@ function answer(bid){
   }
   const suitName = s => '<span class="'+s+'">'+SYM[s]+'</span> '+SNAME[s];
   $('verdict').innerHTML = q.suitPick ? (ok ? 'Goed: '+suitName(q.answer) : 'Niet goed. Jij koos '+suitName(bid)+', beter is '+suitName(q.answer)) : q.cards ? (ok ? 'Goed: '+cardHTML(bid) : 'Niet goed. Jij koos '+cardHTML(bid)+', beter is '+cardHTML(q.answer)) : q.choices ? (ok ? 'Goed' : 'Niet goed. Beter: '+q.d.goodText.charAt(0).toLowerCase()+q.d.goodText.slice(1))
-    : ok ? 'Goed: '+bidHTML(q.answer) : 'Niet goed. Jij koos '+bidHTML(bid)+', juist is '+bidHTML(q.answer);
+    : ok ? (bid!==q.answer ? 'Goed: '+bidHTML(bid)+' (ook goed: '+bidHTML(q.answer)+')' : 'Goed: '+bidHTML(q.answer)) : 'Niet goed. Jij koos '+bidHTML(bid)+', juist is '+bidHTML(q.answer)+(q.accept && q.accept.length && !q.cards ? ' (of '+q.accept.map(bidHTML).join(', ')+')' : '');
   const pickC = q.choices && !ok ? q.choices.find(c=>c.id===bid) : null;
   $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+learnMsg;
   if(q.partner){
@@ -8795,12 +8806,22 @@ function clubHistHTML(){
   let h = '<p class="clubsub"><b>Verloop van '+state.clubMe.replace(/</g,'&lt;')+'</b></p>';
   if(!L.length) return h+'<p>Nog geen avonden bewaard. Elke clubavond die je hier inleest komt in dit overzicht.</p>';
   const chart = (rows, bt) => {
-    const W = 300, Hh = 64, mid = Hh/2, n = rows.length, bw = Math.min(26, (W-10)/n - 4);
-    const val = x => bt ? x.tot : x.tot-50, mx = Math.max(bt ? 10 : 10, ...rows.map(x=>Math.abs(val(x))));
-    const bars = rows.map((x,i)=>{ const v = val(x), hgt = Math.max(1.5, Math.abs(v)/mx*(mid-11)), cx = 5+(i+.5)*(W-10)/n;
-      return '<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+(v>=0 ? mid-hgt : mid).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hgt.toFixed(1)+'" rx="2" class="'+(v>=0 ? 'hup' : 'hdn')+'"/>'
-        + '<text x="'+cx.toFixed(1)+'" y="'+(v>=0 ? mid-hgt-2 : mid+hgt+9).toFixed(1)+'" class="hval">'+(bt ? impTxt(x.tot) : Math.round(x.tot))+'</text>'; }).join('');
-    return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+(bt ? 'IMP per avond' : 'Percentage per avond')+'"><line x1="0" x2="'+W+'" y1="'+mid+'" y2="'+mid+'" class="hax"/><text x="'+(W-2)+'" y="'+(mid-3)+'" class="hlab">'+(bt ? '0' : '50%')+'</text>'+bars+'</svg>';
+    const fmt = x => bt ? impTxt(x.tot)+' IMP' : String(x.tot).replace('.',',')+'%', base = bt ? 0 : 50;
+    if(rows.length<3){
+      const zin = x => fmt(x)+(x.tot>base ? ', boven' : x.tot<base ? ', onder' : ', precies op')+' het gemiddelde';
+      return '<p class="histz">'+(rows.length===1 ? 'Jullie scoorden '+zin(rows[0])+' ('+(bt ? '0 IMP' : '50%')+').' : rows.map(x=>kort(x)+': '+zin(x)).join('<br>')+' ('+(bt ? '0 IMP' : '50%')+').')+' Vanaf drie avonden zie je hier het verloop.</p>';
+    }
+    const W = 300, Hh = 92, top = 12, bot = 70, n = rows.length, xs = i => 22+i*(W-44)/(n-1);
+    const vals = rows.map(x=>x.tot), lo = Math.min(base, ...vals) - (bt ? 3 : 4), hi = Math.max(base, ...vals) + (bt ? 3 : 4);
+    const ys = v => top+(hi-v)/(hi-lo)*(bot-top);
+    const pts = rows.map((x,i)=>xs(i).toFixed(1)+','+ys(x.tot).toFixed(1)).join(' ');
+    return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+(bt ? 'IMP per avond' : 'Percentage per avond')+'">'
+      + '<line x1="14" x2="'+(W-4)+'" y1="'+ys(base).toFixed(1)+'" y2="'+ys(base).toFixed(1)+'" class="hax" stroke-dasharray="4 3"/>'
+      + '<polyline points="'+pts+'" class="hline"/>'
+      + rows.map((x,i)=>{ const up = x.tot>=base; return '<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(x.tot).toFixed(1)+'" r="3.2" class="'+(up ? 'hup' : 'hdn')+'"/>'
+        + '<text x="'+xs(i).toFixed(1)+'" y="'+(ys(x.tot)+(up ? -6 : 12)).toFixed(1)+'" class="hval">'+(bt ? impTxt(x.tot) : Math.round(x.tot))+'</text>'
+        + '<text x="'+xs(i).toFixed(1)+'" y="'+(Hh-4)+'" class="hval hdate">'+kort(x)+'</text>'; }).join('')
+      + '</svg><p class="histleg">Stippellijn: '+(bt ? '0 IMP' : '50%')+' is het gemiddelde van de zaal.</p>';
   };
   const KIND = {paren:'Paren', butler:'Butler'};
   ['paren','butler'].forEach(k=>{
