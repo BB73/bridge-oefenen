@@ -552,6 +552,9 @@ dialog[open]{display:flex;flex-direction:column}
 .navrb{display:inline-flex;gap:.4rem;flex:none;margin-left:auto} .navrb:empty{display:none} .dtitle h2{flex:1}
 .top .navrb{margin-left:.15rem}
 .dhead:has(#tipT:not([hidden])) #setnav{margin-right:3rem}
+.dhead:has(#wmT:not([hidden])) #setnav{margin-right:5.8rem}
+.tipT.wmT{right:3.15rem}
+.dhead:has(#wmT:not([hidden])) .tiplbl{display:none}
 .rb{flex:none;width:2.5rem;height:2.5rem;border-radius:50%;border:0;padding:0;background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08),0 3px 10px rgba(0,0,0,.12);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s, box-shadow .12s}
 .rb svg{width:1.5rem;height:1.5rem;display:block}
 .rb:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(0,0,0,.10),0 6px 14px rgba(0,0,0,.14)} .rb:active{transform:scale(.96)}
@@ -1081,6 +1084,7 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
   <div class="dhead">
     <div class="dtitle"><h2 id="settitle">Wat wil je oefenen?</h2><span class="navrb" id="setnav"></span></div>
     <button class="tipT" id="tipT" data-tip="1" aria-label="Tips: geef een tip of fout door" title="Tips"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="tdisc" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#ECECE9"/><stop offset="1" stop-color="#CFCFCB"/></radialGradient></defs><circle cx="24" cy="24" r="22.5" fill="url(#tdisc)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M15.2 15.6H32.8M24 15.6V34.2" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round"/></svg><span class="tiplbl" aria-hidden="true">Tips</span></button>
+    <button class="tipT wmT" id="wmT" hidden aria-label="Webmaster" title="Webmaster"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="url(#tdisc)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M14.5 34V15.5L24 28L33.5 15.5V34" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <nav class="crumbs" id="crumbs" aria-label="Waar je bent"></nav>
   </div>
   <div class="dbody" id="dbody">
@@ -7967,6 +7971,7 @@ function renderModes(){
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
   $('tipT').hidden = !!T;
+  $('wmT').hidden = true; try{ wmCheck(); }catch(e){}
   $('settitle').textContent = T==='test' ? 'Challenge jezelf' : learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
   $('homeextra').hidden = !!T;
   const showOpt = pk && sel(pk), boxes = (leadsPage && nav[2]!=null) ? [['leadpbox'],['sigbox'],['sig2box']][nav[2]] : sysPage ? ['sysbox','openbox'] : c2Page ? ['c2box'] : d2Page ? ['d2box'] : (showOpt && (cardMode || T==='spelen')) ? (OPTMAP[pk] || []) : [];
@@ -10490,7 +10495,8 @@ document.addEventListener('click', e=>{ const a = e.target.closest && e.target.c
 // beheer: overzicht van het gebruik
 const WM_MAIL = 'basbolk@gmail.com';
 const wmIs = () => { try{ const u = window.firebase && firebase.apps.length && firebase.auth().currentUser; return !!(u && u.email===WM_MAIL && u.emailVerified); }catch(e){ return false; } };
-function wmCheck(){ const ok = wmIs(), f = $('wmfab'); if(f.hidden===ok) f.hidden = !ok; if(ok && !state.wm){ state.wm = 1; save(); } }
+function wmCheck(){ const ok = wmIs(), f = $('wmT'), hide = !ok || $('tipT').hidden; if(f.hidden!==hide) f.hidden = hide; if(ok && !state.wm){ state.wm = 1; save(); } }
+$('wmT').addEventListener('click', ()=>{ TA.tab = 'use'; TAU.who = null; taOpen(); });
 setInterval(wmCheck, 4000);
 setTimeout(()=>{ if(FB_CONFIG && !SAMEN_TEST && navigator.onLine) fbLoad().then(wmCheck).catch(()=>{}); }, 1200);      // meteen kijken of de webmaster is ingelogd
 $('wmfab').addEventListener('click', ()=>{ TA.tab = 'use'; TAU.who = null; taOpen(); });
