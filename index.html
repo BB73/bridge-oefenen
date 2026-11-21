@@ -11629,10 +11629,10 @@ const SAMEN_TEST = /samentest/.test(location.search);
 // Wachtwoord en e-mailadres beheert Firebase Authentication (versleuteld). In de database staan alleen:
 // names/<naam> = uid (zo blijft een naam uniek), users/<uid> = {name}, presence/<uid> (alleen leesbaar voor vrienden),
 // friends/<uid>/<vriend> = true, requests/<aan>/<van> = vriendverzoek, invites/<aan>/<van> = uitnodiging voor een tafel.
-const ACC = {user:null, name:'', friends:{}, reqs:{}, invs:{}, offs:[], view:'', err:'', msg:'', busy:false, seenInv:{}};
+const ACC = {user:null, name:'', unver:false, mailSent:0, friends:{}, reqs:{}, invs:{}, offs:[], view:'', err:'', msg:'', busy:false, seenInv:{}};
 const accKey = n => n.trim().toLowerCase().replace(/\s+/g, '_');
 const accOk = n => /^[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9 _\-]{1,19}$/.test(n.trim());
-const accIn = () => !!(ACC.user && !ACC.user.isAnonymous && ACC.name);
+const accIn = () => !!(ACC.user && !ACC.user.isAnonymous && ACC.name && !ACC.unver);
 function accErr(e){
   const c = (e && e.code) || '';
   return ({'auth/email-already-in-use':'Er is al een account met dit e-mailadres. Log in.', 'auth/invalid-email':'Dit e-mailadres klopt niet.', 'auth/weak-password':'Kies een wachtwoord van minstens 6 tekens.',
@@ -11648,6 +11648,8 @@ async function accStart(){
   const v = (await db.ref('users/'+u.uid).once('value')).val(); ACC.name = (v && v.name) || u.displayName || '';
   if(!ACC.name) return;
   state.acct = 1; state.myName = ACC.name; save();
+  ACC.unver = !u.emailVerified;
+  if(ACC.unver){ accDraw(); return; }                 // vrienden en online pas na het bevestigen van je e-mailadres
   const on = (r, h) => { r.on('value', h); ACC.offs.push(()=>r.off('value', h)); };
   // ik ben online zolang de app open is
   const me = db.ref('presence/'+u.uid), con = db.ref('.info/connected');
@@ -11700,10 +11702,22 @@ async function accCreate(name, mail, pw){
   if(!t.committed && t.snapshot.val()!==u.uid) throw {message:'De naam '+name.trim()+' is net bezet. Kies een andere.', keep:1};
   await db.ref('users/'+u.uid).set({name:name.trim()});
   try{ await u.updateProfile({displayName:name.trim()}); }catch(e){}
+  try{ firebase.auth().languageCode = 'nl'; await u.sendEmailVerification(); ACC.mailSent = Date.now(); }catch(e){}
   FB = null; await accStart();
 }
+async function accVerified(){
+  const u = firebase.auth().currentUser; if(!u) return;
+  await u.reload(); const v = firebase.auth().currentUser;
+  if(!v.emailVerified) throw {message:'Je e-mailadres is nog niet bevestigd. Tik op de link in de mail (kijk ook bij ongewenste mail).'};
+  await v.getIdToken(true); FB = null; await accStart(); return 'Gelukt! Je account is actief.';
+}
+async function accResend(){
+  if(Date.now()-ACC.mailSent<60000) throw {message:'De mail is net verstuurd. Wacht een minuutje voor je het opnieuw probeert.'};
+  firebase.auth().languageCode = 'nl'; await firebase.auth().currentUser.sendEmailVerification(); ACC.mailSent = Date.now();
+  return 'Er is een nieuwe mail verstuurd.';
+}
 async function accLogin(mail, pw){ await fbLoad(); await firebase.auth().signInWithEmailAndPassword(mail, pw); FB = null; await accStart(); }
-async function accLogout(){ accStop(); try{ await firebase.auth().signOut(); }catch(e){} FB = null; ACC.user = null; ACC.name = ''; delete state.acct; save(); }
+async function accLogout(){ accStop(); try{ await firebase.auth().signOut(); }catch(e){} FB = null; ACC.user = null; ACC.name = ''; ACC.unver = false; ACC.skipVer = 0; delete state.acct; save(); }
 async function accAddFriend(name){
   const {db} = await fbLoad(), id = (await db.ref('names/'+accKey(name)).once('value')).val();
   if(!id) throw {message:'Er is niemand met de naam '+name.trim()+'.'};
@@ -11727,6 +11741,10 @@ function accFriendsOnline(limit){
 }
 function accHTML(){
   const v = ACC.view, msg = (ACC.err ? '<p class="leadnote bad">'+esc(ACC.err)+'</p>' : '')+(ACC.msg ? '<p class="leadnote">'+esc(ACC.msg)+'</p>' : '');
+  if(v==='verify') return '<p><b>Bevestig je e-mailadres</b></p><p>We hebben een mail gestuurd naar <b>'+esc((ACC.user && ACC.user.email) || '')+'</b>. Tik op de link in die mail. Kijk ook bij ongewenste mail.</p>'
+      + '<p>Daarna kun je vrienden toevoegen en zie je wie er online is. Tafels openen en spelen kan nu al.</p>'
+      + msg + '<button class="gview" id="acver"'+(ACC.busy ? ' disabled' : '')+'>Ik heb bevestigd</button><button class="gview alt" id="acresend">Mail opnieuw sturen</button>'
+      + '<p class="acfoot">Ingelogd als <b>'+esc(ACC.name)+'</b> · <button class="navclear" id="acout">Uitloggen</button> · <button class="navclear" data-acv="">Terug</button></p>';
   if(v==='login' || v==='new'){
     const isNew = v==='new';
     return '<nav class="modes" id="acctab"><button data-acv="login" aria-pressed="'+!isNew+'">Inloggen</button><button data-acv="new" aria-pressed="'+isNew+'">Account maken</button></nav>'
@@ -11748,12 +11766,14 @@ function accHTML(){
 }
 function accBind(el){
   const go = async (fn, after) => { ACC.err = ''; ACC.msg = ''; ACC.busy = true; samenDraw(); try{ const m = await fn(); if(typeof m==='string') ACC.msg = m; if(after!==undefined) ACC.view = after; }catch(e){ ACC.err = e && e.message && !e.code ? e.message : accErr(e); } ACC.busy = false; samenDraw(); };
-  el.querySelectorAll('[data-acv]').forEach(b=>b.onclick = () => { ACC.view = b.dataset.acv; ACC.err = ''; ACC.msg = ''; samenDraw(); });
+  el.querySelectorAll('[data-acv]').forEach(b=>b.onclick = () => { if(ACC.view==='verify' && !b.dataset.acv) ACC.skipVer = 1; ACC.view = b.dataset.acv; ACC.err = ''; ACC.msg = ''; samenDraw(); });
   if($('acgo')) $('acgo').onclick = () => { const mail = $('acmail').value.trim(), pw = $('acpw').value;
     if(ACC.view==='new'){ const n = $('acname').value; go(()=>accCreate(n, mail, pw), ''); } else go(()=>accLogin(mail, pw), ''); };
   if($('acforgot')) $('acforgot').onclick = () => { const mail = $('acmail').value.trim(); if(!mail){ ACC.err = 'Vul eerst je e-mailadres in.'; samenDraw(); return; }
     go(async()=>{ await fbLoad(); await firebase.auth().sendPasswordResetEmail(mail); return 'Je krijgt een mail om een nieuw wachtwoord te kiezen.'; }); };
   if($('acfradd')) $('acfradd').onclick = () => { const n = $('acfr').value; if(n.trim()) go(()=>accAddFriend(n)); };
+  if($('acver')) $('acver').onclick = () => go(()=>accVerified(), '');
+  if($('acresend')) $('acresend').onclick = () => go(()=>accResend());
   if($('acout')) $('acout').onclick = () => go(async()=>{ await accLogout(); }, '');
   el.querySelectorAll('[data-acok]').forEach(b=>b.onclick = () => go(()=>accAccept(b.dataset.acok)));
   el.querySelectorAll('[data-acno]').forEach(b=>b.onclick = () => go(()=>accDecline(b.dataset.acno)));
@@ -11771,6 +11791,7 @@ function smMine(m){ return m.uid ? m.uid===(SM.tr||{}).uid : m.seat===SM.seat; }
 function samenDraw(){
   const el = $('samenbody'), ready = FB_CONFIG || SAMEN_TEST;
   if(!ready){ el.innerHTML = '<p>Samen spelen werkt zodra de database is gekoppeld. Dat komt binnenkort.</p>'; return; }
+  if(!SM.code && !ACC.view && !ACC.skipVer && ACC.unver && ACC.user && !ACC.user.isAnonymous && !SM.joinCode) ACC.view = 'verify';
   if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); return; }
   if(!SM.code && accIn() && !SM.joinCode){
     const fo = accFriendsOnline(4), nreq = Object.keys(ACC.reqs).length;
@@ -11787,7 +11808,7 @@ function samenDraw(){
       + '<label class="lbl" for="smname">Je naam</label><div class="sm-row"><input id="smname" maxlength="24" autocomplete="given-name" value="'+esc(state.myName||'')+'" placeholder="Bijvoorbeeld Anne"></div>'
       + (SM.err ? '<p class="leadnote bad">'+esc(SM.err)+'</p>' : '') + (SM.note ? '<p class="leadnote">'+SM.note+'</p>' : '')
       + '<button class="gview" id="smgo">'+(join ? 'Naar de tafel' : 'Tafel openen')+'</button>'
-      + (join || SAMEN_TEST ? '' : '<p class="acfoot">Met een account zie je welke vrienden online zijn en nodig je ze direct uit. <button class="navclear" data-acv="login">Inloggen of account maken</button></p>');
+      + (join || SAMEN_TEST ? '' : ACC.unver && ACC.name ? '<p class="acfoot">Je account ('+esc(ACC.name)+') is nog niet bevestigd. <button class="navclear" data-acv="verify">E-mailadres bevestigen</button></p>' : '<p class="acfoot">Met een account zie je welke vrienden online zijn en nodig je ze direct uit. <button class="navclear" data-acv="login">Inloggen of account maken</button></p>');
     accBind(el);
     $('smgo').onclick = () => { const n = $('smname').value.trim(); if(!n){ $('smname').focus(); return; } SM.note = ''; state.myName = n; save(); join ? samenJoin(join) : samenCreate(); };
     return;
