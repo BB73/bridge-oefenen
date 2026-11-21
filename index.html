@@ -10282,11 +10282,20 @@ function h2cLoad(){
   if(!h2cP) h2cP = new Promise((ok, no)=>{ const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload = ok; s.onerror = ()=>{ h2cP = null; no(new Error('laden mislukt')); }; document.head.appendChild(s); });
   return h2cP;
 }
+// html2canvas kent kleuren als color(srgb …), oklab() en color-mix() niet: in de kopie omzetten naar rgba()
+function tipColors(doc){
+  const cv = document.createElement('canvas'); cv.width = cv.height = 1; const cx = cv.getContext('2d', {willReadFrequently:true}), memo = {};
+  const rgb = v => { if(memo[v]) return memo[v]; cx.clearRect(0,0,1,1); cx.fillStyle = '#000'; cx.fillStyle = v; cx.fillRect(0,0,1,1); const d = cx.getImageData(0,0,1,1).data; return memo[v] = 'rgba('+d[0]+','+d[1]+','+d[2]+','+(d[3]/255).toFixed(3)+')'; };
+  const bad = /(color|oklab|oklch|lab|lch|color-mix)\(/, fixv = v => v.replace(/(?:color|oklab|oklch|lab|lch)\([^()]*\)/g, rgb);
+  const props = ['color','background-color','border-top-color','border-right-color','border-bottom-color','border-left-color','outline-color','text-decoration-color','box-shadow','background-image','fill','stroke','caret-color','column-rule-color'];
+  const w = doc.defaultView;
+  doc.querySelectorAll('*').forEach(el=>{ const cs = w.getComputedStyle(el); props.forEach(p=>{ const v = cs.getPropertyValue(p); if(v && bad.test(v)) el.style.setProperty(p, fixv(v), 'important'); }); });
+}
 async function tipShot(){
   const ds = tipOpenDlgs(), target = ds.length ? ds[ds.length-1] : document.body;
   await h2cLoad();
   const opt = {scale:Math.min(1.5, 900/innerWidth), logging:false, useCORS:true, backgroundColor:getComputedStyle(document.body).backgroundColor || '#FFFFFF',
-    ignoreElements:el=>el.id==='tipdlg' || el.id==='tipfab'};
+    ignoreElements:el=>el.id==='tipdlg' || el.id==='tipfab', onclone:tipColors};
   if(target===document.body) Object.assign(opt, {x:scrollX, y:scrollY, width:innerWidth, height:innerHeight, windowWidth:innerWidth, windowHeight:innerHeight});
   const c = await html2canvas(target, opt);
   let cv = c;
@@ -11573,10 +11582,10 @@ function samenDraw(){
     + (full || G || !host || V.length ? '' : (humans<2 && !V.length ? '<p class="hint">Stuur de link naar je partner, en eventueel naar tegenstanders. Wie binnenkomt, geef jij een stoel.</p>' : '')+'<button class="gview" id="smshare">'+(humans<2 ? 'Link sturen' : 'Nog iemand uitnodigen')+'</button>')
     + tabs
     + (G && tab==='spel' ? smGameHTML(G) : (G ? stat : '') + (reqHTML ? '' : (visHTML && V.length>1 ? '' : chatHTML) + (G ? '' : lobby)))
-    + (!G || tab==='chat' ? '<button class="navclear" id="smleave">Tafel verlaten</button>' : '');
+    + (!G || tab==='chat' ? '<button class="navclear" id="smleave">'+(SM.seat==='Z' ? 'Tafel sluiten' : 'Tafel verlaten')+'</button>' : '');
   if($('smshare')) $('smshare').onclick = () => shareUrl(samenLink(), (state.myName||'Je partner')+' wil samen bridge spelen. Open de link om mee te doen.', 'Samen spelen', t=>{ const b = $('smshare'); if(b) b.textContent = t; }, 'Link naar de kamer');
   if($('smform')) $('smform').onsubmit = e => { e.preventDefault(); const v = $('smtext').value.trim(); if(!v) return; SM.tr.push('chat', {seat:SM.seat, uid:SM.tr.uid, name:state.myName||'', text:v.slice(0,300), t:Date.now()}); $('smtext').value = ''; $('smtext').focus(); };
-  if($('smleave')) $('smleave').onclick = samenLeave;
+  if($('smleave')) $('smleave').onclick = () => samenStopAsk(false);
   el.querySelectorAll('[data-smhelp]').forEach(b=>b.onclick = ()=>smHelpClick(b.dataset.smhelp));
   el.querySelectorAll('[data-smhok]').forEach(b=>b.onclick = ()=>smHelpAnswer(b.dataset.smhok==='1'));
   if(G && SM.ctip && SM.ctip.g===G.id && G.phase==='play' && SM.ctip.n===G.st.played.length){ const b = el.querySelector('[data-smcard="'+SM.ctip.card+'"]'); if(b) b.classList.add('tipc'); }
@@ -11894,11 +11903,16 @@ function samenAnalyseEnd(){
 $('theory').addEventListener('close', ()=>{ if(CLUB_OVR) setTimeout(samenAnalyseEnd, 0); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-smback]')) samenAnalyseEnd(); });
 function samenOpen(){ const d = $('samen'); if(!d.open){ if($('settings').open) $('settings').close(); d.showModal ? d.showModal() : d.setAttribute('open',''); } samenDraw(); }
-$('samenclose').addEventListener('click', ()=>{ const shut = () => { $('samen').close(); openMenu(); };
-  if(!SM.code){ shut(); return; }
-  const g = SM.game, busy = g && g.phase!=='done', host = SM.seat==='Z';
-  askConfirm('Stoppen?', '<p><b>Tafel verlaten</b>: je stopt met samen spelen. '+(host ? 'Jij hebt de tafel geopend, dus de tafel wordt voor iedereen gesloten.' : busy && SM.seat ? 'De computer speelt jouw plaats verder.' : 'De anderen zien dat je weg bent.')+'</p><p><b>Alleen sluiten</b>: je blijft aan tafel en komt terug via Samen spelen.</p>',
-    'Tafel verlaten', ()=>{ samenLeave(); shut(); }, 'Alleen sluiten', shut); });
+// stoppen: via het kruisje (dan mag je ook alleen het venster sluiten) of via de knop onderaan
+function samenStopAsk(fromX){
+  const shut = () => { $('samen').close(); openMenu(); };
+  if(!SM.code){ if(fromX) shut(); return; }
+  const g = SM.game, busy = g && g.phase!=='done', host = SM.seat==='Z', yes = host ? 'Tafel sluiten' : 'Tafel verlaten';
+  askConfirm('Stoppen?', '<p><b>'+yes+'</b>: je stopt met samen spelen. '+(host ? 'Jij hebt de tafel geopend, dus de tafel gaat voor iedereen dicht.' : busy && SM.seat ? 'De computer speelt jouw plaats verder.' : 'De anderen zien dat je weg bent.')+'</p>'
+    + (fromX ? '<p><b>Alleen sluiten</b>: je blijft aan tafel en komt terug via Samen spelen.</p>' : ''),
+    yes, ()=>{ samenLeave(); if(fromX) shut(); }, fromX ? 'Alleen sluiten' : 'Annuleren', fromX ? shut : null);
+}
+$('samenclose').addEventListener('click', ()=>samenStopAsk(true));
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-samen]')){ gcEvent('samen-open'); samenOpen(); } });
 { const m = /^#samen=([a-z0-9]{6,12})$/.exec(location.hash);
   if(m){ try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){}
