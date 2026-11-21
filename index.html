@@ -187,7 +187,15 @@ body.dropping #theory, body.dropping .drophint{outline:3px dashed var(--felt);ou
 .tlead{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.06rem;width:1.5rem;height:2.05rem;border-radius:4px;background:#FBFBF8;color:#141414;font-size:.88rem;font-weight:800;line-height:1;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.35)}
 .tlead i{font-style:normal;font-size:.92em;line-height:1} .tlead .H{color:#C4202B} .tlead .D{color:#C85F0A} .tlead .S{color:#1B3F8F} .tlead .C{color:#1E6A4E}
 .tlead.n{top:.25rem;left:50%;transform:translateX(-50%)} .tlead.z{bottom:.25rem;left:50%;transform:translateX(-50%)} .tlead.w{left:.25rem;top:50%;transform:translateY(-50%)} .tlead.o{right:.25rem;top:50%;transform:translateY(-50%)}
-.rvd.cl .rvh.n{grid-column:2 / 4;grid-row:1;padding-left:1.4rem} .rvd.cl .rvh.z{grid-column:2 / 4;grid-row:3;padding-left:1.4rem} .rvd.cl .rvh.w{justify-self:end}
+.rvd.cl .rvh.n{grid-column:2 / 4;grid-row:1;padding-left:1.4rem}
+/* clubavond: kaarten groter, Noord en Zuid wat meer naar rechts, alle kleursymbolen even groot */
+.rvd.cl{font-size:1rem}
+.rvd.cl .rvh.n, .rvd.cl .rvh.z{padding-left:2.6rem}
+.rvd.cl .rvs i{width:1.1rem}
+.rvd.cl .rvmid.sq{width:min(100%,7.5rem);max-height:7.5rem}
+.rvd.cl .rvmid.sq .tct{font-size:1rem}
+.clubyou, .clubsum.wzt{font-size:1rem}
+.clubyou span[class], .clubsum.wzt span[class]{font-size:inherit} .rvd.cl .rvh.z{grid-column:2 / 4;grid-row:3;padding-left:1.4rem} .rvd.cl .rvh.w{justify-self:end}
 .rvlab.kw{display:inline-block;border:1.5px solid #E8857B;border-radius:6px;padding:0 .3rem;margin-left:-.3rem}
 .clubhandsbtn{display:none}
 @media (max-height:760px){ .rvd.clubhands{display:none} .clubhandsbtn{display:inline-flex} }
@@ -440,7 +448,7 @@ main.table > .action:has(> .feedback:not([hidden])){flex:1 1 0;min-height:11rem}
 /* met twee volledige handen (dummy en jij) past het niet onder elkaar: dan tafel en handen links, antwoorden rechts */
 @media (min-width: 760px){
   main.table:has(> #dummy:not([hidden]) li + li){display:grid;align-items:stretch;grid-template-columns:auto minmax(0,1fr);column-gap:1.5rem}
-  main.table:has(> #dummy:not([hidden]) li + li) > .action{align-self:center;flex:none}
+  main.table:has(> #dummy:not([hidden]) li + li) > .action{align-self:start;flex:none;grid-row:2 / span 6;margin-top:0}
 }
 .gend{flex:none;margin-top:.4rem}
 .gtip, .gend{position:fixed;left:.75rem;right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom, 0px));z-index:20;max-width:32.5rem;margin:0 auto;max-height:70vh;max-height:70dvh;overflow-y:auto;box-shadow:0 6px 24px rgba(0,0,0,.45)}
@@ -864,6 +872,19 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .tipstat:empty{display:none}
 .tipstat.err{color:#B3261E}
 .tipdone{font-size:1.05rem}
+.smrows{display:flex;flex-direction:column;gap:.18rem;margin:.3rem auto .2rem;width:fit-content;max-width:100%}
+.smrow{display:flex;align-items:center;gap:.22rem;min-height:1.7rem}
+.smrows.two{display:grid;grid-template-columns:auto auto;column-gap:1.1rem;row-gap:.1rem}
+.smrows.two .smrow{min-height:1.5rem}
+.smrows.two .mk{min-width:1.3rem;height:1.5rem;font-size:1.05rem}
+.smrow > i{font-style:normal;width:1.3rem;font-size:1.2rem;text-align:center}
+.smrow > i.S, .mk.S{color:#1B3F8F} .smrow > i.H, .mk.H{color:#C4202B} .smrow > i.D, .mk.D{color:#C85F0A} .smrow > i.C, .mk.C{color:#1E6A4E}
+.mk{display:inline-flex;align-items:center;justify-content:center;min-width:1.7rem;height:1.65rem;padding:0 .2rem;font:inherit;font-weight:800;font-size:1.1rem;border-radius:6px;border:1px solid transparent;background:none}
+button.mk{border-color:#B9C4BD;background:#FFFFFF;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+button.mk:active{transform:translateY(1px)}
+.mk.off{opacity:.35}
+.mk.tipc{outline:3px solid var(--felt);outline-offset:1px}
+.mkd{color:var(--muted);padding-left:.3rem}
 .acin{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;padding:.45rem .55rem;border:1px solid var(--line);border-radius:8px;background:#FFFFFF;color:var(--ink);margin:0 0 .35rem}
 .acrow{display:flex;align-items:center;gap:.45rem;padding:.25rem 0;border-bottom:1px solid var(--line)}
 .acrow b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -889,6 +910,14 @@ a.ta-btn{text-decoration:none;display:inline-block}
 
 #tipsadmin{width:min(46rem,96vw)}
 #tabody{padding:.2rem .9rem .9rem;overflow-y:auto}
+.ta-tabs{margin:0 0 .5rem}
+.ta-tab{width:100%;border-collapse:collapse;font-size:.88rem;margin:0 0 .6rem}
+.ta-tab th,.ta-tab td{text-align:left;padding:.18rem .3rem;border-bottom:1px solid var(--line)}
+.ta-tab .num{text-align:right;white-space:nowrap}
+.ta-who tr[data-tawho]{cursor:pointer}
+.ta-who tr[data-tawho]:hover{background:var(--panel)}
+.ta-who{font-size:.78rem;table-layout:auto}
+.ta-who th,.ta-who td{padding:.18rem .15rem}
 #tipsadmin .dtitle{padding:.7rem .9rem .3rem}
 .ta-btn{font:inherit;font-size:.85rem;font-weight:600;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 .ta-btn.on{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
@@ -7431,7 +7460,7 @@ function testStart(){
   testKeys().forEach(k=>{ for(let i=0;i<(k==='openen' ? TEST_NOPEN : TEST_N);i++) qq.push(k); });
   for(let i=qq.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [qq[i],qq[j]] = [qq[j],qq[i]]; }
   state.test = {q:qq, i:0, res:{}, run:false, done:false, set:''};
-  testArm();
+  testArm(); gcEvent('challenge-toets');
 }
 function testRows(){                                 // de uitslag per afspraak, zwakste eerst
   const R = state.test ? state.test.res : {};
@@ -8069,6 +8098,7 @@ function answer(bid){
   const s = state.stats[q.conv] || [0,0];
   s[1]++; if(ok) s[0]++;
   state.stats[q.conv] = s;
+  try{ usAdd('c', q.conv, ok); }catch(e){}
   if(!state.hist || typeof state.hist!=='object') state.hist = {};
   const hh = state.hist[q.conv] || (state.hist[q.conv] = []);
   hh.push(ok ? 1 : 0); if(hh.length>10) hh.shift();
@@ -8561,8 +8591,8 @@ function clubDraw(){
       ? ' <span class="leadtag '+(li.cost ? 'bad' : 'good')+'">'+(li.cost ? '−'+li.cost+' slag'+(li.cost===1 ? '' : 'en') : '✓ beste')+'</span>'
       : (li.cost ? ' <span class="leadtag good">+'+li.cost+' voor jullie</span>' : '');
   el.innerHTML = nav
-    + '<div class="rvd cl clubhands">'+seats+mid+'</div>' + yours.replace('%%LEAD%%', leadTag) + leadNote + sum
-    + '<div class="clubplay"><button class="gview clubhandsbtn" data-clubview="handen">Handen</button>'+(CLUB_OVR ? '' : '<button class="gview" data-clubview="tafels">Tafels ('+rows.length+')</button>')+'<button class="gview" data-clubview="open">Open kaarten</button><button class="gview" data-clubview="uitkomst">Uitkomst</button></div>'
+    + '<div class="rvd cl clubhands">'+seats+mid+'</div>' + yours.replace('%%LEAD%%', leadTag) + leadNote
+    + '<div class="clubplay"><button class="gview clubhandsbtn" data-clubview="handen">Handen</button>'+(CLUB_OVR ? '' : '<button class="gview" data-clubview="tafels">Tafels ('+rows.length+')</button>')+'<button class="gview" data-clubview="open">Open kaarten</button><button class="gview" data-clubview="uitkomst">Uitkomst</button></div>' + sum
     + (CLUB_OVR ? '<div class="clubplay"><button class="gview" data-smback="1">Terug naar samen spelen</button></div>'
       : '<p class="clubsub"><b>Naspelen</b>'+(pc ? ': '+clubContractHTML(pc.c)+' door '+NM[pc.decl] : '')+'</p>'
       + '<div class="clubplay">'+(pc ? '<button class="gview" data-clubplay="leider">Als leider</button><button class="gview" data-clubplay="tegen">Tegenspel</button>' : '')+'<button class="gview" data-clubbid="1">Zelf bieden</button></div>');
@@ -10169,6 +10199,7 @@ function cardPrint(){
   document.title = (cvMode==='boek' ? 'Handboek biedsysteem ' : cvMode==='plat' ? 'Overzicht biedsysteem ' : 'Systeemkaart ')+clean(sk.n1)+' en '+clean(sk.n2);
   document.body.classList.remove('pr-card','pr-book');
   document.body.classList.add(cvMode==='boek' ? 'pr-book' : 'pr-card');
+  gcEvent(cvMode==='boek' ? 'print-handboek' : cvMode==='plat' ? 'print-overzicht' : 'print-kaart');
   window.print();
 }
 $('cvprint').addEventListener('click', ()=>{ $('cvpdfhint').hidden = true; cardPrint(); });
@@ -10273,7 +10304,8 @@ if(GC_ON){
 }
 const gcDone = {};
 function gcEvent(name, once){
-  if(!GC_ON || (once && gcDone[name])) return; gcDone[name] = true;
+  if(once && gcDone[name]) return; try{ usAdd('e', name); }catch(e){}
+  if(!GC_ON) return; gcDone[name] = true;
   try{ if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: name, title: name, event: true}); }catch(e){}
 }
 document.addEventListener('click', e=>{
@@ -10406,8 +10438,107 @@ function tipFabPlace(){
   const tt = $('tipT'), ownTip = top && top.id==='settings' && tt && !tt.hidden && tt.offsetParent;
   const hide = $('tipdlg').open || !!ownTip || !!(top && /^(welcome|confirmdlg|shareimp|tipsadmin)$/.test(top.id)); if(f.hidden!==hide) f.hidden = hide;
 }
+
+// ---------- Anoniem gebruik voor de bouwer: welke oefeningen, hoe vaak goed, welke versie ----------
+// Per toestel een anonieme id (Firebase, zonder naam of e-mail). Lokaal sparen, af en toe in één keer optellen in usage/<id>.
+const US = (()=>{ try{ return JSON.parse(localStorage.getItem('uspend')) || {c:{}, e:{}}; }catch(e){ return {c:{}, e:{}}; } })();
+const usKey = k => String(k).replace(/[.#$\/\[\]]/g, '_').slice(0, 60);
+function usSave(){ try{ localStorage.setItem('uspend', JSON.stringify(US)); }catch(e){} }
+function usAdd(kind, key, ok){
+  if(state.noStats || SAMEN_TEST) return; key = usKey(key);
+  if(kind==='c'){ const x = US.c[key] || (US.c[key] = {n:0, ok:0}); x.n++; if(ok) x.ok++; }
+  else US.e[key] = (US.e[key] || 0) + 1;
+  usSave();
+}
+let usBusy = false, usOpened = false;
+async function usFlush(){
+  if(usBusy || state.noStats || SAMEN_TEST || !navigator.onLine || !FB_CONFIG) return;
+  const today = new Date().toISOString().slice(0, 10), newDay = state.usDay!==today;
+  if(usOpened && !newDay && !Object.keys(US.c).length && !Object.keys(US.e).length) return;
+  usBusy = true;
+  try{
+    const {db, uid} = await fbLoad(), inc = firebase.database.ServerValue.increment, TS = firebase.database.ServerValue.TIMESTAMP;
+    let ver = ''; try{ ver = (/bridge-v\d+/.exec(await (await fetch('sw.js', {cache:'no-store'})).text())||[''])[0]; }catch(e){}
+    const snapC = JSON.parse(JSON.stringify(US.c)), snapE = JSON.parse(JSON.stringify(US.e)), upd = {last:TS, v:ver, dev:(matchMedia('(pointer:coarse)').matches ? 'telefoon' : 'computer')+(matchMedia('(display-mode: standalone)').matches ? ' (app)' : '')};
+    Object.entries(snapC).forEach(([k, x])=>{ upd['c/'+k+'/n'] = inc(x.n); if(x.ok) upd['c/'+k+'/ok'] = inc(x.ok); });
+    Object.entries(snapE).forEach(([k, n])=>{ upd['e/'+k] = inc(n); });
+    if(newDay) upd.days = inc(1);
+    const opening = !usOpened; if(opening) upd.opens = inc(1);
+    try{ if(typeof accIn==='function' && accIn()) upd.name = ACC.name; }catch(e){}
+    try{ upd.card = state.card.join(',').slice(0, 1500); const pm = presetMatch(); upd.preset = pm && PRESETS[pm] ? (PRESETS[pm].tag || pm) : 'eigen keuze'; }catch(e){}
+    if(!state.usFirst) upd.first = TS;
+    await db.ref('usage/'+uid).update(upd);
+    Object.entries(snapC).forEach(([k, x])=>{ const y = US.c[k]; if(y){ y.n -= x.n; y.ok -= x.ok; if(y.n<=0) delete US.c[k]; } });
+    Object.entries(snapE).forEach(([k, n])=>{ US.e[k] -= n; if(US.e[k]<=0) delete US.e[k]; });
+    usSave(); state.usDay = today; state.usFirst = 1; if(opening) usOpened = true; save();
+  }catch(e){}
+  usBusy = false;
+}
+setTimeout(usFlush, 15000); setInterval(usFlush, 5*60000);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') usFlush(); });
+document.addEventListener('click', e=>{ const a = e.target.closest && e.target.closest('[data-nostats]'); if(!a) return; e.preventDefault();
+  state.noStats = !state.noStats; save(); a.textContent = state.noStats ? 'Toch delen' : 'Liever niet?'; });
+
+// beheer: overzicht van het gebruik
+async function taUsage(){
+  const el = $('tabody'); el.innerHTML = '<p>Gebruik ophalen…</p>';
+  let v;
+  try{ v = (await firebase.database().ref('usage').once('value')).val() || {}; }
+  catch(e){ el.innerHTML = taTabs()+'<p class="leadnote bad">Geen toegang tot het gebruik. Staan de nieuwe databaseregels erin?</p>'; return; }
+  const now = Date.now(), D = 86400000, L = Object.values(v);
+  const act = d => L.filter(x=>x.last && now-x.last<d*D).length;
+  const conv = {}; L.forEach(x=>Object.entries(x.c||{}).forEach(([k, y])=>{ const z = conv[k] || (conv[k] = {n:0, ok:0, p:0}); z.n += y.n||0; z.ok += y.ok||0; z.p++; }));
+  const ev = {}; L.forEach(x=>Object.entries(x.e||{}).forEach(([k, n])=>{ ev[k] = (ev[k]||0)+n; }));
+  const vers = {}, devs = {}; L.filter(x=>x.last && now-x.last<7*D).forEach(x=>{ vers[x.v||'?'] = (vers[x.v||'?']||0)+1; devs[x.dev||'?'] = (devs[x.dev||'?']||0)+1; });
+  const nm = k => (typeof CONVS!=='undefined' && CONVS[k]) || k;
+  const top = Object.entries(conv).sort((a,b)=>b[1].n-a[1].n);
+  const row = cells => '<tr>'+cells.map((c, i)=>'<td'+(i ? ' class="num"' : '')+'>'+c+'</td>').join('')+'</tr>';
+  el.innerHTML = taTabs()
+    + '<table class="ta-tab"><tr><th>Toestellen</th><th class="num">aantal</th></tr>'+row(['ooit gebruikt', L.length])+row(['vandaag actief', act(1)])+row(['laatste 7 dagen', act(7)])+row(['laatste 30 dagen', act(30)])+'</table>'
+    + '<p class="lbl">Oefeningen (meest gespeeld eerst)</p><table class="ta-tab"><tr><th>Oefening</th><th class="num">vragen</th><th class="num">goed</th><th class="num">spelers</th></tr>'
+    + top.map(([k, z])=>row([esc(nm(k)), z.n, z.n ? Math.round(100*z.ok/z.n)+'%' : '–', z.p])).join('') + '</table>'
+    + (Object.keys(ev).length ? '<p class="lbl">Gebeurtenissen</p><table class="ta-tab">'+Object.entries(ev).sort((a,b)=>b[1]-a[1]).map(([k, n])=>row([esc(k), n])).join('')+'</table>' : '')
+    + '<p class="lbl">Afgelopen 7 dagen</p><table class="ta-tab">'+Object.entries(devs).sort((a,b)=>b[1]-a[1]).map(([k, n])=>row([esc(k), n])).join('')+Object.entries(vers).sort((a,b)=>b[0].localeCompare(a[0])).map(([k, n])=>row([esc(k), n])).join('')+'</table>';
+}
+function taTabs(){ return '<nav class="modes ta-tabs">'+[['tips','Tips'],['use','Gebruik'],['who','Spelers']].map(([k,l])=>'<button data-tatab="'+k+'" aria-pressed="'+(TA.tab===k)+'">'+l+'</button>').join('')+'</nav>'; }
+// beheer: per speler (toestel of account) wat hij gebruikt en hoe goed het gaat
+const TAU = {v:null, who:null};
+const taD = t => t ? new Date(t).toLocaleDateString('nl-NL', {day:'numeric', month:'short', year:'2-digit'}) : '–';
+const taDs = t => t ? new Date(t).toLocaleDateString('nl-NL', {day:'numeric', month:'short'}) : '–';
+const taTot = x => { let n = 0, ok = 0; Object.values(x.c||{}).forEach(y=>{ n += y.n||0; ok += y.ok||0; }); return {n, ok, pct:n ? Math.round(100*ok/n)+'%' : '–'}; };
+const taEv = (x, f) => Object.entries(x.e||{}).filter(([k])=>f(k)).reduce((a, [k, n])=>a+n, 0);
+const taFeat = x => [['Afdrukken of pdf', taEv(x, k=>k.startsWith('print-'))], ['Tips gestuurd', taEv(x, k=>k==='tip-verstuurd')], ['Clubavond', taEv(x, k=>k.startsWith('club'))],
+  ['Challenge', taEv(x, k=>k.startsWith('challenge'))+(((x.c||{}).fris||{}).n ? 1 : 0)], ['Leerpad', taEv(x, k=>k.startsWith('leerpad'))], ['Heel spel spelen', taEv(x, k=>k==='heel-spel' || k==='spel-geboden' || k==='clubspel-geboden')],
+  ['Samen spelen', taEv(x, k=>k==='samen-kamer' || k==='samen-meedoen')], ['Delen', taEv(x, k=>k.includes('delen'))]];
+async function taWho(){
+  const el = $('tabody'); el.innerHTML = '<p>Spelers ophalen…</p>';
+  try{ TAU.v = (await firebase.database().ref('usage').once('value')).val() || {}; }
+  catch(e){ el.innerHTML = taTabs()+'<p class="leadnote bad">Geen toegang tot het gebruik. Staan de nieuwe databaseregels erin?</p>'; return; }
+  taWhoDraw();
+}
+function taWhoDraw(){
+  const el = $('tabody'), V = TAU.v || {}, nm = k => (typeof CONVS!=='undefined' && CONVS[k]) || k;
+  const who = (id, x) => x.name ? esc(x.name) : 'anon. '+esc(id.slice(0, 4));
+  if(TAU.who && V[TAU.who]){
+    const x = V[TAU.who], t = taTot(x), card = String(x.card||'').split(',').filter(Boolean);
+    const row = cells => '<tr>'+cells.map((c, i)=>'<td'+(i ? ' class="num"' : '')+'>'+c+'</td>').join('')+'</tr>';
+    el.innerHTML = taTabs()+'<p><button class="ta-btn" data-tawho="">‹ Alle spelers</button></p><p class="lbl"><b>'+who(TAU.who, x)+'</b> · '+esc(x.dev||'')+' · '+esc(x.v||'')+'</p>'
+      + '<table class="ta-tab">'+row(['Eerste keer', taD(x.first)])+row(['Laatste keer', taD(x.last)])+row(['Keer geopend', x.opens||0])+row(['Dagen gebruikt', x.days||0])+row(['Vragen beantwoord', t.n])+row(['Goed', t.pct])+'</table>'
+      + '<p class="lbl">Systeemkaart'+(x.preset ? ': '+esc(x.preset) : '')+' ('+card.length+' afspraken)</p><p class="ta-meta">'+(card.map(k=>esc(nm(k))).join(', ') || 'nog niets gekozen')+'</p>'
+      + '<p class="lbl">Onderdelen (aantal keer)</p><table class="ta-tab">'+taFeat(x).map(([l, n])=>row([l, n || '–'])).join('')+'</table>'
+      + '<p class="lbl">Oefeningen</p><table class="ta-tab"><tr><th>Oefening</th><th class="num">vragen</th><th class="num">goed</th></tr>'
+      + (Object.entries(x.c||{}).sort((a,b)=>(b[1].n||0)-(a[1].n||0)).map(([k, y])=>row([esc(nm(k)), y.n||0, y.n ? Math.round(100*(y.ok||0)/y.n)+'%' : '–'])).join('') || row(['nog niets', '', '']))+'</table>'
+      + (Object.keys(x.e||{}).length ? '<p class="lbl">Alle gebeurtenissen</p><table class="ta-tab">'+Object.entries(x.e).sort((a,b)=>b[1]-a[1]).map(([k, n])=>row([esc(k), n])).join('')+'</table>' : '');
+    return;
+  }
+  const L = Object.entries(V).sort((a,b)=>(b[1].last||0)-(a[1].last||0));
+  el.innerHTML = taTabs()+'<p class="ta-meta">'+L.length+' spelers, laatst actief bovenaan. Tik op een regel voor de details.</p>'
+    + '<table class="ta-tab ta-who"><tr><th>Wie</th><th class="num">eerst</th><th class="num">laatst</th><th class="num">keer</th><th class="num">vragen</th><th class="num">goed</th></tr>'
+    + L.map(([id, x])=>{ const t = taTot(x); return '<tr data-tawho="'+esc(id)+'"><td>'+who(id, x)+'</td><td class="num">'+taDs(x.first)+'</td><td class="num">'+taDs(x.last)+'</td><td class="num">'+(x.opens||0)+'</td><td class="num">'+t.n+'</td><td class="num">'+t.pct+'</td></tr>'; }).join('')+'</table>';
+}
+
 // ---------- Tips bekijken (alleen voor de bouwer, via #tips en inloggen met Google) ----------
-const TA = {list:[], filter:'nieuw', err:''};
+const TA = {list:[], filter:'nieuw', err:'', tab:'tips'};
 function taOpen(){ const d = $('tipsadmin'); if(!d.open){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); } taLoad(); }
 async function taLoad(){
   const el = $('tabody'); el.innerHTML = '<p>Tips ophalen…</p>';
@@ -10429,7 +10560,7 @@ function taDraw(){
   const n = s => TA.list.filter(t=>(t.status||'nieuw')===s).length;
   const shown = TA.list.filter(t=>TA.filter==='alle' || (t.status||'nieuw')===TA.filter);
   const fd = t => t.t ? new Date(t.t).toLocaleString('nl-NL', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
-  el.innerHTML = (u && !u.isAnonymous ? '<p class="ta-meta">Ingelogd als '+esc(u.email||'')+'</p>' : '')
+  el.innerHTML = taTabs() + (u && !u.isAnonymous ? '<p class="ta-meta">Ingelogd als '+esc(u.email||'')+'</p>' : '')
     + (TA.err ? '<p class="leadnote bad">'+esc(TA.err)+'</p>' : '')
     + '<div class="ta-bar">'+[['nieuw','Nieuw'],['verwerkt','Verwerkt'],['niet','Niets mee'],['alle','Alle']].map(([k,l])=>'<button class="ta-btn'+(TA.filter===k ? ' on' : '')+'" data-taf="'+k+'">'+l+' ('+(k==='alle' ? TA.list.length : n(k))+')</button>').join('')+'<button class="ta-btn" data-tar="1">Vernieuwen</button></div>'
     + (shown.length ? shown.map(t=>'<div class="ta-tip" data-id="'+esc(t.id)+'"><h4>'+fd(t)+(t.ver ? ' · '+esc(t.ver) : '')+'<span class="ta-badge '+esc(t.status||'nieuw')+'">'+esc(t.status||'nieuw')+'</span></h4>'
@@ -10440,9 +10571,12 @@ function taDraw(){
       : '<p>Geen tips'+(TA.filter==='alle' ? '' : ' met deze status')+'.</p>');
 }
 $('tabody').addEventListener('click', async e=>{
-  const b = e.target.closest('button'), im = e.target.closest('.ta-img');
+  const b = e.target.closest('button'), im = e.target.closest('.ta-img'), tr = e.target.closest('tr[data-tawho]');
   if(im){ im.classList.toggle('big'); return; }
+  if(tr){ TAU.who = tr.dataset.tawho; taWhoDraw(); $('tabody').scrollTop = 0; return; }
   if(!b) return;
+  if(b.dataset.tatab){ TA.tab = b.dataset.tatab; TAU.who = null; if(TA.tab==='use') taUsage(); else if(TA.tab==='who') taWho(); else taDraw(); return; }
+  if(b.dataset.tawho!==undefined){ TAU.who = b.dataset.tawho || null; taWhoDraw(); return; }
   if(b.dataset.taf){ TA.filter = b.dataset.taf; taDraw(); return; }
   if(b.dataset.tar){ taLoad(); return; }
   if(b.dataset.tas){ const box = b.closest('.ta-tip'), id = box.dataset.id, note = box.querySelector('input').value.trim();
@@ -10721,6 +10855,7 @@ function gDo(seat, card){
   }else gAdvance();
 }
 function gStart(){
+  gcEvent('heel-spel');
   if(!CLUB_PRESET && state.gbid==='ja' && state.grole!=='tegen'){ bidStartRandom(); return; }
   if(BIDS){ BIDS = null; bidRender(); }
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
@@ -11035,7 +11170,7 @@ function startLearn(t, i){
     if(s.open){ state.openSet = O_ALL.filter(x=>s.open.includes(x)); OPEN_SET = state.openSet.slice(); }
   }else{ state.playSet = [s.conv]; PLAY_SET = [s.conv]; }
   state.conv = s.conv; state.step = 'alles';
-  state.learn.run = {t, i};
+  state.learn.run = {t, i}; gcEvent('leerpad-stap');
   save();
   renderModes(); next(true);
 }
@@ -12080,6 +12215,10 @@ function smGameHTML(g){
   const pos = s => ['b','l','t','r'][(s-me+4)%4];
   const pcard = (c, how) => { const S = SUITS[gSuit(c)], inner = '<b>'+(RANK[gRank(c)]||gRank(c))+'</b><i>'+SYM[S]+'</i>';
     return how==='play' ? '<button class="pc '+S+'" data-smcard="'+c+'">'+inner+'</button>' : '<span class="pc '+S+(how==='off' ? ' off' : '')+'">'+inner+'</span>'; };
+  // je eigen hand: per kleur een regel, zoals op de andere schermen
+  const mrows = (cards, legal, two) => '<div class="smrows'+(two ? ' two' : '')+'">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)), S = SUITS[si];
+    return '<div class="smrow"><i class="'+S+'">'+SYM[S]+'</i>'+(cs.length ? cs.map(c=>{ const t = RANK[gRank(c)]||gRank(c);
+      return legal==null ? '<span class="mk '+S+'">'+t+'</span>' : legal.includes(c) ? '<button class="mk '+S+' on" data-smcard="'+c+'">'+t+'</button>' : '<span class="mk '+S+' off">'+t+'</span>'; }).join('') : '<span class="mkd">–</span>')+'</div>'; }).join('')+'</div>';
   const prow = (cards, legal, cls) => '<div class="prow'+(cls ? ' '+cls : '')+'">'+[0,1,2,3].map(si=>cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).map(c=>pcard(c, legal==null ? 'show' : legal.includes(c) ? 'play' : 'off')).join('')).join('')+'</div>';
   const pcol = cards => '<div class="pcol">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>RANK[gRank(c)]||gRank(c)).join(' ') : '–')+'</div>'; }).join('')+'</div>';
   const labels = t => [0,1,2,3].map(s=>seat(s, 'st '+pos(s)+(s===t ? ' turn' : ''))).join('');
@@ -12090,7 +12229,7 @@ function smGameHTML(g){
     const stacks = [0,1,2,3].map(s=>{ const mine = g.calls.map((b,i)=>i).filter(i=>(g.dealer+i)%4===s); return mine.length ? '<div class="bst '+pos(s)+'"'+(mine.length>1 ? ' style="--n:'+mine.length+'"' : '')+'>'+mine.map(bcard).join('')+'</div>' : ''; }).join('');
     const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
     const sq = '<div class="smsq sqb">'+labels(turn)+stacks+'</div>';
-    return head + sq + fb + prow(g.hands[me], null, 'mine') + (!hu(me) ? '<p class="smwait">Je doet mee vanaf het volgende spel; nu speelt de computer jouw stoel.</p>' : turn===me ? smBidBox(g, oef) : ask || '<p class="smwait">'+(hu(turn) ? pn(turn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
+    return head + sq + fb + mrows(g.hands[me], null, 1) + (!hu(me) ? '<p class="smwait">Je doet mee vanaf het volgende spel; nu speelt de computer jouw stoel.</p>' : turn===me ? smBidBox(g, oef) : ask || '<p class="smwait">'+(hu(turn) ? pn(turn)+' denkt na…' : SM_NM[turn]+' biedt…')+'</p>');
   }
   if(g.phase==='play'){
     const st = g.st, real = (st.turn+g.rot)%4, ctrl = smController(g, real), mine = ctrl===me;
@@ -12108,7 +12247,7 @@ function smGameHTML(g){
       + (showLast ? '<span class="sqm">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '') + '</div>';
     const ct = SM.ctip && SM.ctip.g===g.id && SM.ctip.n===st.played.length ? SM.ctip : null, f1 = x => x.toFixed(1).replace('.', ',');
     const wait = mine ? '<p class="smwait go">'+(ct ? 'Tip: speel '+cardHTML(SUITS[gSuit(ct.card)]+gRank(ct.card))+(ct.ev!=null ? ' (gem. nog '+f1(ct.ev)+' slagen)' : '') : real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+' '+smHelpBtn(g)+'</p>' : smAskLine(g, pn) || '<p class="smwait">'+(dummyIsMe ? 'Jij bent dummy · ' : '')+(ctrl!==null ? pn(ctrl)+' is aan de beurt…'+((P[SM_KEY[ctrl]]||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
-    return head + sq + prow(hand(me), dummyIsMe ? null : legalFor(me), 'mine') + wait;
+    return head + sq + mrows(hand(me), dummyIsMe ? null : legalFor(me)) + wait;
   }
   // klaar
   const R = g.result || {};
@@ -12211,7 +12350,7 @@ document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest(
     else { SM.joinCode = m[1]; setTimeout(samenOpen, 50); } } }
 // ---------- Rondleiding: drie schermpjes voor wie de app voor het eerst opent ----------
 const WEL = [
-  ['Welkom!', '<p>Met deze app oefen je bridge: bieden, afspelen en tegenspelen. Na elk antwoord krijg je uitleg waarom.</p><ul><li>Gratis, je hebt geen account nodig</li><li>Je voortgang blijft bewaard op dit apparaat</li><li>Werkt ook zonder internet</li></ul><p class="wtip">Je bouwt mee! Met het lipje <b>T</b> aan de rechterrand stuur je op elk scherm een tip of fout naar de bouwer. Elke tip wordt gelezen en zeer gewaardeerd.</p>'],
+  ['Welkom!', '<p>Met deze app oefen je bridge: bieden, afspelen en tegenspelen. Na elk antwoord krijg je uitleg waarom.</p><ul><li>Gratis, je hebt geen account nodig</li><li>Je voortgang blijft bewaard op dit apparaat</li><li>Werkt ook zonder internet</li><li>De app houdt bij wat je gebruikt, om hem te verbeteren: anoniem, of onder je naam als je een account hebt. <a href="#" data-nostats>Liever niet?</a></li></ul><p class="wtip">Je bouwt mee! Met het lipje <b>T</b> aan de rechterrand stuur je op elk scherm een tip of fout naar de bouwer. Elke tip wordt gelezen en zeer gewaardeerd.</p>'],
   ['Begin bij je systeemkaart', '<p>Onder <b>Mijn systeemkaart</b> zet je aan welke afspraken jij en je partner spelen, zoals Stayman, Jacoby of de zwakke twee. De app oefent alleen wat erop staat. Begin eventueel met een standaardkaart, zoals die van Berry Westra.</p><p class="wtip">Net begonnen met bridge? Kies <b>Challenge jezelf</b> en volg het leerpad voor beginners.</p>'],
   ['Oefenen en naspelen', '<p><b>Bieden &amp; spelen</b>: oefen losse onderdelen, zo vaak als je wilt.</p><p><b>Clubspellen naspelen</b>: open de uitslag-pdf van je club en zie per spel wat erin zat, wie wat speelde en hoe je het zelf had kunnen bieden en spelen.</p><p class="wtip">Tip: zet de app op je beginscherm. Op de iPhone via Delen › Zet op beginscherm, op Android via het menu › App installeren. Via App delen op de home stuur je hem door.</p>']
 ];
