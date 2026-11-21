@@ -859,6 +859,24 @@ button.pc{cursor:pointer;border:2px solid var(--felt);transform:translateY(-4px)
 .tipstat.err{color:#B3261E}
 .tipdone{font-size:1.05rem}
 [data-tipform][hidden]{display:none!important}
+#tipsadmin{width:min(46rem,96vw)}
+#tabody{padding:.2rem .9rem .9rem;overflow-y:auto}
+#tipsadmin .dtitle{padding:.7rem .9rem .3rem}
+.ta-btn{font:inherit;font-size:.85rem;font-weight:600;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.ta-btn.on{background:var(--ink);color:#FFFFFF;border-color:var(--ink)}
+.ta-bar{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:0 0 .6rem}
+.ta-tip{border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;margin:0 0 .7rem;background:var(--surface)}
+.ta-tip h4{margin:0 0 .25rem;font-size:.85rem;color:var(--muted);font-weight:600}
+.ta-msg{white-space:pre-wrap;margin:.2rem 0 .4rem;font-size:1rem}
+.ta-meta{font-size:.8rem;color:var(--muted);margin:0 0 .4rem;word-break:break-word}
+.ta-img{display:block;max-width:100%;max-height:14rem;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.25);cursor:zoom-in;margin:0 0 .5rem}
+.ta-img.big{max-height:none;cursor:zoom-out}
+.ta-st{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
+.ta-st input{flex:1 1 12rem;font:inherit;font-size:.9rem;padding:.35rem .5rem;border:1px solid var(--line);border-radius:8px}
+.ta-badge{display:inline-block;font-size:.72rem;font-weight:700;padding:.1rem .45rem;border-radius:999px;background:#FFE08A;color:#4A3B00;margin-left:.3rem}
+.ta-badge.verwerkt{background:#CFE9DA;color:#11452D}
+.ta-badge.niet{background:#E4E4E1;color:#3A3A37}
+
 
 .smw{font-weight:400;opacity:.85}
 .smsq .st,.smsq.sqb .st.l,.smsq.sqb .st.r{max-width:calc(var(--w) * .55);width:max-content;right:auto;bottom:auto}
@@ -1995,6 +2013,10 @@ button.smc[data-smcard]{border-color:var(--felt);box-shadow:0 1px 0 var(--felt);
   <button class="close" id="theoryclose">Terug naar de hand</button>
 </dialog>
 
+<dialog id="tipsadmin" aria-labelledby="tatitle">
+  <div class="dtitle"><h2 id="tatitle">Binnengekomen tips</h2><button class="smx" id="taclose" aria-label="Sluiten">×</button></div>
+  <div class="rules" id="tabody"></div>
+</dialog>
 <button class="tipfab" id="tipfab" data-tip="1" aria-label="Geef een tip aan de bouwer" title="Tip voor de bouwer"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 13H35M24 13V37" fill="none" stroke="#151515" stroke-width="6" stroke-linecap="round"/></svg></button>
 <dialog id="tipdlg" aria-labelledby="tiptitle">
   <div class="dhead"><h2 id="tiptitle">Tip voor de bouwer</h2></div>
@@ -10299,8 +10321,54 @@ function tipFabPlace(){
   const f = $('tipfab'), ds = tipOpenDlgs(), top = ds[ds.length-1], host = top || document.body;
   if(f.parentNode!==host) host.appendChild(f);
   const tt = $('tipT'), ownTip = top && top.id==='settings' && tt && !tt.hidden && tt.offsetParent;
-  const hide = $('tipdlg').open || !!ownTip || !!(top && /^(welcome|confirmdlg|shareimp)$/.test(top.id)); if(f.hidden!==hide) f.hidden = hide;
+  const hide = $('tipdlg').open || !!ownTip || !!(top && /^(welcome|confirmdlg|shareimp|tipsadmin)$/.test(top.id)); if(f.hidden!==hide) f.hidden = hide;
 }
+// ---------- Tips bekijken (alleen voor de bouwer, via #tips en inloggen met Google) ----------
+const TA = {list:[], filter:'nieuw', err:''};
+function taOpen(){ const d = $('tipsadmin'); if(!d.open){ if(d.showModal) d.showModal(); else d.setAttribute('open',''); } taLoad(); }
+async function taLoad(){
+  const el = $('tabody'); el.innerHTML = '<p>Tips ophalen…</p>';
+  try{
+    await fbLoad();
+    let u = firebase.auth().currentUser;
+    if(!u || u.isAnonymous){
+      el.innerHTML = '<p>Log in met het Google-account dat in de databaseregels staat.</p><button class="gview" id="tagoogle">Inloggen met Google</button>';
+      $('tagoogle').onclick = async () => { try{ await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()); taLoad(); }catch(e){ el.insertAdjacentHTML('beforeend', '<p class="leadnote bad">Inloggen lukte niet: '+esc(e.code||e.message)+'</p>'); } };
+      return;
+    }
+    const snap = await firebase.database().ref('tips').once('value'), v = snap.val() || {};
+    TA.list = Object.entries(v).map(([id, t])=>Object.assign({id}, t)).sort((a,b)=>(b.t||0)-(a.t||0)); TA.err = '';
+  }catch(e){ TA.list = []; TA.err = e.code==='PERMISSION_DENIED' || /permission/i.test(e.message||'') ? 'Geen toegang. Staat het e-mailadres van dit Google-account in de regels?' : (e.message||'Ophalen lukte niet'); }
+  taDraw();
+}
+function taDraw(){
+  const el = $('tabody'), u = window.firebase && firebase.auth().currentUser;
+  const n = s => TA.list.filter(t=>(t.status||'nieuw')===s).length;
+  const shown = TA.list.filter(t=>TA.filter==='alle' || (t.status||'nieuw')===TA.filter);
+  const fd = t => t.t ? new Date(t.t).toLocaleString('nl-NL', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+  el.innerHTML = (u && !u.isAnonymous ? '<p class="ta-meta">Ingelogd als '+esc(u.email||'')+'</p>' : '')
+    + (TA.err ? '<p class="leadnote bad">'+esc(TA.err)+'</p>' : '')
+    + '<div class="ta-bar">'+[['nieuw','Nieuw'],['verwerkt','Verwerkt'],['niet','Niets mee'],['alle','Alle']].map(([k,l])=>'<button class="ta-btn'+(TA.filter===k ? ' on' : '')+'" data-taf="'+k+'">'+l+' ('+(k==='alle' ? TA.list.length : n(k))+')</button>').join('')+'<button class="ta-btn" data-tar="1">Vernieuwen</button></div>'
+    + (shown.length ? shown.map(t=>'<div class="ta-tip" data-id="'+esc(t.id)+'"><h4>'+fd(t)+(t.ver ? ' · '+esc(t.ver) : '')+'<span class="ta-badge '+esc(t.status||'nieuw')+'">'+esc(t.status||'nieuw')+'</span></h4>'
+        + '<p class="ta-msg">'+esc(t.msg||'')+'</p>'
+        + '<p class="ta-meta">'+(t.mail ? '✉ '+esc(t.mail)+' · ' : '')+esc(t.where||'')+(t.scr ? ' · '+esc(t.scr) : '')+'</p>'
+        + (t.img ? '<img class="ta-img" src="'+esc(t.img)+'" alt="Schermafbeelding bij de tip">' : '')
+        + '<div class="ta-st"><input placeholder="Toelichting (bv. verwerkt in v270, of waarom niet)" value="'+esc(t.note||'')+'"><button class="ta-btn" data-tas="verwerkt">Verwerkt</button><button class="ta-btn" data-tas="niet">Niets mee</button><button class="ta-btn" data-tas="nieuw">Nieuw</button></div></div>').join('')
+      : '<p>Geen tips'+(TA.filter==='alle' ? '' : ' met deze status')+'.</p>');
+}
+$('tabody').addEventListener('click', async e=>{
+  const b = e.target.closest('button'), im = e.target.closest('.ta-img');
+  if(im){ im.classList.toggle('big'); return; }
+  if(!b) return;
+  if(b.dataset.taf){ TA.filter = b.dataset.taf; taDraw(); return; }
+  if(b.dataset.tar){ taLoad(); return; }
+  if(b.dataset.tas){ const box = b.closest('.ta-tip'), id = box.dataset.id, note = box.querySelector('input').value.trim();
+    try{ await firebase.database().ref('tips/'+id).update({status:b.dataset.tas, note}); const t = TA.list.find(x=>x.id===id); if(t){ t.status = b.dataset.tas; t.note = note; } taDraw(); }
+    catch(err){ TA.err = 'Opslaan lukte niet: '+(err.message||''); taDraw(); } }
+});
+$('taclose').addEventListener('click', ()=>{ $('tipsadmin').close(); if(location.hash==='#tips') try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){} });
+const taHash = () => { if(location.hash==='#tips') setTimeout(taOpen, 60); };
+window.addEventListener('hashchange', taHash); taHash();
 new MutationObserver(tipFabPlace).observe(document.body, {subtree:true, attributes:true, attributeFilter:['open','hidden']});
 tipFabPlace();
 $('theory').addEventListener('close', ()=>{ $('theoryclose').textContent = 'Terug naar de hand'; });
@@ -11400,8 +11468,9 @@ function fbLoad(){
   const add = n => new Promise((ok, no)=>{ const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/firebase@'+FB_VER+'/'+n+'-compat.js'; s.onload = ok; s.onerror = ()=>no(new Error('laden mislukt')); document.head.appendChild(s); });
   FB = add('firebase-app').then(()=>Promise.all([add('firebase-auth'), add('firebase-database')])).then(async ()=>{
     if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
-    const cred = await firebase.auth().signInAnonymously();
-    return {db:firebase.database(), uid:cred.user.uid};
+    const cur = await new Promise(ok=>{ const off = firebase.auth().onAuthStateChanged(u=>{ off(); ok(u); }); });
+    const user = cur || (await firebase.auth().signInAnonymously()).user;
+    return {db:firebase.database(), uid:user.uid};
   });
   FB.catch(()=>{ FB = null; });
   return FB;
