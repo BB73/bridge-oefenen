@@ -1153,12 +1153,12 @@ button.cbd{cursor:pointer}
 .sqrow[hidden]{display:none!important}
 .hrow.vl, .hrow.vr{width:var(--dh);container-type:normal;align-items:stretch;margin:0;
   --ds:min(var(--dstep), calc((var(--dv) - var(--dw) - var(--g, 3) * var(--dgap) - 2px) / (var(--n) - 1)))}
-.hrow.vl{flex-direction:column} .hrow.vr{flex-direction:column-reverse}
+.hrow.vl, .hrow.vr{flex-direction:column}
 .hrow.vl .rc.rc, .hrow.vr .rc.rc{width:var(--dh)!important;height:var(--dw)!important;font-size:var(--dvf)!important;letter-spacing:-.08em!important;gap:.08rem!important;box-shadow:0 -1px 2px rgba(0,0,0,.18)!important}
 .hrow.vl .rc.rc{margin:calc(var(--ds) - var(--dw)) 0 0 0!important;flex-direction:row-reverse!important;align-items:flex-start!important;padding:.1rem .14rem 0 0!important}
 .hrow.vl .rc.rc:first-child{margin-top:0!important} .hrow.vl .rc.rc.g{margin-left:0!important;margin-top:calc(var(--ds) - var(--dw) + var(--dgap))!important}
-.hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;flex-direction:row!important;align-items:flex-end!important;padding:0 0 .1rem .14rem!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
-.hrow.vr .rc.rc:first-child{margin-bottom:0!important} .hrow.vr .rc.rc.g{margin-left:0!important;margin-bottom:calc(var(--ds) - var(--dw) + var(--dgap))!important}
+.hrow.vr .rc.rc{margin:calc(var(--ds) - var(--dw)) 0 0 0!important;flex-direction:row!important;align-items:flex-start!important;padding:.1rem 0 0 .14rem!important}
+.hrow.vr .rc.rc:first-child{margin-top:0!important} .hrow.vr .rc.rc.g{margin-left:0!important;margin-top:calc(var(--ds) - var(--dw) + var(--dgap))!important}
 .hrow.vl .rc b, .hrow.vl .rc i, .hrow.vr .rc b, .hrow.vr .rc i{writing-mode:vertical-rl;text-orientation:sideways;min-width:0;min-height:calc(var(--ds) - .2rem);text-align:center;line-height:1}
 .hrow.vr .rc b, .hrow.vr .rc i{transform:rotate(180deg)}
 /* laag scherm: zodra de uitleg verschijnt, maakt de vraag plaats en schuift een dummy opzij in elkaar */
@@ -7790,7 +7790,7 @@ function leadFor(q){
 function rowOrder(list){ const has = k => list.some(c=>c.s===k), B = ['S','C'].filter(has), R = ['H','D'].filter(has);
   const ord = B.length===2 && R.length===1 ? [B[0], R[0], B[1]] : R.length===2 && B.length===1 ? [R[0], B[0], R[1]] : ['S','H','C','D'];
   return list.slice().sort((a,b)=>ord.indexOf(a.s)-ord.indexOf(b.s)); }
-function handRow(list, side){ list = rowOrder(list); let prev = null, g = 0;
+function handRow(list, side){ list = rowOrder(list); if(side==='r') list.reverse(); let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
     return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><b>'+c.t+'</b><i>'+SYM[c.s]+'</i></'+tag+'>'; }).join('');
   return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
@@ -12485,10 +12485,10 @@ function smGameHTML(g){
   const nm = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s]+' (computer)', lb = s => s===me ? 'Jij' : hu(s) ? pn(s) : SM_NM[s];
   const vs = s => smVul(g, s), us = vs(me), them = vs((me+1)%4), vulTxt = us && them ? 'Allen kwetsbaar' : us ? 'Jullie kwetsbaar' : them ? 'Zij kwetsbaar' : 'Niemand kwetsbaar';
   const LET = ['N','O','Z','W'], inPlay = g.phase!=='bid' && g.contract;
-  const badges = s => (s===g.dealer ? '<i class="bd">G</i>' : '')+(inPlay && s===g.decl ? ctrBadge(g.level+(g.trump===4 ? 'SA' : SUITS[g.trump]), g.dbl, 1) : '')+(inPlay && s===g.dummy ? '<i class="bd d">D</i>' : '');
+  const badges = s => (!inPlay && s===g.dealer ? '<i class="bd">G</i>' : '')+(inPlay && s===g.decl ? ctrBadge(g.level+(g.trump===4 ? 'SA' : SUITS[g.trump]), g.dbl, 1) : '')+(inPlay && s===g.dummy ? '<i class="bd d">D</i>' : '');
   const seat = (s, cls) => '<span class="sml'+(vs(s) ? ' vul' : '')+(cls ? ' '+cls : '')+'">'+'<span class="nmx">'+lb(s)+'</span> <span class="smw">('+LET[s]+')</span>'+badges(s)+'</span>';
   const tricks = g.phase==='play' ? ' · slagen: '+(g.decl%2===me%2 ? 'jullie '+g.declTricks+', zij '+g.defTricks : 'jullie '+g.defTricks+', zij '+g.declTricks) : '';
-  const head = '<p class="smleg"><i class="bd">G</i> gever'+(inPlay ? ' <i class="bd d">D</i> dummy' : '')+' · '+(us||them ? '<span class="vul">rood</span> = kwetsbaar' : 'niemand kwetsbaar')+'</p>';
+  const head = '<p class="smleg">'+(inPlay ? '<i class="bd d">D</i> dummy' : '<i class="bd">G</i> gever')+' · '+(us||them ? '<span class="vul">rood</span> = kwetsbaar' : 'niemand kwetsbaar')+'</p>';
   // ---- vierkante tafel: jij onderaan, partner boven, tegenstanders links en rechts
   const pos = s => ['b','l','t','r'][(s-me+4)%4];
   const pcard = (c, how) => { const S = SUITS[gSuit(c)], inner = '<b>'+(RANK[gRank(c)]||gRank(c))+'</b><i>'+SYM[S]+'</i>';
