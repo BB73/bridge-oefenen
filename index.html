@@ -1200,6 +1200,13 @@ button.cbd{cursor:pointer}
 main.table.ns #dummyhand:has(.hrow){display:block}
 .ghand:has(.hrow){width:100%!important;max-width:100%!important}
 /* ===== einde maten ===== */
+/* trendanalyse */
+.trtabs{flex-wrap:nowrap;gap:.25rem;margin:.1rem 0 .45rem} .trtabs button{padding:.3rem .5rem;font-size:.8rem;white-space:nowrap}
+@media (max-height:700px){ .trnote{display:none} } .trtabs.sub button{font-size:.8rem;padding:.25rem .55rem}
+table.trk td:nth-child(n+2), table.trk th:nth-child(n+2){text-align:right}
+table.trk tr[data-trsel]{cursor:pointer} table.trk tr.sel td{background:var(--panel)}
+table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
+
 /* account op het hoofdscherm */
 .accT{position:absolute;top:.28rem;right:3.2rem;width:2.7rem;height:2.6rem;padding:0;border:0;background:transparent;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.08rem;font:inherit;border-radius:8px}
 .accT[hidden]{display:none}
@@ -1305,6 +1312,7 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 </div>
 
 <input type="file" id="clubfile" accept="application/pdf,.pdf" hidden>
+<input type="file" id="clubfiles" accept="application/pdf,.pdf" multiple hidden>
 <dialog id="settings" aria-labelledby="settitle">
   <div class="dhead">
     <div class="dtitle"><h2 id="settitle">Wat wil je oefenen?</h2><span class="navrb" id="setnav"></span></div>
@@ -8798,7 +8806,7 @@ function clubDraw(){
     : me ? '<p class="clubwho">Jullie paar: <b>'+state.clubMe.replace(/</g,'&lt;')+'</b> · <button class="navclear" data-clubpick="1">wijzig</button></p>'
          : '<p class="clubwho">Jullie paar: <button class="navclear" data-clubpick="1">kies (optioneel)</button> <small class="pickhint">dan zie je per spel jullie contract en percentage</small></p>';
   if(CV.i===null && CV.view==='bids'){ el.innerHTML = clubBidsOverview(c, boards); clubDDAll(boards); return; }
-  if(CV.i===null && CV.view==='hist'){ el.innerHTML = clubHistHTML(); return; }
+  if(CV.i===null && CV.view==='hist'){ el.innerHTML = trHTML(); return; }
   if(CV.i===null && CV.view==='oefen'){ el.innerHTML = clubSerHTML(c); return; }
   if(CV.i===null && CV.view==='btips'){ el.innerHTML = clubBTipsOverview(c, boards); clubBG(); return; }
   if(CV.i===null && CV.view==='leads'){ el.innerHTML = clubLeadsOverview(c, boards); clubLeadsAll(boards); return; }
@@ -9181,7 +9189,7 @@ function clubStatBtns(c, BT){
     + btn('data-clubview="oefen"', 'Oefenen', ser!=null ? ser+' spel'+(ser===1 ? '' : 'len') : null)
     + btn('data-clubview="bids"', 'Bieden', H.bidN ? H.bidOK+'/'+H.bidN+' goed' : null)
     + btn('data-clubview="leads"', 'Uitkomsten', H.leadN ? H.leadOK+'/'+H.leadN+' best' : null)
-    + (clubHistList().length ? btn('data-clubview="hist"', 'Verloop', clubHistList().length+' avond'+(clubHistList().length===1 ? '' : 'en')) : '')
+    + btn('data-clubview="hist"', 'Trend', (()=>{ const n = Math.max(trList().length, clubHistList().length); return n ? n+' avond'+(n===1 ? '' : 'en') : null; })())
     + (BT ? btn('data-clubview="btips"', 'Butler-tips', null) : '')
     + btn('data-clubshare="1" id="clubsharemsg"', 'Delen', null)
     + '</div>';
@@ -12903,6 +12911,162 @@ accBind = function(el){ accBind0(el);
 };
 $('accT').addEventListener('click', ()=>{ ACC.fromHome = 1; ACC.err = ''; ACC.msg = ''; ACC.view = (state.acct || accHas()) ? 'profile' : 'login'; samenOpen(); if(state.acct && !ACC.user && FB_CONFIG && !SAMEN_TEST) accStart().catch(()=>{}); });
 accHead();
+
+// ---------- Trendanalyse van clubavonden: per avond alleen tellingen bewaren, voor jullie paar en het clubgemiddelde ----------
+const TR = {busy:false, prog:'', sum:null, tab:'kern', sel:'s', det:'s', stop:false, q:[], autoKey:'', lastDraw:0};
+const TRM = [['u','Uitkomst'],['a','Afspel'],['t','Tegenspel'],['c','Contract'],['s','Score']];
+const trAll = () => state.clubTrend && typeof state.clubTrend==='object' ? state.clubTrend : (state.clubTrend = {});
+const trKey = (c, pair) => pair+'|'+(clubISO(c.date) || c.date || '')+'|'+(c.title || '');
+const trList = () => Object.values(trAll()).filter(x=>x && x.pair===state.clubMe).sort((a,b)=>(a.iso||'').localeCompare(b.iso||''));
+const trEsc = s => String(s==null ? '' : s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function trLeadMap(b, key){
+  if(b.leads && b.leads[key]) return b.leads[key]; if(b.leadFail && b.leadFail[key]) return null;
+  const [tr, decl] = key.split('|').map(Number), leader = (decl+1)%4, legal = (b.hands[leader] || []).slice();
+  if(b.hands.some(h=>!h || h.length!==13)) return null;
+  const r = await ddsAsync({h:b.hands.map(h=>h.slice()), t:tr, l:leader, all:1, legal});
+  if(r && legal.every(x=>r[x]>=0)) return (b.leads = b.leads || {})[key] = Object.fromEntries(legal.map(x=>[x, r[x]]));
+  (b.leadFail = b.leadFail || {})[key] = 1; return null;
+}
+// één avond turven. Alle cijfers zijn zo gedraaid dat hoger beter is.
+async function trEvening(c, pair, onProg){
+  const P = {}, X = {}, add = (o, k, v) => { if(v==null || isNaN(v)) return; const a = o[k] || (o[k] = [0,0]); a[0]++; a[1] += v; }, pp = n => P[n] || (P[n] = {});
+  const boards = Object.values(c.boards).filter(b=>b.hands && b.hands.length===4).sort((a,b)=>a.nr-b.nr), done = [], bt = c.kind==='butler';
+  let line = null; for(const b of boards){ line = Object.keys(b.res).find(L=>b.res[L].some(r=>r.nz===pair || r.ow===pair)); if(line!=null) break; }
+  if(line==null) return null;
+  let hi = 0, mi = 0;
+  for(let bi=0; bi<boards.length; bi++){
+    if(TR.stop) return 'stop';
+    const b = boards[bi], rows = b.res[line] || []; if(onProg) onProg(bi+1, boards.length);
+    const keys = []; rows.forEach(r=>{ const p = clubResParse(r); if(p){ const k = p.trump+'|'+p.decl; if(!keys.includes(k)) keys.push(k); } });
+    const maps = {}; for(let i=0;i<keys.length;i+=2){ const part = keys.slice(i, i+2), rs = await Promise.all(part.map(k=>trLeadMap(b, k).catch(()=>null))); part.forEach((k,j)=>{ maps[k] = rs[j]; }); }
+    let mine = false;
+    rows.forEach(r=>{
+      const isMe = r.nz===pair || r.ow===pair, meNZ = r.nz===pair; if(isMe) mine = true;
+      const okMP = !bt && b.top && r.mpNZ!=null && !isNaN(r.mpNZ);
+      if(okMP){ add(pp(r.nz), 's', 100*r.mpNZ/b.top); add(pp(r.ow), 's', 100*r.mpOW/b.top); }
+      const p = clubResParse(r); if(!p) return;
+      const declNZ = p.decl%2===0, dp = declNZ ? r.nz : r.ow, op = declNZ ? r.ow : r.nz, iDecl = isMe && declNZ===meNZ, map = maps[p.trump+'|'+p.decl];
+      const gameT = p.trump===4 ? 9 : p.trump<2 ? 10 : 11, need = p.level+6, st = p.trump===4 ? 'N' : p.trump<2 ? 'M' : 'm', lv = p.level>=6 ? 'S' : need>=gameT ? 'G' : 'D';
+      if(isMe && okMP){ const v = 100*(meNZ ? r.mpNZ : r.mpOW)/b.top, vul = String(b.vul||''), wk = /all|beid/i.test(vul) || (meNZ ? /NZ/i : /OW/i).test(vul);
+        add(X, iDecl ? 'sL' : 'sT', v); add(X, 's'+st, v); add(X, 's'+lv, v); add(X, wk ? 'sK' : 'sO', v); add(X, bi<boards.length/2 ? 'sH1' : 'sH2', v); }
+      if(!map) return;
+      const best = Math.max(...Object.values(map)), D0 = 13-best, high = need>D0, miss = !high && ((need<gameT && D0>=gameT) || (p.level<6 && D0>=12));
+      add(pp(dp), 'c', high || miss ? 0 : 100); if(iDecl){ if(high) hi++; if(miss) mi++; }
+      const lc = clubLeadCard(r.lead), made = clubMade(r);
+      if(lc==null || map[lc]==null) return;
+      const got = map[lc], D1 = 13-got; add(pp(op), 'u', got-best); if(isMe && !iDecl) add(X, p.trump===4 ? 'uN' : 'uT', got-best);
+      if(made==null || made<0 || made>13) return;
+      add(pp(dp), 'a', made-D1); add(pp(op), 't', D1-made); if(iDecl){ add(X, 'a'+st, made-D1); add(X, 'a'+lv, made-D1); }
+    });
+    if(mine) done.push(b.nr);
+  }
+  const r2 = v => Math.round(v*100)/100, mineP = P[pair] || {};
+  const rec = {pair, iso:clubISO(c.date), date:c.date||'', title:c.title||'', line, kind:c.kind||'paren', n:done.length, bm:done.join(','), k:{}, cl:{}, rk:{}, np:{}, x:X, hi, mi, t:Date.now()};
+  TRM.forEach(([m])=>{ const a = mineP[m]; if(a) rec.k[m] = [a[0], r2(a[1])];
+    let n = 0, s = 0; const avgs = []; Object.entries(P).forEach(([nm, o])=>{ const x = o[m]; if(!x) return; n += x[0]; s += x[1]; if(x[0]>=3) avgs.push([nm, x[1]/x[0]]); });
+    if(n) rec.cl[m] = r2(s/n);
+    if(a && a[0]>=3){ const mv = a[1]/a[0]; rec.rk[m] = 1+avgs.filter(([nm, v])=>nm!==pair && v>mv+1e-9).length; rec.np[m] = avgs.length; } });
+  Object.keys(X).forEach(k=>{ X[k][1] = r2(X[k][1]); });
+  return rec;
+}
+function trTrim(){ const H = trAll(), ks = Object.keys(H).sort((a,b)=>(H[a].iso||'').localeCompare(H[b].iso||'')); while(ks.length>80) delete H[ks.shift()]; }
+async function trRun(jobs, quiet){
+  if(TR.busy){ TR.q.push(...jobs); return; }
+  TR.busy = true; TR.stop = false; const S = quiet ? {ok:0, upd:0, nopair:[], bad:[]} : (TR.sum || (TR.sum = {ok:0, upd:0, nopair:[], bad:[]}));
+  let i = 0;
+  try{ while(jobs.length){ const j = jobs.shift(), pair = state.clubMe; i++; if(!pair) break;
+      const rec = await trEvening(j.c, pair, (a, b)=>{ TR.prog = (quiet ? 'Deze avond tellen' : 'Avond '+i+' van '+(i+jobs.length))+' · spel '+a+' van '+b; trDraw(); });
+      if(rec==='stop'){ S.stopped = 1; break; } if(!rec){ S.nopair.push(j.name); continue; }
+      const key = trKey(j.c, pair), had = !!trAll()[key]; trAll()[key] = rec; if(had) S.upd++; else S.ok++; trTrim(); save();
+      if(TR.q.length){ jobs.push(...TR.q); TR.q = []; } } }
+  catch(e){ S.err = 1; }
+  TR.busy = false; TR.prog = ''; TR.q = []; trPush(); trDraw(true);
+}
+async function trFiles(files){
+  const L = [...files]; if(!L.length) return; TR.sum = {ok:0, upd:0, nopair:[], bad:[]}; TR.tab = 'in'; const jobs = [];
+  for(let i=0;i<L.length;i++){ const f = L[i]; TR.prog = 'Bestand '+(i+1)+' van '+L.length+' lezen'; TR.reading = 1; trDraw(true);
+    try{ const c = clubParse(await pdfTextItems(await f.arrayBuffer())); if(!Object.values(c.boards).some(b=>b.hands && b.hands.length===4 && Object.keys(b.res).length)) TR.sum.bad.push(f.name); else jobs.push({c, name:f.name}); }
+    catch(e){ TR.sum.bad.push(f.name); } }
+  TR.reading = 0; TR.prog = ''; gcEvent('club-trend-ingelezen');
+  if(jobs.length) await trRun(jobs); else trDraw(true);
+}
+function trDraw(force){ const th = $('theory'); if(!th.open || th.dataset.club!=='1' || CV.i!==null || CV.view!=='hist') return; const now = Date.now(); if(!force && now-TR.lastDraw<350) return; TR.lastDraw = now; const pg = $('trprog'); if(pg && !force){ pg.textContent = TR.prog; return; } clubDraw(); }
+// bewaren bij je account, zodat telefoon en laptop dezelfde trend tonen
+function trPush(){ try{ if(!state.acct || !FB_CONFIG || SAMEN_TEST || !window.firebase || !firebase.apps.length) return; const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return; const j = JSON.stringify(trAll()); if(j.length<400000) firebase.database().ref('users/'+u.uid+'/trend').set(j).catch(()=>{}); }catch(e){} }
+async function trPull(){ try{ const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return; const j = (await firebase.database().ref('users/'+u.uid+'/trend').once('value')).val(); if(typeof j!=='string') return; const R = JSON.parse(j), H = trAll(); let ch = false, mine = false;
+    Object.keys(R).forEach(k=>{ const r = R[k]; if(r && r.pair && r.k && (!H[k] || (r.t||0)>(H[k].t||0))){ H[k] = r; ch = true; } }); Object.keys(H).forEach(k=>{ if(!R[k]) mine = true; });
+    if(ch){ trTrim(); save(); trDraw(true); } if(mine) trPush(); }catch(e){} }
+{ const accStart1 = accStart; accStart = async function(){ await accStart1(); try{ if(state.acct) trPull(); }catch(e){} }; }
+// de avond die openstaat telt vanzelf mee
+function trAuto(){ const c = clubData(); if(!c || !state.clubMe || CLUB_OVR || TR.busy) return; const key = trKey(c, state.clubMe); if(TR.autoKey===key || trAll()[key]) return; TR.autoKey = key;
+  setTimeout(()=>{ if(clubData()===c && state.clubMe && !trAll()[trKey(c, state.clubMe)]) trRun([{c, name:''}], true); }, 2500); }
+{ const clubDraw0 = clubDraw; clubDraw = function(){ clubDraw0(); try{ trAuto(); }catch(e){} }; }
+const trFmt = (m, v) => v==null || isNaN(v) ? '–' : (m==='c' || m==='s') ? Math.round(v)+'%' : (v>0.004 ? '+' : v<-0.004 ? '−' : '')+Math.abs(v).toFixed(2).replace('.', ',');
+function trTot(L, m){ let n = 0, s = 0, cs = 0, cn = 0, rk = 0, np = 0, rn = 0;
+  L.forEach(x=>{ const a = x.k && x.k[m]; if(!a) return; n += a[0]; s += a[1]; if(x.cl && x.cl[m]!=null){ cs += x.cl[m]*a[0]; cn += a[0]; } if(x.rk && x.rk[m]){ rk += x.rk[m]; np += x.np[m]; rn++; } });
+  return {n, v:n ? s/n : null, cl:cn ? cs/cn : null, rk:rn ? Math.round(rk/rn) : null, np:rn ? Math.round(np/rn) : null}; }
+function trChart(L, m){
+  const kort = x => { const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.iso||''); return d ? (+d[3])+' '+MAANDEN[+d[2]-1].slice(0,3) : '?'; };
+  const rows = L.filter(x=>x.k && x.k[m] && x.k[m][0]).slice(-10), val = x => x.k[m][1]/x.k[m][0], nm = TRM.find(t=>t[0]===m)[1];
+  if(rows.length<3) return '<p class="histz">'+(rows.length ? rows.map(x=>kort(x)+': jullie '+trFmt(m, val(x))+', club '+trFmt(m, x.cl[m])).join('<br>')+'<br>' : '')+'Vanaf drie avonden zie je hier het verloop van '+nm.toLowerCase()+'.</p>';
+  const W = 300, Hh = 92, top = 12, bot = 70, n = rows.length, xs = i => 22+i*(W-44)/(n-1), all = rows.map(val).concat(rows.map(x=>x.cl[m]).filter(v=>v!=null));
+  const pad = (Math.max(...all)-Math.min(...all) || 1)*.18, lo = Math.min(...all)-pad, hi = Math.max(...all)+pad, ys = v => top+(hi-v)/(hi-lo)*(bot-top);
+  return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+nm+' per avond, jullie en de club">'
+    + '<polyline points="'+rows.filter(x=>x.cl[m]!=null).map(x=>xs(rows.indexOf(x)).toFixed(1)+','+ys(x.cl[m]).toFixed(1)).join(' ')+'" class="hax" fill="none" stroke-dasharray="4 3"/>'
+    + '<polyline points="'+rows.map((x,i)=>xs(i).toFixed(1)+','+ys(val(x)).toFixed(1)).join(' ')+'" class="hline"/>'
+    + rows.map((x,i)=>{ const up = x.cl[m]==null || val(x)>=x.cl[m]; return '<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(val(x)).toFixed(1)+'" r="3.2" class="'+(up ? 'hup' : 'hdn')+'"/>'
+        + '<text x="'+xs(i).toFixed(1)+'" y="'+(ys(val(x))+(up ? -6 : 12)).toFixed(1)+'" class="hval">'+trFmt(m, val(x)).replace('%','')+'</text><text x="'+xs(i).toFixed(1)+'" y="'+(Hh-4)+'" class="hval hdate">'+kort(x)+'</text>'; }).join('')
+    + '</svg><p class="histleg">'+nm+': doorgetrokken lijn jullie, stippellijn het gemiddelde van de club.</p>';
+}
+function trKernHTML(L){
+  const T = Object.fromEntries(TRM.map(([m])=>[m, trTot(L, m)])), nb = L.reduce((s,x)=>s+(x.n||0), 0);
+  const rel = TRM.map(([m, l])=>({m, l, f:T[m].rk && T[m].np>1 ? (T[m].rk-1)/(T[m].np-1) : null})).filter(x=>x.f!=null).sort((a,b)=>a.f-b.f);
+  return '<p class="clubsub"><b>'+trEsc(state.clubMe)+'</b> · '+L.length+' avond'+(L.length===1 ? '' : 'en')+', '+nb+' spellen</p>'
+    + '<table class="clubsum trk"><tr><th>Cijfer</th><th>Jullie</th><th>Club</th><th>Plaats</th></tr>'
+    + TRM.map(([m, l])=>{ const t = T[m]; return '<tr data-trsel="'+m+'"'+(TR.sel===m ? ' class="sel"' : '')+'><td>'+l+'</td><td class="'+(t.v!=null && t.cl!=null ? (t.v>=t.cl ? 'gd' : 'bd2') : '')+'"><b>'+trFmt(m, t.v)+'</b></td><td>'+trFmt(m, t.cl)+'</td><td>'+(t.rk ? t.rk+' van '+t.np : '–')+'</td></tr>'; }).join('')+'</table>'
+    + trChart(L, TR.sel)
+    + (rel.length>1 ? '<p class="histz">Sterkste punt: <b>'+rel[0].l.toLowerCase()+'</b>. Meeste winst te halen: <b>'+rel[rel.length-1].l.toLowerCase()+'</b>.</p>' : '')
+    + '<p class="rvnote trnote">Uitkomst, afspel en tegenspel: slagen per spel tegenover het maximum met open kaarten; hoger is beter. Contract: deel van de spellen op het goede niveau. Tik op een regel voor het verloop.</p>';
+}
+function trDetHTML(L){
+  const G = {s:[['Als leider','sL'],['Als tegenspeler','sT'],['In SA','sN'],['In een hoge kleur','sM'],['In een lage kleur','sm'],['Deelscore','sD'],['Manche','sG'],['Slem','sS'],['Kwetsbaar','sK'],['Niet kwetsbaar','sO'],['Eerste helft','sH1'],['Tweede helft','sH2']],
+             a:[['In SA','aN'],['In een hoge kleur','aM'],['In een lage kleur','am'],['Deelscore','aD'],['Manche','aG'],['Slem','aS']], u:[['Tegen SA','uN'],['Tegen troef','uT']]};
+  const d = G[TR.det] ? TR.det : 's', sum = k => { let n = 0, s = 0; L.forEach(x=>{ const a = x.x && x.x[k]; if(a){ n += a[0]; s += a[1]; } }); return {n, v:n ? s/n : null}; };
+  const hi = L.reduce((s,x)=>s+(x.hi||0), 0), mi = L.reduce((s,x)=>s+(x.mi||0), 0);
+  return '<nav class="modes trtabs sub">'+[['s','Score'],['a','Afspel'],['u','Uitkomst en contract']].map(([k,l])=>'<button data-trdet="'+k+'" aria-pressed="'+(d===k)+'">'+l+'</button>').join('')+'</nav>'
+    + '<table class="clubsum trk"><tr><th>'+(d==='s' ? 'Score' : d==='a' ? 'Afspel' : 'Uitkomst')+'</th><th>Spellen</th><th>Gemiddeld</th></tr>'
+    + G[d].map(([l, k])=>{ const t = sum(k); return '<tr><td>'+l+'</td><td>'+(t.n || '–')+'</td><td><b>'+trFmt(d, t.v)+'</b></td></tr>'; }).join('')
+    + (d==='u' ? '<tr><th class="cap" colspan="3">Contract</th></tr><tr><td>Manche of slem gemist</td><td colspan="2"><b>'+mi+'</b> keer</td></tr><tr><td>Te hoog geboden</td><td colspan="2"><b>'+hi+'</b> keer</td></tr>' : '')+'</table>'
+    + '<p class="rvnote trnote">'+(d==='s' ? 'Jullie gemiddelde percentage per soort spel.' : d==='a' ? 'Slagen per spel tegenover het maximum na de uitkomst die jullie kregen.' : 'Uitkomst: slagen per uitkomst tegenover de beste uitkomst. Contract: beoordeeld in de gespeelde speelsoort, met open kaarten.')+'</p>';
+}
+function trInHTML(){
+  const S = TR.sum, n = trList().length, names = a => a.slice(0, 4).map(trEsc).join(', ')+(a.length>4 ? ' en nog '+(a.length-4) : '');
+  let h = '<p>Kies alle frequentiestaten die je wilt meetellen; dat mogen er veel tegelijk zijn. De app bewaart per avond alleen de tellingen van jullie paar en het clubgemiddelde.</p>';
+  h += !state.clubMe ? '<p class="leadnote">Kies eerst op de clubavond welk paar jullie zijn.</p>' : '<button class="gview" data-trpick="1"'+(TR.busy || TR.reading ? ' disabled' : '')+'>Frequentiestaten kiezen</button>';
+  if(TR.busy || TR.reading) h += '<p class="ddbusy" id="trprog">'+trEsc(TR.prog)+'</p>'+(TR.busy ? '<button class="gview alt" data-trstop="1">Stoppen</button>' : '');
+  else if(S){ const p = [];
+    if(S.ok) p.push('<b>'+S.ok+'</b> avond'+(S.ok===1 ? '' : 'en')+' ingelezen'); if(S.upd) p.push('<b>'+S.upd+'</b> opnieuw geteld');
+    if(S.nopair.length) p.push('<b>'+S.nopair.length+'</b> zonder jullie paar ('+names(S.nopair)+')');
+    if(S.bad.length) p.push('<b>'+S.bad.length+'</b> bestand'+(S.bad.length===1 ? '' : 'en')+': ik herken deze frequentiestaat niet ('+names(S.bad)+')');
+    h += '<p class="leadnote">'+(p.join('<br>') || 'Er is niets ingelezen.')+(S.stopped ? '<br>Gestopt voordat alles klaar was.' : '')+(S.err ? '<br>Het rekenen is afgebroken. Probeer het opnieuw.' : '')+'</p>'; }
+  return h+'<p class="rvnote">'+(n ? 'In de trend: '+n+' avond'+(n===1 ? '' : 'en')+(state.clubMe ? ' van '+trEsc(state.clubMe) : '')+'. <button class="navclear" data-trclear="1">Alles wissen</button>' : 'Nog geen avonden in de trend.')+' Het rekenen duurt ongeveer een minuut per avond.</p>';
+}
+function trHTML(){
+  const tabs = '<nav class="modes trtabs">'+[['kern','Kerncijfers'],['det','Details'],['uit','Uitslag'],['in','Inlezen']].map(([k,l])=>'<button data-trtab="'+k+'" aria-pressed="'+(TR.tab===k)+'">'+l+'</button>').join('')+'</nav>';
+  if(TR.tab==='uit') return tabs+clubHistHTML();
+  if(TR.tab==='in') return tabs+trInHTML();
+  const L = trList();
+  if(!L.length) return tabs+'<p>Nog geen avonden in de trendanalyse. Lees bij <b>Inlezen</b> je frequentiestaten in.</p>'+(TR.busy ? '<p class="ddbusy" id="trprog">'+trEsc(TR.prog)+'</p>' : '');
+  return tabs+(TR.tab==='det' ? trDetHTML(L) : trKernHTML(L));
+}
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-trtab],[data-trsel],[data-trdet],[data-trpick],[data-trstop],[data-trclear]'); if(!x) return;
+  if(x.dataset.trtab){ TR.tab = x.dataset.trtab; clubDraw(); return; }
+  if(x.dataset.trsel){ TR.sel = x.dataset.trsel; clubDraw(); return; }
+  if(x.dataset.trdet){ TR.det = x.dataset.trdet; clubDraw(); return; }
+  if(x.dataset.trpick){ $('clubfiles').click(); return; }
+  if(x.dataset.trstop){ TR.stop = true; return; }
+  if(x.dataset.trclear){ askConfirm('Trend wissen?', '<p>Alle getelde avonden van '+trEsc(state.clubMe||'jullie paar')+' verdwijnen uit de trendanalyse. De clubavond die nu openstaat blijft.</p>', 'Wissen', ()=>{ const H = trAll(); Object.keys(H).forEach(k=>{ if(H[k] && H[k].pair===state.clubMe) delete H[k]; }); TR.sum = null; TR.autoKey = clubData() ? trKey(clubData(), state.clubMe) : ''; save(); trPush(); clubDraw(); }); } });
+$('clubfiles').addEventListener('change', e=>{ const fs = [...(e.target.files || [])]; e.target.value = ''; if(fs.length) trFiles(fs); });
 
 
 let SHARE_IN = null;
