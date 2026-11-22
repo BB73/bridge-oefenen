@@ -1107,6 +1107,8 @@ main.table.ns #dummyhand li, main.table.ns #hand li{font-size:1.15rem;line-heigh
   --df:1.05rem;    /* dummykaart: letter */
   --dstep:1.7rem;  /* dummykaart: hoeveel van elke kaart hoogstens zichtbaar is */
   --dgap:.45rem;   /* dummykaart: extra ruimte tussen twee kleuren */
+  --dv:17rem;      /* dummy links of rechts: hoogste lengte van de gedraaide rij */
+  --dvf:.95rem;    /* dummy links of rechts: letter */
   --cb:1.5rem;     /* contractbolletje bij de leider: doorsnee */
   --cbf:.7rem;     /* contractbolletje: letter */
   --nf:.72rem;     /* naamplaatje: letter */
@@ -1114,7 +1116,7 @@ main.table.ns #dummyhand li, main.table.ns #hand li{font-size:1.15rem;line-heigh
 }
 @media (max-height:700px){ :root{   /* lage schermen (kleine telefoon, laptop met weinig hoogte) */
   --tw:min(calc(100vw - 2rem), 12rem, 26dvh);   /* op een laag scherm is de tafel iets kleiner, maar wel op elk scherm van de app gelijk */
-  --hk:1.4rem; --hw:1.6rem; --hf:1.1rem; --hs:1.15rem; --hg:.04rem;
+  --hk:1.4rem; --hw:1.6rem; --hf:1.1rem; --hs:1.15rem; --hg:.04rem; --dv:14.2rem; --dvf:.85rem;
 } }
 /* handkaarten */
 .smrows{gap:var(--hg)!important} .ghand{gap:var(--hg)!important}
@@ -1144,6 +1146,23 @@ button.cbd{cursor:pointer}
 .smsq .st .cbd{position:relative!important;inset:auto!important;transform:none!important}
 .smsq .cn.c2.c2low{top:auto!important;bottom:.45rem!important}
 .smsq .st .nmx{display:inline-block;max-width:calc(var(--w) * .3);overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+/* dummy links of rechts: dezelfde rij, een kwartslag gedraaid langs die kant van de tafel */
+.sqrow{display:grid!important;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:.3rem;width:100%;margin:.1rem 0}
+.sqrow > .sqs, #qL.sqs, #qR.sqs{display:flex!important;min-width:0;align-items:center!important} .sqrow > .sqs.l{justify-content:flex-end} .sqrow > .sqs.r{justify-content:flex-start}
+.sqrow > .smsq{margin:.15rem 0!important}
+.sqrow[hidden]{display:none!important}
+.hrow.vl, .hrow.vr{width:var(--dh);container-type:normal;align-items:stretch;margin:0;
+  --ds:min(var(--dstep), calc((var(--dv) - var(--dw) - var(--g, 3) * var(--dgap) - 2px) / (var(--n) - 1)))}
+.hrow.vl{flex-direction:column} .hrow.vr{flex-direction:column-reverse}
+.hrow.vl .rc.rc, .hrow.vr .rc.rc{width:var(--dh)!important;height:var(--dw)!important;font-size:var(--dvf)!important;letter-spacing:-.08em!important;gap:.08rem!important;box-shadow:0 -1px 2px rgba(0,0,0,.18)!important}
+.hrow.vl .rc.rc{margin:calc(var(--ds) - var(--dw)) 0 0 0!important;flex-direction:row-reverse!important;align-items:flex-start!important;padding:.1rem .14rem 0 0!important}
+.hrow.vl .rc.rc:first-child{margin-top:0!important} .hrow.vl .rc.rc.g{margin-left:0!important;margin-top:calc(var(--ds) - var(--dw) + var(--dgap))!important}
+.hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;flex-direction:row!important;align-items:flex-end!important;padding:0 0 .1rem .14rem!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
+.hrow.vr .rc.rc:first-child{margin-bottom:0!important} .hrow.vr .rc.rc.g{margin-left:0!important;margin-bottom:calc(var(--ds) - var(--dw) + var(--dgap))!important}
+.hrow.vl .rc b, .hrow.vl .rc i, .hrow.vr .rc b, .hrow.vr .rc i{writing-mode:vertical-rl;text-orientation:sideways;min-width:0;min-height:calc(var(--ds) - .2rem);text-align:center;line-height:1}
+.hrow.vr .rc b, .hrow.vr .rc i{transform:rotate(180deg)}
+/* laag scherm: zodra de uitleg verschijnt, maakt de vraag plaats en schuift een dummy opzij in elkaar */
+@media (max-height:700px){ main.table:has(#feedback:not([hidden])) .prompt{display:none!important} main.table:has(#feedback:not([hidden])) .hrow.vl, main.table:has(#feedback:not([hidden])) .hrow.vr{--dv:var(--tw)} }
 /* gespeelde kaart op tafel */
 .smsq .tc.on, .smsq .tcd .pc{width:var(--pw)!important;height:var(--ph)!important;font-size:var(--pf)!important}
 .smsq .tc.on span, .smsq .tcd .pc b, .smsq .tcd .pc i{font-size:var(--pf)!important}
@@ -7771,11 +7790,11 @@ function leadFor(q){
 function rowOrder(list){ const has = k => list.some(c=>c.s===k), B = ['S','C'].filter(has), R = ['H','D'].filter(has);
   const ord = B.length===2 && R.length===1 ? [B[0], R[0], B[1]] : R.length===2 && B.length===1 ? [R[0], B[0], R[1]] : ['S','H','C','D'];
   return list.slice().sort((a,b)=>ord.indexOf(a.s)-ord.indexOf(b.s)); }
-function handRow(list){ list = rowOrder(list); let prev = null, g = 0;
+function handRow(list, side){ list = rowOrder(list); let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
     return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><b>'+c.t+'</b><i>'+SYM[c.s]+'</i></'+tag+'>'; }).join('');
-  return '<div class="hrow" style="--n:'+Math.max(list.length, 2)+';--g:'+g+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
-function handRowOf(h, only){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L); }
+  return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
+function handRowOf(h, only, side){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L, side); }
 // het contract: een rond bolletje in de troefkleur aan het naamplaatje van de leider
 function ctrBadge(c, dbl, btn){ const m = /^(\d)(SA|N|[SHDC])$/.exec(String(c || '')); if(!m) return '';
   const d = m[2]==='SA' ? 'N' : m[2], tag = btn ? 'button' : 'span';
@@ -7817,7 +7836,8 @@ function renderQTable(mine){
     const cs = q.conv==='uitkomst' ? q.d.contract : q.conv==='signaal' ? (q.d.contract || '3SA') : q.conv==='actief' ? '4S' : (q.conv==='doorsterk' || q.sideDummy) ? '3SA' : '', cb = ctrBadge(cs);
     $('qtablenm').innerHTML = tblPills({W:{d:!dr, l:dr, c:dr ? cb : ''}, O:{d:dr, l:!dr, c:dr ? '' : cb}, Z:{turn:1}}); if(cb) ctr = '';
     $('qsd').innerHTML = '';
-    $('qL').innerHTML = !fixed && q.dummy ? '<p class="dml">Dummy ('+(dr ? 'Oost' : 'West')+')</p>'+handRowOf(q.dummy, q.only) : ''; }
+    { const sd = !fixed && q.dummy; $('qwrap').classList.add('sqrow'); $('qL').className = 'sqs l'; $('qR').className = 'sqs r';
+      $('qL').innerHTML = sd && !dr ? handRowOf(q.dummy, q.only, 'l') : ''; $('qR').innerHTML = sd && dr ? handRowOf(q.dummy, q.only, 'r') : ''; } }
   $('qctr').innerHTML = ctr ? '<b>'+ctr+'</b>' : '';
   const slot = {N:null, O:null, Z:mine || (q.d && q.d.slotZ) || null, W:null};
   if(q.conv==='signaal' || q.sideDummy){ slot.N = q.d.slotN || null; slot.O = q.d.slotO || null; }
@@ -12498,7 +12518,8 @@ function smGameHTML(g){
     const ourT = g.decl%2===me%2 ? g.declTricks : g.defTricks, theirT = g.decl%2===me%2 ? g.defTricks : g.declTricks;
     let dum = '';
     if(showDummy && !dummyIsMe) dum = '';
-    const topD = showDummy && !dummyIsMe ? '<p class="dml">Dummy · '+esc(lb(g.dummy))+' ('+LET[g.dummy]+')</p>'+(()=>{ const legal = dp==='t' ? legalFor(g.dummy) : null, L = []; [0,1,2,3].forEach(si=>hand(g.dummy).filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>{ const ok = legal && legal.includes(c); L.push({s:SUITS[si], t:RANK[gRank(c)]||gRank(c), tag:ok ? 'button' : 'span', cls:legal==null ? '' : ok ? 'on' : 'off', at:ok ? ' data-smcard="'+c+'"' : ''}); })); return handRow(L); })() : '';
+    const dRow = showDummy && !dummyIsMe ? (()=>{ const legal = dp==='t' ? legalFor(g.dummy) : null, L = []; [0,1,2,3].forEach(si=>hand(g.dummy).filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>{ const ok = legal && legal.includes(c); L.push({s:SUITS[si], t:RANK[gRank(c)]||gRank(c), tag:ok ? 'button' : 'span', cls:legal==null ? '' : ok ? 'on' : 'off', at:ok ? ' data-smcard="'+c+'"' : ''}); })); return handRow(L, dp==='t' ? '' : dp); })() : '';
+    const topD = dRow && dp==='t' ? '<p class="dml">Dummy · '+esc(lb(g.dummy))+' ('+LET[g.dummy]+')</p>'+dRow : '';
     const sq = '<div class="smsq play'+(showLast ? ' last' : '')+'">'+labels(showLast ? -1 : real)
       + '<span class="cn c2'+(pos(g.decl)==='t' ? ' c2low' : '')+'"><span class="lg">Wij '+ourT+' · Zij '+theirT+'</span><span class="sh">'+ourT+'–'+theirT+'</span></span>'
       + dum + tc.map(x=>'<span class="tcd '+pos(x.seat)+'">'+pcard(x.card, 'show')+'</span>').join('')
@@ -12506,7 +12527,7 @@ function smGameHTML(g){
       + (showLast ? '<span class="sqm">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '') + '</div>';
     const ct = SM.ctip && SM.ctip.g===g.id && SM.ctip.n===st.played.length ? SM.ctip : null, f1 = x => x.toFixed(1).replace('.', ',');
     const wait = mine ? '<p class="smwait go">'+(ct ? 'Tip: speel '+cardHTML(SUITS[gSuit(ct.card)]+gRank(ct.card))+(ct.ev!=null ? ' (gem. nog '+f1(ct.ev)+' slagen)' : '') : real===g.dummy && !dummyIsMe ? 'Speel een kaart uit de dummy.' : 'Jij bent aan de beurt.')+' '+smHelpBtn(g)+'</p>' : smAskLine(g, pn) || '<p class="smwait">'+(dummyIsMe ? 'Jij bent dummy · ' : '')+(ctrl!==null ? pn(ctrl)+' is aan de beurt…'+((P[SM_KEY[ctrl]]||{}).online ? '' : ' (offline)') : SM_NM[real]+' speelt…')+'</p>';
-    return head + topD + sq + mrows(hand(me), dummyIsMe ? null : legalFor(me)) + wait;
+    return head + topD + (dRow && dp!=='t' ? '<div class="sqrow"><div class="sqs l">'+(dp==='l' ? dRow : '')+'</div>'+sq+'<div class="sqs r">'+(dp==='r' ? dRow : '')+'</div></div>' : sq) + mrows(hand(me), dummyIsMe ? null : legalFor(me)) + wait;
   }
   // klaar
   const R = g.result || {};
