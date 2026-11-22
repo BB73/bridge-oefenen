@@ -1202,13 +1202,15 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 /* ===== einde maten ===== */
 /* trendanalyse */
 .trtabs{flex-wrap:nowrap;gap:.25rem;margin:.1rem 0 .45rem} .trtabs button{padding:.3rem .5rem;font-size:.8rem;white-space:nowrap}
-@media (max-height:700px){ .trnote{display:none} } .trtabs.sub button{font-size:.8rem;padding:.25rem .55rem}
+@media (max-height:700px){ .trnote, .histleg.pl{display:none} } .trtabs.sub button{font-size:.8rem;padding:.25rem .55rem}
 table.trk td:nth-child(n+2), table.trk th:nth-child(n+2){text-align:right}
 table.trk tr[data-trsel]{cursor:pointer} table.trk tr.sel td{background:var(--panel)}
 .ibtn.tri{width:1.25rem;height:1.25rem;font-size:.75rem;line-height:1;padding:0;margin-left:.3rem;vertical-align:middle}
 .ibtn.tri[aria-pressed="true"]{background:var(--felt);color:#fff}
+@media (max-height:700px){ .trinfo{font-size:.82rem;line-height:1.28;padding:.3rem .5rem} .trinfo p{margin:0 0 .2rem} }
 .trinfo{margin:.4rem 0 .3rem} .trinfo p{margin:0 0 .3rem} .trinfo p:last-child{margin:0}
 .histc .hline.thin{stroke-width:1;opacity:.45} .histc{overflow:visible}
+table.trk td.sub{padding-left:1rem;color:var(--muted)}
 table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
 /* account op het hoofdscherm */
@@ -12945,7 +12947,7 @@ async function trEvening(c, pair, onProg){
   const boards = Object.values(c.boards).filter(b=>b.hands && b.hands.length===4).sort((a,b)=>a.nr-b.nr), done = [], bt = c.kind==='butler';
   let line = null; for(const b of boards){ line = Object.keys(b.res).find(L=>b.res[L].some(r=>r.nz===pair || r.ow===pair)); if(line!=null) break; }
   if(line==null) return null;
-  let hi = 0, mi = 0;
+  let hi = 0, mi = 0, hm = 0, tC = 0, tHi = 0, tMi = 0, imp = 0, impN = 0;
   for(let bi=0; bi<boards.length; bi++){
     if(TR.stop) return 'stop';
     const b = boards[bi], rows = b.res[line] || [], tp = clubTop(b, line); if(onProg) onProg(bi+1, boards.length);
@@ -12954,6 +12956,7 @@ async function trEvening(c, pair, onProg){
     let mine = false;
     rows.forEach(r=>{
       const isMe = r.nz===pair || r.ow===pair, meNZ = r.nz===pair; if(isMe) mine = true;
+      if(isMe && bt){ const v = meNZ ? r.mpNZ : r.mpOW; if(v!=null && !isNaN(v)){ imp += v; impN++; } }
       const okMP = !bt && tp && r.mpNZ!=null && !isNaN(r.mpNZ);
       if(okMP){ add(pp(r.nz), 's', 100*r.mpNZ/tp); add(pp(r.ow), 's', 100*r.mpOW/tp); }
       const p = clubResParse(r); if(!p) return;
@@ -12963,8 +12966,9 @@ async function trEvening(c, pair, onProg){
         add(X, iDecl ? 'sL' : 'sT', v); add(X, 's'+st, v); add(X, 's'+lv, v); add(X, wk ? 'sK' : 'sO', v); add(X, bi<boards.length/2 ? 'sH1' : 'sH2', v); }
       if(!map) return;
       const best = Math.max(...Object.values(map)), D0 = 13-best, high = need>D0, miss = !high && ((need<gameT && D0>=gameT) || (p.level<6 && D0>=12));
-      add(pp(dp), 'c', high || miss ? 0 : 100); if(iDecl){ if(high) hi++; if(miss) mi++; }
+      add(pp(dp), 'c', high || miss ? 0 : 100); tC++; if(high) tHi++; if(miss) tMi++;
       const lc = clubLeadCard(r.lead), made = clubMade(r);
+      if(iDecl){ if(high){ hi++; if(made!=null && made>=need) hm++; } if(miss) mi++; }
       if(lc==null || map[lc]==null) return;
       const got = map[lc], D1 = 13-got; add(pp(op), 'u', got-best); if(isMe && !iDecl) add(X, p.trump===4 ? 'uN' : 'uT', got-best);
       if(made==null || made<0 || made>13) return;
@@ -12973,7 +12977,7 @@ async function trEvening(c, pair, onProg){
     if(mine) done.push(b.nr);
   }
   const r2 = v => Math.round(v*100)/100, mineP = P[pair] || {};
-  const rec = {pair, iso:clubISO(c.date), date:c.date||'', title:c.title||'', line, kind:c.kind||'paren', n:done.length, bm:done.join(','), k:{}, cl:{}, rk:{}, np:{}, x:X, hi, mi, t:Date.now()};
+  const rec = {pair, iso:clubISO(c.date), date:c.date||'', title:c.title||'', line, kind:c.kind||'paren', n:done.length, bm:done.join(','), k:{}, cl:{}, rk:{}, np:{}, x:X, hi, mi, hm, imp:impN ? r2(imp) : null, ch:tC ? r2(100*tHi/tC) : null, cm:tC ? r2(100*tMi/tC) : null, t:Date.now()};
   TRM.forEach(([m])=>{ const a = mineP[m]; if(a) rec.k[m] = [a[0], r2(a[1])];
     let n = 0, s = 0; const avgs = []; Object.entries(P).forEach(([nm, o])=>{ const x = o[m]; if(!x) return; n += x[0]; s += x[1]; if(x[0]>=3) avgs.push([nm, x[1]/x[0]]); });
     if(n) rec.cl[m] = r2(s/n);
@@ -13022,21 +13026,23 @@ const TRI = {
   k:['Jullie, club en plaats', 'Jullie: het gemiddelde over alle ingelezen avonden. Club: het gemiddelde van alle paren in jullie lijn, op dezelfde spellen.', 'Groen is beter dan de club, rood slechter. Bij alle cijfers is hoger beter.', 'Plaats: jullie gemiddelde plaats per avond, tussen de paren met minstens drie spellen voor dat cijfer.'],
   ds:['Score per soort spel', 'Jullie gemiddelde percentage op de spellen in die groep, bijvoorbeeld alle spellen waarop jullie leider waren.', 'Hoger is beter; 50% is gemiddeld.', 'Let op het aantal spellen: bij minder dan een stuk of twintig zegt het gemiddelde nog weinig.'],
   da:['Afspel per soort contract', 'Slagen als leider tegenover het maximum met open kaarten na de gekregen uitkomst, uitgesplitst naar speelsoort en niveau.', 'Hoger is beter; onder 0 laat je slagen liggen.', 'Zo zie je of je bijvoorbeeld in SA meer laat liggen dan in een troefcontract.'],
-  du:['Uitkomst en contract', 'Uitkomst: slagen per uitkomst tegenover de beste uitkomst, apart tegen SA en tegen troef. Contract: hoe vaak er een manche of slem in zat die jullie niet boden, en hoe vaak het contract met open kaarten niet haalbaar was.', 'Bij de uitkomst is dichter bij 0 beter; bij het contract is minder keer beter.', 'Te hoog geboden is niet altijd fout: een opoffering of een contract dat door een fout toch gemaakt wordt, telt hier ook mee.']
+  du:['Uitkomst', 'Slagen per uitkomst tegenover de beste uitkomst met open kaarten, apart tegen SA en tegen een troefcontract.', 'Hoe dichter bij 0, hoe beter.', 'Tegen SA kost een uitkomst gemiddeld meer dan tegen troef; dat is bij iedereen zo.'],
+  dc:['Contract', 'Van alle spellen waarop jullie het contract speelden. Te hoog: met open kaarten is het contract in die speelsoort niet te maken. Gemist: er zat in die speelsoort een manche of slem in die jullie niet boden. De rest is haalbaar en op het goede niveau.', 'Bij "haalbaar, goed niveau" is hoger beter; bij gemist en te hoog is lager beter. Vergelijk met de kolom Club.', 'Dit is gemeten tegen wat haalbaar is, niet tegen par. Een opoffering die goedkoper is dan hun contract telt dus ook als te hoog, net als een contract dat door een fout van de tegenpartij toch gemaakt wordt.']
 };
 const trIbtn = k => '<button class="ibtn tri" data-tri="'+k+'" aria-label="Uitleg: '+TRI[k][0]+'" aria-pressed="'+(TR.info===k)+'">i</button>';
 const trInfo = () => { const t = TRI[TR.info]; return t ? '<div class="cnote trinfo"><p><b>'+t[0]+'</b> <button class="navclear" data-tri="">Sluiten</button></p><p>'+t[1]+'</p><p><b>Lezen:</b> '+t[2]+'</p><p><b>Let op:</b> '+t[3]+'</p></div>' : ''; };
-const trFmt = (m, v) => v==null || isNaN(v) ? '–' : (m==='c' || m==='s') ? Math.round(v)+'%' : (v>0.004 ? '+' : v<-0.004 ? '−' : '')+Math.abs(v).toFixed(2).replace('.', ',');
+const trFmt = (m, v) => v==null || isNaN(v) ? '–' : m==='i' ? impTxt(Math.round(v*10)/10) : (m==='c' || m==='s') ? Math.round(v)+'%' : (v>0.004 ? '+' : v<-0.004 ? '−' : '')+Math.abs(v).toFixed(2).replace('.', ',');
 function trTot(L, m){ let n = 0, s = 0, cs = 0, cn = 0, rk = 0, np = 0, rn = 0;
   L.forEach(x=>{ const a = x.k && x.k[m]; if(!a) return; n += a[0]; s += a[1]; if(x.cl && x.cl[m]!=null){ cs += x.cl[m]*a[0]; cn += a[0]; } if(x.rk && x.rk[m]){ rk += x.rk[m]; np += x.np[m]; rn++; } });
   return {n, v:n ? s/n : null, cl:cn ? cs/cn : null, rk:rn ? Math.round(rk/rn) : null, np:rn ? Math.round(np/rn) : null}; }
-function trChart(L, m){
+function trChart(L, m, plain){
   const kort = x => { const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.iso||''); return d ? (+d[3])+' '+MAANDEN[+d[2]-1].slice(0,3) : '?'; };
-  const rows = L.filter(x=>x.k && x.k[m] && x.k[m][0]).slice(-12), val = x => x.k[m][1]/x.k[m][0], nm = TRM.find(t=>t[0]===m)[1];
-  if(rows.length<3) return '<p class="histz">'+(rows.length ? rows.map(x=>kort(x)+': jullie '+trFmt(m, val(x))+', club '+trFmt(m, x.cl[m])).join('<br>')+'<br>' : '')+'Vanaf drie avonden zie je hier het verloop van '+nm.toLowerCase()+'.</p>';
+  const has = x => m==='i' ? x.imp!=null : !!(x.k && x.k[m] && x.k[m][0]), val = x => m==='i' ? x.imp : x.k[m][1]/x.k[m][0], cl = x => m==='i' ? 0 : m==='s' && plain ? 50 : (x.cl && x.cl[m]!=null ? x.cl[m] : null), nm = m==='i' ? 'Butler' : TRM.find(t=>t[0]===m)[1];
+  const rows = L.filter(has).slice(-12);
+  if(rows.length<3) return '<p class="histz">'+(rows.length ? rows.map(x=>kort(x)+': jullie '+trFmt(m, val(x))+', club '+trFmt(m, cl(x))).join('<br>')+'<br>' : '')+'Vanaf drie avonden zie je hier het verloop van '+nm.toLowerCase()+'.</p>';
   const W = 300, Hh = 92, top = 12, bot = 70, n = rows.length, xs = i => 22+i*(W-44)/(n-1);
-  if(L.filter(x=>x.k && x.k[m] && x.k[m][0]).length>12){            // veel avonden: alle avonden dun, het lopende gemiddelde over vijf avonden dik
-    const all0 = L.filter(x=>x.k && x.k[m] && x.k[m][0]), N = all0.length, X = i => 14+i*(W-28)/(N-1), v0 = all0.map(val), c0 = all0.map(x=>x.cl[m]);
+  if(L.filter(has).length>12){            // veel avonden: alle avonden dun, het lopende gemiddelde over vijf avonden dik
+    const all0 = L.filter(has), N = all0.length, X = i => 14+i*(W-28)/(N-1), v0 = all0.map(val), c0 = all0.map(x=>cl(x));
     const roll = a => a.map((_, i)=>{ const p = a.slice(Math.max(0, i-4), i+1).filter(v=>v!=null); return p.length ? p.reduce((s,v)=>s+v, 0)/p.length : null; }), rv = roll(v0), rc = roll(c0);
     const vals = v0.concat(rc.filter(v=>v!=null)), pad = (Math.max(...vals)-Math.min(...vals) || 1)*.1, lo = Math.min(...vals)-pad, hi = Math.max(...vals)+pad, Y = v => top+(hi-v)/(hi-lo)*(bot-top);
     const pl = (a, cls, extra) => '<polyline points="'+a.map((v,i)=>v==null ? '' : X(i).toFixed(1)+','+Y(v).toFixed(1)).filter(Boolean).join(' ')+'" class="'+cls+'" fill="none"'+(extra || '')+'/>';
@@ -13045,16 +13051,29 @@ function trChart(L, m){
       + pl(v0, 'hline thin') + pl(rc, 'hax', ' stroke-dasharray="4 3"') + pl(rv, 'hline')
       + '<circle cx="'+X(N-1).toFixed(1)+'" cy="'+Y(rv[N-1]).toFixed(1)+'" r="3.2" class="'+(rc[N-1]==null || rv[N-1]>=rc[N-1] ? 'hup' : 'hdn')+'"/><text x="'+(X(N-1)-4).toFixed(1)+'" y="'+(Y(rv[N-1])-6).toFixed(1)+'" class="hval" text-anchor="end">'+trFmt(m, rv[N-1]).replace('%','')+'</text>'
       + ticks.map((i, k)=>'<text x="'+X(i).toFixed(1)+'" y="'+(Hh-4)+'" class="hval hdate" text-anchor="'+(k===0 ? 'start' : k===3 ? 'end' : 'middle')+'">'+kort(all0[i])+(k===0 || k===3 ? " '"+String(all0[i].iso||'').slice(2,4) : '')+'</text>').join('')
-      + '</svg><p class="histleg">'+nm+', alle '+N+' avonden. Dik: jullie gemiddelde over vijf avonden. Dun: per avond. Stippellijn: de club.</p>';
+      + '</svg><p class="histleg'+(plain ? ' pl' : '')+'">'+nm+', alle '+N+' avonden. Dik: jullie gemiddelde over vijf avonden. Dun: per avond. Stippellijn: de club.</p>';
   }
-  const all = rows.map(val).concat(rows.map(x=>x.cl[m]).filter(v=>v!=null));
+  const all = rows.map(val).concat(rows.map(x=>cl(x)).filter(v=>v!=null));
   const pad = (Math.max(...all)-Math.min(...all) || 1)*.18, lo = Math.min(...all)-pad, hi = Math.max(...all)+pad, ys = v => top+(hi-v)/(hi-lo)*(bot-top);
   return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+nm+' per avond, jullie en de club">'
-    + '<polyline points="'+rows.filter(x=>x.cl[m]!=null).map(x=>xs(rows.indexOf(x)).toFixed(1)+','+ys(x.cl[m]).toFixed(1)).join(' ')+'" class="hax" fill="none" stroke-dasharray="4 3"/>'
+    + '<polyline points="'+rows.filter(x=>cl(x)!=null).map(x=>xs(rows.indexOf(x)).toFixed(1)+','+ys(cl(x)).toFixed(1)).join(' ')+'" class="hax" fill="none" stroke-dasharray="4 3"/>'
     + '<polyline points="'+rows.map((x,i)=>xs(i).toFixed(1)+','+ys(val(x)).toFixed(1)).join(' ')+'" class="hline"/>'
-    + rows.map((x,i)=>{ const up = x.cl[m]==null || val(x)>=x.cl[m]; return '<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(val(x)).toFixed(1)+'" r="3.2" class="'+(up ? 'hup' : 'hdn')+'"/>'
+    + rows.map((x,i)=>{ const up = cl(x)==null || val(x)>=cl(x); return '<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(val(x)).toFixed(1)+'" r="3.2" class="'+(up ? 'hup' : 'hdn')+'"/>'
         + '<text x="'+xs(i).toFixed(1)+'" y="'+(ys(val(x))+(up ? -6 : 12)).toFixed(1)+'" class="hval">'+trFmt(m, val(x)).replace('%','')+'</text><text x="'+xs(i).toFixed(1)+'" y="'+(Hh-4)+'" class="hval hdate">'+kort(x)+'</text>'; }).join('')
-    + '</svg><p class="histleg">'+nm+': doorgetrokken lijn jullie, stippellijn het gemiddelde van de club.</p>';
+    + '</svg><p class="histleg'+(plain ? ' pl' : '')+'">'+nm+': doorgetrokken lijn jullie, stippellijn het gemiddelde van de club.</p>';
+}
+function trUitHTML(L){
+  const kort = x => { const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.iso||''); return d ? (+d[3])+' '+MAANDEN[+d[2]-1].slice(0,3)+" '"+d[1].slice(2) : '?'; };
+  const par = L.filter(x=>x.kind!=='butler' && x.k && x.k.s && x.k.s[0]), but = L.filter(x=>x.kind==='butler' && x.imp!=null), low = matchMedia('(max-height:700px)').matches;
+  const pv = x => x.k.s[1]/x.k.s[0], f1 = v => String(Math.round(v*10)/10).replace('.', ',');
+  let h = '<p class="clubsub"><b>Uitslag van '+trEsc(state.clubMe)+'</b> · alle ingelezen avonden</p>';
+  if(par.length) h += '<p class="lhead"><b>Paren</b> · '+par.length+' avond'+(par.length===1 ? '' : 'en')+' · gemiddeld <b>'+f1(par.reduce((s,x)=>s+pv(x), 0)/par.length)+'%</b></p>'+trChart(par, 's', 1);
+  if(but.length) h += '<p class="lhead"><b>Butler</b> · '+but.length+' avond'+(but.length===1 ? '' : 'en')+' · gemiddeld <b>'+impTxt(Math.round(10*but.reduce((s,x)=>s+x.imp, 0)/but.length)/10)+' IMP</b></p>'+trChart(but, 'i', 1);
+  const last = L.filter(x=>par.includes(x) || but.includes(x)).slice(low || (par.length>2 && but.length>2) ? -3 : -6).reverse();
+  if(!(low && par.length>2 && but.length>2)) h += '<table class="clubsum histt"><tr><th>Avond</th><th>Uitslag</th><th>Contract</th><th>Uitkomst</th></tr>'
+     + last.map(x=>'<tr><td>'+kort(x)+'</td><td>'+(x.kind==='butler' ? impTxt(x.imp)+' IMP' : f1(pv(x))+'%')+'</td><td>'+(x.k.c && x.k.c[0] ? Math.round(x.k.c[1]/100)+'/'+x.k.c[0] : '–')+'</td><td>'+(x.k.u && x.k.u[0] ? trFmt('u', x.k.u[1]/x.k.u[0]) : '–')+'</td></tr>').join('')+'</table>';
+  const nb = L.filter(x=>x.kind==='butler' && x.imp==null).length;
+  return h+'<p class="rvnote trnote">Uitslag: gemiddelde per spel. Contract: haalbaar en op het goede niveau. Uitkomst: slagen per uitkomst.'+(nb ? ' Van '+nb+' Butler-avond'+(nb===1 ? '' : 'en')+' ontbreekt de uitslag nog: lees die opnieuw in.' : '')+'</p>';
 }
 function trKernHTML(L){
   const T = Object.fromEntries(TRM.map(([m])=>[m, trTot(L, m)])), nb = L.reduce((s,x)=>s+(x.n||0), 0);
@@ -13072,11 +13091,18 @@ function trDetHTML(L){
   const d = G[TR.det] ? TR.det : 's', sum = k => { let n = 0, s = 0; L.forEach(x=>{ const a = x.x && x.x[k]; if(a){ n += a[0]; s += a[1]; } }); return {n, v:n ? s/n : null}; };
   const hi = L.reduce((s,x)=>s+(x.hi||0), 0), mi = L.reduce((s,x)=>s+(x.mi||0), 0);
   const nav2 = '<nav class="modes trtabs sub">'+[['s','Score'],['a','Afspel'],['u','Uitkomst en contract']].map(([k,l])=>'<button data-trdet="'+k+'" aria-pressed="'+(d===k)+'">'+l+'</button>').join('')+'</nav>';
-  if(TR.info==='d'+d) return nav2+trInfo();
+  if(TR.info==='d'+d || (d==='u' && TR.info==='dc')) return nav2+trInfo();
   return nav2
     + '<table class="clubsum trk"><tr><th>'+(d==='s' ? 'Score' : d==='a' ? 'Afspel' : 'Uitkomst')+trIbtn('d'+d)+'</th><th>Spellen</th><th>Gemiddeld</th></tr>'
     + G[d].map(([l, k])=>{ const t = sum(k); return '<tr><td>'+l+'</td><td>'+(t.n || '–')+'</td><td><b>'+trFmt(d, t.v)+'</b></td></tr>'; }).join('')
-    + (d==='u' ? '<tr><th class="cap" colspan="3">Contract</th></tr><tr><td>Manche of slem gemist</td><td colspan="2"><b>'+mi+'</b> keer</td></tr><tr><td>Te hoog geboden</td><td colspan="2"><b>'+hi+'</b> keer</td></tr>' : '')+'</table>'
+    + (d==='u' ? (()=>{ const N = L.reduce((s,x)=>s+((x.k && x.k.c && x.k.c[0]) || 0), 0), pc = v => N ? Math.round(100*v/N)+'%' : '–';
+          const cl = k => { let w = 0, s = 0; L.forEach(x=>{ const n = (x.k && x.k.c && x.k.c[0]) || 0; if(n && x[k]!=null){ w += n; s += x[k]*n; } }); return w ? Math.round(s/w)+'%' : '–'; };
+          const hm = L.reduce((s,x)=>s+(x.hm||0), 0), hasHm = L.some(x=>x.hm!=null), good = N-hi-mi;
+          const row = (l, v, c) => '<tr><td>'+l+'</td><td>'+v+' van '+N+'</td><td><b>'+pc(v)+'</b></td><td>'+c+'</td></tr>';
+          return '</table><table class="clubsum trk"><tr><th>Contract'+trIbtn('dc')+'</th><th>Spellen</th><th>Jullie</th><th>Club</th></tr>'
+            + row('Haalbaar, goed niveau', good, (()=>{ let w = 0, s = 0; L.forEach(x=>{ const n = (x.k && x.k.c && x.k.c[0]) || 0; if(n && x.cl && x.cl.c!=null){ w += n; s += x.cl.c*n; } }); return w ? Math.round(s/w)+'%' : '–'; })())
+            + row('Manche of slem gemist', mi, cl('cm')) + row('Te hoog geboden', hi, cl('ch'))
+            + (hasHm ? '<tr><td class="sub">waarvan toch gemaakt</td><td>'+hm+' van '+hi+'</td><td>'+(hi ? Math.round(100*hm/hi)+'%' : '–')+'</td><td></td></tr>' : ''); })() : '')+'</table>'
     + '<p class="rvnote trnote">'+(d==='s' ? 'Jullie gemiddelde percentage per soort spel.' : d==='a' ? 'Slagen per spel tegenover het maximum na de uitkomst die jullie kregen.' : 'Uitkomst: slagen per uitkomst tegenover de beste uitkomst. Contract: beoordeeld in de gespeelde speelsoort, met open kaarten.')+'</p>';
 }
 function trInHTML(){
@@ -13093,7 +13119,7 @@ function trInHTML(){
 }
 function trHTML(){
   const tabs = '<nav class="modes trtabs">'+[['kern','Kerncijfers'],['det','Details'],['uit','Uitslag'],['in','Inlezen']].map(([k,l])=>'<button data-trtab="'+k+'" aria-pressed="'+(TR.tab===k)+'">'+l+'</button>').join('')+'</nav>';
-  if(TR.tab==='uit') return tabs+clubHistHTML();
+  if(TR.tab==='uit') return tabs+(trList().length ? trUitHTML(trList()) : clubHistHTML());
   if(TR.tab==='in') return tabs+trInHTML();
   const L = trList();
   if(!L.length) return tabs+'<p>Nog geen avonden in de trendanalyse. Lees bij <b>Inlezen</b> je frequentiestaten in.</p>'+(TR.busy ? '<p class="ddbusy" id="trprog">'+trEsc(TR.prog)+'</p>' : '');
