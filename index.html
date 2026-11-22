@@ -1200,6 +1200,14 @@ button.cbd{cursor:pointer}
 main.table.ns #dummyhand:has(.hrow){display:block}
 .ghand:has(.hrow){width:100%!important;max-width:100%!important}
 /* ===== einde maten ===== */
+/* antwoorden direct onder de vraag */
+.box.top{width:100%;grid-column:1 / -1;margin:.05rem 0 .5rem;padding-bottom:.55rem;border-bottom:1px solid var(--line);flex:none}
+#dummy{width:100%} #dummyhand:has(.hrow){width:100%!important}
+@media (max-height:700px){ .box.top{margin-bottom:.25rem;padding-bottom:.3rem} }
+.navrow2{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin:.1rem 0 0}
+.navrow2 button{font:inherit;font-weight:600;font-size:.9rem;padding:.55rem .4rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+#cloudmsg{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 0;text-align:center}
+
 </style>
 </head>
 <body>
@@ -2157,6 +2165,15 @@ main.table.ns #dummyhand:has(.hrow){display:block}
       <ul>
         <li>Iedere speler heeft dertien kaarten. Weet je van een tegenstander drie kleuren, dan weet je de vierde ook.</li>
       </ul>
+      <h3>Spelen: de tegenpartij lezen</h3>
+      <ul>
+        <li>Ook als leider let je op de kaarten van de tegenpartij: hun uitkomst en hun signalen zijn bedoeld voor elkaar, maar jij mag meekijken.</li>
+        <li>Uitkomst met een plaatje: de hoogste van een serie. De vrouw belooft de boer en ontkent de heer.</li>
+        <li>Uitkomst met de vierde van boven: trek de kaart af van 11. Zoveel hogere kaarten zitten er bij de dummy, bij jou en bij de andere tegenspeler samen.</li>
+        <li>Aan of af op de uitkomst: moedigt een tegenspeler aan, dan heeft hij een plaatje of een doubleton. Wijst hij af, verwacht dan een andere kleur.</li>
+        <li>Lengtesignaal als jij een kleur speelt: uit even of oneven reken je uit hoe de kleur verdeeld zit.</li>
+        <li>Ga uit van wat zij op hun systeemkaart hebben staan; in deze oefening spelen zij dezelfde afspraken als jullie.</li>
+      </ul>
       <h3>Tegenspel: terugspelen</h3>
       <ul>
         <li>Speel je partners kleur terug: met twee overgebleven kaarten de hoogste, met drie of meer de laagste.</li>
@@ -2448,7 +2465,7 @@ function pickMix(set, recent, since){
   for(let i=0;i<set.length;i++){ t -= ws[i]; if(t<=0) return set[i]; }
   return set[set.length-1];
 }
-let PLAY_SET = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];   // de app zet dit vanuit de instellingen
+let PLAY_SET = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','lezen','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];   // de app zet dit vanuit de instellingen
 // Systeemkaart: welke afspraken staan samen aan? Die bepalen wat andere oefeningen wel en niet mogen vragen.
 const SYS = {muiderberg:false, inverted:false, z2h:false, acol:false};
 function newQuestion(conv, idx, stepKey){
@@ -7484,12 +7501,57 @@ function newACT(sk){
     : 'De dummy is vlak en heeft geen lange kleur waarop de leider verliezers kwijt kan. Zijn verliezers lopen dus niet weg. Speel passief: geef niets cadeau door een kleur vanaf een honneur aan te spelen, en laat de leider het werk doen.';
   return pxQ('actief', 2, dummy, mine, (right ? 'West' : 'Oost')+' speelt 4'+'<span class="S">'+SYM.S+'</span>. Je bent aan slag en hebt in de andere kleuren een heer of vrouw zonder de kaart eronder. Dit zijn de ruiten van de dummy'+(active ? '' : '; zijn andere kleuren zijn net zo vlak')+'. Hoe speel je tegen?', opts, active ? 0 : 1, why, {sideDummy:true, dummyRight:right});
 }
-Object.assign(NEWCONV, {dsnit:newDSN, combi:newCMB, vrij:newVRY, weggooi:newWEG, telhand:newTLH, terug:newTRG, lengte:newLEN, ophoudt:newOPT, actief:newACT});
+// ---------- Als leider: de uitkomst en de signalen van de tegenpartij lezen ----------
+function newLZN(){
+  const types = ['B','C','D'].concat(LEAD_SA==='4' ? ['A'] : []), t = types[rnd(types.length)], si = rnd(4), sn = SNAME[SUITS[si]], C = r => cardHTML(SUITS[si]+r);
+  const pick = (n, pool) => { const p = pool.slice(); for(let i=p.length-1;i>0;i--){ const j = rnd(i+1); const z = p[i]; p[i] = p[j]; p[j] = z; } return p.slice(0, n); };
+  if(t==='A'){                                                    // regel van 11, nu door de ogen van de leider
+    for(;;){
+      const N = 5+rnd(4), hi = []; for(let r=N+1;r<=14;r++) hi.push(r);
+      const rest = pick(hi.length, hi).slice(3), low = []; for(let r=2;r<N;r++) low.push(r);
+      const pool = pick(rest.length+low.length, rest.concat(low)), nd = 2+rnd(2), nm = 2+rnd(2);
+      if(pool.length<nd+nm+1) continue;
+      const dummy = pool.slice(0, nd).sort((a,b)=>b-a), mine = pool.slice(nd, nd+nm).sort((a,b)=>b-a);
+      const dh = dummy.filter(r=>r>N).length, mh = mine.filter(r=>r>N).length, ans = 11-N-dh-mh;
+      if(ans<0 || ans>3 || dh+mh===0) continue;
+      const opts = ['Geen','Eén','Twee','Drie'].map((x,i)=>({title:x, sub:i===0 ? 'Oost heeft niets boven de '+N : i===1 ? 'Oost heeft één kaart boven de '+N : 'Oost heeft er '+x.toLowerCase()+' boven de '+N}));
+      const why = 'Zij komen tegen SA uit met de vierde van boven. Dan geldt de regel van 11, ook voor jou als leider: 11 − '+N+' = '+(11-N)+'. Zoveel kaarten hoger dan de '+N+' zitten er bij de dummy, bij jou en bij Oost samen. De dummy heeft er '+NTAL[dh]+' en jij '+NTAL[mh]+', dus Oost heeft er '+NTAL[ans]+'. '+(ans===0 ? 'Oost kan de uitkomst dus niet overnemen: een lage kaart uit de dummy is genoeg.' : 'Zo weet je welke kaart je uit de dummy moet leggen en of een snit zin heeft.');
+      return pxQ('lezen', si, dummy, mine, 'Je speelt 3SA. Zij komen uit met de vierde van boven. Hoeveel kaarten hoger dan de '+N+' heeft Oost in deze kleur?', opts, ans, why, {lead:SUITS[si]+N});
+    }
+  }
+  if(t==='B'){                                                    // uitkomst met een plaatje: de hoogste van een serie
+    const v = pick(1, LEAD_AK==='A' ? [13,12,11] : [12,11])[0], miss = v+1, sm = pick(4, [2,3,4,5,6,7,8]);
+    const dummy = (v===13 ? [sm[0], sm[1]] : [14, sm[0]]).sort((a,b)=>b-a), mine = [sm[2], sm[3]].sort((a,b)=>b-a);
+    const nm = PXN[miss], lead = PXN[v], under = PXN[v-1];
+    const opts = [{title:'Bij Oost', sub:'West ontkent de '+nm+' met deze uitkomst'}, {title:'Bij West', sub:'West komt uit onder zijn '+nm+' vandaan'}, {title:'Dat kun je niet weten', sub:'De uitkomst zegt niets over de '+nm}];
+    const why = 'Van een serie plaatjes kom je uit met de hoogste. De '+lead+' belooft dus de '+under+' en ontkent de '+nm+': anders was West met de '+nm+' uitgekomen. De '+nm+' zit bij Oost. '+(v===13 ? 'Je weet dus ook dat West de vrouw heeft: speel deze kleur later naar Oost toe en niet naar West.' : 'Neem je de aas, dan heeft Oost de '+nm+' nog: houd daar rekening mee als Oost later aan slag komt.');
+    return pxQ('lezen', si, dummy, mine, 'Je speelt 3SA. Waar zit de '+nm+' van deze kleur?', opts, 0, why, {lead:SUITS[si]+v});
+  }
+  if(t==='C'){                                                    // aan of af op de uitkomst van West
+    const enc = rnd(2)===1;
+    const e = ATT==='oneven' ? pick(1, (enc ? [3,5,7,9] : [2,4,6,8]))[0] : (ATT==='laag')===enc ? pick(1, [2,3])[0] : pick(1, [8,9])[0];
+    const rest = [2,3,4,5,6,7,8,9,10,11].filter(r=>r!==e), p5 = pick(5, rest), dummy = p5.slice(0,3).sort((a,b)=>b-a), mine = p5.slice(3,5).sort((a,b)=>b-a);
+    const short = ATT==='oneven' ? 'oneven is aan, even is af' : ATT==='laag' ? 'laag is aan, hoog is af' : 'hoog is aan, laag is af'; const tr = SUITS[(si+1+rnd(3))%4], rule = ATT==='oneven' ? 'een oneven kaart moedigt aan, een even kaart wijst af' : ATT==='laag' ? 'een lage kaart moedigt aan, een hoge wijst af' : 'een hoge kaart moedigt aan, een lage wijst af';
+    const opts = [{title:'Oost moedigt aan', sub:'Hij heeft de vrouw of een doubleton en wil dat West doorspeelt'}, {title:'Oost wijst af', sub:'Hij heeft niets in de kleur; West kan beter iets anders spelen'}, {title:'De kaart zegt niets', sub:'Het is gewoon de laagste kaart van Oost'}];
+    const why = 'Op de uitkomst van partner geeft een tegenspeler aan of af. Zij spelen: '+rule+'. De '+e+' is '+(ATT==='oneven' ? (e%2 ? 'oneven' : 'even') : (e>=8 ? 'hoog' : 'laag'))+', dus Oost '+(enc ? 'moedigt aan' : 'wijst af')+'. '
+      + (enc ? 'Reken erop dat West de heer speelt en daarna nog een keer '+sn+'. Heeft Oost een doubleton, dan wil hij de derde ronde introeven: houd daar rekening mee in je plan.' : 'Oost heeft dus geen vrouw en geen doubleton. Verwacht dat West van kleur wisselt: bedenk nu al welke kleur dat voor jou het gevaarlijkst is.');
+    const q = pxQ('lezen', si, dummy, mine, 'Zij signaleren: '+short+'. Je speelt 4<span class="'+tr+'">'+SYM[tr]+'</span>. West heeft aas en heer en Oost legt '+C(e)+' bij. Wat vertelt die kaart?', opts, enc ? 0 : 1, why, {lead:SUITS[si]+14});
+    q.d.contract = '4'+tr; return q;
+  }
+  // lengtesignaal van West als jij een kleur speelt
+  const rev = CNT==='rev', hiFirst = rnd(2)===1, even = hiFirst!==rev, hi = pick(1, [9,8,7])[0], lo = pick(1, [2,3,4])[0], dummy = [13,12,10,6], mine = [11,5];
+  const rule = rev ? 'eerst laag en dan hoog is een even aantal, eerst hoog en dan laag een oneven aantal' : 'eerst hoog en dan laag is een even aantal, eerst laag en dan hoog een oneven aantal';
+  const opts = [{title:'Een even aantal', sub:'Twee of vier kaarten'}, {title:'Een oneven aantal', sub:'Drie kaarten'}, {title:'Dat zegt de volgorde niet', sub:'West legt gewoon wat hem uitkomt'}];
+  const why = 'Speelt de leider een kleur, dan geven de tegenspelers elkaar hun lengte door. Zij spelen: '+rule+'. West legt eerst '+C(hiFirst ? hi : lo)+' en dan '+C(hiFirst ? lo : hi)+': '+(hiFirst ? 'hoog-laag' : 'laag-hoog')+', dus een '+(even ? 'even' : 'oneven')+' aantal. '
+    + 'Jij en de dummy hebben samen zes '+sn+', dus zij hebben er zeven. '+(even ? 'Heeft West er twee, dan heeft Oost er vijf; heeft West er vier, dan heeft Oost er drie.' : 'West heeft er drie en Oost dus vier.')+' Zo weet je hoe de kleur verdeeld zit zonder dat je alle kaarten hebt gezien.';
+  return pxQ('lezen', si, dummy, mine, 'Zij geven lengte: '+(rev ? 'laag-hoog' : 'hoog-laag')+' is even. Je speelt 3SA en speelt deze kleur twee keer. West legt eerst '+C(hiFirst ? hi : lo)+' en dan '+C(hiFirst ? lo : hi)+'. Hoeveel kaarten had West in deze kleur?', opts, even ? 0 : 1, why);
+}
+Object.assign(NEWCONV, {lezen:newLZN, dsnit:newDSN, combi:newCMB, vrij:newVRY, weggooi:newWEG, telhand:newTLH, terug:newTRG, lengte:newLEN, ophoudt:newOPT, actief:newACT});
 // ENGINE-END
 
 const $ = id => document.getElementById(id);
 const STORE = 'bridge-na-1sa-v2';
-const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'Preëmptief op 3-niveau', 'o:4x':'Preëmptief op 4-niveau', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
+const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'Preëmptief op 3-niveau', 'o:4x':'Preëmptief op 4-niveau', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', lezen:'De tegenpartij lezen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E', 3:'Openaar na 2SA (zwakke twee)', 4:'Openaar na 2♣\uFE0E – 2♦\uFE0E', 5:'Vrager na het antwoord op 2SA'};
 const STEPS_DO = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt DONT', 3:'Na je doublet'};
 const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA', 3:'Vervolg na de transfer', 4:'Na hun doublet op 1SA', 5:'Na 1♣\uFE0E en een zwak sprongvolgbod'};
@@ -7549,14 +7611,14 @@ const STEPS_PU = {alles:'Alles door elkaar', 1:'Vragen of niet', 2:'Openaar antw
 const STEPS_BY = {puppet2:STEPS_PU, puppet1:{alles:'Alles door elkaar', 1:'Vragen of niet', 2:'Openaar antwoordt', 3:'Vrager na het antwoord', 4:'Het slot'}, zwak2h:STEPS_Z2, zwak2a:STEPS_Z2, doublet:STEPS_DBL, openen:STEPS_ONE, volgbod:STEPS_VOLG, wet:STEPS_WET, steun:STEPS_ST, rkcb:STEPS_RKC, exclusion:STEPS_EX, gerber:STEPS_GB, acol2:STEPS_AC, benji:STEPS_BN, leaping:STEPS_LM, bergen:STEPS_BG, jac2n:STEPS_J2, splinter:STEPS_SP, montreal:STEPS_MR, walsh:STEPS_WA, twalsh:STEPS_TW, bart:STEPS_BRT, gazzilli:STEPS_GZ, bijbod:STEPS_BIJ, uitkomst:STEPS_UIT,
   doorsterk:STEPS_DS, handen:STEPS_HN, troef:STEPS_TR, antw2:STEPS_A2, twee1:STEPS_21, gambling:STEPS_GA, muiderberg:STEPS_MU, uppercue:STEPS_TS, unusual:STEPS_TS,
   negatief:STEPS_NEG, tellen:STEPS_ONE, snijden:STEPS_SN, ontwikkel:STEPS_OW, verliezers:STEPS_ONE, spel:STEPS_ONE, spelmix:STEPS_ONE, biedmix:STEPS_ONE,
-  signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_GV, entree:STEPS_EN, veilig:STEPS_VE, dekken:STEPS_DK, regel11:STEPS_DS, dsnit:STEPS_DN, combi:STEPS_ONE, vrij:STEPS_VR, weggooi:STEPS_ONE, telhand:STEPS_ONE, terug:STEPS_DS, lengte:STEPS_DS, ophoudt:STEPS_DS, actief:STEPS_DS, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
+  signaal:STEPS_SG, ophouden:STEPS_ONE, gevaar:STEPS_GV, entree:STEPS_EN, veilig:STEPS_VE, dekken:STEPS_DK, regel11:STEPS_DS, dsnit:STEPS_DN, combi:STEPS_ONE, vrij:STEPS_VR, weggooi:STEPS_ONE, telhand:STEPS_ONE, lezen:STEPS_ONE, terug:STEPS_DS, lengte:STEPS_DS, ophoudt:STEPS_DS, actief:STEPS_DS, landy:STEPS_LA, mlandy:STEPS_LA, multi:STEPS_MT, nmf:STEPS_NMF, vierde:STEPS_ONE, reverse:STEPS_ONE, texas:STEPS_TX, nadbl:STEPS_ONE, checkback:STEPS_CB, blackwood:STEPS_BW, ballumer:STEPS_BA, inverted:STEPS_IM, rubensohl:STEPS_RU, dont:STEPS_DO, na2sa:STEPS_2N};
 const CONV_SUBS = {
   convsB1:[['Openingen op 1-niveau',['o:1C','o:1D','o:1H','o:1S','o:1N']], ['Sterke openingen',['o:2C','o:2N','c2:sterk','benji','d2:drie','acol2','c2:2n']], ['Multi en tweekleuren (zwak)',['multi','muiderberg','d2:majors','o:2D']], ['Multi (zwak of sterk)',['d2:multib','d2:multis','d2:multi3','c2:ruiten']], ['Preëmptieve openingen',['zwak2h','zwak2a','o:pre','gambling','o:pas','o:34']]],
   convsB2:[['Antwoorden op 1 in een kleur',['bijbod','twee1']], ['Na 1♣︎ of 1♦︎',['inverted','montreal','walsh','twalsh']], ['Na 1♥︎ of 1♠︎',['bergen','jac2n','splinter']], ['Antwoorden na 1SA',['stayman','ballumer','jacoby','texas','puppet1']], ['Antwoorden na een 2-opening',['na2sa','puppet2','antw2']]],
   convsB3:[['Volgbod en doublet',['volgbod','doublet']], ['Tweekleurenspelen',['uppercue','unusual','leaping']], ['Tegen hun 1SA',['dont','landy','mlandy']]],
   convsB4:[['Na hun volgbod of doublet',['negatief','wet','steun','rubensohl','nadbl']], ['Tweekleurenspelen',['uppercue','unusual']]],      // de tweekleurenspelen staan ook bij groep 3
   convsB5:[['Herbiedingen',['reverse','vierde','checkback','nmf']], ['Na 1♥︎ of 1♠︎ – 1SA',['bart','gazzilli']], ['Azen vragen',['rkcb','blackwood','gerber','exclusion']]],
-  convsL:[['Plannen en tellen',[['Je eigen kaarten',['tellen','verliezers']], ['De tegenpartij',['telhand']]]],
+  convsL:[['Plannen en tellen',[['Je eigen kaarten',['tellen','verliezers']], ['De tegenpartij',['telhand','lezen']]]],
            ['Slagen maken',[['Met honneurs',['ontwikkel','snijden','dsnit']], ['Met lengte',['vrij']], ['De volgorde',['combi']]]],
            ['Troef',['troef','weggooi']],
            ['Verbindingen en veiligheid',[['Tegen hun lange kleur',['ophouden','gevaar']], ['Oversteken',['entree']], ['Op zeker spelen',['veilig']]]],
@@ -7575,7 +7637,7 @@ let nav = [];                       // waar je in het keuzescherm bent: [] = Hom
 const CONV_GROUPS = {};
 const subKeys = s => [].concat(...s[1].map(x=>Array.isArray(x) ? x[1] : [x]));      // een subgroep kan zelf weer in stukjes verdeeld zijn
 for(const id in CONV_SUBS) CONV_GROUPS[id] = [].concat(...CONV_SUBS[id].map(subKeys));
-const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];
+const PLAYABLE = ['tellen','ontwikkel','verliezers','troef','snijden','ophouden','gevaar','entree','veilig','dsnit','combi','vrij','weggooi','telhand','lezen','uitkomst','doorsterk','handen','signaal','dekken','regel11','terug','lengte','ophoudt','actief'];
 const BIDDABLE = ['puppet1','puppet2','openen','zwak2h','zwak2a','muiderberg','gambling','bijbod','twee1','inverted','stayman','ballumer','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb','blackwood','checkback','nadbl','landy','mlandy','multi','nmf','vierde','reverse','texas','exclusion','gerber','steun','acol2','benji','leaping','bergen','jac2n','splinter','montreal','bart','gazzilli','walsh','twalsh'];
 const BID_DEFAULT = ['openen','bijbod','stayman','jacoby','na2sa','antw2','volgbod','doublet','uppercue','unusual','dont','negatief','wet','rubensohl','rkcb'];   // de standaardkaart
 // officiële namen
@@ -7636,7 +7698,7 @@ const BID_EXCL = [['bart','gazzilli'], ['montreal','walsh'], ['montreal','twalsh
 const tabOf = c => (PLAYABLE.includes(c) || c==='spel' || c==='spelmix') ? 'spelen' : 'bieden';
 let tab = 'bieden';
 const groupOf = c => c==='spelmix' ? 'convsL' : (c==='biedmix' || c==='openen') ? 'convsB1' : (Object.keys(CONV_GROUPS).find(id=>CONV_GROUPS[id].includes(c)) || null);
-const STAT_LABEL = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers'};
+const STAT_LABEL = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', stayman:'Stayman', jacoby:'Jacoby', geen:'Zonder conventie', doublet:'Doublet', openen:'Openen', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', signaal:'Signaleren', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', lezen:'De tegenpartij lezen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers'};
 let state = {conv:'beide', step:'alles', stats:{}, streak:0, rkc:'1430'};
 let FIRST_RUN = false; try{ FIRST_RUN = !localStorage.getItem(STORE); }catch(e){}
 try{
@@ -8081,7 +8143,7 @@ function renderModes(){
       : '<p class="hint">Hier oefen je losse onderdelen: alleen de biedingen en spelsituaties die bij de afspraken op je systeemkaart horen.</p>'
         + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
         + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
-        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat</small></button>' : '')+'</div>';
+        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Hier maak je ook een account of log je in.</small></button>' : '')+'</div>';
   }else if(T==='test' && !mode){
     const TS = state.test;
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
@@ -8139,7 +8201,8 @@ function renderModes(){
        + '<button class="navrow'+(presetMatch() ? ' has' : '')+'" data-kgo="std"><span>Standaardkaart</span><small>'+(presetMatch() ? '✓ '+PRESETS[presetMatch()].tag : 'Berry beginners of clubspelers')+'</small></button>'
        + '<button class="navrow has" data-kgo="eigen"><span>Eigen specifieke systeemkaart</span><small>bieden en speelafspraken</small></button>'
        + '<button class="navrow" data-cardview="1"><span>Bekijken en afdrukken</span><small>Vouwkaart, overzicht op één A4 of handboek</small></button>'
-       + '<button class="navrow" data-cardshare="1"><span>Delen met je partner</span><small id="sharemsg">Via een link</small></button>';
+       + '<button class="navrow" data-cardshare="1"><span>Delen met je partner</span><small id="sharemsg">Via een link</small></button>'
+       + (FB_CONFIG ? '<div class="navrow2"><button data-cardcloud="save">Opslaan in je account</button><button data-cardcloud="load">Ophalen uit je account</button></div><small id="cloudmsg">Bewaar je kaart en haal hem op een ander toestel weer op</small>' : '');
   }else if(T==='kaart' && nav[1]==='eigen'){
     pg = '<p class="hint">Stel zelf in wat jullie spelen, of pas een standaardkaart aan.</p>'
        + '<button class="navrow has" data-kgo="bieden"><span>Bieden</span><small>'+state.card.length+' afspraken</small></button>'
@@ -8174,11 +8237,11 @@ function renderModes(){
        + '<div class="navtools">'+(cur<total-1 ? '<button class="navclear all" data-lskip="1">Deze stap overslaan</button>' : '')+'<button class="navclear all" data-lfree="1">Zelf kiezen wat ik oefen</button><button class="navclear" data-lreset="1">Dit leerpad opnieuw beginnen</button></div>';
   }else if(!cat){
     pg = cats.map(c=>{ const v = [...new Set(vis(CONV_GROUPS[c.id]))]; return (v.length===1 && !(cardMode && c.id==='convsB1')) ? convRow(v[0]) : navRow('data-cat="'+c.id+'"', c.name, CONV_GROUPS[c.id], (!cardMode && !v.length) ? 'Niet op je systeemkaart' : null); }).join('')
-       + tools(allOf(T), T==='spelen' ? 'bij spelen' : cardMode ? '' : 'bij bieden', false).replace('Alles  van','Alles van');
+       + tools(allOf(T), T==='spelen' ? 'bij spelen' : cardMode ? '' : 'bij bieden', T==='spelen').replace('Alles  van','Alles van');
     if(T==='bieden' && !cardMode) pg += '<div class="navtools"><button class="navclear all" data-allcard="1">Mijn hele systeemkaart oefenen</button></div>';
     if(T==='spelen' && extra.length) pg += '<p class="hint">Komt nu vaker aan bod: '+extra.map(k=>CONVS[k]).join(', ')+'.</p>';
   }else if(!sub){
-    pg = subsOf.map((s,i)=>{ const v = vis(subKeys(s)); return setPage(cat.id, i) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : !v.length ? '' : v.length===1 ? convRow(v[0]) : navRow('data-subi="'+i+'"', s[0], subKeys(s)); }).join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', false);
+    pg = subsOf.map((s,i)=>{ const v = vis(subKeys(s)); return setPage(cat.id, i) ? navRow('data-subi="'+i+'"', s[0], subKeys(s)) : !v.length ? '' : v.length===1 ? convRow(v[0]) : navRow('data-subi="'+i+'"', s[0], subKeys(s)); }).join('') + tools(CONV_GROUPS[cat.id], 'in deze rubriek', T==='spelen');
   }else if(!pk){
     const rows = sub[1].map(x=>Array.isArray(x) ? (vis(x[1]).length ? '<p class="navsub">'+x[0]+'</p>'+vis(x[1]).map(convRow).join('') : '') : (vis([x]).length ? convRow(x) : '')).join('');
     pg = (sysPage ? '<p class="hint">Kies hieronder jullie basissysteem. 2 over 1 mancheforcing zet je op je kaart onder Antwoorden en herbiedingen.</p>' : '')
@@ -9947,9 +10010,9 @@ function clubBid(nr){
 }
 function bidStartRandomOrGame(){ if(state.gbid==='ja' && state.grole!=='tegen') bidStartRandom(); else gStart(); }
 const THEORY = {puppet2:['Puppet Stayman'], puppet1:['Puppet Stayman'], zwak2h:['Zwakke twee','Antwoorden op de zwakke twee'], zwak2a:['Zwakke twee','Antwoorden op de zwakke twee'], openen:['Openen'], stayman:['Opening','Stayman','Uitnodigingen'], jacoby:['Opening','Jacoby','Uitnodigingen'],
-  geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], steun:['Steunen: storend'], rkcb:['RKC'], exclusion:['Exclusion'], gerber:['Gerber'], acol2:['Acol-tweeën'], benji:['Benjamin'], leaping:['Wereldconventie'], bergen:['Bergen-raises'], jac2n:['Jacoby 2SA'], splinter:['Splinters'], montreal:['Montreal relay'], walsh:['Walsh'], twalsh:['Transfer Walsh'], bart:['Bart'], gazzilli:['Gazzilli'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], checkback:['Checkback'], blackwood:['Blackwood'], nadbl:['Na een informatiedoublet'], ophouden:['Spelen: ophouden'], gevaar:['Spelen: de gevaarlijke'], entree:['Spelen: entrees'], veilig:['Spelen: veiligheidsspel'], dekken:['Tegenspel: honneur'], regel11:['Tegenspel: de regel van 11'], dsnit:['Spelen: dubbele snit'], combi:['Spelen: kansen combineren'], vrij:['Spelen: lange kleur'], weggooi:['Spelen: weggooien'], telhand:['Spelen: de hand uittellen'], terug:['Tegenspel: terugspelen'], lengte:['Tegenspel: lengtesignaal'], ophoudt:['Tegenspel: je aas ophouden'], actief:['Tegenspel: actief of passief'], landy:['Landy'], mlandy:['Multi-Landy'], multi:['Multi 2'], nmf:['New Minor'], vierde:['Vierde kleur'], reverse:['Reverse'], texas:['Texas'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
+  geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], steun:['Steunen: storend'], rkcb:['RKC'], exclusion:['Exclusion'], gerber:['Gerber'], acol2:['Acol-tweeën'], benji:['Benjamin'], leaping:['Wereldconventie'], bergen:['Bergen-raises'], jac2n:['Jacoby 2SA'], splinter:['Splinters'], montreal:['Montreal relay'], walsh:['Walsh'], twalsh:['Transfer Walsh'], bart:['Bart'], gazzilli:['Gazzilli'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], checkback:['Checkback'], blackwood:['Blackwood'], nadbl:['Na een informatiedoublet'], ophouden:['Spelen: ophouden'], gevaar:['Spelen: de gevaarlijke'], entree:['Spelen: entrees'], veilig:['Spelen: veiligheidsspel'], dekken:['Tegenspel: honneur'], regel11:['Tegenspel: de regel van 11'], dsnit:['Spelen: dubbele snit'], combi:['Spelen: kansen combineren'], vrij:['Spelen: lange kleur'], weggooi:['Spelen: weggooien'], telhand:['Spelen: de hand uittellen'], lezen:['Spelen: de tegenpartij lezen'], terug:['Tegenspel: terugspelen'], lengte:['Tegenspel: lengtesignaal'], ophoudt:['Tegenspel: je aas ophouden'], actief:['Tegenspel: actief of passief'], landy:['Landy'], mlandy:['Multi-Landy'], multi:['Multi 2'], nmf:['New Minor'], vierde:['Vierde kleur'], reverse:['Reverse'], texas:['Texas'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
 ['openen','zwak2h','zwak2a','volgbod','multi','muiderberg','uppercue','unusual','wet'].forEach(k=>{ if(THEORY[k]) THEORY[k].push('Kwetsbaarheid'); });
-const THEORY_TITLE = {puppet2:'Puppet Stayman', puppet1:'Puppet Stayman', zwak2h:'Zwakke twee', zwak2a:'Zwakke twee', openen:'Openen', stayman:'Stayman', jacoby:'Jacoby', geen:'Bieden na 1SA', doublet:'Informatiedoublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid en Unusual 2SA', unusual:'Upper cuebid en Unusual 2SA', rubensohl:'Rubensohl', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', na2sa:'Na 2SA van partner', dont:'DONT', muiderberg:'Muiderberg', spel:'Een heel spel spelen'};
+const THEORY_TITLE = {puppet2:'Puppet Stayman', puppet1:'Puppet Stayman', zwak2h:'Zwakke twee', zwak2a:'Zwakke twee', openen:'Openen', stayman:'Stayman', jacoby:'Jacoby', geen:'Bieden na 1SA', doublet:'Informatiedoublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', bijbod:'Bijbod', tellen:'Slagen tellen', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', antw2:'Antwoord op 2-opening', twee1:'2 over 1 mancheforcing', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid en Unusual 2SA', unusual:'Upper cuebid en Unusual 2SA', rubensohl:'Rubensohl', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', lezen:'De tegenpartij lezen', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', na2sa:'Na 2SA van partner', dont:'DONT', muiderberg:'Muiderberg', spel:'Een heel spel spelen'};
 if(!THEORY.beide) THEORY.beide = (THEORY.stayman||[]).concat(THEORY.jacoby||[]);
 if(!THEORY_TITLE.beide) THEORY_TITLE.beide = 'Stayman en Jacoby';
 function showTheory(full, key){
@@ -11626,7 +11689,7 @@ $('convs').addEventListener('click', e=>{
                       : (state.conv==='biedmix' ? state.bidSet.slice() : BIDDABLE.includes(state.conv) ? [state.conv] : []);
   let os = set.includes('openen') ? effOpen() : [];                             // de aangevinkte openingen
   if(d.clear){ const sc = scope(); set = set.filter(k=>!sc.includes(k)); const off = [].concat(...sc.filter(k=>k.startsWith('o:')).map(oSet)); os = os.filter(x=>!off.includes(x)); }
-  else if(d.all){ set = set.filter(k=>k!=='spel'); scope().forEach(k=>{ if(!set.includes(k)) set.push(k); }); }
+  else if(d.all){ set = set.filter(k=>k!=='spel'); scope().forEach(k=>{ if(k!=='spel' && !set.includes(k)) set.push(k); }); }
   else if(d.allcard){ set = state.card.slice(); os = NAV_OPEN.slice(); }
   else if(d.only){ set = [d.only]; os = []; state.step = 'alles'; }
   else{
@@ -12687,6 +12750,40 @@ async function clubShare(){
 }
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-clubshare]')) clubShare(); });
 document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('[data-cardshare]')) shareCard(); });
+// antwoordknoppen (keuzes en getallen) staan direct onder de vraag, met een dunne lijn eronder
+const renderBox0 = renderBox;
+renderBox = function(){ renderBox0();
+  const b = $('box'), top = !!q && (q.box==='choice' || q.box==='num' || q.box==='suit'), pr = document.querySelector('main.table > .prompt'), ac = document.querySelector('main.table > .action');
+  if(top){ if(b.previousElementSibling!==pr) pr.after(b); b.classList.add('top'); }
+  else if(b.parentNode!==ac) ac.prepend(b);
+};
+// systeemkaart bewaren in je account en op een ander toestel weer ophalen
+async function cardCloud(mode){
+  const msg = t => { const m = $('cloudmsg'); if(m) m.textContent = t; };
+  if(!FB_CONFIG || SAMEN_TEST){ msg('De database is hier niet gekoppeld.'); return; }
+  msg('Even geduld…');
+  try{
+    await fbLoad(); const u = firebase.auth().currentUser;
+    if(!u || u.isAnonymous || !u.emailVerified){ msg('Log eerst in bij Samen met je partner.'); samenOpen(); return; }
+    const ref = firebase.database().ref('users/'+u.uid+'/kaart');
+    if(mode==='save'){
+      const o = {}; SHARE_KEYS.forEach(k=>{ if(state[k]!==undefined) o[k] = state[k]; });
+      await ref.set({j:JSON.stringify(o), n:(state.card||[]).length, t:firebase.database.ServerValue.TIMESTAMP});
+      gcEvent('kaart-opgeslagen'); msg('Opgeslagen: '+(state.card||[]).length+' afspraken.'); return;
+    }
+    const v = (await ref.once('value')).val(); let IN = null; try{ IN = v && v.j ? JSON.parse(v.j) : null; }catch(e){}
+    if(!IN || !Array.isArray(IN.card)){ msg('Er staat nog geen kaart in je account.'); return; }
+    const keys = IN.card.filter(k=>CARDKEYS.includes(k)), d = v.t ? new Date(v.t).toLocaleDateString('nl-NL', {day:'numeric', month:'long'}) : '';
+    $('shtitle').textContent = 'Opgeslagen kaart ophalen?';
+    $('shbody').innerHTML = '<p>In je account staat een systeemkaart van '+keys.length+' afspraken'+(d ? ', opgeslagen op '+d : '')+'.</p><p>Je huidige afspraken worden vervangen. Je scores en voortgang blijven bewaard.</p>';
+    msg('Opslaan of ophalen'); shareDlg(true);
+    $('shyes').onclick = () => { SHARE_KEYS.forEach(k=>{ if(IN[k]!==undefined && (typeof IN[k]!=='object' || IN[k]===null || k==='card' || k==='lt' || k==='lp')) state[k] = IN[k]; });
+      state.card = keys; state.preInit = 1; save(); gcEvent('kaart-opgehaald'); location.reload(); };
+    $('shno').onclick = () => shareDlg(false);
+  }catch(e){ msg('Dat lukte niet. Heb je internet?'); }
+}
+document.addEventListener('click', e=>{ const b = e.target.closest && e.target.closest('[data-cardcloud]'); if(b) cardCloud(b.dataset.cardcloud); });
+
 let SHARE_IN = null;
 try{ const m = /^#kaart=([A-Za-z0-9_-]+)$/.exec(location.hash); if(m){ const o = JSON.parse(b64d(m[1])); if(o && typeof o==='object' && Array.isArray(o.card)) SHARE_IN = o; } }catch(e){}
 function shareClear(){ try{ history.replaceState(null, '', location.pathname+location.search); }catch(e){} }
