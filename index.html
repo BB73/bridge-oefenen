@@ -1213,6 +1213,10 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 .accT.in{color:var(--felt)}
 .acprof{display:flex;align-items:center;gap:.8rem;margin:.2rem 0 .6rem} .acprof p{margin:0;min-width:0;overflow-wrap:anywhere}
 .accph.big{width:4.5rem;height:4.5rem;border-radius:8px;flex:none}
+.accrop{position:relative;width:min(16rem, 100%);aspect-ratio:1;margin:.3rem auto .5rem;overflow:hidden;border-radius:10px;border:2px solid var(--felt);background:#222;touch-action:none;cursor:grab;user-select:none}
+.accrop:active{cursor:grabbing}
+.accrop img{position:absolute;left:0;top:0;max-width:none;transform-origin:0 0;pointer-events:none;user-select:none}
+.aczoom{display:block;width:min(16rem, 100%);margin:0 auto .6rem;accent-color:var(--felt)}
 .acsil{flex:none;color:var(--muted)} .acsil svg{width:4.5rem;height:4.05rem}
 .dhead:has(#accT:not([hidden])) #settitle{max-width:calc(100% - 6rem)}
 .dhead:has(#wmT:not([hidden])) #settitle{max-width:calc(100% - 8.8rem)}
@@ -12267,8 +12271,22 @@ function accHTML(){
     return '<div class="acprof">'+(f ? '<span class="accph big" style="background-image:url('+f+')"></span>' : '<span class="acsil">'+ACC_SVG+'</span>')+'<p><b>'+esc(ACC.name || state.myName || '')+'</b>'+(mail ? '<br><small>'+esc(mail)+'</small>' : '')+'</p></div>'
       + (ACC.unver ? '<p class="leadnote">Je e-mailadres is nog niet bevestigd. <button class="navclear" data-acv="verify">Bevestigen</button></p>' : '') + msg
       + '<input type="file" id="acfoto" accept="image/*" hidden><button class="gview alt" id="acfotobtn"'+(ACC.busy ? ' disabled' : '')+'>'+(f ? 'Andere foto kiezen' : 'Foto kiezen')+'</button>'
+      + (f ? '<button class="gview alt" id="acfotodel"'+(ACC.busy ? ' disabled' : '')+'>Foto verwijderen</button>' : '')
+      + '<button class="gview alt" data-acv="edit">Naam, e-mail of wachtwoord wijzigen</button>'
+      + '<button class="gview alt" id="acout">Uitloggen</button>'
       + '<button class="gview" id="acdone">Klaar</button>'
-      + '<p class="acfoot">'+(f ? '<button class="navclear" id="acfotodel">Foto verwijderen</button> · ' : '')+'<button class="navclear" id="acout">Uitloggen</button> · <button class="navclear" data-acv="">Samen spelen</button></p>'; }
+      + '<p class="acfoot"><button class="navclear" data-acv="">Naar Samen spelen</button></p>'; }
+  if(v==='crop' && ACC.crop) return '<p class="hint">Schuif de foto en zoom in tot het vierkant klopt.</p><div class="accrop" id="accrop"><img id="accropimg" alt="" draggable="false" src="'+ACC.crop.url+'"></div>'
+      + '<input type="range" class="aczoom" id="aczoom" min="1" max="4" step="0.01" value="'+ACC.crop.z+'" aria-label="In- en uitzoomen">' + msg
+      + '<button class="gview" id="acuse"'+(ACC.busy ? ' disabled' : '')+'>Deze uitsnede gebruiken</button><button class="gview alt" data-acv="profile">Annuleren</button>';
+  if(v==='edit'){ const e = ACC.edit || 'naam', pwAcc = !!(ACC.user && (ACC.user.providerData || []).some(p=>p && p.providerId==='password')) || !ACC.user || !ACC.user.providerData;
+    return '<nav class="modes" id="acedtab">'+[['naam','Naam'],['mail','E-mail'],['pw','Wachtwoord']].map(([k,l])=>'<button data-aced="'+k+'" aria-pressed="'+(e===k)+'">'+l+'</button>').join('')+'</nav>'
+      + (e==='naam' ? '<label class="lbl" for="acnew">Je naam (anderen zien deze)</label><input class="acin" id="acnew" maxlength="20" autocomplete="nickname" value="'+esc(ACC.name || '')+'">'
+         : !pwAcc ? '<p class="hint">Je bent ingelogd met Google. Je e-mailadres en wachtwoord wijzig je bij Google.</p>'
+         : e==='mail' ? '<p class="hint">Nu: '+esc((ACC.user && ACC.user.email) || '')+'</p><label class="lbl" for="acnew">Nieuw e-mailadres</label><input class="acin" id="acnew" type="email" autocomplete="email"><label class="lbl" for="accur">Je wachtwoord</label><input class="acin" id="accur" type="password" autocomplete="current-password">'
+         : '<label class="lbl" for="accur">Huidig wachtwoord</label><input class="acin" id="accur" type="password" autocomplete="current-password"><label class="lbl" for="acnew">Nieuw wachtwoord (minstens 6 tekens)</label><input class="acin" id="acnew" type="password" autocomplete="new-password">')
+      + msg + ((e==='naam' || pwAcc) ? '<button class="gview" id="acsave"'+(ACC.busy ? ' disabled' : '')+'>'+(e==='naam' ? 'Naam opslaan' : e==='mail' ? 'E-mailadres wijzigen' : 'Wachtwoord wijzigen')+'</button>' : '')
+      + '<p class="acfoot"><button class="navclear" data-acv="profile">Terug</button></p>'; }
   if(v==='login' || v==='new'){
     const isNew = v==='new';
     return '<nav class="modes" id="acctab"><button data-acv="login" aria-pressed="'+!isNew+'">Inloggen</button><button data-acv="new" aria-pressed="'+isNew+'">Account maken</button></nav>'
@@ -12321,7 +12339,7 @@ function samenDraw(){
   if(!SM.code && !ACC.view && !ACC.skipVer && ACC.unver && ACC.user && !ACC.user.isAnonymous && !SM.joinCode) ACC.view = 'verify';
   if(!SM.code && !ACC.view && ACC.fromHome && accHas()) ACC.view = 'profile';
   if(!SM.code && !ACC.view && !accHas() && !state.acct && !SAMEN_TEST){ ACC.view = 'login'; if(!ACC.err && !ACC.msg && !ACC.fromHome) ACC.msg = SM.joinCode ? 'Je bent uitgenodigd om samen te spelen. Log eerst in, of maak een account.' : 'Om samen te spelen log je eerst in, of maak je een account.'; }
-  if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); $('samentitle').textContent = ['login','new','verify','profile'].includes(ACC.view) ? 'Je account' : 'Samen spelen'; return; }
+  if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); $('samentitle').textContent = ['login','new','verify','profile','edit','crop'].includes(ACC.view) ? 'Je account' : 'Samen spelen'; return; }
   if(!SM.code && accIn() && !SM.joinCode){
     const fo = accFriendsOnline(3), nreq = Object.keys(ACC.reqs).length;
     el.innerHTML = '<p>Hoi <b>'+esc(ACC.name)+'</b>. Open een tafel en nodig vrienden uit, of stuur de link.</p>'
@@ -12817,18 +12835,50 @@ function accHead(){ const b = $('accT'); if(!b) return; const inn = !!state.acct
   b.classList.toggle('in', inn);
   b.innerHTML = (f ? '<span class="accph" style="background-image:url('+f+')"></span>' : ACC_SVG)+(inn ? '<span class="accnm">'+esc(state.myName)+'</span>' : '<span class="accln"></span>');
   b.title = inn ? 'Ingelogd als '+state.myName : 'Niet ingelogd. Tik om in te loggen.'; b.setAttribute('aria-label', b.title); }
-function accClose(){ ACC.view = ''; ACC.fromHome = 0; ACC.err = ''; ACC.msg = ''; const d = $('samen'); if(d.open){ if(d.close) d.close(); else d.removeAttribute('open'); } openMenu(); }
-async function accFoto(file){
+function accClose(){ accCropEnd(); ACC.view = ''; ACC.fromHome = 0; ACC.err = ''; ACC.msg = ''; const d = $('samen'); if(d.open){ if(d.close) d.close(); else d.removeAttribute('open'); } openMenu(); }
+async function accFoto(d){                                       // d = verkleinde foto als data-URL, of null om hem te verwijderen
   await fbLoad(); const u = firebase.auth().currentUser; if(!u || u.isAnonymous) throw new Error('niet ingelogd');
-  let d = null;
-  if(file){ const url = URL.createObjectURL(file);
-    try{ const im = new Image(); await new Promise((ok, no)=>{ im.onload = ok; im.onerror = no; im.src = url; });
-      const S = 96, c = document.createElement('canvas'), m = Math.min(im.width, im.height); c.width = c.height = S;
-      c.getContext('2d').drawImage(im, (im.width-m)/2, (im.height-m)/2, m, m, 0, 0, S, S); d = c.toDataURL('image/jpeg', .72); }
-    finally{ URL.revokeObjectURL(url); } }
   await firebase.database().ref('users/'+u.uid+'/foto').set(d);
   if(d) state.myFoto = d; else delete state.myFoto; save(); accHead(); gcEvent(d ? 'foto-opgeslagen' : 'foto-verwijderd');
 }
+// zelf de uitsnede kiezen: de foto schuiven en zoomen binnen een vierkant
+function accCropEnd(){ if(ACC.crop){ try{ URL.revokeObjectURL(ACC.crop.url); }catch(e){} ACC.crop = null; } }
+function accCropBind(){
+  const box = $('accrop'), im = $('accropimg'), C = ACC.crop; if(!box || !im || !C) return;
+  const lay = () => { const B = box.clientWidth; if(!C.w || !B) return; const s = B/Math.min(C.w, C.h)*C.z, W = C.w*s, H = C.h*s;
+    if(C.x==null){ C.x = (B-W)/2; C.y = (B-H)/2; } C.x = Math.min(0, Math.max(B-W, C.x)); C.y = Math.min(0, Math.max(B-H, C.y)); C.B = B; C.s = s;
+    im.style.width = W+'px'; im.style.height = H+'px'; im.style.transform = 'translate('+C.x+'px,'+C.y+'px)'; };
+  const ready = () => { C.w = im.naturalWidth; C.h = im.naturalHeight; lay(); };
+  if(im.complete && im.naturalWidth) ready(); else im.onload = ready;
+  let drag = null;
+  box.onpointerdown = e => { drag = {px:e.clientX, py:e.clientY, x:C.x, y:C.y}; try{ box.setPointerCapture(e.pointerId); }catch(er){} };
+  box.onpointermove = e => { if(!drag) return; C.x = drag.x+e.clientX-drag.px; C.y = drag.y+e.clientY-drag.py; lay(); };
+  box.onpointerup = box.onpointercancel = () => { drag = null; };
+  $('aczoom').oninput = e => { const z = +e.target.value, B = C.B || box.clientWidth, cx = (B/2-C.x)/C.s, cy = (B/2-C.y)/C.s; C.z = z; const s = B/Math.min(C.w, C.h)*z; C.x = B/2-cx*s; C.y = B/2-cy*s; lay(); };
+}
+function accCropData(){ const C = ACC.crop, im = $('accropimg'), S = 96, c = document.createElement('canvas'); c.width = c.height = S;
+  const side = C.B/C.s; c.getContext('2d').drawImage(im, -C.x/C.s, -C.y/C.s, side, side, 0, 0, S, S); return c.toDataURL('image/jpeg', .75); }
+// naam, e-mailadres en wachtwoord wijzigen
+async function accReauth(pw){ const u = firebase.auth().currentUser; if(!pw) throw {message:'Vul je huidige wachtwoord in.'}; await u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email, pw)); return u; }
+async function accRename(name){
+  if(!accOk(name)) throw {message:'Kies een naam van 2 tot 20 letters of cijfers.'};
+  const {db} = await fbLoad(), u = firebase.auth().currentUser, nw = name.trim(), key = accKey(nw), old = accKey(ACC.name || '');
+  if(nw===ACC.name) return 'Dat is al je naam.';
+  if(key!==old){
+    if((await db.ref('names/'+key).once('value')).exists()) throw {message:'De naam '+nw+' is al bezet. Kies een andere.'};
+    const t = await db.ref('names/'+key).transaction(x=>x===null ? u.uid : undefined);
+    if(!t.committed && t.snapshot.val()!==u.uid) throw {message:'De naam '+nw+' is net bezet. Kies een andere.'};
+  }
+  await db.ref('users/'+u.uid+'/name').set(nw);
+  if(key!==old && old){ try{ await db.ref('names/'+old).remove(); }catch(e){} }
+  try{ await u.updateProfile({displayName:nw}); }catch(e){}
+  ACC.name = nw; state.myName = nw; save(); accHead(); gcEvent('naam-gewijzigd');
+  try{ if(!ACC.unver) await db.ref('presence/'+u.uid).set({name:nw, t:firebase.database.ServerValue.TIMESTAMP}); }catch(e){}
+  return 'Je naam is nu '+nw+'.';
+}
+async function accNewPw(cur, nw){ if(!nw || nw.length<6) throw {message:'Kies een nieuw wachtwoord van minstens 6 tekens.'}; const u = await accReauth(cur); await u.updatePassword(nw); return 'Je wachtwoord is gewijzigd.'; }
+async function accNewMail(cur, mail){ if(!/^\S+@\S+\.\S+$/.test(mail)) throw {message:'Vul een geldig e-mailadres in.'}; const u = await accReauth(cur); firebase.auth().languageCode = 'nl'; await u.verifyBeforeUpdateEmail(mail);
+  return 'We hebben een mail gestuurd naar '+mail+'. Tik op de link in die mail; daarna log je in met het nieuwe adres.'; }
 const accStart0 = accStart, accLogout0 = accLogout, accBind0 = accBind;
 accStart = async function(){
   try{ await accStart0();
@@ -12841,7 +12891,13 @@ accBind = function(el){ accBind0(el);
     if(!accHas() && !state.acct && !SAMEN_TEST){ accClose(); return; } ACC.view = ''; samenDraw(); });
   const busy = async fn => { ACC.err = ''; ACC.msg = ''; ACC.busy = true; samenDraw(); try{ ACC.msg = await fn(); }catch(e){ ACC.err = 'Dat lukte niet. Probeer het nog eens.'; } ACC.busy = false; samenDraw(); };
   if($('acfotobtn')) $('acfotobtn').onclick = () => $('acfoto').click();
-  if($('acfoto')) $('acfoto').onchange = e => { const f = e.target.files && e.target.files[0]; if(f) busy(async()=>{ await accFoto(f); return 'Je foto is opgeslagen.'; }); };
+  const go2 = async (fn, after) => { ACC.err = ''; ACC.msg = ''; ACC.busy = true; samenDraw(); try{ ACC.msg = (await fn()) || ''; if(after) ACC.view = after; }catch(e){ ACC.err = e && e.message && !e.code ? e.message : accErr(e); } ACC.busy = false; samenDraw(); };
+  if($('acfoto')) $('acfoto').onchange = e => { const f = e.target.files && e.target.files[0]; if(!f) return; accCropEnd(); ACC.crop = {url:URL.createObjectURL(f), z:1, x:null, y:null}; ACC.err = ''; ACC.msg = ''; ACC.view = 'crop'; samenDraw(); };
+  if(ACC.view==='crop') accCropBind(); else if(ACC.crop && !ACC.busy) accCropEnd();
+  if($('acuse')) $('acuse').onclick = () => { let d = null; try{ d = accCropData(); }catch(e){} if(!accFotoOk(d)){ ACC.err = 'Deze foto kan de app niet lezen. Kies een andere.'; samenDraw(); return; } go2(async()=>{ await accFoto(d); return 'Je foto is opgeslagen.'; }, 'profile'); };
+  el.querySelectorAll('[data-aced]').forEach(b=>b.onclick = () => { ACC.edit = b.dataset.aced; ACC.err = ''; ACC.msg = ''; samenDraw(); });
+  if($('acsave')) $('acsave').onclick = () => { const e = ACC.edit || 'naam', nw = ($('acnew') || {}).value || '', cur = ($('accur') || {}).value || '';
+    go2(()=>e==='naam' ? accRename(nw) : e==='mail' ? accNewMail(cur, nw.trim()) : accNewPw(cur, nw), e==='mail' ? '' : 'profile'); };
   if($('acfotodel')) $('acfotodel').onclick = () => busy(async()=>{ await accFoto(null); return 'Je foto is verwijderd.'; });
   if($('acdone')) $('acdone').onclick = accClose;
 };
