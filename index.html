@@ -1205,6 +1205,9 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 @media (max-height:700px){ .trnote{display:none} } .trtabs.sub button{font-size:.8rem;padding:.25rem .55rem}
 table.trk td:nth-child(n+2), table.trk th:nth-child(n+2){text-align:right}
 table.trk tr[data-trsel]{cursor:pointer} table.trk tr.sel td{background:var(--panel)}
+.ibtn.tri{width:1.25rem;height:1.25rem;font-size:.75rem;line-height:1;padding:0;margin-left:.3rem;vertical-align:middle}
+.ibtn.tri[aria-pressed="true"]{background:var(--felt);color:#fff}
+.trinfo{margin:.4rem 0 .3rem} .trinfo p{margin:0 0 .3rem} .trinfo p:last-child{margin:0}
 .histc .hline.thin{stroke-width:1;opacity:.45} .histc{overflow:visible}
 table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
@@ -13010,6 +13013,19 @@ async function trPull(){ try{ const u = firebase.auth().currentUser; if(!u || u.
 function trAuto(){ const c = clubData(); if(!c || !state.clubMe || CLUB_OVR || TR.busy) return; const key = trKey(c, state.clubMe); if(TR.autoKey===key || trAll()[key]) return; TR.autoKey = key;
   setTimeout(()=>{ if(clubData()===c && state.clubMe && !trAll()[trKey(c, state.clubMe)]) trRun([{c, name:''}], true); }, 2500); }
 { const clubDraw0 = clubDraw; clubDraw = function(){ clubDraw0(); try{ trAuto(); }catch(e){} }; }
+const TRI = {
+  u:['Uitkomst', 'Hoeveel slagen jullie uitkomst kost tegenover de beste uitkomst met open kaarten, per spel waarop jullie uitkwamen.', 'Hoe dichter bij 0, hoe beter; 0 is het best haalbare. −0,29 betekent dat je gemiddeld ruim een kwart slag per uitkomst weggeeft.', 'Een uitkomst die met open kaarten een slag kost, is niet altijd fout. Kijk daarom vooral naar het verschil met de club.'],
+  a:['Afspel', 'De slagen die jullie als leider maken, min het maximum dat er met open kaarten in zat na de uitkomst die je kreeg.', 'Hoger is beter. Onder 0 laat je slagen liggen; boven 0 kreeg je slagen cadeau van de tegenpartij.', 'Niemand speelt met open kaarten, dus een kleine min is normaal.'],
+  t:['Tegenspel', 'Wat de leider tegen jullie minder maakt dan zijn maximum met open kaarten, gerekend na jullie uitkomst.', 'Hoger is beter. +0,23 betekent dat de leider tegen jullie gemiddeld bijna een kwart slag minder haalt dan erin zat.', 'Fouten van de leider tellen in jullie voordeel mee; het is dus geen zuiver cijfer voor jullie tegenspel.'],
+  c:['Contract', 'Het deel van de spellen waarop jullie speelden en het contract met open kaarten haalbaar was, zonder dat er een manche of slem gemist werd.', 'Hoger is beter.', 'Grove maat: alleen de gespeelde speelsoort telt, en een bewuste opoffering telt als te hoog geboden.'],
+  s:['Score', 'Jullie gemiddelde percentage matchpunten per spel.', 'Hoger is beter; 50% is het gemiddelde van jullie lijn.', 'Butler-avonden tellen hier niet mee, want daar zijn geen matchpunten.'],
+  k:['Jullie, club en plaats', 'Jullie: het gemiddelde over alle ingelezen avonden. Club: het gemiddelde van alle paren in jullie lijn, op dezelfde spellen.', 'Groen is beter dan de club, rood slechter. Bij alle cijfers is hoger beter.', 'Plaats: jullie gemiddelde plaats per avond, tussen de paren met minstens drie spellen voor dat cijfer.'],
+  ds:['Score per soort spel', 'Jullie gemiddelde percentage op de spellen in die groep, bijvoorbeeld alle spellen waarop jullie leider waren.', 'Hoger is beter; 50% is gemiddeld.', 'Let op het aantal spellen: bij minder dan een stuk of twintig zegt het gemiddelde nog weinig.'],
+  da:['Afspel per soort contract', 'Slagen als leider tegenover het maximum met open kaarten na de gekregen uitkomst, uitgesplitst naar speelsoort en niveau.', 'Hoger is beter; onder 0 laat je slagen liggen.', 'Zo zie je of je bijvoorbeeld in SA meer laat liggen dan in een troefcontract.'],
+  du:['Uitkomst en contract', 'Uitkomst: slagen per uitkomst tegenover de beste uitkomst, apart tegen SA en tegen troef. Contract: hoe vaak er een manche of slem in zat die jullie niet boden, en hoe vaak het contract met open kaarten niet haalbaar was.', 'Bij de uitkomst is dichter bij 0 beter; bij het contract is minder keer beter.', 'Te hoog geboden is niet altijd fout: een opoffering of een contract dat door een fout toch gemaakt wordt, telt hier ook mee.']
+};
+const trIbtn = k => '<button class="ibtn tri" data-tri="'+k+'" aria-label="Uitleg: '+TRI[k][0]+'" aria-pressed="'+(TR.info===k)+'">i</button>';
+const trInfo = () => { const t = TRI[TR.info]; return t ? '<div class="cnote trinfo"><p><b>'+t[0]+'</b> <button class="navclear" data-tri="">Sluiten</button></p><p>'+t[1]+'</p><p><b>Lezen:</b> '+t[2]+'</p><p><b>Let op:</b> '+t[3]+'</p></div>' : ''; };
 const trFmt = (m, v) => v==null || isNaN(v) ? '–' : (m==='c' || m==='s') ? Math.round(v)+'%' : (v>0.004 ? '+' : v<-0.004 ? '−' : '')+Math.abs(v).toFixed(2).replace('.', ',');
 function trTot(L, m){ let n = 0, s = 0, cs = 0, cn = 0, rk = 0, np = 0, rn = 0;
   L.forEach(x=>{ const a = x.k && x.k[m]; if(!a) return; n += a[0]; s += a[1]; if(x.cl && x.cl[m]!=null){ cs += x.cl[m]*a[0]; cn += a[0]; } if(x.rk && x.rk[m]){ rk += x.rk[m]; np += x.np[m]; rn++; } });
@@ -13044,19 +13060,21 @@ function trKernHTML(L){
   const T = Object.fromEntries(TRM.map(([m])=>[m, trTot(L, m)])), nb = L.reduce((s,x)=>s+(x.n||0), 0);
   const rel = TRM.map(([m, l])=>({m, l, f:T[m].rk && T[m].np>1 ? (T[m].rk-1)/(T[m].np-1) : null})).filter(x=>x.f!=null).sort((a,b)=>a.f-b.f);
   return '<p class="clubsub"><b>'+trEsc(state.clubMe)+'</b> · '+L.length+' avond'+(L.length===1 ? '' : 'en')+', '+nb+' spellen</p>'
-    + '<table class="clubsum trk"><tr><th>Cijfer</th><th>Jullie</th><th>Club</th><th>Plaats</th></tr>'
-    + TRM.map(([m, l])=>{ const t = T[m]; return '<tr data-trsel="'+m+'"'+(TR.sel===m ? ' class="sel"' : '')+'><td>'+l+'</td><td class="'+(t.v!=null && t.cl!=null ? (t.v>=t.cl ? 'gd' : 'bd2') : '')+'"><b>'+trFmt(m, t.v)+'</b></td><td>'+trFmt(m, t.cl)+'</td><td>'+(t.rk ? t.rk+' van '+t.np : '–')+'</td></tr>'; }).join('')+'</table>'
-    + trChart(L, TR.sel)
+    + (TRI[TR.info] && matchMedia('(max-height:700px)').matches ? '' : '<table class="clubsum trk"><tr><th>Cijfer'+trIbtn('k')+'</th><th>Jullie</th><th>Club</th><th>Plaats</th></tr>'
+    + TRM.map(([m, l])=>{ const t = T[m]; return '<tr data-trsel="'+m+'"'+(TR.sel===m ? ' class="sel"' : '')+'><td>'+l+trIbtn(m)+'</td><td class="'+(t.v!=null && t.cl!=null ? (t.v>=t.cl ? 'gd' : 'bd2') : '')+'"><b>'+trFmt(m, t.v)+'</b></td><td>'+trFmt(m, t.cl)+'</td><td>'+(t.rk ? t.rk+' van '+t.np : '–')+'</td></tr>'; }).join('')+'</table>')
+    + (TRI[TR.info] && !/^d/.test(TR.info) ? trInfo() : trChart(L, TR.sel)
     + (rel.length>1 ? '<p class="histz">Sterkste punt: <b>'+rel[0].l.toLowerCase()+'</b>. Meeste winst te halen: <b>'+rel[rel.length-1].l.toLowerCase()+'</b>.</p>' : '')
-    + '<p class="rvnote trnote">Uitkomst, afspel en tegenspel: slagen per spel tegenover het maximum met open kaarten; hoger is beter. Contract: deel van de spellen op het goede niveau. Tik op een regel voor het verloop.</p>';
+    + '<p class="rvnote trnote">Tik op een regel voor het verloop, of op de i voor uitleg. Bij alle cijfers is hoger beter.</p>');
 }
 function trDetHTML(L){
   const G = {s:[['Als leider','sL'],['Als tegenspeler','sT'],['In SA','sN'],['In een hoge kleur','sM'],['In een lage kleur','sm'],['Deelscore','sD'],['Manche','sG'],['Slem','sS'],['Kwetsbaar','sK'],['Niet kwetsbaar','sO'],['Eerste helft','sH1'],['Tweede helft','sH2']],
              a:[['In SA','aN'],['In een hoge kleur','aM'],['In een lage kleur','am'],['Deelscore','aD'],['Manche','aG'],['Slem','aS']], u:[['Tegen SA','uN'],['Tegen troef','uT']]};
   const d = G[TR.det] ? TR.det : 's', sum = k => { let n = 0, s = 0; L.forEach(x=>{ const a = x.x && x.x[k]; if(a){ n += a[0]; s += a[1]; } }); return {n, v:n ? s/n : null}; };
   const hi = L.reduce((s,x)=>s+(x.hi||0), 0), mi = L.reduce((s,x)=>s+(x.mi||0), 0);
-  return '<nav class="modes trtabs sub">'+[['s','Score'],['a','Afspel'],['u','Uitkomst en contract']].map(([k,l])=>'<button data-trdet="'+k+'" aria-pressed="'+(d===k)+'">'+l+'</button>').join('')+'</nav>'
-    + '<table class="clubsum trk"><tr><th>'+(d==='s' ? 'Score' : d==='a' ? 'Afspel' : 'Uitkomst')+'</th><th>Spellen</th><th>Gemiddeld</th></tr>'
+  const nav2 = '<nav class="modes trtabs sub">'+[['s','Score'],['a','Afspel'],['u','Uitkomst en contract']].map(([k,l])=>'<button data-trdet="'+k+'" aria-pressed="'+(d===k)+'">'+l+'</button>').join('')+'</nav>';
+  if(TR.info==='d'+d) return nav2+trInfo();
+  return nav2
+    + '<table class="clubsum trk"><tr><th>'+(d==='s' ? 'Score' : d==='a' ? 'Afspel' : 'Uitkomst')+trIbtn('d'+d)+'</th><th>Spellen</th><th>Gemiddeld</th></tr>'
     + G[d].map(([l, k])=>{ const t = sum(k); return '<tr><td>'+l+'</td><td>'+(t.n || '–')+'</td><td><b>'+trFmt(d, t.v)+'</b></td></tr>'; }).join('')
     + (d==='u' ? '<tr><th class="cap" colspan="3">Contract</th></tr><tr><td>Manche of slem gemist</td><td colspan="2"><b>'+mi+'</b> keer</td></tr><tr><td>Te hoog geboden</td><td colspan="2"><b>'+hi+'</b> keer</td></tr>' : '')+'</table>'
     + '<p class="rvnote trnote">'+(d==='s' ? 'Jullie gemiddelde percentage per soort spel.' : d==='a' ? 'Slagen per spel tegenover het maximum na de uitkomst die jullie kregen.' : 'Uitkomst: slagen per uitkomst tegenover de beste uitkomst. Contract: beoordeeld in de gespeelde speelsoort, met open kaarten.')+'</p>';
@@ -13081,10 +13099,11 @@ function trHTML(){
   if(!L.length) return tabs+'<p>Nog geen avonden in de trendanalyse. Lees bij <b>Inlezen</b> je frequentiestaten in.</p>'+(TR.busy ? '<p class="ddbusy" id="trprog">'+trEsc(TR.prog)+'</p>' : '');
   return tabs+(TR.tab==='det' ? trDetHTML(L) : trKernHTML(L));
 }
-document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-trtab],[data-trsel],[data-trdet],[data-trpick],[data-trstop],[data-trclear]'); if(!x) return;
-  if(x.dataset.trtab){ TR.tab = x.dataset.trtab; clubDraw(); return; }
-  if(x.dataset.trsel){ TR.sel = x.dataset.trsel; clubDraw(); return; }
-  if(x.dataset.trdet){ TR.det = x.dataset.trdet; clubDraw(); return; }
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-tri],[data-trtab],[data-trsel],[data-trdet],[data-trpick],[data-trstop],[data-trclear]'); if(!x) return;
+  if(x.dataset.tri!==undefined){ TR.info = TR.info===x.dataset.tri ? '' : x.dataset.tri; clubDraw(); return; }
+  if(x.dataset.trtab){ TR.tab = x.dataset.trtab; TR.info = ''; clubDraw(); return; }
+  if(x.dataset.trsel){ TR.sel = x.dataset.trsel; TR.info = ''; clubDraw(); return; }
+  if(x.dataset.trdet){ TR.det = x.dataset.trdet; TR.info = ''; clubDraw(); return; }
   if(x.dataset.trpick){ $('clubfiles').click(); return; }
   if(x.dataset.trstop){ TR.stop = true; return; }
   if(x.dataset.trclear){ askConfirm('Trend wissen?', '<p>Alle getelde avonden van '+trEsc(state.clubMe||'jullie paar')+' verdwijnen uit de trendanalyse. De clubavond die nu openstaat blijft.</p>', 'Wissen', ()=>{ const H = trAll(); Object.keys(H).forEach(k=>{ if(H[k] && H[k].pair===state.clubMe) delete H[k]; }); TR.sum = null; TR.autoKey = clubData() ? trKey(clubData(), state.clubMe) : ''; save(); trPush(); clubDraw(); }); } });
