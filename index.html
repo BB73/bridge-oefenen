@@ -1200,6 +1200,23 @@ button.cbd{cursor:pointer}
 main.table.ns #dummyhand:has(.hrow){display:block}
 .ghand:has(.hrow){width:100%!important;max-width:100%!important}
 /* ===== einde maten ===== */
+/* account op het hoofdscherm */
+.accT{position:absolute;top:.28rem;right:3.2rem;width:2.7rem;height:2.6rem;padding:0;border:0;background:transparent;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.08rem;font:inherit;border-radius:8px}
+.accT[hidden]{display:none}
+.dhead:has(#accT) .tiplbl{display:none}
+.accT:focus-visible{outline:2px solid var(--felt);outline-offset:1px}
+#wmT:not([hidden]) ~ .accT{right:6rem}
+.accT svg, .acsil svg{display:block;width:1.95rem;height:1.75rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.accph{display:block;width:1.75rem;height:1.75rem;border:2px solid currentColor;border-radius:3px;background:center/cover no-repeat;box-sizing:border-box}
+.accln{display:block;width:1.45rem;height:2px;background:currentColor;border-radius:1px;margin-top:.24rem}
+.accnm{display:block;max-width:3.6rem;font-size:.62rem;font-weight:800;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.accT.in{color:var(--felt)}
+.acprof{display:flex;align-items:center;gap:.8rem;margin:.2rem 0 .6rem} .acprof p{margin:0;min-width:0;overflow-wrap:anywhere}
+.accph.big{width:4.5rem;height:4.5rem;border-radius:8px;flex:none}
+.acsil{flex:none;color:var(--muted)} .acsil svg{width:4.5rem;height:4.05rem}
+.dhead:has(#accT:not([hidden])) #settitle{max-width:calc(100% - 6rem)}
+.dhead:has(#wmT:not([hidden])) #settitle{max-width:calc(100% - 8.8rem)}
+
 /* antwoorden direct onder de vraag */
 .box.top{width:100%;grid-column:1 / -1;margin:.05rem 0 .5rem;padding-bottom:.55rem;border-bottom:1px solid var(--line);flex:none}
 #dummy{width:100%} #dummyhand:has(.hrow){width:100%!important}
@@ -1289,6 +1306,7 @@ main.table.ns #dummyhand:has(.hrow){display:block}
     <div class="dtitle"><h2 id="settitle">Wat wil je oefenen?</h2><span class="navrb" id="setnav"></span></div>
     <button class="tipT" id="tipT" data-tip="1" aria-label="Tips: geef een tip of fout door" title="Tips"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="tdisc" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#ECECE9"/><stop offset="1" stop-color="#CFCFCB"/></radialGradient></defs><circle cx="24" cy="24" r="22.5" fill="url(#tdisc)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M15.2 15.6H32.8M24 15.6V34.2" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round"/></svg><span class="tiplbl" aria-hidden="true">Tips</span></button>
     <button class="tipT wmT" id="wmT" hidden aria-label="Webmaster" title="Webmaster"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="url(#tdisc)" stroke="rgba(0,0,0,.14)" stroke-width="1"/><path d="M14.5 34V15.5L24 28L33.5 15.5V34" fill="none" stroke="#151515" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="accT" id="accT" aria-label="Je account"></button>
     <nav class="crumbs" id="crumbs" aria-label="Waar je bent"></nav>
   </div>
   <div class="dbody" id="dbody">
@@ -8143,7 +8161,7 @@ function renderModes(){
       : '<p class="hint">Hier oefen je losse onderdelen: alleen de biedingen en spelsituaties die bij de afspraken op je systeemkaart horen.</p>'
         + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
         + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
-        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Hier maak je ook een account of log je in.</small></button>' : '')+'</div>';
+        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Eerst inloggen of een account maken.</small></button>' : '')+'</div>';
   }else if(T==='test' && !mode){
     const TS = state.test;
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
@@ -8254,7 +8272,7 @@ function renderModes(){
   }
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
-  $('tipT').hidden = !!T;
+  $('tipT').hidden = !!T; $('accT').hidden = !!T;
   $('wmT').hidden = true; try{ wmCheck(); }catch(e){}
   $('settitle').textContent = T==='test' ? 'Challenge jezelf' : learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
   $('homeextra').hidden = !!T;
@@ -12245,6 +12263,12 @@ function accHTML(){
       + '<p>Daarna kun je vrienden toevoegen en zie je wie er online is. Tafels openen en spelen kan nu al.</p>'
       + msg + '<button class="gview" id="acver"'+(ACC.busy ? ' disabled' : '')+'>Ik heb bevestigd</button><button class="gview alt" id="acresend">Mail opnieuw sturen</button>'
       + '<p class="acfoot">Ingelogd als <b>'+esc(ACC.name)+'</b> · <button class="navclear" id="acout">Uitloggen</button> · <button class="navclear" data-acv="">Terug</button></p>';
+  if(v==='profile'){ const f = accFotoOk(state.myFoto) ? state.myFoto : '', mail = (ACC.user && ACC.user.email) || '';
+    return '<div class="acprof">'+(f ? '<span class="accph big" style="background-image:url('+f+')"></span>' : '<span class="acsil">'+ACC_SVG+'</span>')+'<p><b>'+esc(ACC.name || state.myName || '')+'</b>'+(mail ? '<br><small>'+esc(mail)+'</small>' : '')+'</p></div>'
+      + (ACC.unver ? '<p class="leadnote">Je e-mailadres is nog niet bevestigd. <button class="navclear" data-acv="verify">Bevestigen</button></p>' : '') + msg
+      + '<input type="file" id="acfoto" accept="image/*" hidden><button class="gview alt" id="acfotobtn"'+(ACC.busy ? ' disabled' : '')+'>'+(f ? 'Andere foto kiezen' : 'Foto kiezen')+'</button>'
+      + '<button class="gview" id="acdone">Klaar</button>'
+      + '<p class="acfoot">'+(f ? '<button class="navclear" id="acfotodel">Foto verwijderen</button> · ' : '')+'<button class="navclear" id="acout">Uitloggen</button> · <button class="navclear" data-acv="">Samen spelen</button></p>'; }
   if(v==='login' || v==='new'){
     const isNew = v==='new';
     return '<nav class="modes" id="acctab"><button data-acv="login" aria-pressed="'+!isNew+'">Inloggen</button><button data-acv="new" aria-pressed="'+isNew+'">Account maken</button></nav>'
@@ -12295,7 +12319,9 @@ function samenDraw(){
   const el = $('samenbody'), ready = FB_CONFIG || SAMEN_TEST;
   if(!ready){ el.innerHTML = '<p>Samen spelen werkt zodra de database is gekoppeld. Dat komt binnenkort.</p>'; return; }
   if(!SM.code && !ACC.view && !ACC.skipVer && ACC.unver && ACC.user && !ACC.user.isAnonymous && !SM.joinCode) ACC.view = 'verify';
-  if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); return; }
+  if(!SM.code && !ACC.view && ACC.fromHome && accHas()) ACC.view = 'profile';
+  if(!SM.code && !ACC.view && !accHas() && !state.acct && !SAMEN_TEST){ ACC.view = 'login'; if(!ACC.err && !ACC.msg && !ACC.fromHome) ACC.msg = SM.joinCode ? 'Je bent uitgenodigd om samen te spelen. Log eerst in, of maak een account.' : 'Om samen te spelen log je eerst in, of maak je een account.'; }
+  if(!SM.code && ACC.view){ el.innerHTML = accHTML(); accBind(el); $('samentitle').textContent = ['login','new','verify','profile'].includes(ACC.view) ? 'Je account' : 'Samen spelen'; return; }
   if(!SM.code && accIn() && !SM.joinCode){
     const fo = accFriendsOnline(3), nreq = Object.keys(ACC.reqs).length;
     el.innerHTML = '<p>Hoi <b>'+esc(ACC.name)+'</b>. Open een tafel en nodig vrienden uit, of stuur de link.</p>'
@@ -12783,6 +12809,45 @@ async function cardCloud(mode){
   }catch(e){ msg('Dat lukte niet. Heb je internet?'); }
 }
 document.addEventListener('click', e=>{ const b = e.target.closest && e.target.closest('[data-cardcloud]'); if(b) cardCloud(b.dataset.cardcloud); });
+// ---------- Account op het hoofdscherm: silhouet = anoniem, naam (en foto) = ingelogd ----------
+const ACC_SVG = '<svg viewBox="0 0 38 34" aria-hidden="true"><rect x="3" y="2" width="32" height="30" rx="2"/><circle cx="19" cy="13" r="5.5"/><path d="M8 31.5c0-7 4.5-10.5 11-10.5s11 3.5 11 10.5"/></svg>';
+const accHas = () => !!(ACC.user && !ACC.user.isAnonymous && ACC.name);
+const accFotoOk = f => typeof f==='string' && /^data:image\/(jpeg|png);base64,[A-Za-z0-9+\/=]+$/.test(f) && f.length<60000;
+function accHead(){ const b = $('accT'); if(!b) return; const inn = !!state.acct && !!state.myName, f = inn && accFotoOk(state.myFoto) ? state.myFoto : '';
+  b.classList.toggle('in', inn);
+  b.innerHTML = (f ? '<span class="accph" style="background-image:url('+f+')"></span>' : ACC_SVG)+(inn ? '<span class="accnm">'+esc(state.myName)+'</span>' : '<span class="accln"></span>');
+  b.title = inn ? 'Ingelogd als '+state.myName : 'Niet ingelogd. Tik om in te loggen.'; b.setAttribute('aria-label', b.title); }
+function accClose(){ ACC.view = ''; ACC.fromHome = 0; ACC.err = ''; ACC.msg = ''; const d = $('samen'); if(d.open){ if(d.close) d.close(); else d.removeAttribute('open'); } openMenu(); }
+async function accFoto(file){
+  await fbLoad(); const u = firebase.auth().currentUser; if(!u || u.isAnonymous) throw new Error('niet ingelogd');
+  let d = null;
+  if(file){ const url = URL.createObjectURL(file);
+    try{ const im = new Image(); await new Promise((ok, no)=>{ im.onload = ok; im.onerror = no; im.src = url; });
+      const S = 96, c = document.createElement('canvas'), m = Math.min(im.width, im.height); c.width = c.height = S;
+      c.getContext('2d').drawImage(im, (im.width-m)/2, (im.height-m)/2, m, m, 0, 0, S, S); d = c.toDataURL('image/jpeg', .72); }
+    finally{ URL.revokeObjectURL(url); } }
+  await firebase.database().ref('users/'+u.uid+'/foto').set(d);
+  if(d) state.myFoto = d; else delete state.myFoto; save(); accHead(); gcEvent(d ? 'foto-opgeslagen' : 'foto-verwijderd');
+}
+const accStart0 = accStart, accLogout0 = accLogout, accBind0 = accBind;
+accStart = async function(){
+  try{ await accStart0();
+    if(accHas()){ try{ const f = (await firebase.database().ref('users/'+ACC.user.uid+'/foto').once('value')).val(); if(accFotoOk(f)) state.myFoto = f; else delete state.myFoto; save(); }catch(e){} } }
+  finally{ accHead(); accDraw(); }
+};
+accLogout = async function(){ try{ await accLogout0(); } finally{ delete state.myFoto; save(); accHead(); } };
+accBind = function(el){ accBind0(el);
+  el.querySelectorAll('[data-acv=""]').forEach(b=>b.onclick = () => { if(ACC.view==='verify') ACC.skipVer = 1; ACC.fromHome = 0; ACC.err = ''; ACC.msg = '';
+    if(!accHas() && !state.acct && !SAMEN_TEST){ accClose(); return; } ACC.view = ''; samenDraw(); });
+  const busy = async fn => { ACC.err = ''; ACC.msg = ''; ACC.busy = true; samenDraw(); try{ ACC.msg = await fn(); }catch(e){ ACC.err = 'Dat lukte niet. Probeer het nog eens.'; } ACC.busy = false; samenDraw(); };
+  if($('acfotobtn')) $('acfotobtn').onclick = () => $('acfoto').click();
+  if($('acfoto')) $('acfoto').onchange = e => { const f = e.target.files && e.target.files[0]; if(f) busy(async()=>{ await accFoto(f); return 'Je foto is opgeslagen.'; }); };
+  if($('acfotodel')) $('acfotodel').onclick = () => busy(async()=>{ await accFoto(null); return 'Je foto is verwijderd.'; });
+  if($('acdone')) $('acdone').onclick = accClose;
+};
+$('accT').addEventListener('click', ()=>{ ACC.fromHome = 1; ACC.err = ''; ACC.msg = ''; ACC.view = (state.acct || accHas()) ? 'profile' : 'login'; samenOpen(); if(state.acct && !ACC.user && FB_CONFIG && !SAMEN_TEST) accStart().catch(()=>{}); });
+accHead();
+
 
 let SHARE_IN = null;
 try{ const m = /^#kaart=([A-Za-z0-9_-]+)$/.exec(location.hash); if(m){ const o = JSON.parse(b64d(m[1])); if(o && typeof o==='object' && Array.isArray(o.card)) SHARE_IN = o; } }catch(e){}
