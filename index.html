@@ -155,7 +155,9 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .clubgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:.3rem;margin:.4rem 0}
 @media (max-height:760px){ #theory .drophint.small{padding:.25rem;font-size:.78rem;margin-top:.15rem} #theory .clubh + .clubwho{margin-top:0} .clubgrid{gap:.25rem;margin:.3rem 0} .clubgrid .clubb{padding:.15rem .15rem;gap:0} .clubgrid .clubb b{font-size:.92rem} .clubh{font-size:.92rem;margin-bottom:.1rem;line-height:1.22} #theory .clubgrid + .rvnote{margin:.2rem 0} .clubwho select{padding:.1rem .3rem} }
 .clubb{display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.35rem .2rem;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:inherit;font:inherit;cursor:pointer}
-.clubb b{font-size:1rem} .clubb small{font-size:.72rem;line-height:1.15} .clubb .cbt{display:flex;width:100%;justify-content:space-between;align-items:baseline;padding:0 .2rem;box-sizing:border-box} .clubb .cbt small{font-weight:700}
+.clubb b{font-size:1rem} .clubb small{font-size:.9rem;line-height:1.15} .clubb .cbt{display:flex;width:100%;justify-content:space-between;align-items:baseline;padding:0 .2rem;box-sizing:border-box} .clubb .cbt small{font-weight:700}
+@media (max-height:760px){ .clubgrid{gap:.2rem!important} .clubgrid .clubb{padding:.06rem .15rem!important} .clubgrid .clubb small{line-height:1.05} .clubgrid .clubb .cbt small{font-size:.85rem} }
+@media (max-height:640px){ .clubgrid .clubb small, .clubgrid .clubb .cbt small{font-size:.8rem} .clubgrid .clubb b{font-size:.85rem} }
 .clubwho{margin:.2rem 0} .clubb .rust{color:var(--muted);font-style:italic} .pickhint{color:var(--muted);font-size:.8rem} .rvnote .navclear{padding:0;font-size:inherit}
 .clubb.goed{border-color:var(--felt);background:#DDF0E5} .clubb.slecht{border-color:#C4202B;background:#FBE3E3}
 @media (prefers-color-scheme: dark){ .clubb.goed{background:#1E3A2B} .clubb.slecht{background:#4A1D20} }
@@ -1255,6 +1257,19 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 .smsq .tc.on > b > svg.gl, .smsq .tc.on > i > svg.gl, .smsq .tcd .pc svg.gl, .hrow .rc .rci svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
 .smsq .tc.on .glt, .smsq .tcd .pc .glt, .hrow .rc .rci .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 svg.gl text{font-family:inherit}
+/* v315: profielfoto rond en even groot als het T-rondje */
+.accT:has(.accph){height:auto}
+.accT .accph{width:2.34rem;height:2.34rem;border-radius:50%;border:0;margin-top:.08rem;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+/* v315: dummy groter als er ruimte is (minder kaarten) */
+:root{--dstep:2.3rem}
+.hrow:not(.vl):not(.vr){--dh:clamp(2.9rem, calc(var(--ds) * 1.65), 3.7rem)}
+@media (max-height:700px){ :root{--dstep:1.9rem} .hrow:not(.vl):not(.vr){--dh:clamp(2.9rem, calc(var(--ds) * 1.65), 3.2rem)} }
+/* v315: kaarten die je aantikt zijn groter, en het aantikvlak loopt iets door */
+.hand .ranks.tap .card, #game .ghand .card:not(.rc), .smrows .mk{position:relative;height:var(--tk)!important;min-width:var(--tkw)!important;font-size:var(--tkf)!important}
+.hand .ranks.tap .card::after, #game .ghand .card:not(.rc)::after, .smrows button.mk::after{content:"";position:absolute;inset:-4px -2px}
+.hand:has(.ranks.tap) li, .smrows .smrow{min-height:var(--tk)!important}
+:root{--tk:2.45rem;--tkw:2.2rem;--tkf:1.35rem}
+@media (max-height:700px){ :root{--tk:2.05rem;--tkw:1.95rem;--tkf:1.2rem} }
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
@@ -7615,7 +7630,7 @@ function newLEN(sk){
   const opts = mine.map(r=>({title:pxCard(r), sub: r===mine[0] ? 'Je hoogste' : r===mine[mine.length-1] ? 'Je laagste' : 'Je middelste'}));
   const rev = CNT==='rev', low1 = three!==rev;          // eerst de laagste: oneven bij gewoon lengtesignaal, even bij omgekeerd
   const why = (three ? 'Je hebt drie kaarten: een oneven aantal. ' : 'Je hebt twee kaarten: een even aantal. ')+'Jullie spelen '+(rev ? 'laag-hoog is even' : 'hoog-laag is even')+', dus '+(low1 ? 'speel eerst je laagste, '+pxCard(mine[mine.length-1]).toLowerCase() : 'speel eerst je hoogste, '+pxCard(mine[0]).toLowerCase())+'. Partner kan nu uitrekenen hoeveel kaarten de leider heeft, en weet hoe lang hij zijn aas moet ophouden.';
-  return pxQ('lengte', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur naar de dummy, die verder geen entree heeft. Partner heeft waarschijnlijk de aas. Welke kaart speel je bij om je lengte te tonen?', opts, low1 ? mine.length-1 : 0, why, {sideDummy:true, dummyRight:right});
+  return pxQ('lengte', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur naar de dummy. De leider kan de dummy alleen via deze kleur bereiken: in de andere kleuren heeft de dummy geen entree. Partner heeft waarschijnlijk de aas. Welke kaart speel je bij om je lengte te tonen?', opts, low1 ? mine.length-1 : 0, why, {sideDummy:true, dummyRight:right});
 }
 // ---------- Tegenspel: je aas ophouden ----------
 function newOPT(sk){
@@ -7623,7 +7638,7 @@ function newOPT(sk){
   const dummy = [13,12,11,10,sm[0]], mine = [14,sm[1],sm[2]], decl = pTwo ? 3 : 2;
   const opts = [{title:'In de eerste ronde', sub:'Neem meteen', tip:'Neem je je aas meteen, dan heeft de leider nog een kaart in de kleur om de dummy te bereiken. Wacht tot hij zijn laatste kaart speelt.'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Neem je aas precies op het moment dat de leider zijn laatste kaart in de kleur speelt; dan kan hij de dummy niet meer bereiken. De dummy heeft vijf kaarten en jij drie. Partner toont '+((pTwo!==(CNT==='rev')) ? 'met hoog-laag' : 'met laag-hoog')+' een '+(pTwo ? 'even aantal: twee' : 'oneven aantal: drie')+(CNT==='rev' ? ' (jullie spelen laag-hoog is even)' : '')+'. Dan heeft de leider er 13 − 5 − 3 − '+(pTwo ? 2 : 3)+' = '+decl+'. Neem dus in de '+(decl===3 ? 'derde' : 'tweede')+' ronde.';
-  return pxQ('ophoudt', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur. De dummy heeft verder geen entree. Partner speelt '+((pTwo!==(CNT==='rev')) ? 'eerst een hoge en dan een lage kaart' : 'eerst een lage en dan een hogere kaart')+'. Wanneer neem je je aas?', opts, decl-1, why, {sideDummy:true, dummyRight:right});
+  return pxQ('ophoudt', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur. De leider kan de dummy alleen via deze kleur bereiken: in de andere kleuren heeft de dummy geen entree. Partner speelt '+((pTwo!==(CNT==='rev')) ? 'eerst een hoge en dan een lage kaart' : 'eerst een lage en dan een hogere kaart')+'. Wanneer neem je je aas?', opts, decl-1, why, {sideDummy:true, dummyRight:right});
 }
 // ---------- Tegenspel: actief of passief ----------
 function newACT(sk){
@@ -7950,8 +7965,10 @@ function repAfter(ok){
   return '<span class="lmsg">Deze hand komt over een paar vragen terug.</span>';
 }
 
+const SROW = [0,1,3,2];   // rijen van een hand: zwart, rood, zwart, rood (♠ ♥ ♣ ♦)
+const ordS = fn => SROW.map(i=>fn(SUITS[i], i));
 function handHTML(h, only, tap){
-  return SUITS.map((s,i)=>{
+  return ordS((s,i)=>{
     if(only!=null && i!==only) return '';
     const ranks = tap
       ? h.suits[i].map(r=>'<button class="card k'+s+'" data-card="'+s+r+'">'+'<span class="pip">'+SYM[s]+'</span>'+(RANK[r]||r)+'</button>').join('')
@@ -8938,7 +8955,7 @@ function clubDraw(){
   const b = c.boards[CV.i];
   const m = clubMine(b);
   const ct = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
-  const hand = seat => SUITS.map((su, si)=>{ const cs = b.hands[seat].filter(x=>gSuit(x)===si).sort((x,y)=>gRank(y)-gRank(x)); return '<div class="rvs"><i class="'+su+'">'+SYM[su]+'</i>'+(cs.length ? cs.map(x=>'<span>'+(RANK[gRank(x)]||gRank(x))+'</span>').join('') : '<span class="rvv">–</span>')+'</div>'; }).join('');
+  const hand = seat => ordS((su, si)=>{ const cs = b.hands[seat].filter(x=>gSuit(x)===si).sort((x,y)=>gRank(y)-gRank(x)); return '<div class="rvs"><i class="'+su+'">'+SYM[su]+'</i>'+(cs.length ? cs.map(x=>'<span>'+(RANK[gRank(x)]||gRank(x))+'</span>').join('') : '<span class="rvv">–</span>')+'</div>'; }).join('');
   const NM = ['Noord','Oost','Zuid','West'], AR = ['n','o','z','w'];
   const youSeats = m ? (m.nz ? [0,2] : [1,3]) : [];
   // kwetsbaarheid alleen grafisch: de naam van een kwetsbare speler licht rood omlijnd
@@ -11082,7 +11099,7 @@ const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trum
 const gMine = seat => G && (G.role==='tegen' ? seat===G.me : seat%2===0);
 function gHandHTML(seat){
   const myTurn = G && !G.over && !gBusy && G.turn===seat && gMine(seat), legal = myTurn ? gLegal(G, seat) : [];
-  return SUITS.map((s,si)=>{
+  return ordS((s,si)=>{
     const cs = G.hands[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
     const btns = cs.map(c=>'<button class="card k'+s+'" data-c="'+c+'"'+(myTurn && legal.includes(c) ? '' : ' disabled')+'>'+'<span class="pip">'+SYM[s]+'</span>'+(RANK[gRank(c)]||gRank(c))+'</button>').join('');
     return '<li><span class="sym '+s+'">'+SYM[s]+'</span>'+(btns ? '<span class="ranks tap">'+btns+'</span>' : '<span class="void">–</span>')+'</li>';
@@ -11246,7 +11263,7 @@ function gReviewDraw(){
   const def = R.role==='tegen';
   const NAME = def ? ['Noord (dummy)', R.me===1 ? 'Oost (jij)' : 'Oost (partner)', 'Zuid (leider)', R.me===3 ? 'West (jij)' : 'West (partner)'] : ['Noord (dummy)','Oost','Zuid (jij)','West'], AREA = ['n','o','z','w'];
   const play = {}; t.plays.forEach(p=>{ play[p.card] = p; });
-  const hand = seat => SUITS.map((su, si)=>{
+  const hand = seat => ordS((su, si)=>{
     const cs = t.before[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
     const rk = cs.map(c=>{ const p = play[c], txt = RANK[gRank(c)] || gRank(c); return p ? '<b class="rvp'+(p.loss>0 ? ' bad' : '')+(p.seat===t.winner ? ' win' : '')+'">'+txt+'</b>' : '<span>'+txt+'</span>'; }).join('');
     return '<div class="rvs"><i class="'+su+'">'+SYM[su]+'</i>'+(rk || '<span class="rvv">–</span>')+'</div>';
@@ -12699,7 +12716,7 @@ function smHostStep(){
 // --- tekenen
 function smCardBtn(c, on){ const s = SUITS[gSuit(c)]; return '<button class="smc '+s+'"'+(on ? ' data-smcard="'+c+'"' : ' disabled')+'>'+(RANK[gRank(c)]||gRank(c))+'</button>'; }
 function smHandRows(cards, legal){
-  return '<div class="smh">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
+  return '<div class="smh">'+SROW.map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
     return '<div class="smr"><i class="'+SUITS[si]+'">'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>legal ? smCardBtn(c, legal.includes(c)) : '<span class="smc '+SUITS[si]+'">'+(RANK[gRank(c)]||gRank(c))+'</span>').join('') : '<span class="smdash">–</span>')+'</div>'; }).join('')+'</div>';
 }
 // Het biedverloop als schema (W N O Z); star = biedingen waarbij hulp is gebruikt
@@ -12722,11 +12739,11 @@ function smGameHTML(g){
   const pcard = (c, how) => { const S = SUITS[gSuit(c)], inner = '<b>'+(RANK[gRank(c)]||gRank(c))+'</b><i>'+SYM[S]+'</i>';
     return how==='play' ? '<button class="pc '+S+'" data-smcard="'+c+'">'+inner+'</button>' : '<span class="pc '+S+(how==='off' ? ' off' : '')+'">'+inner+'</span>'; };
   // je eigen hand: per kleur een regel, zoals op de andere schermen
-  const mrows = (cards, legal, two) => '<div class="smrows'+(two ? ' two' : '')+'">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)), S = SUITS[si];
+  const mrows = (cards, legal, two) => '<div class="smrows'+(two ? ' two' : '')+'">'+SROW.map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)), S = SUITS[si];
     return '<div class="smrow"><i class="'+S+'">'+SYM[S]+'</i>'+(cs.length ? cs.map(c=>{ const t = RANK[gRank(c)]||gRank(c);
       return legal==null ? '<span class="mk '+S+'">'+t+'</span>' : legal.includes(c) ? '<button class="mk '+S+' on" data-smcard="'+c+'">'+t+'</button>' : '<span class="mk '+S+' off">'+t+'</span>'; }).join('') : '<span class="mkd">–</span>')+'</div>'; }).join('')+'</div>';
-  const prow = (cards, legal, cls) => '<div class="prow'+(cls ? ' '+cls : '')+'">'+[0,1,2,3].map(si=>cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).map(c=>pcard(c, legal==null ? 'show' : legal.includes(c) ? 'play' : 'off')).join('')).join('')+'</div>';
-  const pcol = cards => '<div class="pcol">'+[0,1,2,3].map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>RANK[gRank(c)]||gRank(c)).join(' ') : '–')+'</div>'; }).join('')+'</div>';
+  const prow = (cards, legal, cls) => '<div class="prow'+(cls ? ' '+cls : '')+'">'+SROW.map(si=>cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).map(c=>pcard(c, legal==null ? 'show' : legal.includes(c) ? 'play' : 'off')).join('')).join('')+'</div>';
+  const pcol = cards => '<div class="pcol">'+SROW.map(si=>{ const cs = cards.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(c=>RANK[gRank(c)]||gRank(c)).join(' ') : '–')+'</div>'; }).join('')+'</div>';
   const labels = t => [0,1,2,3].map(s=>seat(s, 'st '+pos(s)+(s===t ? ' turn' : ''))).join('');
   if(g.phase==='bid'){
     const turn = (g.dealer+g.calls.length)%4, last = g.calls.length-1;
