@@ -1244,11 +1244,17 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 .hrow .rc.kD i{--gf:var(--gfD);--gy:var(--gyD);--gx:var(--gxD)} .hrow .rc.kC i{--gf:var(--gfC);--gy:var(--gyC);--gx:var(--gxC)}
 /* kaart L: cijfer en symbool even hoog, de witruimte ertussen precies op het midden van de kaart */
 .smsq .tc.on, .smsq .tcd .pc{--mid:calc((var(--ph) - 2px) / 2); --ch:calc((var(--ph) - 2px - 3 * var(--pg)) / 2)}
-.smsq .tc.on > b, .smsq .tcd .pc > b{font-size:calc(var(--ch) / var(--rc))!important;top:calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc)))!important}
-.smsq .tc.on > i.pcs, .smsq .tcd .pc > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2))!important}
+.smsq .tc.on > b, .smsq .tcd .pc > b{font-size:calc(var(--ch) / var(--rc))!important;top:0!important;transform:translateY(calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc))))!important}
+.smsq .tc.on > i.pcs, .smsq .tcd .pc > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:0!important;transform:translateX(calc(var(--fs) * var(--gx, 0) * -1)) translateY(calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2))) scaleX(var(--pwd))!important}
 .hrow .rc .rci{--mid:calc((var(--dh) - 2px) / 2); --ch:min(calc((var(--dh) - 2px - 3 * var(--pg)) / 2), calc((var(--ds) - 3px) / 1.08 * var(--rc)), calc(var(--ds) - 5px))}
-.hrow .rc .rci > b{font-size:calc(var(--ch) / var(--rc))!important;top:calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc)))!important}
-.hrow .rc .rci > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2))!important}
+.hrow .rc .rci > b{font-size:calc(var(--ch) / var(--rc))!important;top:0!important;transform:translateY(calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc))))!important}
+.hrow .rc .rci > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:0!important;transform:translateX(calc(var(--fs) * var(--gx, 0) * -1)) translateY(calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2)))!important}
+/* kaart M: cijfer en symbool als SVG precies in hun vak (inkt van boven tot onder), vakken exact op de witruimte */
+.smsq .tc.on > b, .smsq .tcd .pc > b, .hrow .rc .rci > b{top:calc(var(--mid) - var(--pg) / 2 - var(--ch))!important;height:var(--ch)!important;transform:none!important;font-size:0!important;line-height:0!important;letter-spacing:0!important}
+.smsq .tc.on > i.pcs, .smsq .tcd .pc > i, .hrow .rc .rci > i{top:calc(var(--mid) + var(--pg) / 2)!important;height:var(--ch)!important;transform:none!important;font-size:0!important;line-height:0!important}
+.smsq .tc.on > b > svg.gl, .smsq .tc.on > i > svg.gl, .smsq .tcd .pc svg.gl, .hrow .rc .rci svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
+.smsq .tc.on .glt, .smsq .tcd .pc .glt, .hrow .rc .rci .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+svg.gl text{font-family:inherit}
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
@@ -3784,22 +3790,36 @@ function newSQ(sk){
 }
 // ---------- Spelen: de uitkomstkaart ----------
 // gespeelde kaart: cijfer boven, symbool onder; elk symbool gemeten zodat alle vier precies even hoog staan
-function playHTML(id){ const s = id[0], r = +id.slice(1); return '<b>'+(RANK[r]||r)+'</b><i class="pcs '+s+'">'+SYM[s]+'</i>'; }
+// Kaartteken als SVG: de inkt van het teken vult precies het vak, zonder afrondingen van de browser op de basislijn.
+const GLY = {};
+function glyph(t, w){ const k = w+'|'+t; let v = GLY[k];
+  if(!v){ try{ const cv = glyph.cv || (glyph.cv = document.createElement('canvas').getContext('2d'));
+      cv.font = w+' 100px '+getComputedStyle(document.body).fontFamily; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left';
+      const m = cv.measureText(t), l = m.actualBoundingBoxLeft, r = m.actualBoundingBoxRight, a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
+      v = (a+d>0 && l+r>0) ? [-l, -a, l+r, a+d] : [0, -72, 60*t.length, 72]; }catch(e){ v = [0, -72, 60*t.length, 72]; }
+    if(document.fonts && document.fonts.status==='loaded') GLY[k] = v; }
+  return '<svg class="gl" viewBox="'+v.map(x=>+x.toFixed(2)).join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="0" y="0" style="font-size:100px;font-weight:'+w+';letter-spacing:0">'+t+'</text></svg><span class="glt">'+t+'</span>'; }
+function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'; }
 function pcsMeasure(){ try{
-  const fam = getComputedStyle(document.body).fontFamily, cv = document.createElement('canvas').getContext('2d'), R = document.documentElement.style;
+  // De browser zelf laten zeggen waar de basislijn ligt (regelhoogte = lettergrootte); het lettertype zegt hoe hoog de tekens boven de basislijn uitsteken.
+  const fam = getComputedStyle(document.body).fontFamily, R = document.documentElement.style, cv = document.createElement('canvas').getContext('2d');
+  const box = document.createElement('div'); box.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;font-family:'+fam.replace(/"/g, "'")+';font-size:100px;line-height:100px;white-space:nowrap';
+  box.innerHTML = '<div id="pmS" style="font-weight:700">'+SYM.S+'<i style="display:inline-block;width:1px;height:0;vertical-align:baseline"></i></div><div id="pmR" style="font-weight:400">10<i style="display:inline-block;width:1px;height:0;vertical-align:baseline"></i></div>';
+  document.body.appendChild(box);
+  const base = id => { const d = box.querySelector('#'+id), m = d.querySelector('i'); return m.getBoundingClientRect().bottom - d.getBoundingClientRect().top; };
+  const bS = base('pmS'), bR = base('pmR'); box.remove();
+  if(!(bS>0) || !(bR>0)) return;
   cv.font = '700 100px '+fam; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left';
-  SUITS.forEach(s=>{ const m = cv.measureText(SYM[s]); const a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent, fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent;
-    if(!(a+d>0) || !(fa+fd>0)) return;
-    R.setProperty('--gf'+s, (100/(a+d)).toFixed(4));                                               // lettergrootte per pixel vakhoogte
-    R.setProperty('--gy'+s, ((1-(fa+fd)/100)/2+(fa-a)/100).toFixed(4));                              // bovenkant van het symbool binnen de regel
+  SUITS.forEach(s=>{ const m = cv.measureText(SYM[s]); const a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
+    if(!(a+d>0)) return;
+    R.setProperty('--gf'+s, (100/(a+d)).toFixed(4));                                               // lettergrootte per pixel symboolhoogte
+    R.setProperty('--gy'+s, ((bS-a)/100).toFixed(4));                                               // bovenkant van het symbool binnen de regel
     R.setProperty('--gx'+s, (((m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2-m.width/2)/100).toFixed(4)); });   // horizontaal midden
-
-  try{ const cv2 = document.createElement('canvas').getContext('2d'); cv2.font = '400 100px '+getComputedStyle(document.body).fontFamily; let asc = 0;
-    for(const ch of '0123456789AHVB') asc = Math.max(asc, cv2.measureText(ch).actualBoundingBoxAscent);
-    const m = cv2.measureText('H'), fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent, R = document.documentElement.style;
-    if(asc>0 && fa+fd>0){ R.setProperty('--rc', (asc/100).toFixed(4)); R.setProperty('--rb', ((1-(fa+fd)/100)/2+fa/100).toFixed(4)); } }catch(e){}
+  cv.font = '400 100px '+fam; let asc = 0; for(const ch of '0123456789AHVB') asc = Math.max(asc, cv.measureText(ch).actualBoundingBoxAscent);
+  if(asc>0){ R.setProperty('--rc', (asc/100).toFixed(4)); R.setProperty('--rb', (bR/100).toFixed(4)); }
 }catch(e){} }
-pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(pcsMeasure);
+pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ for(const k in GLY) delete GLY[k]; pcsMeasure(); });
+try{ Promise.all([document.fonts.load('700 100px Suits', SYM.S+SYM.H+SYM.D+SYM.C), document.fonts.load('400 100px "Atkinson Hyperlegible"', '10AHVB')]).then(()=>setTimeout(pcsMeasure, 50)).catch(()=>{}); }catch(e){}
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
 // Uitkomstafspraken, in te stellen door de speler
 // De kracht van de 2SA-opening is instelbaar; de sterke 2♣︎ met een evenwichtige hand begint er direct boven
@@ -7968,7 +7988,7 @@ function rowOrder(list){ const has = k => list.some(c=>c.s===k), B = ['S','C'].f
   return list.slice().sort((a,b)=>ord.indexOf(a.s)-ord.indexOf(b.s)); }
 function handRow(list, side){ list = rowOrder(list); let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
-    return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+c.t+'</b><i>'+SYM[c.s]+'</i></span></'+tag+'>'; }).join('');
+    return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+glyph(''+c.t, 400)+'</b><i>'+glyph(SYM[c.s], 700)+'</i></span></'+tag+'>'; }).join('');
   return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
 function handRowOf(h, only, side){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L, side); }
 // het contract: een rond bolletje in de troefkleur aan het naamplaatje van de leider
@@ -12730,7 +12750,7 @@ function smGameHTML(g){
     const topD = dRow && dp==='t' ? '<p class="dml">Dummy · '+esc(lb(g.dummy))+' ('+LET[g.dummy]+')</p>'+dRow : '';
     const sq = '<div class="smsq play'+(showLast ? ' last' : '')+'">'+labels(showLast ? -1 : real)
       + '<span class="cn c2'+(pos(g.decl)==='t' ? ' c2low' : '')+'"><span class="lg">Wij '+ourT+' · Zij '+theirT+'</span><span class="sh">'+ourT+'–'+theirT+'</span></span>'
-      + dum + tc.map(x=>'<span class="tcd '+pos(x.seat)+'">'+pcard(x.card, 'show')+'</span>').join('')
+      + dum + tc.map(x=>'<span class="tcd '+pos(x.seat)+'"><span class="pc '+SUITS[gSuit(x.card)]+'">'+playHTML(SUITS[gSuit(x.card)]+gRank(x.card))+'</span></span>').join('')
       + (SM.showAuc ? '<div class="sqa aucov" data-smauc="1"><p>Biedverloop · tik om te sluiten</p>'+smAucTbl(g, null)+'</div>' : '')
       + (showLast ? '<span class="sqm">Slag naar '+(g.lastTrick.winner===me ? 'jou' : lb(g.lastTrick.winner))+'</span>' : '') + '</div>';
     const ct = SM.ctip && SM.ctip.g===g.id && SM.ctip.n===st.played.length ? SM.ctip : null, f1 = x => x.toFixed(1).replace('.', ',');
