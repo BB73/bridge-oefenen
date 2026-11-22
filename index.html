@@ -1097,7 +1097,12 @@ main.table.ns #dummyhand li, main.table.ns #hand li{font-size:1.15rem;line-heigh
   --h2:.88;        /* verkleining als een hand in twee kolommen staat */
   --pw:2.15rem;    /* gespeelde kaart op tafel: breedte */
   --ph:2.95rem;    /* gespeelde kaart op tafel: hoogte */
-  --pf:1rem;       /* gespeelde kaart op tafel: letter */
+  --pf:1.5rem;     /* gespeelde kaart op tafel: cijfer */
+  --pfw:400;       /* gespeelde kaart: dikte van het cijfer (400 gewoon, 700 vet) */
+  --prt:0px;       /* gespeelde kaart: afstand van het cijfer tot de bovenrand */
+  --pst:1.4375rem; /* gespeelde kaart: bovenkant van het symbool */
+  --psh:1.22rem;   /* gespeelde kaart: hoogte van het symbool */
+  --pwd:1.1;       /* gespeelde kaart: symbool breder maken (1 = normaal) */
   --bw:2rem;       /* biedkaartje: breedte */
   --bh:2.15rem;    /* biedkaartje: hoogte */
   --bf:.9rem;      /* biedkaartje: letter */
@@ -1165,7 +1170,6 @@ button.cbd{cursor:pointer}
 @media (max-height:700px){ main.table:has(#feedback:not([hidden])) .prompt{display:none!important} main.table:has(#feedback:not([hidden])) .hrow.vl, main.table:has(#feedback:not([hidden])) .hrow.vr{--dv:var(--tw)} }
 /* gespeelde kaart op tafel */
 .smsq .tc.on, .smsq .tcd .pc{width:var(--pw)!important;height:var(--ph)!important;font-size:var(--pf)!important}
-.smsq .tc.on span, .smsq .tcd .pc b, .smsq .tcd .pc i{font-size:var(--pf)!important}
 .smsq #tS.on, .smsq #qS.on, .smsq .tcd.b{top:min(70%, calc(100% - .55rem - var(--nh) - var(--ph) / 2))}
 .smsq #tN.on, .smsq #qN.on, .smsq .tcd.t{top:max(34%, calc(.55rem + var(--nh) + var(--ph) / 2))}
 /* biedkaartjes */
@@ -1199,6 +1203,20 @@ button.cbd{cursor:pointer}
 .hrowli{display:block!important;width:100%;margin:0!important;min-height:0!important;grid-column:1 / -1}
 main.table.ns #dummyhand:has(.hrow){display:block}
 .ghand:has(.hrow){width:100%!important;max-width:100%!important}
+/* gespeelde kaart op tafel: cijfer boven, symbool onder, alle symbolen even hoog */
+.smsq .tc.on, .smsq .tcd .pc{display:block!important;padding:0!important;position:relative}
+.smsq .tc.on{position:absolute}
+.smsq .tc.on > b, .smsq .tcd .pc > b{position:absolute;left:0;right:0;top:var(--prt);text-align:center;font-size:var(--pf)!important;font-weight:var(--pfw);line-height:1;letter-spacing:0;color:inherit}
+.smsq .tc.on > i.pcs, .smsq .tcd .pc > i{position:absolute;left:0;right:0;text-align:center;font-style:normal;font-weight:700;color:inherit;
+  --fs:calc(var(--psh) * var(--gf, 1.3)); font-size:var(--fs)!important; line-height:var(--fs); top:calc(var(--pst) - var(--fs) * var(--gy, .2));
+  transform:translateX(calc(var(--fs) * var(--gx, 0) * -1)) scaleX(var(--pwd)); transform-origin:50% 50%}
+.pcs.S, .smsq .tcd .pc.S > i{--gf:var(--gfS);--gy:var(--gyS);--gx:var(--gxS)} .pcs.H, .smsq .tcd .pc.H > i{--gf:var(--gfH);--gy:var(--gyH);--gx:var(--gxH)}
+.pcs.D, .smsq .tcd .pc.D > i{--gf:var(--gfD);--gy:var(--gyD);--gx:var(--gxD)} .pcs.C, .smsq .tcd .pc.C > i{--gf:var(--gfC);--gy:var(--gyC);--gx:var(--gxC)}
+/* de vier gespeelde kaarten raken elkaar niet: links en rechts verder naar buiten */
+.smsq #tN.on, .smsq #tS.on, .smsq #tW.on, .smsq #tE.on{transform:translate(-50%,-50%);right:auto;bottom:auto;animation:pcin .25s ease-out}
+@keyframes pcin{from{opacity:0}to{opacity:1}}
+.smsq #tW.on, .smsq #qW.on, .smsq #nW.on, .smsq .tcd.l{left:30%} .smsq #tE.on, .smsq #qE.on, .smsq .tcd.r{left:70%}
+.smsq .tc.on:has(.pcs.S){color:#1C3D8F} .smsq .tc.on:has(.pcs.H){color:#C4202B} .smsq .tc.on:has(.pcs.D){color:#C85F0A} .smsq .tc.on:has(.pcs.C){color:#1E7A46}
 /* ===== einde maten ===== */
 /* trendanalyse */
 .trtabs{flex-wrap:nowrap;gap:.25rem;margin:.1rem 0 .45rem} .trtabs button{padding:.3rem .5rem;font-size:.8rem;white-space:nowrap}
@@ -3727,6 +3745,18 @@ function newSQ(sk){
           partner:null, only:si, answer:'c'+good, choices, box:'choice', last:null, auction:null, hasNext:false};
 }
 // ---------- Spelen: de uitkomstkaart ----------
+// gespeelde kaart: cijfer boven, symbool onder; elk symbool gemeten zodat alle vier precies even hoog staan
+function playHTML(id){ const s = id[0], r = +id.slice(1); return '<b>'+(RANK[r]||r)+'</b><i class="pcs '+s+'">'+SYM[s]+'</i>'; }
+function pcsMeasure(){ try{
+  const fam = getComputedStyle(document.body).fontFamily, cv = document.createElement('canvas').getContext('2d'), R = document.documentElement.style;
+  cv.font = '700 100px '+fam; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left';
+  SUITS.forEach(s=>{ const m = cv.measureText(SYM[s]); const a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent, fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent;
+    if(!(a+d>0) || !(fa+fd>0)) return;
+    R.setProperty('--gf'+s, (100/(a+d)).toFixed(4));                                               // lettergrootte per pixel vakhoogte
+    R.setProperty('--gy'+s, ((1-(fa+fd)/100)/2+(fa-a)/100).toFixed(4));                              // bovenkant van het symbool binnen de regel
+    R.setProperty('--gx'+s, (((m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2-m.width/2)/100).toFixed(4)); });   // horizontaal midden
+}catch(e){} }
+pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(pcsMeasure);
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
 // Uitkomstafspraken, in te stellen door de speler
 // De kracht van de 2SA-opening is instelbaar; de sterke 2♣︎ met een evenwichtige hand begint er direct boven
@@ -7951,7 +7981,7 @@ function renderQTable(mine){
   }
   [['qN','N'],['qE','O'],['qS','Z'],['qW','W']].forEach(([id,k])=>{
     const el = $(id);
-    el.innerHTML = slot[k] ? cardHTML(slot[k]) : k;
+    el.innerHTML = slot[k] ? playHTML(slot[k]) : k;
     el.classList.toggle('on', !!slot[k]);
   });
 }
@@ -8416,7 +8446,7 @@ function next(fresh){
     const c = (q.contract6 ? '6SA' : q.contract4S ? '4S' : q.d.contract) || (q.check && q.check.ti!=null ? '4'+SUITS[q.check.ti] : q.conv==='ontwikkel' ? '3SA' : '');
     $('qstriptext').innerHTML = ''; state._nsC = c;
     // de uitkomst van West: een kaart die een kwartslag gedraaid links van de tafel ligt, zoals West hem neerlegt
-    $('nW').innerHTML = q.lead ? '<span>'+SYM[q.lead[0]]+'</span>'+(RANK[+q.lead.slice(1)] || q.lead.slice(1)) : '';
+    $('nW').innerHTML = q.lead ? playHTML(q.lead) : '';
     $('nW').className = 'tc'+(q.lead ? ' on k'+q.lead[0] : '');
     $('qstripnm').innerHTML = tblPills({N:{d:1}, Z:{l:1, turn:1, c:ctrBadge(state._nsC)}});
   }
@@ -8431,6 +8461,11 @@ function next(fresh){
   $('feedback').hidden = true;
   $('box').hidden = false;
 }
+// bij een fout antwoord: laat zien welke variant er op de kaart van dit toestel staat, met een knop om hem te wijzigen
+function varNav(k){ try{ for(const c of NAV.bieden){ const subs = CONV_SUBS[c.id] || []; for(let i=0;i<subs.length;i++){ const flat = [].concat(...subs[i][1].map(x=>Array.isArray(x) ? x[1] : [x])); if(flat.includes(k)) return ['bieden','kaart',c.id,i,k]; } } }catch(e){} return null; }
+function varNote(k){ if(!OPTMAP[k] || !varNav(k) || !state.card.includes(k)) return '';
+  const wat = k==='puppet1' ? 'Op dit toestel staat Puppet Stayman na 1SA op <b>'+(PUP1==='2c' ? bidHTML('2C') : bidHTML('3C')+' (sprong)')+'</b>.' : 'Bij '+CONVS[k]+' hoort een keuze op de systeemkaart van dit toestel.';
+  return '<span class="lmsg varn">'+wat+' Spelen jullie het anders? <button class="lbtn" data-varnav="'+k+'">Wijzigen</button></span>'; }
 function answer(bid){
   if(answered) return;
   answered = true;
@@ -8490,7 +8525,7 @@ function answer(bid){
   $('verdict').innerHTML = q.suitPick ? (ok ? 'Goed: '+suitName(q.answer) : 'Niet goed. Jij koos '+suitName(bid)+', beter is '+suitName(q.answer)) : q.cards ? (ok ? 'Goed: '+cardHTML(bid) : 'Niet goed. Jij koos '+cardHTML(bid)+', beter is '+cardHTML(q.answer)) : q.choices ? (ok ? 'Goed' : 'Niet goed. Beter: '+q.d.goodText.charAt(0).toLowerCase()+q.d.goodText.slice(1))
     : ok ? (bid!==q.answer ? 'Goed: '+bidHTML(bid)+' (ook goed: '+bidHTML(q.answer)+')' : 'Goed: '+bidHTML(q.answer)) : 'Niet goed. Jij koos '+bidHTML(bid)+', juist is '+bidHTML(q.answer)+(q.accept && q.accept.length && !q.cards ? ' (of '+q.accept.map(bidHTML).join(', ')+')' : '');
   const pickC = q.choices && !ok ? q.choices.find(c=>c.id===bid) : null;
-  $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+learnMsg;
+  $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+(ok ? '' : varNote(q.conv))+learnMsg;
   if(q.partner){
     $('partnerlabel').textContent = 'Hand van partner (Noord), '+q.partner.hcp+' punten';
     $('partnerhand').innerHTML = handHTML(q.partner);
@@ -10088,6 +10123,7 @@ $('theorybody').addEventListener('click', e=>{ if(e.target.closest('#fullth')) s
 $('info').addEventListener('click', ()=>showTheory());
 document.addEventListener('click', e=>{ const b = e.target.closest && e.target.closest('[data-th]'); if(b){ e.preventDefault(); e.stopPropagation(); showTheory(false, b.dataset.th); } }, true);
 $('why').addEventListener('click', e=>{ if(e.target.closest('[data-frdone]') && FQ){ nav = ['test','fris',FQ.mode]; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); return; }
+  { const vb = e.target.closest('[data-varnav]'), vn = vb && varNav(vb.dataset.varnav); if(vn){ nav = vn; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); return; } }
   if(e.target.closest('[data-tdone]')){ nav = ['test','toets']; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); return; }
   if(e.target.closest('[data-lnext]') && state.learn.run){ const t = state.learn.run.t; startLearn(t, state.learn.step[t]); showTheory(); } });
 // ---------- Uitleg bij de systeemkaart: wat is het, waarin verschilt het, voor wie, en hoe vaak wordt het gespeeld ----------
@@ -11010,7 +11046,7 @@ function gRender(){
   });
   ['tN','tE','tS','tW'].forEach((id,seat)=>{
     const c = gShown[seat];
-    $(id).innerHTML = c===null ? ['N','O','Z','W'][seat] : cardHTML(SUITS[gSuit(c)]+gRank(c));
+    $(id).innerHTML = c===null ? ['N','O','Z','W'][seat] : playHTML(SUITS[gSuit(c)]+gRank(c));
     $(id).classList.toggle('on', c!==null);
   });
   $('cntW').textContent = G.hands[3].length;
