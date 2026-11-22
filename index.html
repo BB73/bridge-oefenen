@@ -1205,6 +1205,7 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 @media (max-height:700px){ .trnote{display:none} } .trtabs.sub button{font-size:.8rem;padding:.25rem .55rem}
 table.trk td:nth-child(n+2), table.trk th:nth-child(n+2){text-align:right}
 table.trk tr[data-trsel]{cursor:pointer} table.trk tr.sel td{background:var(--panel)}
+.histc .hline.thin{stroke-width:1;opacity:.45} .histc{overflow:visible}
 table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
 /* account op het hoofdscherm */
@@ -1226,6 +1227,11 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 .aczoom{display:block;width:min(16rem, 100%);margin:0 auto .6rem;accent-color:var(--felt)}
 .acsil{flex:none;color:var(--muted)} .acsil svg{width:4.5rem;height:4.05rem}
 .dhead:has(#accT:not([hidden])) #settitle{max-width:calc(100% - 6rem)}
+.dhead:has(#accT:not([hidden])) #setnav{margin-right:5.9rem}
+.dhead:has(#wmT:not([hidden])) #setnav{margin-right:8.8rem}
+@media (max-width:400px){ .dhead:has(#wmT:not([hidden])) #settitle{font-size:.95rem} }
+.cnote.lnote{border-color:var(--felt);background:var(--good-bg)}
+@media (max-height:700px){ .cnote.lnote{margin-bottom:.3rem;padding:.25rem .5rem;font-size:.85rem;line-height:1.25} }
 .dhead:has(#wmT:not([hidden])) #settitle{max-width:calc(100% - 8.8rem)}
 
 /* antwoorden direct onder de vraag */
@@ -8160,7 +8166,8 @@ function renderModes(){
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+(presetMatch() && presetMatch()!=='app' ? PRESETS[presetMatch()].tag : state.card.length+' afspraken')+' · uitkomen · afdrukken</small></button>'
        + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
-    if(state.learn.on) pg = '<div class="homebtns homegrid"><button class="homebtn has" data-go="doel"><b>Specifieke biedingen &amp; spellen</b><small>Leerpad: bieden stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+', spelen stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+    if(state.learn.on) pg = '<p class="cnote lnote"><b>Het leerpad staat aan</b>, daarom zie je je systeemkaart niet. <button class="navclear" data-loff="1">Leerpad uitzetten</button></p>'
+       + '<div class="homebtns homegrid"><button class="homebtn has" data-go="doel"><b>Specifieke biedingen &amp; spellen</b><small>Leerpad: bieden '+(state.learn.step.bieden+1)+'/'+LEARN.bieden.length+', spelen '+(state.learn.step.spelen+1)+'/'+LEARN.spelen.length+'</small></button>'
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
   }else if(T==='regels'){
@@ -8765,7 +8772,9 @@ function clubMine(b){ const me = state.clubMe; if(!me) return null; for(const L 
 const clubButler = c => !!c && (c.kind==='butler' || /butler/i.test(c.title||''));
 function clubImp(b, m){ if(!m || m.r.mpNZ==null || isNaN(m.r.mpNZ)) return null; const v = m.nz ? m.r.mpNZ : m.r.mpOW; return v==null || isNaN(v) ? null : v; }
 const impTxt = v => (v>0 ? '+' : v<0 ? '−' : '')+String(Math.abs(v)).replace('.',',');
-function clubPct(b, m){ if(!m || !b.top || m.r.mpNZ==null || isNaN(m.r.mpNZ)) return null; return Math.round(100*(m.nz ? m.r.mpNZ : m.r.mpOW)/b.top); }
+// de top verschilt per lijn: neem hem uit de matchpunten van de eigen lijn
+function clubTop(b, L){ let mx = 0; ((b.res && b.res[L]) || []).forEach(r=>{ const v = (+r.mpNZ)+(+r.mpOW); if(v>mx) mx = v; }); return mx>0 ? mx : (b.top || 0); }
+function clubPct(b, m){ const tp = m ? clubTop(b, m.L) : 0; if(!m || !tp || m.r.mpNZ==null || isNaN(m.r.mpNZ)) return null; return Math.round(100*(m.nz ? m.r.mpNZ : m.r.mpOW)/tp); }
 // kleurtekens uit de pdf altijd als tekst (niet als emoji) en in de vier vaste kleuren
 const suitTxtHTML = t => String(t||'').replace(/([♠♥♦♣])[\uFE0E\uFE0F]?/g, (x, ch)=>{ const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[ch]; return '<span class="'+su+'">'+SYM[su]+'</span>'; });
 function clubContractHTML(c){ if(!c) return ''; if(/^pas/i.test(c)) return 'Pas'; const m = /^(\d)(SA|[♠♥♦♣])(x{0,2})/i.exec(c); if(!m) return c; const su = {'♠':'S','♥':'H','♦':'D','♣':'C'}[m[2]]; return m[1]+(su ? '<span class="'+su+'">'+SYM[su]+'</span>' : 'SA')+(m[3] ? m[3].toLowerCase() : ''); }
@@ -12936,18 +12945,18 @@ async function trEvening(c, pair, onProg){
   let hi = 0, mi = 0;
   for(let bi=0; bi<boards.length; bi++){
     if(TR.stop) return 'stop';
-    const b = boards[bi], rows = b.res[line] || []; if(onProg) onProg(bi+1, boards.length);
+    const b = boards[bi], rows = b.res[line] || [], tp = clubTop(b, line); if(onProg) onProg(bi+1, boards.length);
     const keys = []; rows.forEach(r=>{ const p = clubResParse(r); if(p){ const k = p.trump+'|'+p.decl; if(!keys.includes(k)) keys.push(k); } });
     const maps = {}; for(let i=0;i<keys.length;i+=2){ const part = keys.slice(i, i+2), rs = await Promise.all(part.map(k=>trLeadMap(b, k).catch(()=>null))); part.forEach((k,j)=>{ maps[k] = rs[j]; }); }
     let mine = false;
     rows.forEach(r=>{
       const isMe = r.nz===pair || r.ow===pair, meNZ = r.nz===pair; if(isMe) mine = true;
-      const okMP = !bt && b.top && r.mpNZ!=null && !isNaN(r.mpNZ);
-      if(okMP){ add(pp(r.nz), 's', 100*r.mpNZ/b.top); add(pp(r.ow), 's', 100*r.mpOW/b.top); }
+      const okMP = !bt && tp && r.mpNZ!=null && !isNaN(r.mpNZ);
+      if(okMP){ add(pp(r.nz), 's', 100*r.mpNZ/tp); add(pp(r.ow), 's', 100*r.mpOW/tp); }
       const p = clubResParse(r); if(!p) return;
       const declNZ = p.decl%2===0, dp = declNZ ? r.nz : r.ow, op = declNZ ? r.ow : r.nz, iDecl = isMe && declNZ===meNZ, map = maps[p.trump+'|'+p.decl];
       const gameT = p.trump===4 ? 9 : p.trump<2 ? 10 : 11, need = p.level+6, st = p.trump===4 ? 'N' : p.trump<2 ? 'M' : 'm', lv = p.level>=6 ? 'S' : need>=gameT ? 'G' : 'D';
-      if(isMe && okMP){ const v = 100*(meNZ ? r.mpNZ : r.mpOW)/b.top, vul = String(b.vul||''), wk = /all|beid/i.test(vul) || (meNZ ? /NZ/i : /OW/i).test(vul);
+      if(isMe && okMP){ const v = 100*(meNZ ? r.mpNZ : r.mpOW)/tp, vul = String(b.vul||''), wk = /all|beid/i.test(vul) || (meNZ ? /NZ/i : /OW/i).test(vul);
         add(X, iDecl ? 'sL' : 'sT', v); add(X, 's'+st, v); add(X, 's'+lv, v); add(X, wk ? 'sK' : 'sO', v); add(X, bi<boards.length/2 ? 'sH1' : 'sH2', v); }
       if(!map) return;
       const best = Math.max(...Object.values(map)), D0 = 13-best, high = need>D0, miss = !high && ((need<gameT && D0>=gameT) || (p.level<6 && D0>=12));
@@ -13007,9 +13016,22 @@ function trTot(L, m){ let n = 0, s = 0, cs = 0, cn = 0, rk = 0, np = 0, rn = 0;
   return {n, v:n ? s/n : null, cl:cn ? cs/cn : null, rk:rn ? Math.round(rk/rn) : null, np:rn ? Math.round(np/rn) : null}; }
 function trChart(L, m){
   const kort = x => { const d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(x.iso||''); return d ? (+d[3])+' '+MAANDEN[+d[2]-1].slice(0,3) : '?'; };
-  const rows = L.filter(x=>x.k && x.k[m] && x.k[m][0]).slice(-10), val = x => x.k[m][1]/x.k[m][0], nm = TRM.find(t=>t[0]===m)[1];
+  const rows = L.filter(x=>x.k && x.k[m] && x.k[m][0]).slice(-12), val = x => x.k[m][1]/x.k[m][0], nm = TRM.find(t=>t[0]===m)[1];
   if(rows.length<3) return '<p class="histz">'+(rows.length ? rows.map(x=>kort(x)+': jullie '+trFmt(m, val(x))+', club '+trFmt(m, x.cl[m])).join('<br>')+'<br>' : '')+'Vanaf drie avonden zie je hier het verloop van '+nm.toLowerCase()+'.</p>';
-  const W = 300, Hh = 92, top = 12, bot = 70, n = rows.length, xs = i => 22+i*(W-44)/(n-1), all = rows.map(val).concat(rows.map(x=>x.cl[m]).filter(v=>v!=null));
+  const W = 300, Hh = 92, top = 12, bot = 70, n = rows.length, xs = i => 22+i*(W-44)/(n-1);
+  if(L.filter(x=>x.k && x.k[m] && x.k[m][0]).length>12){            // veel avonden: alle avonden dun, het lopende gemiddelde over vijf avonden dik
+    const all0 = L.filter(x=>x.k && x.k[m] && x.k[m][0]), N = all0.length, X = i => 14+i*(W-28)/(N-1), v0 = all0.map(val), c0 = all0.map(x=>x.cl[m]);
+    const roll = a => a.map((_, i)=>{ const p = a.slice(Math.max(0, i-4), i+1).filter(v=>v!=null); return p.length ? p.reduce((s,v)=>s+v, 0)/p.length : null; }), rv = roll(v0), rc = roll(c0);
+    const vals = v0.concat(rc.filter(v=>v!=null)), pad = (Math.max(...vals)-Math.min(...vals) || 1)*.1, lo = Math.min(...vals)-pad, hi = Math.max(...vals)+pad, Y = v => top+(hi-v)/(hi-lo)*(bot-top);
+    const pl = (a, cls, extra) => '<polyline points="'+a.map((v,i)=>v==null ? '' : X(i).toFixed(1)+','+Y(v).toFixed(1)).filter(Boolean).join(' ')+'" class="'+cls+'" fill="none"'+(extra || '')+'/>';
+    const ticks = [0, Math.round((N-1)/3), Math.round(2*(N-1)/3), N-1];
+    return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+nm+' over '+N+' avonden, jullie en de club">'
+      + pl(v0, 'hline thin') + pl(rc, 'hax', ' stroke-dasharray="4 3"') + pl(rv, 'hline')
+      + '<circle cx="'+X(N-1).toFixed(1)+'" cy="'+Y(rv[N-1]).toFixed(1)+'" r="3.2" class="'+(rc[N-1]==null || rv[N-1]>=rc[N-1] ? 'hup' : 'hdn')+'"/><text x="'+(X(N-1)-4).toFixed(1)+'" y="'+(Y(rv[N-1])-6).toFixed(1)+'" class="hval" text-anchor="end">'+trFmt(m, rv[N-1]).replace('%','')+'</text>'
+      + ticks.map((i, k)=>'<text x="'+X(i).toFixed(1)+'" y="'+(Hh-4)+'" class="hval hdate" text-anchor="'+(k===0 ? 'start' : k===3 ? 'end' : 'middle')+'">'+kort(all0[i])+(k===0 || k===3 ? " '"+String(all0[i].iso||'').slice(2,4) : '')+'</text>').join('')
+      + '</svg><p class="histleg">'+nm+', alle '+N+' avonden. Dik: jullie gemiddelde over vijf avonden. Dun: per avond. Stippellijn: de club.</p>';
+  }
+  const all = rows.map(val).concat(rows.map(x=>x.cl[m]).filter(v=>v!=null));
   const pad = (Math.max(...all)-Math.min(...all) || 1)*.18, lo = Math.min(...all)-pad, hi = Math.max(...all)+pad, ys = v => top+(hi-v)/(hi-lo)*(bot-top);
   return '<svg class="histc" viewBox="0 0 '+W+' '+Hh+'" role="img" aria-label="'+nm+' per avond, jullie en de club">'
     + '<polyline points="'+rows.filter(x=>x.cl[m]!=null).map(x=>xs(rows.indexOf(x)).toFixed(1)+','+ys(x.cl[m]).toFixed(1)).join(' ')+'" class="hax" fill="none" stroke-dasharray="4 3"/>'
