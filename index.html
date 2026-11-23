@@ -1281,6 +1281,74 @@ svg.gl text{font-family:inherit}
 /* v318: het kleursymbool voor een rij handkaarten is even groot als het symbool op de kaarten (inkt ca. 18 px) */
 :root{--tsym:1.55rem} @media (max-height:700px){ :root{--tsym:1.35rem} }
 .hand li:has(.ranks.tap) > .sym, .ghand li > .sym, .smrows .smrow > i{font-size:var(--tsym)!important;width:calc(var(--tsym) * 1.05)!important;line-height:1!important;flex:none;text-align:center}
+/* v319: op een laptop of groot scherm groeit alles mee met de schermhoogte (alle maten zijn in rem) */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+  /* LAPTOP: alles groeit mee met de schermhoogte (alle maten zijn in rem); 40 rem hoog, dus op elk scherm dezelfde verhoudingen.
+     Vensters (menu, systeemkaart, clubavond) houden hun eigen maat; Samen spelen groeit wel mee. */
+  html:not(:has(dialog[open]:not(#samen))){font-size:clamp(14px, min(calc(100vh / 40), calc(100vw / 72)), 27px)}
+  .wrap{max-width:min(96vw, 84rem)!important}
+  :root{--tz:1.4;--H:1.4rem;--lw:31rem;--rw:min(36rem, 43.5vw)}   /* --tz: de tafel is overal 12,5 rem x 1,4; --H: hoogte van elk kaartsymbool en elke rang links */
+  /* twee kolommen: links tafel, dummy en hand; rechts de vraag, antwoorden, biedkastje en uitleg */
+  main.table:not([hidden]), main.table:not([hidden]):has(> #dummy:not([hidden]) li + li), #game:not([hidden]){display:flex!important;flex-direction:column!important;flex-wrap:wrap!important;justify-content:center!important;align-content:center!important;align-items:center!important;column-gap:2rem!important;height:100%;overflow:hidden!important}
+  main.table > *, #game > *, #game > #gbid > *{order:1!important;flex:none!important;width:var(--lw)!important;max-width:none!important;grid-column:auto!important;grid-row:auto!important;margin-left:0;margin-right:0}
+  main.table::after, #game:not([hidden])::after{content:"";order:2;flex-basis:100%;width:0}
+  main.table > .prompt, main.table > #box, main.table > .action, #game > #gclubback, #game > #gstatus, #game > #gbid > .box, #game > #gbid > .abwhy, #game > #gbid > #bidsum, #game > #gtip, #game > #gend{order:3!important;width:var(--rw)!important;align-self:center}
+  main.table > .action:empty, main.table > .action:not(:has(*:not([hidden]))){display:none}
+  /* de tafel: vaste basismaat, vergroot met zoom zodat kaarten, biedkaartjes en namen meegroeien */
+  main.table .bsq, main.table .nsq:not(.smsq), main.table .qsq{width:12.5rem!important;height:12.5rem!important;zoom:var(--tz)}
+  main.table .smsq, #game > #gbid > .smsq{--w:12.5rem!important;zoom:var(--tz);width:var(--w)!important}
+  #game > .tablewrap{zoom:var(--tz);width:auto!important}
+  /* EEN MAAT voor alle kaarten links: op tafel, in de dummy (boven of opzij) en in de hand zijn symbool en rang precies --H hoog */
+  main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem)}
+  main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
+  main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
+  main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
+  main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(12.5rem * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
+  #game > .tablewrap #gsq{--w:12.5rem!important}
+  /* de eigen hand */
+  main.table > #hand, #game > #gsouth{width:fit-content!important;max-width:var(--lw)!important;align-self:center;margin-left:auto;margin-right:auto}
+  main.table:not([hidden]), #game:not([hidden]), #samenbody{--tk:2.6rem!important;--tkw:2.3rem!important;--tkf:calc(var(--H) / .74)!important;--tsym:calc(var(--H) / .74)!important}
+  main.table > #hand li{font-size:calc(var(--H) / .74)!important;line-height:1.15!important;margin:.1rem 0!important;gap:.15rem!important}
+  main.table > #hand .sym{font-size:calc(var(--H) / .74)!important;width:2.2rem!important}
+  main.table > #hand .mk, main.table > #hand .ranks:not(.tap), main.table > #hand .void{font-size:inherit!important}
+  main.table > #hand .mk{margin-right:.22em;height:auto!important;min-width:0!important;padding:0 .08em!important}
+  #game > #gsouth{margin-top:.1rem!important;margin-bottom:0!important} #game > #gsouth li{margin:.08rem 0!important}
+  #game > #gsouth li:not(:has(.ranks.tap)){font-size:calc(var(--H) / .74)!important;line-height:1.15!important} #game > #gsouth li:not(:has(.ranks.tap)) > .sym{font-size:calc(var(--H) / .74)!important;width:2.2rem!important}
+  #game .abwhy, #game #bidsum{font-size:1.1rem!important;line-height:1.3}
+  /* rechts: grotere tekst; de vraag blijft altijd even groot, een lange uitleg schuift binnen zijn vak */
+  main.table > .prompt, #game > #gstatus{font-size:1.5rem!important;line-height:1.3}
+  #game > #gstatus{min-height:0!important;margin-bottom:.6rem}
+  main.table .box.choices{gap:.45rem!important}
+  main.table .box.choices .choice{height:auto!important;min-height:3.2rem!important;padding:.5rem .8rem!important}
+  main.table .box.choices .choice b{font-size:1.3rem!important}
+  main.table .box.choices .choice small{font-size:1.02rem!important;line-height:1.25!important}
+  main.table .box.choices .cicon{font-size:1.3rem!important}
+  main.table .box:not(.choices) .bid, #game .box .bid{height:3rem!important;font-size:1.3rem!important}
+  main.table .feedback .verdict{font-size:1.3rem!important}
+  main.table .feedback .why, main.table .feedback .fbtext p:not(.verdict){font-size:1.12rem!important;line-height:1.35!important}
+  main.table > .action:has(> .feedback:not([hidden])){max-height:var(--ah, calc(100dvh - 19.5rem));display:flex;flex-direction:column;overflow:hidden}
+  main.table > .action > .feedback{flex:1 1 auto!important;min-height:0}
+  main.table .feedback .fbtext{overflow-y:auto!important;min-height:0}
+  /* Heel spel: tip en einduitslag staan rechts in plaats van over het spel heen */
+  #game:not([hidden]){max-width:none!important;width:100%!important;margin:0!important}
+  #game > #gtip, #game > #gend{position:static!important;margin:.5rem 0 0!important;max-height:none!important;box-shadow:none!important;font-size:1.1rem}
+  #game > #gtip p, #game > #gend p{font-size:1.1rem!important}
+  /* de rechterkolom staat bovenaan; een script zet hem daarna gelijk met de bovenkant van de tafel */
+  main.table:not([hidden])::before, #game:not([hidden])::before, #samenbody:has(> .smsq, > .sqrow)::before{content:"";order:4;flex:1 1 0;width:0;min-height:0}
+  /* Samen spelen tijdens een spel: hetzelfde beeld in twee kolommen */
+  #samen:has(#samenbody > .smsq, #samenbody > .sqrow){width:min(96vw, 84rem)!important;max-width:none!important;height:96dvh!important;max-height:96dvh!important;padding:.6rem 1rem!important}
+  #samenbody:has(> .smsq, > .sqrow){display:flex!important;flex-direction:column!important;flex-wrap:wrap!important;justify-content:center!important;align-content:center!important;align-items:center!important;column-gap:2rem!important;row-gap:.25rem!important;gap:.25rem 2rem!important;overflow:hidden!important}
+  #samenbody:has(> .smsq, > .sqrow) > *{order:3!important;flex:none!important;width:var(--rw)!important;max-width:none!important;margin-left:0!important;margin-right:0!important}
+  #samenbody:has(> .smsq, > .sqrow)::after{content:"";order:2;flex-basis:100%;width:0}
+  #samenbody:has(> .smsq, > .sqrow) > .dml, #samenbody:has(> .smsq, > .sqrow) > .hrow, #samenbody > .smsq, #samenbody > .sqrow, #samenbody:has(> .smsq, > .sqrow) > .smrows{order:1!important;width:var(--lw)!important}
+  #samenbody > .smsq{--w:12.5rem!important;zoom:var(--tz);width:var(--w)!important}
+  #samenbody > .sqrow{width:auto!important} #samenbody > .sqrow .smsq{--w:12.5rem!important;zoom:var(--tz);width:var(--w)!important} #samenbody > .sqrow .sqs{zoom:1}
+  #samenbody:has(> .smsq, > .sqrow) > .dml{display:none!important}
+  #samenbody:has(> .smsq, > .sqrow) > .smrows{width:fit-content!important;max-width:var(--lw)!important}
+  #samenbody:has(> .smsq, > .sqrow) > .smwait, #samenbody:has(> .smsq, > .sqrow) > .smfb, #samenbody:has(> .smsq, > .sqrow) > .smleg{font-size:1.15rem!important;line-height:1.35}
+  #samenbody:has(> .smsq, > .sqrow) > .smfb p{font-size:inherit!important}
+  #samenbody:has(> .smsq, > .sqrow) .smbb button{min-height:2.8rem;font-size:1.25rem}
+}
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
@@ -3850,6 +3918,38 @@ function pcsMeasure(){ try{
   cv.font = '400 100px '+fam; let asc = 0; for(const ch of '0123456789AHVB') asc = Math.max(asc, cv.measureText(ch).actualBoundingBoxAscent);
   if(asc>0){ R.setProperty('--rc', (asc/100).toFixed(4)); R.setProperty('--rb', (bR/100).toFixed(4)); }
 }catch(e){} }
+// Laptop: de rechterkolom (vraag, antwoorden, uitleg) begint op de hoogte van de bovenkant van de tafel.
+// Past dat niet, dan schuift de kolom zover omhoog als nodig. De vraag houdt altijd dezelfde lettergrootte; --ah is de hoogte die overblijft voor de uitleg.
+(function(){ if(!window.matchMedia || !window.ResizeObserver || !window.MutationObserver) return;
+  const mq = window.matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)');
+  const C = [document.querySelector('main.table'), document.getElementById('game'), document.getElementById('samenbody')].filter(Boolean);
+  const vis = e => !!e && e.getClientRects().length > 0, px = v => parseFloat(v) || 0;
+  const items = c => { const L = []; for(const e of c.children){ if(getComputedStyle(e).display==='contents') L.push(...e.children); else L.push(e); } return L.filter(vis); };
+  const TB = '.smsq, .sq, .bsq, .nsq, .qsq';
+  function one(c){ try{
+    if(c._rt){ c._rt.style.marginTop = ''; c._rt = null; }
+    const main = c.tagName==='MAIN', p = main ? document.getElementById('prompt') : null;
+    if(main) c.style.removeProperty('--ah');
+    if(!mq.matches || !vis(c)) return;
+    const cs = getComputedStyle(c); if(cs.flexWrap!=='wrap') return;
+    const full = main && p ? c.clientHeight - px(cs.paddingTop) - px(cs.paddingBottom) - p.offsetHeight - px(getComputedStyle(p).marginBottom) - 14 : 0;
+    if(main && full > 0) c.style.setProperty('--ah', Math.max(140, Math.floor(full))+'px');
+    const it = items(c), right = it.filter(e=>getComputedStyle(e).order==='3'), left = it.filter(e=>getComputedStyle(e).order==='1'); if(!right.length || !left.length) return;
+    const tb = left.map(e=>e.matches(TB) ? e : e.querySelector(TB)).find(vis); if(!tb) return;
+    const first = right[0], last = right[right.length-1], R = c.getBoundingClientRect();
+    const free = R.bottom - px(cs.paddingBottom) - px(cs.borderBottomWidth) - last.getBoundingClientRect().bottom - px(getComputedStyle(last).marginBottom);
+    let m = Math.floor(Math.min(tb.getBoundingClientRect().top - first.getBoundingClientRect().top, free - 2));
+    const act = main ? c.querySelector(':scope > .action') : null; if(act && vis(act) && full > 0) m = Math.floor(Math.min(m, full - act.getBoundingClientRect().height - 1));
+    if(m > 1){ first.style.marginTop = (px(getComputedStyle(first).marginTop) + m)+'px'; c._rt = first;
+      if(main && full > 0) c.style.setProperty('--ah', Math.max(140, Math.floor(full - m))+'px'); }
+  }catch(e){} }
+  let q = 0; const run = () => { if(q) return; q = requestAnimationFrame(()=>{ q = 0; C.forEach(one); }); };
+  const ro = new ResizeObserver(run), mo = new MutationObserver(run);
+  C.forEach(c=>{ ro.observe(c); mo.observe(c, {childList:true, subtree:true, attributes:true, attributeFilter:['hidden','class']}); });
+  const pr = document.getElementById('prompt'); if(pr) ro.observe(pr);
+  window.addEventListener('resize', run); if(mq.addEventListener) mq.addEventListener('change', run);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  window.rightAlign = () => C.forEach(one); run(); })();
 pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ for(const k in GLY) delete GLY[k]; pcsMeasure(); });
 try{ Promise.all([document.fonts.load('700 100px Suits', SYM.S+SYM.H+SYM.D+SYM.C), document.fonts.load('400 100px "Atkinson Hyperlegible"', '10AHVB')]).then(()=>setTimeout(pcsMeasure, 50)).catch(()=>{}); }catch(e){}
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
@@ -7408,7 +7508,7 @@ function newGEV(sk){
                 {title:'De boer laten doorlopen', sub:'Speel de boer voor vanuit '+pName+' en leg klein in '+qName},
                 {title:'Aas en heer slaan', sub:'Hoop dat de vrouw valt', tip:'Aas en heer slaan werkt alleen als de vrouw toevallig valt. Valt ze niet, dan komt misschien de gevaarlijke hand aan slag. Met de snit naar de veilige kant kan er niets misgaan.'}];
   const good = loseA===safe ? 0 : 1;
-  const reden = dangerWest ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.'
+  const reden = dangerWest ? (rnd(2)===1 ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.' : 'De dummy (Noord) heeft schoppenheer en een kleintje; de aas zit bij Oost. Komt West aan slag, dan speelt hij schoppen door de heer van de dummy heen: West is de gevaarlijke hand.')
     : 'Je eigen hand (Zuid) heeft schoppenheer en een kleintje; de aas zit bij West. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
   const why = 'Je kunt de vrouw naar twee kanten zoeken. Kies de kant waarbij een mislukte snit aan de ongevaarlijke hand verliest. "'+opts[good].title+'" verliest alleen aan '+(good===0 ? loseA : loseB)+', en dat is hier '+safe+', de veilige hand. De andere snit verliest aan '+(good===0 ? loseB : loseA)+'. Lukt de snit niet, dan staat je contract nog steeds.';
   return pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why);
