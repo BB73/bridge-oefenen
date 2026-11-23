@@ -1229,6 +1229,7 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 .rvs{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:0!important;letter-spacing:0!important;white-space:nowrap}
 .rvs > i{flex:none;width:1.2em;text-align:center;font-style:normal}
 .rvs > span{flex:none;width:1.1em;text-align:center;font-weight:800}
+.rvs:has(> span:nth-child(7)) > span{width:.92em;min-width:fit-content} .rvs:has(> span:nth-child(8)) > span{width:.8em} .rvs:has(> span:nth-child(9)) > span{width:.72em} .rvs:has(> span:nth-child(10)) > span{width:.66em}
 .rvd.cl{grid-template-columns:minmax(0,1fr) 7.5rem minmax(0,1fr)!important} .rvh{min-width:0}
 .tlead{flex-direction:column-reverse!important;color:inherit} .tlead:has(i.S){color:var(--s)} .tlead:has(i.H){color:var(--h)} .tlead:has(i.D){color:var(--d)} .tlead:has(i.C){color:var(--c)} .tlead b{color:inherit;font-weight:500}
 .rvs:has(> i.S) > span{color:var(--s)} .rvs:has(> i.H) > span{color:var(--h)} .rvs:has(> i.D) > span{color:var(--d)} .rvs:has(> i.C) > span{color:var(--c)}
@@ -1270,6 +1271,13 @@ svg.gl text{font-family:inherit}
 .hand:has(.ranks.tap) li, .smrows .smrow{min-height:var(--tk)!important}
 :root{--tk:2.45rem;--tkw:2.2rem;--tkf:1.35rem}
 @media (max-height:700px){ :root{--tk:2.05rem;--tkw:1.95rem;--tkf:1.2rem} }
+/* v316: uitkomstkaart op de tafel van de clubavond volgens dezelfde kaartregels (rang boven, symbool onder, gelijke witruimte) */
+.tlead.tl2{display:block!important;padding:0;--th:2.05rem;--mid:calc(var(--th) / 2);--ch:calc((var(--th) - 3 * var(--pg)) / 2)}
+.tlead.tl2.S{color:#123462} .tlead.tl2.H{color:#9B1D38} .tlead.tl2.D{color:#BF5A02} .tlead.tl2.C{color:#216B50}
+.tlead.tl2 > b, .tlead.tl2 > i{position:absolute;left:0;right:0;height:var(--ch);font-size:0;line-height:0;color:inherit}
+.tlead.tl2 > b{top:calc(var(--mid) - var(--pg) / 2 - var(--ch))} .tlead.tl2 > i{top:calc(var(--mid) + var(--pg) / 2)}
+.tlead.tl2 svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
+.tlead.tl2 .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
@@ -3808,10 +3816,16 @@ function newSQ(sk){
 // Kaartteken als SVG: de inkt van het teken vult precies het vak, zonder afrondingen van de browser op de basislijn.
 const GLY = {};
 function glyph(t, w){ const k = w+'|'+t; let v = GLY[k];
-  if(!v){ try{ const cv = glyph.cv || (glyph.cv = document.createElement('canvas').getContext('2d'));
-      cv.font = w+' 100px '+getComputedStyle(document.body).fontFamily; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left';
-      const m = cv.measureText(t), l = m.actualBoundingBoxLeft, r = m.actualBoundingBoxRight, a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
-      v = (a+d>0 && l+r>0) ? [-l, -a, l+r, a+d] : [0, -72, 60*t.length, 72]; }catch(e){ v = [0, -72, 60*t.length, 72]; }
+  if(!v){ try{
+      // De inkt opmeten door het teken echt te tekenen en de pixels te tellen: werkt in elke browser gelijk
+      // (Safari geeft bij measureText een andere linkergrens terug dan Chrome).
+      const W = 400, H = 240, X = 150, Y = 170;
+      const c = glyph.c || (glyph.c = Object.assign(document.createElement('canvas'), {width:W, height:H})), cv = c.getContext('2d', {willReadFrequently:true});
+      cv.clearRect(0, 0, W, H); cv.font = w+' 100px '+getComputedStyle(document.body).fontFamily; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left'; cv.fillStyle = '#000';
+      cv.fillText(t, X, Y);
+      const px = cv.getImageData(0, 0, W, H).data; let t0 = H, b0 = -1, l0 = W, r0 = -1;
+      for(let y = 0; y < H; y++) for(let x = 0; x < W; x++) if(px[(y*W+x)*4+3] > 60){ if(y<t0) t0 = y; if(y>b0) b0 = y; if(x<l0) l0 = x; if(x>r0) r0 = x; }
+      v = b0 >= t0 && r0 >= l0 ? [l0-X, t0-Y, r0-l0+1, b0-t0+1] : [0, -72, 60*t.length, 72]; }catch(e){ v = [0, -72, 60*t.length, 72]; }
     if(document.fonts && document.fonts.status==='loaded') GLY[k] = v; }
   return '<svg class="gl" viewBox="'+v.map(x=>+x.toFixed(2)).join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="0" y="0" style="font-size:100px;font-weight:'+w+';letter-spacing:0">'+t+'</text></svg><span class="glt">'+t+'</span>'; }
 function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'; }
@@ -7392,7 +7406,7 @@ function newGEV(sk){
                 {title:'Aas en heer slaan', sub:'Hoop dat de vrouw valt', tip:'Aas en heer slaan werkt alleen als de vrouw toevallig valt. Valt ze niet, dan komt misschien de gevaarlijke hand aan slag. Met de snit naar de veilige kant kan er niets misgaan.'}];
   const good = loseA===safe ? 0 : 1;
   const reden = dangerWest ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.'
-    : 'Je hebt in schoppen nog heer en een kleintje. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
+    : 'Je eigen hand (Zuid) heeft schoppenheer en een kleintje; de aas zit bij West. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
   const why = 'Je kunt de vrouw naar twee kanten zoeken. Kies de kant waarbij een mislukte snit aan de ongevaarlijke hand verliest. "'+opts[good].title+'" verliest alleen aan '+(good===0 ? loseA : loseB)+', en dat is hier '+safe+', de veilige hand. De andere snit verliest aan '+(good===0 ? loseB : loseA)+'. Lukt de snit niet, dan staat je contract nog steeds.';
   return pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why);
 }
@@ -8963,7 +8977,7 @@ function clubDraw(){
   // vierkante tafel: het contract van jullie tafel in het midden, de uitkomstkaart bij de uitkomende speler
   const tr0 = m ? m.r : null, tp = tr0 ? clubResParse(tr0) : null, lc0 = tr0 ? clubLeadCard(tr0.lead) : null;
   const leadPos = tp ? ['n','o','z','w'][(tp.decl+1)%4] : '';
-  const leadCard = lc0!=null ? (()=>{ const su = SUITS[gSuit(lc0)]; return '<span class="tlead '+leadPos+'"><i class="'+su+'">'+SYM[su]+'</i><b>'+(RANK[gRank(lc0)]||gRank(lc0))+'</b></span>'; })() : '';
+  const leadCard = lc0!=null ? (()=>{ const su = SUITS[gSuit(lc0)]; return '<span class="tlead tl2 '+leadPos+' '+su+'"><b>'+glyph(''+(RANK[gRank(lc0)]||gRank(lc0)), 400)+'</b><i class="'+su+'">'+glyph(SYM[su], 700)+'</i></span>'; })() : '';
   const mid = '<div class="rvmid sq">'+(tr0 ? '<span class="tct">'+clubContractHTML(tr0.c)+(tp ? ' '+NM[tp.decl][0] : '')+'</span>' : '<span class="tct">spel '+b.nr+'</span>')+leadCard+'</div>';
   const ysc = m ? (m.r.score!=null ? ((m.nz ? m.r.score : -m.r.score)>0 ? '+' : '')+(m.nz ? m.r.score : -m.r.score) : '')+' · <b>'+(clubButler(c) ? (clubImp(b, m)===null ? '' : impTxt(clubImp(b, m))+' IMP') : (clubPct(b, m)===null ? '' : clubPct(b, m)+'%'))+'</b>' : '';
   const yours = m ? '<p class="clubyou"><span class="cyl">Jullie:</span><span class="cys">Contract:</span><span class="cyr"><b>'+clubContractHTML(m.r.c)+(m.r.d ? ' '+m.r.d : '')+(m.r.r && m.r.r!=='-' ? ' '+m.r.r : '')+'</b> <span class="ysc">· '+ysc+'</span></span>'+(m.r.lead ? '<span></span><span class="cys">Uitkomst:</span><span class="cyr">'+suitTxtHTML(m.r.lead)+'%%LEAD%%</span>' : '')+'</p>' : '';
