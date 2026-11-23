@@ -1278,6 +1278,9 @@ svg.gl text{font-family:inherit}
 .tlead.tl2 > b{top:calc(var(--mid) - var(--pg) / 2 - var(--ch))} .tlead.tl2 > i{top:calc(var(--mid) + var(--pg) / 2)}
 .tlead.tl2 svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
 .tlead.tl2 .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* v318: het kleursymbool voor een rij handkaarten is even groot als het symbool op de kaarten (inkt ca. 18 px) */
+:root{--tsym:1.55rem} @media (max-height:700px){ :root{--tsym:1.35rem} }
+.hand li:has(.ranks.tap) > .sym, .ghand li > .sym, .smrows .smrow > i{font-size:var(--tsym)!important;width:calc(var(--tsym) * 1.05)!important;line-height:1!important;flex:none;text-align:center}
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
