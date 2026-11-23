@@ -670,7 +670,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 #cvex{margin:0 0 .5rem}
 .book.noex .bex{display:none}
 .close[disabled]{opacity:.5;cursor:default}
-.book{background:#fff;color:#111;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.4;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:6px}
+.book{background:#fff;color:#111;font-family:"Suits",Calibri,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.4;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:6px}
 .book h1{font-size:1.5rem;margin:0 0 .2rem;color:#1f3f8f}
 .book .bwho{margin:0 0 1rem;color:#444}
 .book h2{font-size:1.2rem;margin:1.3rem 0 .4rem;padding-bottom:.15rem;border-bottom:2px solid #1f3f8f;color:#1f3f8f;break-after:avoid}
@@ -685,8 +685,8 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .book .bexs{font-size:.8rem;font-weight:700;color:#1f3f8f;text-transform:uppercase;letter-spacing:.04em}
 .book .bexh{font-weight:700;letter-spacing:.02em}
 .book table{border-collapse:collapse;margin:.3rem 0} .book td{border:1px solid #b9c2cc;padding:2px 8px}
-.book .S{color:#1b2f7a} .book .H{color:#c8102e} .book .D{color:#d2691e} .book .C{color:#216B50}
-.sheet{width:794px;height:1123px;box-sizing:border-box;background:#fff;color:#111;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:12.5px;line-height:1.3;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;transform-origin:top left}
+.book .S{color:#123462} .book .H{color:#9B1D38} .book .D{color:#BF5A02} .book .C{color:#216B50}
+.sheet{width:794px;height:1123px;box-sizing:border-box;background:#fff;color:#111;font-family:"Suits",Calibri,"Segoe UI",Arial,sans-serif;font-size:12.5px;line-height:1.3;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;transform-origin:top left}
 .sheet .skpn{box-sizing:border-box;padding:16px 24px 12px;overflow:hidden;min-width:0}
 .sheet .skpn{position:relative}
 .sheet .skpg{position:absolute;right:14px;bottom:8px;font-size:11px;font-weight:700;color:#555}
@@ -698,7 +698,7 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .ovpage h3{font-size:1.06em;margin:.5em 0 .1em;break-after:avoid} .sheet.ovz .ovpage h4, #printsheet.ovz .ovpage h4{font-size:1em;font-weight:700;margin:.3em 0 .05em;color:#444;border:0;padding:0;break-after:avoid}
 .ovpage ul{margin:.1em 0 .3em;padding-left:1.15em} .ovpage li{margin:0} .ovpage p{margin:.15em 0} .ovpage .bvar{font-weight:700;font-style:italic} .ovpage .ovnote{color:#444;font-style:italic}
 .ovpage table{border-collapse:collapse;font-size:.95em;margin:.2em 0} .ovpage td, .ovpage th{border:1px solid #b9c2cc;padding:1px 4px;text-align:left}
-.ovpage .S{color:#1b2f7a} .ovpage .H{color:#c8102e} .ovpage .D{color:#d2691e} .ovpage .C{color:#216B50}      /* na het vouwen staan deze twee weer rechtop */
+.ovpage .S{color:#123462} .ovpage .H{color:#9B1D38} .ovpage .D{color:#BF5A02} .ovpage .C{color:#216B50}      /* na het vouwen staan deze twee weer rechtop */
 .sheet h4{margin:10px 0 2px;font-size:14.5px;color:#1f3f8f;font-weight:700}
 .sheet h4:first-child{margin-top:0}
 .sheet table{width:100%;border-collapse:collapse;table-layout:fixed}
@@ -710,11 +710,11 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .sheet .sknm{font-size:15px;margin:0 0 2px} .sheet .sknm b{color:#1f3f8f}
 .sheet .skbs{font-size:16.5px;font-weight:700;color:#1f3f8f;margin:14px 0 10px}
 .sheet .sknt{margin:4px 0 0;font-size:11.5px}
-.sheet .S{color:#1b2f7a} .sheet .H{color:#c8102e} .sheet .D{color:#d2691e} .sheet .C{color:#216B50}
+.sheet .S{color:#123462} .sheet .H{color:#9B1D38} .sheet .D{color:#BF5A02} .sheet .C{color:#216B50}
 @media print{
   @page{size:A4 portrait;margin:0}
   html, body{background:#fff !important;margin:0 !important;padding:0 !important}
-  @page book{size:A4 portrait;margin:14mm 15mm}
+  @page book{size:A4 portrait;margin:14mm 15mm 16mm;@bottom-center{content:"Pagina " counter(page) " van " counter(pages);font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:9pt;color:#555}}
   body.pr-card > *:not(#printsheet), body.pr-book > *:not(#printbook){display:none !important}
   body.pr-book #printbook{display:block !important;page:book;border:0;padding:0;font-size:10.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body.pr-card #printsheet{display:grid !important;width:210mm;height:296mm;grid-template-columns:105mm 105mm;grid-template-rows:148.5mm 147.5mm;overflow:hidden;font-size:9.4pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -1282,6 +1282,42 @@ svg.gl text{font-family:inherit}
 :root{--tsym:1.55rem} @media (max-height:700px){ :root{--tsym:1.35rem} }
 .hand li:has(.ranks.tap) > .sym, .ghand li > .sym, .smrows .smrow > i{font-size:var(--tsym)!important;width:calc(var(--tsym) * 1.05)!important;line-height:1!important;flex:none;text-align:center}
 /* v319: op een laptop of groot scherm groeit alles mee met de schermhoogte (alle maten zijn in rem) */
+/* EEN KAARTMAAT OP ELK SCHERM (v325): op tafel, in de dummy (boven of opzij) en in de eigen hand zijn symbool en rang precies --H hoog.
+   Telefoon: --H is zo groot dat een dummy van 13 kaarten nog op één rij past; laptop: zie het blok hieronder. */
+:root{--H:clamp(13px, calc(((100vw - 4.6rem - 6px) / 13 - 3px) * .685), 19px);--tz:1}
+main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem);--tkf:calc(var(--H) / .74)!important;--tsym:calc(var(--H) / .74)!important}
+main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
+main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
+main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
+main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
+main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
+/* v326: de eigen hand ziet er overal hetzelfde uit: per kleur één rij, symbool links, de kaarten als witte kaartjes;
+   symbool en rang zijn even groot als op de dummy en op tafel (--H). Kaarten die je kunt spelen liggen iets "op", de rest vlak. */
+main.table, #game, #samenbody{--tile:max(calc(var(--H) * 1.8), 1.4rem);--tile2:max(calc(var(--H) * 2.3), 2.35rem)}
+@media (max-height:760px){ main.table, #game, #samenbody{--tile:max(calc(var(--H) * 1.62), 1.25rem)} main.table:is(.ns, :not(.ns)) > #hand{row-gap:.06rem!important} }
+main.table:is(.ns, :not(.ns)) > #hand, #game > #gsouth{display:flex!important;flex-direction:column!important;align-items:flex-start!important;grid-template-columns:none!important;column-gap:0!important;row-gap:.12rem!important;width:fit-content!important;margin-left:auto!important;margin-right:auto!important}
+main.table > #hand > li, #game > #gsouth > li, #samenbody .smrows .smrow{display:flex!important;align-items:center!important;gap:.22rem!important;margin:0!important;min-height:var(--tile)!important;line-height:1!important;font-size:calc(var(--H) / .74)!important}
+main.table > #hand > li:has(.ranks.tap), #game > #gsouth > li:has(.card:not(:disabled)), #game.turn > #gsouth > li, #samenbody .smrows .smrow:has(button.mk){min-height:var(--tile2)!important}
+main.table > #hand .ranks, #game > #gsouth .ranks{display:flex!important;flex-wrap:nowrap!important;gap:.22rem!important;font-size:inherit!important}
+main.table > #hand .mk, main.table > #hand .card, #game > #gsouth .card, #samenbody .smrows .mk{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-direction:row!important;box-sizing:border-box!important;
+  height:var(--tile)!important;min-width:calc(var(--H) * 1.55)!important;width:auto!important;aspect-ratio:auto!important;padding:0 .14em!important;margin:0!important;
+  border:1px solid #B9C4BD!important;border-radius:5px!important;background:#FFFFFF!important;box-shadow:none!important;opacity:1;
+  font:inherit!important;font-size:calc(var(--H) / .74)!important;font-weight:800!important;line-height:1!important;letter-spacing:-.02em!important}
+main.table > #hand .ranks.tap .card, #game > #gsouth .card:not(:disabled), #samenbody .smrows button.mk{height:var(--tile2)!important;min-width:calc(var(--H) * 1.9)!important;border-bottom-width:3px!important;box-shadow:0 1px 3px rgba(0,0,0,.25)!important;cursor:pointer}
+#game > #gsouth .card:disabled{opacity:.55!important}
+#game.bidmode > #gsouth .card, #game > #gsouth:not(.turn) .card{opacity:1!important}
+#samenbody .smrows .mk.off{opacity:.45!important}
+main.table > #hand .mk.S, main.table > #hand .card.kS, #game > #gsouth .card.kS, #samenbody .smrows .mk.S{color:#123462!important}
+main.table > #hand .mk.H, main.table > #hand .card.kH, #game > #gsouth .card.kH, #samenbody .smrows .mk.H{color:#9B1D38!important}
+main.table > #hand .mk.D, main.table > #hand .card.kD, #game > #gsouth .card.kD, #samenbody .smrows .mk.D{color:#BF5A02!important}
+main.table > #hand .mk.C, main.table > #hand .card.kC, #game > #gsouth .card.kC, #samenbody .smrows .mk.C{color:#216B50!important}
+main.table > #hand .card .pip, #game > #gsouth .card .pip{display:none!important}
+main.table > #hand .void, #game > #gsouth .void, #samenbody .smrows .mkd{font-size:calc(var(--H) / .74)!important;line-height:1}
+/* v326: biedkastje smaller; niveau en kleursymbool even groot als in de hand */
+.box:has(> .bid[class*=" d-"]){width:fit-content!important;max-width:100%;margin-left:auto!important;margin-right:auto!important;grid-template-columns:repeat(5, calc(var(--H) * 3.7))!important}
+.box > .bid[class*=" d-"], .box > .bid[data-bid="pas"], .box > .bid[data-bid="X"], .box > .bid[data-bid="XX"]{font-size:calc(var(--H) / .74)!important;line-height:1}
+.box > .bid[class*=" d-"] > span{font-size:1em!important}
+#samenbody .smbd button{font-size:calc(var(--H) / .74)!important}
 @media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
   /* LAPTOP: alles groeit mee met de schermhoogte (alle maten zijn in rem); 40 rem hoog, dus op elk scherm dezelfde verhoudingen.
      Vensters (menu, systeemkaart, clubavond) houden hun eigen maat; Samen spelen groeit wel mee. */
@@ -1298,20 +1334,11 @@ svg.gl text{font-family:inherit}
   main.table .bsq, main.table .nsq:not(.smsq), main.table .qsq{width:12.5rem!important;height:12.5rem!important;zoom:var(--tz)}
   main.table .smsq, #game > #gbid > .smsq{--w:12.5rem!important;zoom:var(--tz);width:var(--w)!important}
   #game > .tablewrap{zoom:var(--tz);width:auto!important}
-  /* EEN MAAT voor alle kaarten links: op tafel, in de dummy (boven of opzij) en in de hand zijn symbool en rang precies --H hoog */
-  main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem)}
-  main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
-  main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
-  main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
-  main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(12.5rem * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
   #game > .tablewrap #gsq{--w:12.5rem!important}
   /* de eigen hand */
   main.table > #hand, #game > #gsouth{width:fit-content!important;max-width:var(--lw)!important;align-self:center;margin-left:auto;margin-right:auto}
-  main.table:not([hidden]), #game:not([hidden]), #samenbody{--tk:2.6rem!important;--tkw:2.3rem!important;--tkf:calc(var(--H) / .74)!important;--tsym:calc(var(--H) / .74)!important}
-  main.table > #hand li{font-size:calc(var(--H) / .74)!important;line-height:1.15!important;margin:.1rem 0!important;gap:.15rem!important}
-  main.table > #hand .sym{font-size:calc(var(--H) / .74)!important;width:2.2rem!important}
-  main.table > #hand .mk, main.table > #hand .ranks:not(.tap), main.table > #hand .void{font-size:inherit!important}
-  main.table > #hand .mk{margin-right:.22em;height:auto!important;min-width:0!important;padding:0 .08em!important}
+  main.table:not([hidden]), #game:not([hidden]), #samenbody{--tk:2.6rem!important;--tkw:2.3rem!important}
+  main.table > #hand li{margin:.1rem 0!important;gap:.15rem!important}
   #game > #gsouth{margin-top:.1rem!important;margin-bottom:0!important} #game > #gsouth li{margin:.08rem 0!important}
   #game > #gsouth li:not(:has(.ranks.tap)){font-size:calc(var(--H) / .74)!important;line-height:1.15!important} #game > #gsouth li:not(:has(.ranks.tap)) > .sym{font-size:calc(var(--H) / .74)!important;width:2.2rem!important}
   #game .abwhy, #game #bidsum{font-size:1.1rem!important;line-height:1.3}
@@ -1323,7 +1350,8 @@ svg.gl text{font-family:inherit}
   main.table .box.choices .choice b{font-size:1.3rem!important}
   main.table .box.choices .choice small{font-size:1.02rem!important;line-height:1.25!important}
   main.table .box.choices .cicon{font-size:1.3rem!important}
-  main.table .box:not(.choices) .bid, #game .box .bid{height:3rem!important;font-size:1.3rem!important}
+  main.table .box:not(.choices) .bid, #game .box .bid{height:3rem!important;font-size:1.3rem}
+  main.table .box > .bid[class*=" d-"], #game .box > .bid[class*=" d-"], main.table .box > .bid[data-bid="pas"], #game .box > .bid[data-bid="pas"]{font-size:calc(var(--H) / .74)!important}
   main.table .feedback .verdict{font-size:1.3rem!important}
   main.table .feedback .why, main.table .feedback .fbtext p:not(.verdict){font-size:1.12rem!important;line-height:1.35!important}
   main.table > .action:has(> .feedback:not([hidden])){max-height:var(--ah, calc(100dvh - 19.5rem));display:flex;flex-direction:column;overflow:hidden}
@@ -3886,19 +3914,36 @@ function newSQ(sk){
 // gespeelde kaart: cijfer boven, symbool onder; elk symbool gemeten zodat alle vier precies even hoog staan
 // Kaartteken als SVG: de inkt van het teken vult precies het vak, zonder afrondingen van de browser op de basislijn.
 const GLY = {};
-function glyph(t, w){ const k = w+'|'+t; let v = GLY[k];
-  if(!v){ try{
-      // De inkt opmeten door het teken echt te tekenen en de pixels te tellen: werkt in elke browser gelijk
-      // (Safari geeft bij measureText een andere linkergrens terug dan Chrome).
-      const W = 400, H = 240, X = 150, Y = 170;
-      const c = glyph.c || (glyph.c = Object.assign(document.createElement('canvas'), {width:W, height:H})), cv = c.getContext('2d', {willReadFrequently:true});
-      cv.clearRect(0, 0, W, H); cv.font = w+' 100px '+getComputedStyle(document.body).fontFamily; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left'; cv.fillStyle = '#000';
-      cv.fillText(t, X, Y);
-      const px = cv.getImageData(0, 0, W, H).data; let t0 = H, b0 = -1, l0 = W, r0 = -1;
-      for(let y = 0; y < H; y++) for(let x = 0; x < W; x++) if(px[(y*W+x)*4+3] > 60){ if(y<t0) t0 = y; if(y>b0) b0 = y; if(x<l0) l0 = x; if(x>r0) r0 = x; }
-      v = b0 >= t0 && r0 >= l0 ? [l0-X, t0-Y, r0-l0+1, b0-t0+1] : [0, -72, 60*t.length, 72]; }catch(e){ v = [0, -72, 60*t.length, 72]; }
-    if(document.fonts && document.fonts.status==='loaded') GLY[k] = v; }
-  return '<svg class="gl" viewBox="'+v.map(x=>+x.toFixed(2)).join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="0" y="0" style="font-size:100px;font-weight:'+w+';letter-spacing:0">'+t+'</text></svg><span class="glt">'+t+'</span>'; }
+const SUITPATH = {"♠":{"d":"M365 -740Q371 -733 374 -725.5Q377 -718 380.5 -710.5Q384 -703 387.5 -696Q391 -689 395 -682Q399 -675 403 -668Q407 -661 411.5 -654Q416 -647 420.5 -640Q425 -633 430 -626Q435 -619 439.5 -612.5Q444 -606 449.5 -599Q455 -592 460.5 -585.5Q466 -579 471.5 -572Q477 -565 483.5 -558.5Q490 -552 496.5 -545.5Q503 -539 508.5 -533Q514 -527 520.5 -520.5Q527 -514 533.5 -508Q540 -502 547 -496.5Q554 -491 560.5 -485.5Q567 -480 574 -474.5Q581 -469 587.5 -462.5Q594 -456 600.5 -450.5Q607 -445 613.5 -438.5Q620 -432 625.5 -425.5Q631 -419 636.5 -412.5Q642 -406 647 -399Q652 -392 655.5 -384.5Q659 -377 662 -370Q665 -363 667 -355.5Q669 -348 671 -340Q673 -332 674 -324.5Q675 -317 675 -309Q675 -301 675 -293Q675 -285 673.5 -277Q672 -269 670 -261.5Q668 -254 665.5 -246.5Q663 -239 659 -232Q655 -225 651 -218Q647 -211 641 -204Q635 -197 628.5 -191.5Q622 -186 615.5 -181Q609 -176 601.5 -172.5Q594 -169 587 -166Q580 -163 572 -161Q564 -159 556.5 -157.5Q549 -156 541 -155Q533 -154 525.5 -154.5Q518 -155 510 -156Q502 -157 494.5 -159Q487 -161 479.5 -163Q472 -165 464.5 -169Q457 -173 450.5 -177.5Q444 -182 437 -187.5Q430 -193 424 -199.5Q418 -206 413 -212.5Q408 -219 403.5 -226Q399 -233 389 -246Q389 -236 389.5 -228Q390 -220 391 -212Q392 -204 393 -196.5Q394 -189 395 -181Q396 -173 398 -165.5Q400 -158 402 -150.5Q404 -143 407 -135.5Q410 -128 414 -121Q418 -114 422 -106.5Q426 -99 430.5 -92.5Q435 -86 441 -79.5Q447 -73 453.5 -67Q460 -61 467 -56Q474 -51 481 -47.5Q488 -44 495.5 -40.5Q503 -37 510.5 -34.5Q518 -32 525.5 -29.5Q533 -27 548 -23L547 0Q524 0 516 0Q508 0 499.5 0Q491 0 483 0Q475 0 467 0Q459 0 451 0Q443 0 435 0Q427 0 418.5 0Q410 0 402 0Q394 0 386 0Q378 0 370 0Q362 0 354 0Q346 0 337.5 0Q329 0 321 0Q313 0 305 0Q297 0 289 0Q281 0 273 0Q265 0 256.5 0Q248 0 240 0Q232 0 224 0Q216 0 208 0Q200 0 184 -3L185 -25Q206 -30 213.5 -31.5Q221 -33 228.5 -36.5Q236 -40 243 -43.5Q250 -47 257 -51Q264 -55 271 -60.5Q278 -66 284.5 -72.5Q291 -79 296 -86Q301 -93 305.5 -100Q310 -107 314 -114Q318 -121 321 -128.5Q324 -136 326.5 -143.5Q329 -151 331 -158.5Q333 -166 334.5 -173.5Q336 -181 337.5 -189Q339 -197 340 -205Q341 -213 341.5 -221Q342 -229 341 -245Q333 -236 329 -229Q325 -222 320 -215Q315 -208 309.5 -201.5Q304 -195 297.5 -189.5Q291 -184 284 -179.5Q277 -175 270 -171Q263 -167 255.5 -164Q248 -161 240.5 -159.5Q233 -158 225 -156.5Q217 -155 209.5 -154.5Q202 -154 194 -155Q186 -156 178.5 -157Q171 -158 163 -159.5Q155 -161 148 -164.5Q141 -168 133.5 -171Q126 -174 119 -178.5Q112 -183 106 -188.5Q100 -194 94.5 -200.5Q89 -207 84 -214Q79 -221 74.5 -228Q70 -235 67 -242.5Q64 -250 62 -257.5Q60 -265 58.5 -272.5Q57 -280 56.5 -288Q56 -296 55.5 -303.5Q55 -311 56 -319Q57 -327 58.5 -335Q60 -343 62 -350.5Q64 -358 67 -365Q70 -372 73.5 -379.5Q77 -387 81.5 -394Q86 -401 91.5 -407.5Q97 -414 102.5 -421Q108 -428 114.5 -434.5Q121 -441 127.5 -447Q134 -453 140.5 -459Q147 -465 154 -470Q161 -475 167.5 -481Q174 -487 180.5 -493Q187 -499 193.5 -504.5Q200 -510 206.5 -516.5Q213 -523 219 -528.5Q225 -534 231 -540.5Q237 -547 243.5 -553.5Q250 -560 255.5 -566.5Q261 -573 266.5 -579.5Q272 -586 277 -592.5Q282 -599 287.5 -606Q293 -613 297.5 -619.5Q302 -626 306.5 -633Q311 -640 315.5 -646.5Q320 -653 324 -660.5Q328 -668 332 -675Q336 -682 340 -689Q344 -696 347.5 -703Q351 -710 354.5 -717.5Q358 -725 365 -740Z","b":[55.3,-740,619.7,740]},"♣":{"d":"M387 -386Q376 -405 369.5 -412Q363 -419 356 -425Q349 -431 342 -436.5Q335 -442 328.5 -448Q322 -454 315 -460Q308 -466 301.5 -472.5Q295 -479 288.5 -485.5Q282 -492 277 -499Q272 -506 267 -513Q262 -520 258.5 -527.5Q255 -535 251.5 -542.5Q248 -550 246 -557.5Q244 -565 242.5 -573Q241 -581 241 -589Q241 -597 241 -605.5Q241 -614 242.5 -622Q244 -630 246.5 -637.5Q249 -645 252 -652.5Q255 -660 259.5 -667Q264 -674 269 -681Q274 -688 281 -694Q288 -700 294.5 -705.5Q301 -711 308.5 -715Q316 -719 323.5 -722.5Q331 -726 338.5 -728.5Q346 -731 354 -733Q362 -735 370 -736Q378 -737 386 -738.5Q394 -740 402 -740Q410 -740 418 -739.5Q426 -739 434 -738Q442 -737 450 -735Q458 -733 465.5 -731Q473 -729 480.5 -726Q488 -723 495.5 -718.5Q503 -714 510 -710Q517 -706 524 -699.5Q531 -693 537 -686Q543 -679 547.5 -672Q552 -665 556 -658Q560 -651 562.5 -643Q565 -635 566.5 -627.5Q568 -620 569.5 -612Q571 -604 570.5 -595.5Q570 -587 569 -579Q568 -571 566 -563.5Q564 -556 561.5 -548.5Q559 -541 555.5 -533.5Q552 -526 547.5 -519Q543 -512 538 -505Q533 -498 527.5 -491Q522 -484 515.5 -477.5Q509 -471 502 -465Q495 -459 488.5 -453.5Q482 -448 475 -442Q468 -436 461.5 -430Q455 -424 448.5 -418Q442 -412 436 -406Q430 -400 426 -385Q444 -395 451 -399.5Q458 -404 465 -410Q472 -416 479 -421.5Q486 -427 492.5 -432.5Q499 -438 506.5 -443Q514 -448 521 -452.5Q528 -457 535.5 -461Q543 -465 550 -468Q557 -471 565 -473.5Q573 -476 580.5 -478Q588 -480 596 -481Q604 -482 612.5 -482.5Q621 -483 629 -482Q637 -481 644.5 -479.5Q652 -478 660 -475.5Q668 -473 675 -469.5Q682 -466 689.5 -461Q697 -456 703.5 -450.5Q710 -445 716 -438Q722 -431 726.5 -424Q731 -417 735 -409.5Q739 -402 742 -394.5Q745 -387 747.5 -379.5Q750 -372 752 -364Q754 -356 754 -348Q754 -340 754 -331.5Q754 -323 754 -315Q754 -307 753 -299Q752 -291 750 -283Q748 -275 745.5 -267.5Q743 -260 739.5 -252.5Q736 -245 732 -238Q728 -231 722.5 -224Q717 -217 711 -210Q705 -203 698 -197.5Q691 -192 684 -187Q677 -182 669.5 -178.5Q662 -175 654.5 -172.5Q647 -170 639 -168Q631 -166 623 -165.5Q615 -165 606.5 -165Q598 -165 590.5 -166.5Q583 -168 575 -170Q567 -172 559.5 -175Q552 -178 544.5 -181.5Q537 -185 530 -189.5Q523 -194 516 -199Q509 -204 502 -209.5Q495 -215 489.5 -222Q484 -229 478.5 -236Q473 -243 468 -250Q463 -257 459 -264Q455 -271 451.5 -278.5Q448 -286 444.5 -293.5Q441 -301 438 -308.5Q435 -316 431.5 -323.5Q428 -331 418 -346Q414 -336 413.5 -327.5Q413 -319 413.5 -311Q414 -303 415 -295Q416 -287 416.5 -279Q417 -271 417.5 -263Q418 -255 419.5 -247Q421 -239 421 -230.5Q421 -222 422 -214Q423 -206 424.5 -198Q426 -190 427 -182Q428 -174 430 -166.5Q432 -159 434 -151Q436 -143 438 -135.5Q440 -128 442.5 -120Q445 -112 448.5 -104.5Q452 -97 456 -90Q460 -83 464 -75.5Q468 -68 473.5 -61.5Q479 -55 486 -49Q493 -43 500 -39Q507 -35 514.5 -32Q522 -29 538 -24L537 0Q522 0 513.5 0Q505 0 497 0Q489 0 480.5 0Q472 0 464 0Q456 0 447.5 0Q439 0 431 0Q423 0 414.5 0Q406 0 398 0Q390 0 381.5 0Q373 0 365 0Q357 0 348.5 0Q340 0 332 0Q324 0 315.5 0Q307 0 298.5 0Q290 0 274 -1V-24Q296 -31 303.5 -35Q311 -39 318 -43.5Q325 -48 331 -54.5Q337 -61 342 -68Q347 -75 351.5 -82.5Q356 -90 359.5 -97Q363 -104 366 -111.5Q369 -119 371.5 -127Q374 -135 376 -142.5Q378 -150 380 -158Q382 -166 383 -174Q384 -182 385 -190Q386 -198 387.5 -206Q389 -214 390 -222Q391 -230 391 -238Q391 -246 392.5 -254Q394 -262 394 -270.5Q394 -279 395 -287Q396 -295 396 -303Q396 -311 396 -319.5Q396 -328 394 -344Q380 -325 377 -317.5Q374 -310 371 -302.5Q368 -295 364 -288Q360 -281 356.5 -273.5Q353 -266 348.5 -258.5Q344 -251 339.5 -244Q335 -237 329.5 -230Q324 -223 317.5 -217.5Q311 -212 304.5 -205.5Q298 -199 291 -194.5Q284 -190 276.5 -186Q269 -182 261.5 -178.5Q254 -175 246.5 -173Q239 -171 231 -169.5Q223 -168 215 -166.5Q207 -165 199 -165Q191 -165 183 -166.5Q175 -168 167 -170Q159 -172 151.5 -175Q144 -178 136.5 -181.5Q129 -185 122 -190.5Q115 -196 108.5 -202Q102 -208 95.5 -215Q89 -222 85 -229Q81 -236 76.5 -243.5Q72 -251 68.5 -258Q65 -265 63 -273Q61 -281 59.5 -289Q58 -297 56.5 -304.5Q55 -312 55 -320.5Q55 -329 55 -337Q55 -345 56.5 -353Q58 -361 60 -369Q62 -377 64.5 -384.5Q67 -392 70 -399.5Q73 -407 77.5 -414Q82 -421 87 -428Q92 -435 99 -442Q106 -449 112.5 -454.5Q119 -460 126.5 -464.5Q134 -469 141.5 -472Q149 -475 156.5 -476.5Q164 -478 172 -480Q180 -482 188 -482.5Q196 -483 204 -482.5Q212 -482 220 -480.5Q228 -479 236 -477Q244 -475 251.5 -472Q259 -469 266.5 -465.5Q274 -462 281 -458Q288 -454 295.5 -449.5Q303 -445 310 -440Q317 -435 323.5 -429.5Q330 -424 337 -418Q344 -412 351 -406.5Q358 -401 365 -396Q372 -391 387 -386Z","b":[55.0,-740.0,699.0,740.0]},"♥":{"d":"M387 0Q383 -12 380 -19.5Q377 -27 374.5 -34.5Q372 -42 369 -49Q366 -56 362.5 -63.5Q359 -71 356 -78Q353 -85 349 -92.5Q345 -100 342 -107Q339 -114 335 -121.5Q331 -129 326.5 -136Q322 -143 318 -150Q314 -157 309.5 -164Q305 -171 300.5 -178Q296 -185 291 -191.5Q286 -198 281 -205Q276 -212 270.5 -219Q265 -226 259.5 -232.5Q254 -239 248.5 -246Q243 -253 237 -259.5Q231 -266 225.5 -272.5Q220 -279 213.5 -285.5Q207 -292 201.5 -298Q196 -304 190 -310.5Q184 -317 178.5 -324Q173 -331 166.5 -337.5Q160 -344 154.5 -350.5Q149 -357 143 -364Q137 -371 132 -377.5Q127 -384 122 -391Q117 -398 112 -405Q107 -412 102.5 -419Q98 -426 94 -433Q90 -440 86.5 -447Q83 -454 79.5 -461.5Q76 -469 73 -476Q70 -483 68 -491Q66 -499 64.5 -506.5Q63 -514 61.5 -521.5Q60 -529 59 -537Q58 -545 56.5 -553Q55 -561 55 -569Q55 -577 55.5 -585Q56 -593 57 -600.5Q58 -608 60 -615.5Q62 -623 64 -631Q66 -639 69 -646Q72 -653 76.5 -660Q81 -667 85.5 -674Q90 -681 95.5 -688Q101 -695 108 -700Q115 -705 122 -710Q129 -715 136 -719Q143 -723 150.5 -726Q158 -729 165.5 -731.5Q173 -734 180.5 -735.5Q188 -737 195.5 -738.5Q203 -740 211.5 -740Q220 -740 228 -740Q236 -740 243.5 -738.5Q251 -737 258.5 -735Q266 -733 273.5 -729.5Q281 -726 288 -722Q295 -718 302 -712.5Q309 -707 315.5 -701Q322 -695 327 -688Q332 -681 337 -674Q342 -667 346.5 -660Q351 -653 354.5 -646Q358 -639 361.5 -631.5Q365 -624 367.5 -617Q370 -610 372.5 -602.5Q375 -595 377 -587Q379 -579 380.5 -571.5Q382 -564 387 -549Q389 -559 391 -566.5Q393 -574 394.5 -581.5Q396 -589 398.5 -596.5Q401 -604 403.5 -611.5Q406 -619 409.5 -626.5Q413 -634 416.5 -641Q420 -648 424.5 -655Q429 -662 433 -669Q437 -676 442 -683Q447 -690 453.5 -696Q460 -702 466.5 -707.5Q473 -713 479.5 -718Q486 -723 493.5 -726.5Q501 -730 508 -733Q515 -736 523 -737.5Q531 -739 539 -739.5Q547 -740 555 -740Q563 -740 571 -739Q579 -738 586.5 -737Q594 -736 601.5 -733.5Q609 -731 616.5 -728Q624 -725 631 -721.5Q638 -718 645.5 -713.5Q653 -709 659.5 -703.5Q666 -698 672.5 -691.5Q679 -685 684 -678Q689 -671 693 -664Q697 -657 701 -650Q705 -643 707.5 -635.5Q710 -628 711.5 -620Q713 -612 714 -604.5Q715 -597 716.5 -589Q718 -581 717.5 -573Q717 -565 716 -557Q715 -549 714 -541.5Q713 -534 712 -526Q711 -518 709 -510.5Q707 -503 705 -495.5Q703 -488 700 -480.5Q697 -473 694 -465.5Q691 -458 687.5 -451Q684 -444 680.5 -437Q677 -430 672 -423Q667 -416 662.5 -409Q658 -402 653 -395Q648 -388 642.5 -381.5Q637 -375 631.5 -368Q626 -361 620.5 -354.5Q615 -348 609.5 -341.5Q604 -335 597.5 -328.5Q591 -322 584.5 -315.5Q578 -309 572.5 -302.5Q567 -296 561 -289.5Q555 -283 549 -276Q543 -269 537 -262.5Q531 -256 526 -249Q521 -242 515 -235.5Q509 -229 504 -222Q499 -215 494 -208.5Q489 -202 484 -195Q479 -188 474.5 -181Q470 -174 466 -167Q462 -160 457.5 -153Q453 -146 449 -139Q445 -132 441 -124.5Q437 -117 433.5 -110Q430 -103 426.5 -96Q423 -89 419.5 -81.5Q416 -74 412.5 -67Q409 -60 406.5 -52.5Q404 -45 401.5 -37.5Q399 -30 396.5 -22.5Q394 -15 387 0Z","b":[55.0,-740.0,662.6,740.0]},"♦":{"d":"M55 -381Q63 -388 69.5 -395Q76 -402 82.5 -408.5Q89 -415 95.5 -421.5Q102 -428 108.5 -434.5Q115 -441 121.5 -447.5Q128 -454 135 -460.5Q142 -467 148.5 -474Q155 -481 161.5 -487.5Q168 -494 173.5 -501Q179 -508 185.5 -514.5Q192 -521 197.5 -527.5Q203 -534 209.5 -541Q216 -548 222 -554.5Q228 -561 233.5 -568Q239 -575 245 -581.5Q251 -588 256.5 -595Q262 -602 268 -609Q274 -616 279.5 -623Q285 -630 290.5 -636.5Q296 -643 301 -650Q306 -657 311.5 -664Q317 -671 322 -678Q327 -685 332 -692Q337 -699 342.5 -706Q348 -713 353 -720Q358 -727 368 -740Q379 -730 384 -723Q389 -716 394 -709Q399 -702 404.5 -695Q410 -688 415 -681Q420 -674 425.5 -667Q431 -660 436.5 -653Q442 -646 447 -639Q452 -632 457.5 -625.5Q463 -619 468.5 -612Q474 -605 479.5 -598Q485 -591 491 -584.5Q497 -578 502.5 -571Q508 -564 513.5 -557Q519 -550 525.5 -543.5Q532 -537 538 -530Q544 -523 550 -516.5Q556 -510 562 -503Q568 -496 574.5 -489.5Q581 -483 587.5 -476.5Q594 -470 600.5 -463.5Q607 -457 614 -450.5Q621 -444 626.5 -437Q632 -430 638.5 -423.5Q645 -417 651.5 -411Q658 -405 665 -399Q672 -393 682 -379Q669 -365 662.5 -359Q656 -353 649.5 -347.5Q643 -342 636.5 -335.5Q630 -329 623.5 -322.5Q617 -316 610.5 -309Q604 -302 597.5 -295.5Q591 -289 585.5 -282.5Q580 -276 573.5 -269.5Q567 -263 561 -256Q555 -249 549 -242.5Q543 -236 537 -229Q531 -222 525.5 -215.5Q520 -209 514.5 -202Q509 -195 503 -188Q497 -181 492 -174Q487 -167 481.5 -160.5Q476 -154 470.5 -147Q465 -140 460.5 -133Q456 -126 450.5 -119Q445 -112 440 -105Q435 -98 430 -91Q425 -84 420.5 -77Q416 -70 411 -63Q406 -56 401.5 -49Q397 -42 392 -34.5Q387 -27 383 -20Q379 -13 368 0Q358 -14 354 -21Q350 -28 345 -35.5Q340 -43 335.5 -50Q331 -57 326 -64Q321 -71 316.5 -78Q312 -85 307 -92Q302 -99 297 -106Q292 -113 287 -120Q282 -127 277 -134Q272 -141 266.5 -148Q261 -155 256 -162Q251 -169 245.5 -175.5Q240 -182 234 -189Q228 -196 222.5 -203Q217 -210 211.5 -216.5Q206 -223 200.5 -230Q195 -237 188.5 -243.5Q182 -250 176.5 -257Q171 -264 164 -270.5Q157 -277 151.5 -283.5Q146 -290 140 -296.5Q134 -303 127.5 -309.5Q121 -316 114.5 -322.5Q108 -329 101 -334.5Q94 -340 87.5 -347Q81 -354 74.5 -360.5Q68 -367 55 -381Z","b":[55,-740,627,740]}};
+// Kaartteken als SVG.
+// Kleursymbolen: de vorm zelf (pad uit ons eigen lettertype), met een vaste maat. Geen lettertype en geen meting nodig,
+//   dus op elk toestel (ook iPhone/Safari) en meteen bij het openen precies goed.
+// Rang (A, H, V, B, 10, 9 ...): tekst in Atkinson. De inkt wordt één keer per teken opgemeten (niet per kaart) en bewaard;
+//   pas als Atkinson echt geladen is, en daarna worden kaarten die al op het scherm staan bijgesteld.
+const RANKFONT = '"Atkinson Hyperlegible"';
+function rankBox(t, w){
+  const W = 400, H = 240, X = 150, Y = 170;
+  const c = glyph.c || (glyph.c = Object.assign(document.createElement('canvas'), {width:W, height:H})), cv = c.getContext('2d', {willReadFrequently:true});
+  cv.clearRect(0, 0, W, H); cv.font = w+' 100px '+RANKFONT+', '+getComputedStyle(document.body).fontFamily; cv.textBaseline = 'alphabetic'; cv.textAlign = 'left'; cv.fillStyle = '#000';
+  cv.fillText(t, X, Y);
+  const px = cv.getImageData(0, 0, W, H).data; let t0 = H, b0 = -1, l0 = W, r0 = -1;
+  for(let y = 0; y < H; y++) for(let x = 0; x < W; x++) if(px[(y*W+x)*4+3] > 60){ if(y<t0) t0 = y; if(y>b0) b0 = y; if(x<l0) l0 = x; if(x>r0) r0 = x; }
+  return b0 >= t0 && r0 >= l0 ? [l0-X, t0-Y, r0-l0+1, b0-t0+1] : [0, -72, 60*t.length, 72];
+}
+function rankReady(w, t){ try{ return !!(document.fonts && document.fonts.check(w+' 100px '+RANKFONT, t)); }catch(e){ return true; } }
+function glyph(t, w){
+  const sp = SUITPATH[String(t).charAt(0)];
+  if(sp) return '<svg class="gl" viewBox="'+sp.b.join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="'+sp.d+'"/></svg><span class="glt">'+t+'</span>';
+  const k = w+'|'+t; let v = GLY[k];
+  if(!v){ try{ v = rankBox(t, w); }catch(e){ v = [0, -72, 60*t.length, 72]; } if(rankReady(w, t)) GLY[k] = v; }
+  return '<svg class="gl" data-t="'+t+'" data-w="'+w+'" viewBox="'+v.map(x=>+x.toFixed(2)).join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><text x="0" y="0" style="font-family:'+RANKFONT.replace(/"/g,"'")+', inherit;font-size:100px;font-weight:'+w+';letter-spacing:0">'+t+'</text></svg><span class="glt">'+t+'</span>';
+}
+// Zodra Atkinson geladen is: de bewaarde maten vernieuwen en de rangen die al op het scherm staan bijstellen.
+function glyphRefresh(){ for(const k in GLY) delete GLY[k];
+  document.querySelectorAll('svg.gl[data-t]').forEach(s=>{ const t = s.dataset.t, w = s.dataset.w, k = w+'|'+t; let v = GLY[k];
+    if(!v){ try{ v = rankBox(t, w); }catch(e){ return; } if(rankReady(w, t)) GLY[k] = v; }
+    s.setAttribute('viewBox', v.map(x=>+x.toFixed(2)).join(' ')); }); }
+try{ if(document.fonts && document.fonts.load) Promise.all([document.fonts.load('400 100px '+RANKFONT, 'AHVB0123456789'), document.fonts.load('700 100px '+RANKFONT, 'AHVB0123456789')]).then(glyphRefresh, ()=>{}); }catch(e){}
 function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'; }
 function pcsMeasure(){ try{
   // De browser zelf laten zeggen waar de basislijn ligt (regelhoogte = lettergrootte); het lettertype zegt hoe hoog de tekens boven de basislijn uitsteken.
@@ -3950,7 +3995,7 @@ function pcsMeasure(){ try{
   window.addEventListener('resize', run); if(mq.addEventListener) mq.addEventListener('change', run);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(run);
   window.rightAlign = () => C.forEach(one); run(); })();
-pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ for(const k in GLY) delete GLY[k]; pcsMeasure(); });
+pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ glyphRefresh(); pcsMeasure(); });
 try{ Promise.all([document.fonts.load('700 100px Suits', SYM.S+SYM.H+SYM.D+SYM.C), document.fonts.load('400 100px "Atkinson Hyperlegible"', '10AHVB')]).then(()=>setTimeout(pcsMeasure, 50)).catch(()=>{}); }catch(e){}
 function cardHTML(id){ const s = id[0], r = +id.slice(1); return '<span class="'+s+'">'+SYM[s]+'</span>'+(RANK[r]||r); }
 // Uitkomstafspraken, in te stellen door de speler
