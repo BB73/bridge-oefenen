@@ -1207,6 +1207,7 @@ button.cbd{cursor:pointer}
 .hrow .rc b{font-weight:800;min-width:calc(var(--ds) - .3rem);text-align:center} .hrow .rc i{font-style:normal;font-size:.92em;min-width:calc(var(--ds) - .3rem);text-align:center;letter-spacing:0}
 .hrow .rc.kS{color:#123462!important} .hrow .rc.kH{color:#9B1D38!important} .hrow .rc.kD{color:#BF5A02!important} .hrow .rc.kC{color:#216B50!important}
 .hrow button.rc.rc:not(:disabled){cursor:pointer;border-color:#1E6A4E!important;transform:translateY(-.3rem)}
+#game .hrow button.rc.rc:not(:disabled){transform:none!important;box-shadow:inset 0 0 0 2px #1E6A4E, -1px 0 2px rgba(0,0,0,.18)!important}
 .hrow .rc.tipc{outline:3px solid #FFD54F;outline-offset:-2px}
 .hrowli{display:block!important;width:100%;margin:0!important;min-height:0!important;grid-column:1 / -1}
 main.table.ns #dummyhand:has(.hrow){display:block}
@@ -1307,9 +1308,17 @@ main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{fon
 #game.big :is(#gnorth, #gsrow) .hrowli + .hrowli{margin-top:.22rem!important}
 #game.big :is(#gnorth, #gsrow) .hrow{min-height:var(--dh);justify-content:center}
 #game .dhide{visibility:hidden!important}
+/* v337: niets groeit of verspringt als je aan de beurt bent; een speelbare kaart heeft alleen een groene rand */
+#game#game > #gsouth .card:not(:disabled){height:var(--tile)!important;min-width:calc(var(--H) * 1.55)!important;border:1px solid #1E6A4E!important;box-shadow:inset 0 0 0 1.5px #1E6A4E!important}
+#game#game > #gsouth > li{min-height:var(--tile)!important}
+#game :is(#gnorth, #gsrow) .hrow:not(.vl):not(.vr){min-height:var(--dh)}
+#game .hrow.ph{min-width:var(--dh)}
 #game .ghand .dcap{display:block!important;min-height:0!important;margin:0 .15rem .1rem!important;font-size:.74rem!important;line-height:1.1!important;font-weight:700;color:var(--muted);letter-spacing:.02em}
 #game .ghand .dcap.r{text-align:right}
 #game.flat:not(.bidmode) > #gstatus{min-height:4.05em;min-height:3lh}
+/* v338: rang en symbool staan precies op de middellijn van de hele kaart (links en rechts evenveel wit), ook gedraaid */
+.hrow .rc .rci{width:calc(var(--dw) - 2px)!important}
+.hrow.vl .rc .rci, .hrow.vr .rc .rci{left:calc((var(--dh) - 2px) / 2 - (var(--dw) - 2px) / 2)!important;top:calc((var(--dw) - 2px) / 2 - (var(--dh) - 2px) / 2)!important}
 /* v331: stempel "Under construction" bij een rubriek waar nog tips over openstaan */
 .crumbs .ucstamp, .ucmini{display:inline-block;font-family:var(--display);font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:1;color:#B3261E;border:2px solid #B3261E;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-5deg);white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(179,38,30,.25)}
 .crumbs .ucstamp{font-size:.68rem;padding:.22rem .4rem;margin-left:.5rem;cursor:pointer}
@@ -2406,7 +2415,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <ul>
         <li>Snijden is een slag proberen te maken met een kaart die niet de hoogste is, door te hopen dat de hogere kaart van de tegenpartij op de goede plek zit.</li>
         <li>Speel náár je honneur toe, niet ervandaan: klein vanuit de andere hand naar A V, naar de heer, of naar de vrouw. Zit de ontbrekende kaart vóór je honneur, dan maak je een extra slag.</li>
-        <li>Een honneur zelf voorspelen doe je alleen als je de kaarten eronder ook hebt, zoals V B 10 tegenover de aas.</li>
+        <li>Een honneur zelf voorspelen doe je alleen als je de kaarten eronder ook hebt, zoals V B T tegenover de aas.</li>
         <li>Met twee honneurs naast elkaar (H V of A V B) speel je er twee keer naartoe.</li>
         <li>Mis je alleen de vrouw: met acht kaarten samen of minder snijd je, met negen sla je aas en heer.</li>
         <li>Kansen: een snit op één ontbrekende kaart lukt de helft van de keren. Aas en heer slaan in de hoop dat de vrouw valt lukt met negen kaarten samen in 53% van de gevallen, met acht kaarten in 33%. Hopen op een kale heer of aas lukt bijna nooit.</li>
@@ -2415,7 +2424,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <ul>
         <li>Heeft partner een kleur geboden, kom dan uit in partners kleur. Met twee kaarten de hoogste; met drie of meer en een plaatje erbij een kleintje.</li>
         <li>Tegen SA zonder bod van partner: kom uit in je langste kleur.</li>
-        <li>Heb je daar een serie van drie hoge kaarten (H V B, V B 10) of bijna een serie (H V 10), kom dan uit met de hoogste van de serie.</li>
+        <li>Heb je daar een serie van drie hoge kaarten (H V B, V B T) of bijna een serie (H V T), kom dan uit met de hoogste van de serie.</li>
         <li>Zonder serie kom je klein uit. Welke kleine kaart hangt af van jullie afspraak: de vierde van boven, of derde of vijfde (uit een even aantal de derde van boven, uit een oneven aantal de laagste). Je stelt dit in bij het kiezen van de oefening, apart voor SA-contracten en voor troefcontracten.</li>
         <li>Tegen een troefcontract is een serie van twee hoge kaarten al genoeg: de heer van H V, de vrouw van V B. Van A H kom je uit met de aas of met de heer, afhankelijk van jullie afspraak; ook dat stel je in.</li>
         <li>Tegen een troefcontract met een singleton en kleine troeven: kom uit met de singleton en hoop op een aftroever.</li>
@@ -2456,7 +2465,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       </ul>
       <h3>Spelen: dubbele snit</h3>
       <ul>
-        <li>Mis je twee honneurs, snijd dan twee keer. Met A B 10: eerst naar de tien, later naar de boer. Je maakt twee slagen als minstens één honneur goed zit.</li>
+        <li>Mis je twee honneurs, snijd dan twee keer. Met A B T: eerst naar de tien, later naar de boer. Je maakt twee slagen als minstens één honneur goed zit.</li>
         <li>Met A B 9: eerst de diepe snit naar de negen.</li>
       </ul>
       <h3>Spelen: kansen combineren</h3>
@@ -2634,7 +2643,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 // ENGINE-START
 const SUITS = ['S','H','D','C'];
 const SYM = {S:'♠\uFE0E', H:'♥\uFE0E', D:'♦\uFE0E', C:'♣\uFE0E'};
-const RANK = {14:'A',13:'H',12:'V',11:'B'};
+const RANK = {14:'A',13:'H',12:'V',11:'B',10:'T'};   // de tien is op elke kaart een T: één teken, net als de andere rangen
 const DEN = ['C','D','H','S','N'];
 const M_IDX = {S:0, H:1};
 const NAME = {S:'schoppen', H:'harten'};
@@ -4018,6 +4027,7 @@ function rankBox(t, w){
 }
 function rankReady(w, t){ try{ return !!(document.fonts && document.fonts.check(w+' 100px '+RANKFONT, t)); }catch(e){ return true; } }
 function glyph(t, w){
+  if(String(t)==='10') t = 'T';
   const sp = SUITPATH[String(t).charAt(0)];
   if(sp) return '<svg class="gl" viewBox="'+sp.b.join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="'+sp.d+'"/></svg><span class="glt">'+t+'</span>';
   const k = w+'|'+t; let v = GLY[k];
@@ -4029,7 +4039,7 @@ function glyphRefresh(){ for(const k in GLY) delete GLY[k];
   document.querySelectorAll('svg.gl[data-t]').forEach(s=>{ const t = s.dataset.t, w = s.dataset.w, k = w+'|'+t; let v = GLY[k];
     if(!v){ try{ v = rankBox(t, w); }catch(e){ return; } if(rankReady(w, t)) GLY[k] = v; }
     s.setAttribute('viewBox', v.map(x=>+x.toFixed(2)).join(' ')); }); }
-try{ if(document.fonts && document.fonts.load) Promise.all([document.fonts.load('400 100px '+RANKFONT, 'AHVB0123456789'), document.fonts.load('700 100px '+RANKFONT, 'AHVB0123456789')]).then(glyphRefresh, ()=>{}); }catch(e){}
+try{ if(document.fonts && document.fonts.load) Promise.all([document.fonts.load('400 100px '+RANKFONT, 'AHVBT0123456789'), document.fonts.load('700 100px '+RANKFONT, 'AHVBT0123456789')]).then(glyphRefresh, ()=>{}); }catch(e){}
 function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'; }
 function pcsMeasure(){ try{
   // De browser zelf laten zeggen waar de basislijn ligt (regelhoogte = lettergrootte); het lettertype zegt hoe hoog de tekens boven de basislijn uitsteken.
@@ -11604,7 +11614,7 @@ function gSplit(L){ L = rowOrder(L); const ord = []; L.forEach(c=>{ if(!ord.incl
   return ord.slice(0, best); }
 function gRows(L, top){
   if(!gBig()) return '<li class="hrowli">'+handRow(L)+'</li>';
-  if(!L.length) return '<li class="hrowli">'+handRow1([])+'</li>';
+  if(!L.length) return '<li class="hrowli">'+handRow1([])+'</li><li class="hrowli"><div class="hrow" style="--n:2;--g:0"></div></li>';
   top = top || gSplit(L);
   return [L.filter(c=>top.includes(c.s)), L.filter(c=>!top.includes(c.s))].map(r=>'<li class="hrowli">'+(r.length ? handRow1(rowOrder(r)) : '<div class="hrow" style="--n:2;--g:0"></div>')+'</li>').join(''); }
 function gRowHTML(seat){
@@ -11637,7 +11647,9 @@ function gRender(){
   $('gdl').classList.toggle('dhide', dhide); $('gdr').classList.toggle('dhide', dhide);
   { const tw = document.querySelector('#game .tablewrap'); tw.classList.toggle('sqrow', side);
     const L = []; if(def) SUITS.forEach((s,si)=>G.hands[0].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>L.push({s, t:RANK[gRank(c)]||gRank(c)})));
-    const row = side ? handRow(L, dpos===3 ? 'l' : 'r') : '';
+    let row = '';
+    if(side){ const sd = dpos===3 ? 'l' : 'r'; if(!G.dcols && L.length) G.dcols = rowOrder(L).map(c=>c.s).filter((x,i,a)=>a.indexOf(x)===i);
+      row = '<div class="hcols v'+sd+'">'+(G.dcols || []).map(k=>{ const g = L.filter(c=>c.s===k); return g.length ? handRow1(g, sd) : '<div class="hrow v'+sd+' ph" style="--n:2;--g:0"></div>'; }).join('')+'</div>'; }
     $('gdl').innerHTML = side && dpos===3 ? row : ''; $('gdr').innerHTML = side && dpos===1 ? row : '';
     $('gdl').classList.toggle('turn', side && dpos===3 && !G.over && G.turn===0); $('gdr').classList.toggle('turn', side && dpos===1 && !G.over && G.turn===0); }
   const TID = ['tN','tE','tS','tW'];
@@ -11660,10 +11672,11 @@ function gRender(){
     if(def){
       const down = 14-G.need;
       if(gBusy) who = !gMine(G.turn) && gShown.filter(x=>x!==null).length<4 ? (G.turn===0 ? 'De leider speelt uit de dummy' : G.turn===2 ? 'Zuid (leider) is aan de beurt' : 'Partner is aan de beurt') : '';
-      else if(!G.played.length) who = (G.club ? G.club+': j' : 'J')+'ij komt uit tegen '+gLevel(G)+(G.trump===4 ? 'SA' : ' '+SNAME[SUITS[G.trump]])+' van '+gNm(2)+'. Om hem down te spelen hebben jullie '+down+' slagen nodig.';
-      else who = 'Jouw beurt. Jullie hebben '+down+' slagen nodig om hem down te spelen.';
+      else if(!G.played.length) who = (G.club ? G.club+': j' : 'J')+'ij komt uit tegen '+gLevel(G)+(G.trump===4 ? 'SA' : ' '+SNAME[SUITS[G.trump]])+' van '+gNm(2)+'.'+(flat ? '' : ' Om hem down te spelen hebben jullie '+down+' slagen nodig.');
+      else who = flat ? 'Jouw beurt.' : 'Jouw beurt. Jullie hebben '+down+' slagen nodig om hem down te spelen.';
     }
     else if(gBusy) who = (G.turn===1 || G.turn===3) && gShown.filter(x=>x!==null).length<4 ? gNm(G.turn)+' is aan de beurt' : '';
+    else if(G.played.length===1 && flat) who = G.trump===4 ? 'Je hebt '+G.top+' vaste slagen, nodig '+G.need+'. Speel uit de dummy.' : 'Je hebt '+G.los+' verliezer'+(G.los===1 ? '' : 's')+', je mag er '+(13-G.need)+' hebben. Denk aan troef trekken.';
     else if(G.played.length===1) who = G.trump===4 ? 'Tel eerst: je hebt '+G.top+' vaste slagen en hebt er '+G.need+' nodig'+(G.top<G.need ? '. Waar haal je de andere '+(G.need-G.top)+' vandaan?' : '.')+' Speel dan uit de dummy.'
       : 'Tel eerst je verliezers: in je hand zijn het er '+G.los+', met de hoge kaarten van de dummy meegeteld. Je mag er '+(13-G.need)+' hebben.'+(G.los>13-G.need ? ' Kun je er '+(G.los-13+G.need)+' introeven in de dummy of wegwerken?' : '')+' Denk aan troef trekken.';
     else who = G.turn===0 ? 'Speel een kaart uit de dummy' : 'Speel een kaart uit je hand';
@@ -11714,10 +11727,7 @@ function gFit(){
   sq.dataset.fit = '1'; if(res) box.style.marginBottom = res+'px';
   for(let i=0; i<6; i++){
     sq.style.zoom = w / w0;
-    let over = Math.max(se.scrollHeight - innerHeight, g.scrollHeight - g.clientHeight);
-    // de tip na een kaart schuift onderaan over het scherm: je eigen hand blijft erboven zichtbaar
-    { const tip = document.getElementById('gtip'), hr = document.getElementById('gsrow');
-      if(!bid && tip && hr && !tip.hidden && tip.getClientRects().length && getComputedStyle(tip).position==='fixed') over = Math.max(over, hr.getBoundingClientRect().bottom + 4 - tip.getBoundingClientRect().top); }
+    const over = Math.max(se.scrollHeight - innerHeight, g.scrollHeight - g.clientHeight);
     if(over <= 0 || w <= base) break;
     w = Math.max(base, Math.floor(w - over - 1));
   }
@@ -12069,14 +12079,14 @@ const LTH = {
     <li>Als openaar na 2SA of 3SA: met drie of meer kaarten mee speel je de hoge kleur, met twee kaarten SA. Een uitnodiging neem je aan met 16–17 punten.</li>
     <li>Soms krijg je een sterkere hand (15 of meer punten) of 5-5 in harten en schoppen. De uitleg bij het antwoord vertelt dan wat je biedt.</li>
   </ul>
-  <p class="ex"><b>Voorbeeld.</b> ♠ V 10 8 6 3 · ♥ 7 2 · ♦ H 5 4 · ♣ 8 6 3: 5 punten en een vijfkaart schoppen. Bied {2H}; partner biedt {2S} en jij past.</p>`),
+  <p class="ex"><b>Voorbeeld.</b> ♠ V T 8 6 3 · ♥ 7 2 · ♦ H 5 4 · ♣ 8 6 3: 5 punten en een vijfkaart schoppen. Bied {2H}; partner biedt {2S} en jij past.</p>`),
   l5: () => lt(`<ul>
     <li>20, 21 of 22 punten en een evenwichtige hand: open 2SA.</li>
     <li>Vanaf 23 punten (of 22 met een onevenwichtige hand): open {2C}. Dat is kunstmatig: het zegt niets over klaveren, en partner mag niet passen.</li>
     <li>Weinig punten (5–9) maar een zevenkaart: open 3 in die kleur. Met een achtkaart open je 4 in die kleur. Zo neem je de tegenpartij biedruimte af.</li>
     <li>Weinig punten en geen lange kleur: pas.</li>
   </ul>
-  <p class="ex"><b>Voorbeeld.</b> ♠ 6 · ♥ H V B 9 7 5 2 · ♦ 8 4 · ♣ 10 6 3: 6 punten en een zevenkaart harten. Open {3H}.</p>
+  <p class="ex"><b>Voorbeeld.</b> ♠ 6 · ♥ H V B 9 7 5 2 · ♦ 8 4 · ♣ T 6 3: 6 punten en een zevenkaart harten. Open {3H}.</p>
   <p><b>Speelslagen tellen.</b> Met een lange kleur zeggen punten niet alles. Tel dan hoeveel slagen je zelf maakt als partner niets meebrengt:</p>
   <ul>
     <li>Een aas telt 1. Een heer of vrouw telt 1 als er een hogere honneur of elkaar bij zit, anders ½.</li>
@@ -12093,7 +12103,7 @@ const LTH = {
     <li>1SA als volgbod: 15–18 punten, evenwichtig, met een hoge kaart in hun kleur.</li>
     <li>Deed partner een volgbod, steun hem dan met drie of meer kaarten mee: een gewone verhoging met 9–12 punten, een sprong met 13–15.</li>
   </ul>
-  <p class="ex"><b>Voorbeeld.</b> Rechts opent {1D}. Jij hebt ♠ A V 10 8 5 · ♥ 7 3 · ♦ 9 6 2 · ♣ H 8 4: 9 punten en een goede vijfkaart schoppen. Bied {1S}.</p>`),
+  <p class="ex"><b>Voorbeeld.</b> Rechts opent {1D}. Jij hebt ♠ A V T 8 5 · ♥ 7 3 · ♦ 9 6 2 · ♣ H 8 4: 9 punten en een goede vijfkaart schoppen. Bied {1S}.</p>`),
   l7: () => lt(`<ul>
     <li>De tegenpartij opent rechts van je. Met 12 of meer punten maar zonder goede vijfkaart doubleer je. Dat is niet voor straf: je vraagt partner zijn beste kleur te bieden.</li>
     <li>Voorwaarden: hooguit twee kaarten in hun kleur, en minstens drie in elke andere kleur. Openen zij harten of schoppen, dan heb je een vierkaart in de andere hoge kleur.</li>
@@ -12112,7 +12122,7 @@ const LTH = {
     <li>1SA: 6–10 punten met een hoge kaart in hun kleur en geen vierkaart in een ongeboden hoge kleur. Met 0–5 punten pas je.</li>
     <li>Als openaar bied je daarna verder alsof partner die hoge kleur zelf bood: met een vierkaart mee bied je de kleur, zo laag mogelijk met 12–14 punten en met een sprong met 15–17.</li>
   </ul>
-  <p class="ex"><b>Voorbeeld.</b> Partner opent {1C} en rechts biedt {1H}. Jij hebt ♠ H B 6 3 · ♥ 8 5 2 · ♦ V 7 4 · ♣ 10 6 3: 6 punten en vier schoppen. Doubleer.</p>`),
+  <p class="ex"><b>Voorbeeld.</b> Partner opent {1C} en rechts biedt {1H}. Jij hebt ♠ H B 6 3 · ♥ 8 5 2 · ♦ V 7 4 · ♣ T 6 3: 6 punten en vier schoppen. Doubleer.</p>`),
   l9: () => lt(`<ul>
     <li>Hebben jullie een fit en samen ongeveer 33 punten, dan kan er klein slem in zitten: 12 slagen. Je wilt dan weten of er niet twee azen ontbreken.</li>
     <li>4SA vraagt partner hoeveel azen hij heeft.</li>
@@ -12134,11 +12144,11 @@ const LTH = {
     <li>Een lange kleur: speel hem een paar keer. Zijn de kaarten van de tegenpartij op, dan zijn je laatste kleintjes ook slagen.</li>
     <li>Doe dit eerst, zolang je in de andere kleuren nog hoge kaarten hebt om weer aan slag te komen. Je vaste slagen lopen niet weg.</li>
   </ul>
-  <p class="ex"><b>Voorbeeld.</b> Met H V B 10 in ruiten maak je drie slagen, zodra de aas van de tegenpartij weg is. Speel die kleur dus eerst.</p>`),
+  <p class="ex"><b>Voorbeeld.</b> Met H V B T in ruiten maak je drie slagen, zodra de aas van de tegenpartij weg is. Speel die kleur dus eerst.</p>`),
   s3: () => lt(`<ul>
     <li>Snijden is een slag maken met een kaart die niet de hoogste is, in de hoop dat de hogere kaart van de tegenpartij goed zit.</li>
     <li>Speel náár je hoge kaart toe, niet ervandaan: klein vanuit de andere hand naar A V, naar de heer of naar de vrouw.</li>
-    <li>Een hoge kaart zelf voorspelen doe je alleen als je de kaarten eronder ook hebt, zoals V B 10 tegenover de aas.</li>
+    <li>Een hoge kaart zelf voorspelen doe je alleen als je de kaarten eronder ook hebt, zoals V B T tegenover de aas.</li>
     <li>Mis je alleen de vrouw: met acht kaarten samen of minder snijd je, met negen sla je aas en heer.</li>
     <li>Een snit lukt gemiddeld de helft van de keren.</li>
   </ul>
@@ -12167,7 +12177,7 @@ const LTH = {
   s7: () => lt(`<ul>
     <li>Heeft partner een kleur geboden, kom dan in die kleur uit.</li>
     <li>Tegen SA: kom uit in je langste kleur.</li>
-    <li>Heb je daar drie hoge kaarten naast elkaar, zoals H V B of V B 10, kom dan uit met de hoogste.</li>
+    <li>Heb je daar drie hoge kaarten naast elkaar, zoals H V B of V B T, kom dan uit met de hoogste.</li>
     <li>Zonder zo'n serie kom je klein uit. Welke kleine kaart hangt af van jullie afspraak; de bekendste is de vierde kaart van boven.</li>
     <li>Tegen een troefcontract is een serie van twee al genoeg: de heer van H V. Kom nooit klein uit onder een aas vandaan.</li>
     <li>Tegen een troefcontract met een singleton en kleine troeven: kom uit met de singleton en hoop op een aftroever.</li>
@@ -12322,9 +12332,9 @@ function exclWhy(k, gone){
 }
 let cardNote = null;
 const LEADN_ = {'4':'4e van boven', '24':'2e en 4e', '35':'3e of 5e', 'rom':'Romeins', 'rl':'Romeins-Lavinthal', 'kbp':'kleintje belooft plaatje'};
-// Uitkomen van honneurs: serie (top = hoogste, rus = Rusinow tegen troef), onder (onderbroken serie H V 10: top of klein), hvx (tegen SA van H V x: klein of heer), twee (partners kleur met twee kaarten: hoog of laag)
+// Uitkomen van honneurs: serie (top = hoogste, rus = Rusinow tegen troef), onder (onderbroken serie H V T: top of klein), hvx (tegen SA van H V x: klein of heer), twee (partners kleur met twee kaarten: hoog of laag)
 // De tabel met uitkomstprincipes: per combinatie de kaart tegen SA en tegen een troefcontract. Elk vakje is instelbaar.
-const LT_ROWS = [['AH','A H x (x)',['A','H','x']], ['HVB','H V B (x)',['H','V','B']], ['HVX','H V x (x)',['x','H','V']], ['VB10','V B 10 (x)',['V','B','10']], ['HV10','H V 10 x',['H','V','10','x']]];
+const LT_ROWS = [['AH','A H x (x)',['A','H','x']], ['HVB','H V B (x)',['H','V','B']], ['HVX','H V x (x)',['x','H','V']], ['VB10','V B T (x)',['V','B','10']], ['HV10','H V T x',['H','V','10','x']]];
 function ltGet(){
   const s = (typeof state!=='undefined' && state) || {}, L = lpGet(), ak = s.leadAK==='K' ? 'H' : 'A', rus = L.serie==='rus';
   const d = {AH:[ak, ak], HVB:['H', rus ? 'V' : 'H'], HVX:[L.hvx==='heer' ? 'H' : 'x', rus ? 'V' : 'H'], VB10:['V', rus ? 'B' : 'V'], HV10:[L.onder==='klein' ? 'x' : 'H', rus ? 'V' : 'H']};
