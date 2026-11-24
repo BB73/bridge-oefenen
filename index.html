@@ -219,7 +219,7 @@ table.clubsum.wzt td.none{text-align:left !important;font-weight:400 !important;
 .clubres tr.me td{background:#FFF3C4;font-weight:700}
 @media (prefers-color-scheme: dark){ .clubres tr.me td{background:#4A3F12} }
 .gclubback{margin:0 0 .2rem} .gclubback .navclear{padding:0;font-size:.9rem}
-.clubplay{display:flex;gap:.5rem;flex-wrap:wrap} .clubplay .gview{margin:0}
+.clubplay{display:flex;gap:.5rem;flex-wrap:wrap} .clubplay .gview{margin:0} .gview.prim{background:var(--felt);color:var(--on-felt, #fff)}
 .clubentry{display:block;margin:.6rem 0 0;width:100%;text-align:left}
 #game.bidmode #gsouth li{font-size:clamp(1.05rem,2.6dvh,1.3rem);line-height:1.15;margin:.05rem 0;gap:.5rem;min-height:0}
 #game.bidmode .gstatus{min-height:0}
@@ -1293,7 +1293,11 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) 
 main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
 main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
 main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
-main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
+main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{font-size:var(--tsym);line-height:1;vertical-align:-.08em}
+#game .tablewrap:not(.sqrow) > .sqs{display:none!important} #game .tablewrap.sqrow:not([hidden]){display:grid!important;grid-template-columns:auto auto auto!important;justify-content:center!important} #game .tablewrap.sqrow > .seat{display:none!important}
+#game > .tablewrap.sqrow{zoom:1!important} #game > .tablewrap.sqrow > #gsq{zoom:var(--tz)}
+.hcols{display:flex;gap:.25rem;align-items:flex-start;flex:none} .hcols.vr{align-items:flex-end}
+#game .hrow.vl, #game .hrow.vr, main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
 main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
 /* v326: de eigen hand ziet er overal hetzelfde uit: per kleur één rij, symbool links, de kaarten als witte kaartjes;
    symbool en rang zijn even groot als op de dummy en op tafel (--H). Kaarten die je kunt spelen liggen iets "op", de rest vlak. */
@@ -1384,6 +1388,19 @@ main.table > #hand .void, #game > #gsouth .void, #samenbody .smrows .mkd{font-si
   #samenbody:has(> .smsq, > .sqrow) > .smfb p{font-size:inherit!important}
   #samenbody:has(> .smsq, > .sqrow) .smbb button{min-height:2.8rem;font-size:1.25rem}
 }
+/* v329: alertkaartje blijft liggen tot jij geboden hebt; de betekenis staat onder de tafel */
+.alc.vast{animation:none!important;opacity:1!important}
+.altxt{margin:.25rem auto 0;max-width:30rem;font-size:.88rem;line-height:1.3;color:var(--ink, inherit);display:flex;flex-direction:column;gap:.15rem}
+.altxt .alc, .abal .alc{position:static!important;display:inline-flex!important;margin:0 .15rem 0 0!important;vertical-align:-.1em}
+.abal{font-size:.9rem;margin:.15rem 0 .25rem;line-height:1.3}
+/* v330: het lampje voor een tip vooraf */
+#game{position:relative}
+.glamp{position:absolute;top:.35rem;right:.35rem;z-index:5;width:2.6rem;height:2.6rem;padding:0;border:0;border-radius:50%;overflow:hidden;background:#FFFFFF;box-shadow:0 0 0 1px var(--line),0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+.glamp img{width:100%;height:100%;display:block}
+#game > .gstatus{padding-right:3rem}
+#game:has(#gend:not([hidden])) .glamp{display:none}
+#game > .glamp.glamp{width:2.6rem!important;height:2.6rem!important;min-width:0!important;max-width:none!important;flex:none!important;margin:0!important;position:absolute!important}
+#game .card.hint{outline:3px solid #F2B705!important;outline-offset:1px;box-shadow:0 0 0 5px rgba(242,183,5,.35)!important}
 /* Oost is het spiegelbeeld van West: de bovenste kaart ligt over de onderste, het zichtbare deel zit onderaan */
 .hrow.vr{flex-direction:column-reverse!important}
 .hrow.vr .rc.rc{margin:0 0 calc(var(--ds) - var(--dw)) 0!important;box-shadow:0 1px 2px rgba(0,0,0,.18)!important}
@@ -1432,7 +1449,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
 /* antwoorden direct onder de vraag */
 .box.top{width:100%;grid-column:1 / -1;margin:.05rem 0 .5rem;padding-bottom:.55rem;border-bottom:1px solid var(--line);flex:none}
-#dummy{width:100%} #dummyhand:has(.hrow){width:100%!important}
+#dummy{width:100%} #dummyhand:has(.hrow){width:100%!important} main.table > #hand:has(.hrow){width:auto!important;align-self:stretch!important;margin-left:0!important;margin-right:0!important;max-width:100%!important;display:block!important}
 @media (max-height:700px){ .box.top{margin-bottom:.25rem;padding-bottom:.3rem} }
 .navrow2{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin:.1rem 0 0}
 .navrow2 button{font:inherit;font-weight:600;font-size:.9rem;padding:.55rem .4rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
@@ -1486,21 +1503,22 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
   <section class="table game" id="game" hidden aria-label="Een heel spel spelen">
     <p class="gclubback" id="gclubback" hidden><button class="navclear" data-clubback="1">‹ Terug naar de uitslagen van dit spel</button></p>
     <p class="gstatus" id="gstatus" aria-live="polite"></p>
+    <button class="glamp" id="glamp" type="button" aria-label="Geef me een tip" title="Geef me een tip"><img src="data:image/webp;base64,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" alt=""></button>
     <div id="gbid" hidden></div>
     <p class="handlabel" id="gnlabel"><span class="dbadge">Dummy</span>Noord</p>
     <ul class="hand ghand" id="gnorth"></ul>
     <div class="tablewrap">
       <div class="seat" id="seatW"><span id="nameW">West</span><span class="back" id="cntW"></span></div>
-      <div class="sq smsq" id="gsq" aria-label="De tafel met de slag"><span class="tnm" id="gsqnm"></span>
+      <div class="sqs l" id="gdl"></div><div class="sq smsq" id="gsq" aria-label="De tafel met de slag"><span class="tnm" id="gsqnm"></span>
         <span class="gcontract" id="gcontract" aria-label="Het contract">3SA</span><span class="tc" id="tN"></span><span class="tc" id="tW"></span><span class="tc" id="tE"></span><span class="tc" id="tS"></span>
       </div>
-      <div class="seat" id="seatE"><span id="nameE">Oost</span><span class="back" id="cntE"></span></div>
+      <div class="sqs r" id="gdr"></div><div class="seat" id="seatE"><span id="nameE">Oost</span><span class="back" id="cntE"></span></div>
     </div>
     <p class="handlabel" id="gslabel">Jouw hand (Zuid)</p>
     <ul class="hand ghand" id="gsouth"></ul>
     <div class="gtip" id="gtip" hidden>
       <p id="gtiptext"></p>
-      <div class="gtipbtns"><button id="gtipback">Kies opnieuw</button><button id="gtipgo">Toch spelen</button></div>
+      <div class="gtipbtns"><button id="gtipback">Kies opnieuw</button><button id="gtipgo">Toch spelen</button><button id="gtipok" hidden>Begrepen</button></div>
     </div>
     <div class="gend" id="gend" hidden>
       <p id="gresult"></p>
@@ -1508,6 +1526,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <p class="gnote" id="gbidnote" hidden>Wie de leider wordt en wat het contract is, volgt uit de bieding: jullie spelen het af of verdedigen.</p>
       <p class="gdef" id="grole">Jij bent: <button data-grole="leider">Leider</button><button data-grole="tegen">Tegenspeler</button></p>
       <p class="gdef" id="gct">Contract: <button data-gct="sa">3SA</button><button data-gct="troef">Troef</button><button data-gct="mix">Afwisselend</button></p>
+      <p class="gdef" id="gtipsc">Tips achteraf: <button data-gtips="aan">Aan</button><button data-gtips="uit">Uit</button></p>
       <p class="gdef" id="gopp">Tegenstanders: <button data-gopp="eigen">Jullie systeem</button><button data-gopp="std">Standaard</button></p>
       <p class="gdef" id="gdef" hidden><span id="gdeflab">Tegenspel:</span> <button data-gdef="vuist">Gewoon</button><button data-gdef="sterk">Sterk</button></p>
       <button class="next" id="gnew">Nieuw spel</button>
@@ -3972,7 +3991,7 @@ function pcsMeasure(){ try{
   cv.font = '400 100px '+fam; let asc = 0; for(const ch of '0123456789AHVB') asc = Math.max(asc, cv.measureText(ch).actualBoundingBoxAscent);
   if(asc>0){ R.setProperty('--rc', (asc/100).toFixed(4)); R.setProperty('--rb', (bR/100).toFixed(4)); }
 }catch(e){} }
-// Laptop: de rechterkolom (vraag, antwoorden, uitleg) begint op de hoogte van de bovenkant van de tafel.
+// Laptop: de rechterkolom (vraag, antwoorden, uitleg) staat verticaal gecentreerd naast de tafel.
 // Past dat niet, dan schuift de kolom zover omhoog als nodig. De vraag houdt altijd dezelfde lettergrootte; --ah is de hoogte die overblijft voor de uitleg.
 (function(){ if(!window.matchMedia || !window.ResizeObserver || !window.MutationObserver) return;
   const mq = window.matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)');
@@ -3992,7 +4011,8 @@ function pcsMeasure(){ try{
     const tb = left.map(e=>e.matches(TB) ? e : e.querySelector(TB)).find(vis); if(!tb) return;
     const first = right[0], last = right[right.length-1], R = c.getBoundingClientRect();
     const free = R.bottom - px(cs.paddingBottom) - px(cs.borderBottomWidth) - last.getBoundingClientRect().bottom - px(getComputedStyle(last).marginBottom);
-    let m = Math.floor(Math.min(tb.getBoundingClientRect().top - first.getBoundingClientRect().top, free - 2));
+    const tR = tb.getBoundingClientRect(), fT = first.getBoundingClientRect().top, blk = last.getBoundingClientRect().bottom - fT;
+    let m = Math.floor(Math.min(tR.top + tR.height/2 - blk/2 - fT, free - 2));      // verticaal gecentreerd op de tafel
     const act = main ? c.querySelector(':scope > .action') : null; if(act && vis(act) && full > 0) m = Math.floor(Math.min(m, full - act.getBoundingClientRect().height - 1));
     if(m > 1){ first.style.marginTop = (px(getComputedStyle(first).marginTop) + m)+'px'; c._rt = first;
       if(main && full > 0) c.style.setProperty('--ah', Math.max(140, Math.floor(full - m))+'px'); }
@@ -4068,7 +4088,7 @@ function newUQ(stepKey){
       if(rowK){ const v = T2[rowK][0]; lead = v==='x' ? leadLowCard([...hold[mi]].sort((a,b)=>b-a)) : CV[v]; if(lead===null || lead===undefined) lead = seq[0]; if(lead!==seq[0]) tbl = v==='x' ? 'klein' : 'tweede'; }
       answer = SUITS[mi]+lead;
       const broken = seq[1]-seq[2]>1;
-      why = 'Tegen SA kom je uit in je langste kleur, hier '+SNAME[SUITS[mi]]+'. Bovenaan heb je '+(broken ? 'bijna een serie' : 'een serie')+' ('+seq.map(r=>RANK[r]||r).join(' ')+'): '+(tbl ? 'volgens jullie tabel Uitkomen kom je dan uit met '+DE(lead)+(tbl==='tweede' ? ' (de tweede van de serie, Rusinow)' : '')+'.' : 'kom dan uit met de hoogste daarvan, '+DE(seq[0])+'.')+' Zo werk je de hoge kaarten van de leider eruit zonder zelf een slag weg te geven.';
+      why = 'Tegen SA kom je uit in je langste kleur, hier '+SNAME[SUITS[mi]]+'. Bovenaan heb je '+(broken ? 'een gebroken serie' : 'een serie')+' ('+seq.map(r=>RANK[r]||r).join(' ')+')'+(broken ? ', twee aansluitende plaatjes met de '+(RANK[seq[2]]||seq[2])+' erbij. Tegen SA telt dat als serie, want na de '+(RANK[seq[0]]||seq[0])+' en de '+(RANK[seq[1]]||seq[1])+' wordt de '+(RANK[seq[2]]||seq[2])+' snel hoog. Een kleintje (de vierde van boven) geeft de leider een goedkope slag' : '')+': '+(tbl ? 'volgens jullie tabel Uitkomen kom je dan uit met '+DE(lead)+(tbl==='tweede' ? ' (de tweede van de serie, Rusinow)' : '')+'.' : 'kom dan uit met de hoogste daarvan, '+DE(seq[0])+'.')+' Zo werk je de hoge kaarten van de leider eruit zonder zelf een slag weg te geven.';
       prompt = 'Oost speelt 3SA en jij komt uit. Tik de kaart aan.';
     }else if(kind==='vierde'){
       const five = rnd(2)===1;
@@ -5277,6 +5297,46 @@ function gTipRule(st, seat, card){
   }
   return null;
 }
+// De reden achter een kaart, kort: de afspraak of de spelregel die erbij hoort (voor de lamp en de tips achteraf).
+function gWhy(st, seat, c){
+  try{
+    const tr = st.trump===undefined ? 4 : st.trump, su = gSuit(c), r = gRank(c), sa = tr===4, def = seat%2===1 || (st.role==='tegen' && seat===st.me);
+    const hand = st.hands[seat], cs = hand.filter(x=>gSuit(x)===su).sort((a,b)=>gRank(b)-gRank(a)), R = cs.map(gRank), n = cs.length;
+    const isMaster = x => { for(let k=gRank(x)+1;k<=14;k++) if(!st.played.includes(gSuit(x)*13+k-2) && !hand.includes(gSuit(x)*13+k-2)) return false; return true; };
+    const NMr = k => RANK[k] || k;
+    if(!st.trick.length){
+      if(def && !st.played.length){
+        const which = sa ? 'Tegen SA kom je uit in je langste kleur' : n===1 ? 'Singleton: straks kun je introeven' : 'Tegen troef de veiligste kleur';
+        if(n===1) return which+'.';
+        if(n===2) return which+'; van twee kaarten de '+(r===R[0] ? 'hoogste' : 'laagste')+'.';
+        const seq = R[0]>=11 && R[0]-R[1]===1 && (R[1]-R[2]<=2);
+        if(seq && R.indexOf(r)<=1) return which+'; je hebt een serie, dus een hoge kaart volgens jullie tabel uitkomen.';
+        if(R[0]>=11 || (R[0]===10 && R[1]===9)){ const ll = sa ? LEAD_SA : LEAD_SUIT; return which+'; met een plaatje speel je '+(LEADN_[ll] || '4e van boven')+' (jullie afspraak).'; }
+        const mode = (sa ? state.xs : state.xt) || 'laag';
+        return which+'; uit kleintjes: '+(XSN[mode] || 'de laagste')+' (jullie afspraak).';
+      }
+      if(!sa && su===tr && !def) return 'Troef trekken: haal de troeven van de tegenstanders weg.';
+      if(isMaster(c)) return 'Dit is de hoogste kaart die nog in de kleur zit: een vaste slag.';
+      if(def && st.defSuit===su) return 'Speel jullie kleur door: zo worden de lage kaarten ook slagen.';
+      if(n>=4) return 'Speel je lange kleur: na een paar rondes worden je kleintjes vrij.';
+      return r<=9 ? 'Speel klein naar de hoge kaarten toe, dan zit de tegenstander ervoor.' : 'Speel deze kleur om slagen vrij te spelen.';
+    }
+    const led = gSuit(st.trick[0].card), win = gWinner(st.trick, tr), pw = win.seat===(seat+2)%4, pos = st.trick.length+1;
+    const beats = (su===gSuit(win.card) && r>gRank(win.card)) || (!sa && su===tr && gSuit(win.card)!==tr);
+    if(su!==led){
+      if(!sa && su===tr) return 'Je kunt niet bekennen: introeven en de slag nemen.';
+      return pw ? 'Je kunt niet bekennen en partner heeft de slag: gooi een kaart weg die je niet nodig hebt.' : 'Je kunt niet bekennen: gooi een kaart weg uit je zwakste kleur, houd je lengte vast.';
+    }
+    if(pw && !beats) return 'Partner heeft de slag al: speel laag bij.';
+    if(beats && pos===4) return 'Als laatste speler win je zo goedkoop mogelijk.';
+    if(beats && pos===2 && gRank(win.card)>=11) return 'Dek een plaatje met een plaatje: zo maak je een lagere kaart hoog.';
+    if(beats && pos===3) return 'Derde hand hoog: neem de slag of dwing een hoge kaart van de leider af.';
+    if(beats) return 'Hiermee win je de slag.';
+    if(pos===2) return 'Tweede hand laag: wacht af wat partner of de vierde hand doet.';
+    if(def && st.trick[0].seat===(seat+2)%4 && n>=2 && r!==R[n-1]) return 'Een signaal aan partner volgens jullie afspraak (aanmoedigen of afwijzen).';
+    return 'Je wint de slag toch niet: bewaar je hogere kaarten.';
+  }catch(e){ return ''; }
+}
 function gTip(st, seat, card, evReady){
   const legal = gLegal(st, seat);
   if(legal.length<2) return null;
@@ -5287,7 +5347,7 @@ function gTip(st, seat, card, evReady){
     legal.forEach(c=>{ if(ev[c]>ev[best]+1e-9) best = c; });
     if(ev[best]-ev[card]>=(n>=8 ? 1 : n===7 ? 0.75 : 0.5) && (n<=7 || ev.n>=4)){
       const f = x => x.toFixed(1).replace('.', ','), cardTxt = c => cardHTML(SUITS[gSuit(c)]+gRank(c));
-      return {rule:'berekend', best, text:'Weet je het zeker? Waarom niet '+cardTxt(best)+'? Met '+cardTxt(card)+' maak je van de slagen die nog komen gemiddeld '+f(ev[card])+', met '+cardTxt(best)+' gemiddeld '+f(ev[best])+'.'};
+      return {rule:'berekend', best, text:'Weet je het zeker? Waarom niet '+cardTxt(best)+'? '+(gWhy(st, seat, best) ? gWhy(st, seat, best)+' ' : '')+'Gemiddeld nog '+f(ev[best])+' slagen, met '+cardTxt(card)+' '+f(ev[card])+'.'};
     }
     if(n<=6) return null;
   }
@@ -8211,7 +8271,11 @@ function leadFor(q){
 function rowOrder(list){ const has = k => list.some(c=>c.s===k), B = ['S','C'].filter(has), R = ['H','D'].filter(has);
   const ord = B.length===2 && R.length===1 ? [B[0], R[0], B[1]] : R.length===2 && B.length===1 ? [R[0], B[0], R[1]] : ['S','H','C','D'];
   return list.slice().sort((a,b)=>ord.indexOf(a.s)-ord.indexOf(b.s)); }
-function handRow(list, side){ list = rowOrder(list); let prev = null, g = 0;
+function handRow(list, side){ list = rowOrder(list);
+  if(side && list.length){ const grp = []; list.forEach(c=>{ const g = grp[grp.length-1]; if(g && g[0].s===c.s) g.push(c); else grp.push([c]); });      // opzij: elke kleur een eigen kolom
+    return '<div class="hcols v'+side+'">'+grp.map(g=>handRow1(g, side)).join('')+'</div>'; }
+  return handRow1(list, side); }
+function handRow1(list, side){ let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
     return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+glyph(''+c.t, 400)+'</b><i>'+glyph(SYM[c.s], 700)+'</i></span></'+tag+'>'; }).join('');
   return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
@@ -8277,73 +8341,78 @@ function renderQTable(mine){
 // Volgens de alerteerregeling van de NBB: kunstmatige biedingen, Stayman, transfers, relays en vraagbiedingen met hun kunstmatige antwoorden.
 // Niet: doubletten (behalve DONT), de kracht van een natuurlijk bod (zwakke twee, inverted minors, storende sprong),
 // en biedingen vanaf het vierde niveau, tenzij ze kunstmatig zijn en in de eerste biedronde vallen.
+function tblBidTxt(b){ return b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : b[0]+(b[1]==='N' ? 'SA' : '<span class="'+b[1]+'">'+SYM[b[1]]+'</span>'); }
+// Alerts tijdens Heel spel: wat de anderen sinds jouw laatste bod alerteerbaar boden, met de betekenis.
+function bidAlerts(B){ let al; try{ al = alertSet(B.calls, ''); }catch(e){ return new Map(); }
+  const lastMe = B.calls.map((b,i)=>(B.dealer+i)%4===2 ? i : -1).filter(i=>i>=0).pop(), M = new Map();
+  al.forEach((w, i)=>{ if((B.dealer+i)%4!==2 && (lastMe===undefined || i>lastMe)) M.set(i, w); }); return M; }
 function alertSet(calls, conv){
-  const out = new Set(), has = k => conv===k || onCardK(k);
+  const out = new Map(), has = k => conv===k || onCardK(k);
   const lv = b => /^[1-7]/.test(b||'') ? +b[0] : 0, su = b => (b||'').slice(1);
   const o = calls.findIndex(b=>b!=='pas');
   if(o<0) return out;
-  const at = k => calls[o+k], mark = k => { if(o+k<calls.length) out.add(o+k); };
+  const at = k => calls[o+k], mark = (k, w) => { if(o+k<calls.length && !out.has(o+k)) out.set(o+k, w || 'Kunstmatig bod'); };
   const O = at(0), lho = at(1), resp = at(2), reb = at(4), rr = at(6);
   const quiet = lho==='pas' || lho===undefined;
   const RK = 'CDHSN', higher = (a,b) => lv(a)*5+RK.indexOf(su(a)) > lv(b)*5+RK.indexOf(su(b));
   // openingen
-  if(O==='2C'){ mark(0); if(quiet && resp==='2D') mark(2); }
-  if(O==='2D' && (MULTI || C2==='ruiten' || D2==='benji')){ mark(0); if(quiet && resp==='2H' && D2==='benji') mark(2); }
+  if(O==='2C'){ mark(0, C2==='ruiten' ? 'Sterk, óf een zwakke twee in ruiten' : 'Sterk en kunstmatig, forcing'); if(quiet && resp==='2D') mark(2, 'Wachtbod, kunstmatig'); }
+  if(O==='2D' && (MULTI || C2==='ruiten' || D2==='benji')){ mark(0, D2==='benji' ? 'Benjamin: een sterke hand, forcing' : MULTI ? 'Multi: een zwakke twee in harten óf in schoppen' : 'Kunstmatig: zwak met beide hoge kleuren'); if(quiet && resp==='2H' && D2==='benji') mark(2, 'Wachtbod, kunstmatig'); }
   const muider = conv==='muiderberg' || (conv!=='zwak2h' && conv!=='zwak2a' && onCardK('muiderberg'));
-  if((O==='2H' || O==='2S') && muider) mark(0);
-  if(['2D','2H','2S'].includes(O) && quiet && resp==='2N'){ mark(2); if(lv(reb)===3 && reb!=='3N' && su(reb)!==su(O)) mark(4); }
-  if(O==='3N' && has('gambling')){ mark(0); if(quiet && resp==='4C') mark(2); }
+  if((O==='2H' || O==='2S') && muider) mark(0, 'Muiderberg: een vijfkaart in deze kleur en een vierkaart lage kleur, 6–10 punten');
+  if(['2D','2H','2S'].includes(O) && quiet && resp==='2N'){ mark(2, 'Vraagt naar kracht en kleur, forcing'); if(lv(reb)===3 && reb!=='3N' && su(reb)!==su(O)) mark(4, 'Antwoord op de 2SA-vraag, kunstmatig'); }
+  if(O==='3N' && has('gambling')){ mark(0, 'Gambling: een dichte zeven- of achtkaart lage kleur, verder weinig'); if(quiet && resp==='4C') mark(2, 'Speel 4 in jouw lage kleur (pas of verbeter)'); }
   // na 1SA en 2SA
   if((O==='1N' || O==='2N') && quiet){
     const t = O==='1N' ? 2 : 3;
     const stay = resp===t+'C' || (O==='1N' && resp==='3C' && PUP1==='3c' && has('puppet1'));
-    if(stay){ mark(2); if(reb===t+'D' || (resp==='3C' && reb==='3D') || (has('ballumer') && O==='1N' && resp==='2C' && reb && reb!=='2H' && reb!=='pas')) mark(4);
-      if(resp==='3C' && reb==='3D' && (rr==='3H' || rr==='3S')) mark(6); }
-    if(resp===t+'D' || resp===t+'H') mark(2);
-    if(O==='1N' && resp==='2S') mark(2);
-    if(resp==='4C' && (has('gerber') || has('texas'))) mark(2);
-    if((resp==='4D' || resp==='4H') && has('texas')) mark(2);
+    if(stay){ mark(2, resp===t+'C' && !(O==='1N' && resp==='3C') ? 'Stayman: vraagt naar een vierkaart hoog' : 'Puppet Stayman: vraagt naar een vier- of vijfkaart hoog'); if(reb===t+'D' || (resp==='3C' && reb==='3D') || (has('ballumer') && O==='1N' && resp==='2C' && reb && reb!=='2H' && reb!=='pas')) mark(4, reb===t+'D' ? 'Antwoord op Stayman: geen vierkaart hoog' : 'Antwoord op de Stayman-vraag, kunstmatig');
+      if(resp==='3C' && reb==='3D' && (rr==='3H' || rr==='3S')) mark(6, 'Toont een vierkaart in de andere hoge kleur'); }
+    if(resp===t+'D' || resp===t+'H') mark(2, resp===t+'D' ? 'Transfer: belooft een vijfkaart harten' : 'Transfer: belooft een vijfkaart schoppen');
+    if(O==='1N' && resp==='2S') mark(2, 'Kunstmatig: vraagt partner 3♣︎ te bieden (een lange lage kleur)');
+    if(resp==='4C' && (has('gerber') || has('texas'))) mark(2, has('gerber') ? 'Gerber: vraagt naar azen' : 'Kunstmatig');
+    if((resp==='4D' || resp==='4H') && has('texas')) mark(2, resp==='4D' ? 'Texas: transfer naar 4♥︎' : 'Texas: transfer naar 4♠︎');
   }
   // na 1 in een hoge kleur
   if((O==='1H' || O==='1S') && quiet){
     const M = su(O);
-    if(resp==='2N' && (has('jac2n') || has('twee1'))){ mark(2); if(lv(reb)===3 && su(reb)!==M && reb!=='3N') mark(4); }
-    if((resp==='3C' || resp==='3D') && (conv==='bergen' || onCardK('bergen'))) mark(2);
+    if(resp==='2N' && (has('jac2n') || has('twee1'))){ mark(2, 'Jacoby 2SA: vier troeven steun en manchekracht'); if(lv(reb)===3 && su(reb)!==M && reb!=='3N') mark(4, 'Antwoord op Jacoby 2SA: een korte kleur'); }
+    if((resp==='3C' || resp==='3D') && (conv==='bergen' || onCardK('bergen'))) mark(2, 'Bergen: vier troeven steun, '+((resp==='3C')!==!!state.bergr ? '7–9' : '10–12')+' punten');
     const spl = M==='H' ? ['3S','4C','4D'] : ['4C','4D','4H'];
-    if(spl.includes(resp) && (has('splinter') || conv==='steun')) mark(2);
-    if(resp==='1N' && reb==='2C'){ if(has('gazzilli')){ mark(4); if(rr==='2D') mark(6); } else if(M==='S' && has('bart') && rr==='2D') mark(6); }
+    if(spl.includes(resp) && (has('splinter') || conv==='steun')) mark(2, 'Splinter: steun met een singleton of renonce in deze kleur, manchekracht');
+    if(resp==='1N' && reb==='2C'){ if(has('gazzilli')){ mark(4, 'Gazzilli: klaveren óf een sterke hand (16+)'); if(rr==='2D') mark(6, 'Antwoord op Gazzilli: 8 of meer punten'); } else if(M==='S' && has('bart') && rr==='2D') mark(6, 'Bart: kunstmatig, vraagt verder'); }
   }
   // na 1 klaveren
   if(O==='1C' && quiet){
-    if(has('twalsh') && ['1D','1H','1S'].includes(resp)) mark(2);
-    else if(has('montreal') && resp==='1D') mark(2);
+    if(has('twalsh') && ['1D','1H','1S'].includes(resp)) mark(2, resp==='1D' ? 'Transfer Walsh: belooft een vierkaart harten' : resp==='1H' ? 'Transfer Walsh: belooft een vierkaart schoppen' : 'Transfer Walsh: geen vierkaart hoog');
+    else if(has('montreal') && resp==='1D') mark(2, 'Afwachtbod: geen vijfkaart hoog');
   }
   // herbiedingen zonder tussenbod: Checkback, nieuwe lage kleur, vierde kleur
   if(lv(O)===1 && su(O)!=='N' && quiet && at(3)==='pas' && at(5)==='pas' && lv(resp)===1){
-    if(reb==='1N' && ((rr==='2C' && (has('checkback') || has('nmf'))) || (has('nmf') && rr==='2D' && O!=='1D'))) mark(6);
+    if(reb==='1N' && ((rr==='2C' && (has('checkback') || has('nmf'))) || (has('nmf') && rr==='2D' && O!=='1D'))) mark(6, 'Checkback: vraagt naar steun of een vijfkaart hoog, forcing');
     const seen = [su(O), su(resp), su(reb)];
-    if(lv(reb)>=1 && su(reb)!=='N' && new Set(seen).size===3 && 'CDHS'.includes(su(reb)) && lv(rr)>=2 && su(rr)!=='N' && !seen.includes(su(rr)) && has('vierde')) mark(6);
+    if(lv(reb)>=1 && su(reb)!=='N' && new Set(seen).size===3 && 'CDHS'.includes(su(reb)) && lv(rr)>=2 && su(rr)!=='N' && !seen.includes(su(rr)) && has('vierde')) mark(6, 'Vierde kleur: kunstmatig en forcing, vraagt partner zijn hand verder te beschrijven');
   }
   // tegen hun opening
   if(lv(O)===1 && lho && lho!=='pas'){
     if(su(O)!=='N'){
-      if(lho==='2N') mark(1);                                   // Unusual 2SA
-      if(lho==='2'+su(O)) mark(1);                               // cuebid: twee kleuren
+      if(lho==='2N') mark(1, 'Unusual 2SA: de twee laagste ongeboden kleuren, minstens 5-5');
+      if(lho==='2'+su(O)) mark(1, 'Cuebid: een tweekleurenspel, minstens 5-5');
     }else{
-      if(has('dont') && (lho==='X' || ['2C','2D','2H'].includes(lho))) mark(1);
-      else if(has('mlandy') && (lho==='2C' || lho==='2D')) mark(1);
-      else if(has('landy') && lho==='2C') mark(1);
+      if(has('dont') && (lho==='X' || ['2C','2D','2H'].includes(lho))) mark(1, lho==='X' ? 'DONT: een eenkleurenspel' : lho==='2C' ? 'DONT: klaveren en een hogere kleur' : lho==='2D' ? 'DONT: ruiten en een hoge kleur' : 'DONT: harten en schoppen');
+      else if(has('mlandy') && (lho==='2C' || lho==='2D')) mark(1, lho==='2C' ? 'Landy: beide hoge kleuren' : 'Eén hoge kleur, minstens een zeskaart');
+      else if(has('landy') && lho==='2C') mark(1, 'Landy: beide hoge kleuren');
     }
   }
-  if(/^2[DHS]$/.test(O) && (lho==='4C' || lho==='4D') && has('leaping')) mark(1);
+  if(/^2[DHS]$/.test(O) && (lho==='4C' || lho==='4D') && has('leaping')) mark(1, 'Leaping Michaels: deze lage kleur en een hoge kleur, minstens 5-5');
   // na ons openingsbod en hun volgbod
   if(lv(O)===1 && lho && !['pas','X','XX'].includes(lho) && resp){
-    if(su(O)!=='N' && su(resp)===su(lho) && lv(resp)<=3) mark(2);                       // cuebid in hun kleur: steun met kracht
-    if(O==='1N' && has('rubensohl') && (resp==='2N' || (lv(resp)===3 && su(resp)!=='N'))) mark(2);
+    if(su(O)!=='N' && su(resp)===su(lho) && lv(resp)<=3) mark(2, 'Cuebid in hun kleur: steun met minstens limietkracht');
+    if(O==='1N' && has('rubensohl') && (resp==='2N' || (lv(resp)===3 && su(resp)!=='N'))) mark(2, 'Rubensohl: transfer naar de volgende kleur');
   }
   // vanaf het vierde niveau: alleen nog kunstmatige biedingen in de eerste biedronde
   const f = calls.findIndex(b=>lv(b)>=4);
-  out.forEach(i=>{ if(f>=0 && i>=f && i>o+3) out.delete(i); if(calls[i]==='XX') out.delete(i); });
+  [...out.keys()].forEach(i=>{ if(f>=0 && i>=f && i>o+3) out.delete(i); if(calls[i]==='XX') out.delete(i); });
   return out;
 }
 // Een biedkaartje zoals uit de biedbox: het niveau groot, de kleur eronder, in de kleur van die kleur getint
@@ -8358,14 +8427,18 @@ function renderAuction(done){
   const a = q.auction, seats = [[],[],[],[]];
   const full = done ? a.calls.concat([q.answer]) : a.calls, al = alertSet(full, q.conv), now = Date.now();
   if(!q._alertT) q._alertT = {};
-  // de alertkaart: ongeveer drie seconden zichtbaar, daarna weg; bij opnieuw tekenen loopt hij gewoon door
-  const ak = i => { if(!al.has(i)) return ''; const t0 = q._alertT[i] || (q._alertT[i] = now), gone = now-t0; return gone>=3000 ? '' : '<i class="alc" aria-label="Alert" style="animation-delay:-'+gone+'ms">A</i>'; };
+  // de alertkaart blijft liggen tot jij geboden hebt; wat het bod betekent staat onder de tafel
+  const myLast = a.calls.map((b,i)=>(a.start+i)%4===3 ? i : -1).filter(i=>i>=0).pop(), alOn = i => !done && al.has(i) && (a.start+i)%4!==3 && (myLast===undefined || i>myLast);
+  const ak = i => alOn(i) ? '<i class="alc vast" aria-label="Alert">A</i>' : '';
   a.calls.forEach((b,i)=>{ seats[(a.start+i)%4].push(tblBid(b, !done && i===a.calls.length-1 ? ' new' : '', ak(i))); });
   seats[3].push(done ? tblBid(q.answer, ' new', ak(a.calls.length)) : '<span class="bc ask">?</span>');
   const V = q.vul || {};
   $('bsq').className = 'smsq sqb';
   $('bsq').innerHTML = tblPills({N:{vul:V.we}, Z:{vul:V.we, turn:!done}, W:{vul:V.they}, O:{vul:V.they}})
     + tblStack('t', seats[1])+tblStack('l', seats[0])+tblStack('r', seats[2])+tblStack('b', seats[3]);
+  { let p = $('altxt'); if(!p){ p = document.createElement('p'); p.id = 'altxt'; p.className = 'altxt'; $('bsq').after(p); }
+    const WN = ['West','Partner','Oost'], L = done ? [] : a.calls.map((b,i)=>alOn(i) ? '<span><i class="alc vast">A</i> '+WN[(a.start+i)%4]+' '+tblBidTxt(b)+': '+al.get(i)+'.</span>' : '').filter(Boolean);
+    p.innerHTML = L.join(''); p.hidden = !L.length; }
 }
 function renderBox(){
   if(q.box==='suit'){
@@ -8728,7 +8801,7 @@ function next(fresh){
   $('prompt').innerHTML = (q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
   renderAuction(false);
   $('hand').className = 'hand';
-  $('hand').innerHTML = handHTML(q.me, q.only, q.box==='lead');
+  $('hand').innerHTML = q.only!=null && q.dummy && q.box!=='lead' ? '<li class="hrowli">'+handRowOf(q.me, q.only)+'</li>' : handHTML(q.me, q.only, q.box==='lead');      // één kleur: dezelfde kaartjes als de dummy
   document.querySelector('.table').classList.toggle('lead', q.box==='lead');
   const play = !!q.dummy;
   document.querySelector('.table').classList.toggle('play', play);
@@ -10292,7 +10365,8 @@ function bidRender(){
     const wait = !B.done && turn===s ? (s===2 ? '<span class="bk ask">?</span>' : '<span class="bk wait">…</span>') : '';
     return '<div class="bseat '+pos+(!B.done && turn===s ? ' turn' : '')+'"><span class="bname'+(vulOf(s) ? ' kw' : '')+'">'+NM[s]+(s===2 ? ' (jij)' : '')+(s===B.dealer ? ' · gever' : '')+'</span><div class="bfan">'+mine+wait+'</div></div>';
   };
-  const stk = (s, pos) => { const arr = []; B.calls.forEach((b,i)=>{ if((B.dealer+i)%4===s) arr.push(tblBid(b, i===B.calls.length-1 ? ' new' : '')); }); if(!B.done && turn===s && s===2) arr.push('<span class="bc ask">?</span>'); return tblStack(pos, arr); };
+  const AL = B.done ? new Map() : bidAlerts(B);
+  const stk = (s, pos) => { const arr = []; B.calls.forEach((b,i)=>{ if((B.dealer+i)%4===s) arr.push(tblBid(b, i===B.calls.length-1 ? ' new' : '', AL.has(i) ? '<i class="alc vast" aria-label="Alert">A</i>' : '')); }); if(!B.done && turn===s && s===2) arr.push('<span class="bc ask">?</span>'); return tblStack(pos, arr); };
   const pl = s => ({vul:vulOf(s), g:s===B.dealer, turn:!B.done && turn===s});
   let html = '<div class="smsq sqb">'+tblPills({N:Object.assign({name:'Partner'}, pl(0)), O:pl(1), Z:pl(2), W:pl(3)})+stk(0,'t')+stk(3,'l')+stk(1,'r')+stk(2,'b')+'</div>';
   // laatste uitleg van partner
@@ -10304,7 +10378,8 @@ function bidRender(){
     for(let l=from; l<=Math.min(7, from+3); l++) for(const d of DEN){ const b = l+d; box += '<button class="bid d-'+d+'" data-abid="'+b+'"'+(last && bidRank(b)<=bidRank(last) ? ' disabled' : '')+'>'+bidHTML(b)+'</button>'; }
     box = '<div class="box'+(bidLegal(B,'X') || bidLegal(B,'XX') ? ' withdbl' : '')+'">'+box+'<button class="bid pas" data-abid="pas">Pas</button>'+(bidLegal(B,'X') ? '<button class="bid dbl" data-abid="X">X</button>' : '')+(bidLegal(B,'XX') ? '<button class="bid rdbl" data-abid="XX">XX</button>' : '')+'</div>';
   }
-  $('gbid').innerHTML = html + pw + (B.done ? '<div id="bidsum"></div>' : box);
+  const alh = [...AL].map(([i,w])=>'<p class="abwhy abal"><i class="alc vast">A</i> '+(((B.dealer+i)%4)===0 ? 'Partner' : NM[(B.dealer+i)%4])+' '+tblBidTxt(B.calls[i])+': '+(B.why[i] || w)+'.</p>').join('');
+  $('gbid').innerHTML = html + alh + (alh ? '' : pw) + (B.done ? '<div id="bidsum"></div>' : box);
   $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? 'De bieding is klaar.' : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
 }
 function bidSummary(){
@@ -10315,10 +10390,10 @@ function bidSummary(){
   let h = ct ? '<p class="abres">Contract: <b>'+chtml(ct)+(ct.dbl===2 ? ' XX' : ct.dbl ? ' X' : '')+'</b> door '+NM[ct.decl]+(ct.decl%2 ? ' (jullie verdedigen)' : '')+'.</p>' : '<p class="abres">Iedereen paste: het spel is uitgepast.</p>';
   const tips = Object.entries(B.adv||{}).filter(([i, a])=>a && a.bid!==B.calls[i]).map(([i, a])=>'Je bood '+(B.calls[i]==='pas' ? 'pas' : bidHTML(B.calls[i]))+'; volgens je systeemkaart was '+(a.bid==='pas' ? 'pas' : bidHTML(a.bid))+' beter'+(a.why ? ' ('+a.why+')' : '')+'.');
   B.tipN = tips.length;
-  if(tips.length) h += '<div class="abtip">'+TIP_T+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
+  if(tips.length && state.gtips!=='uit') h += '<div class="abtip">'+TIP_T+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
   h += '<p id="bidopen" class="abwhy">Met open kaarten rekenen…</p>';
   if(B.tables) h += '<p class="abwhy">Aan de tafels van jouw lijn: '+B.tables+'</p>';
-  h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
+  h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview prim" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
   el.innerHTML = h;
   const run = gRun;
   ddsLoad().then(()=>{
@@ -10339,9 +10414,13 @@ function bidSummary(){
       const bestSc = bridgeScore(best.lvl, best.tr, 0, sideVul(B.vul, 0), best.t);
       const brk = (lvl, tr) => lvl>=7 ? 3 : lvl===6 ? 2 : lvl>=(tr===4 ? 3 : tr<=1 ? 4 : 5) ? 1 : 0;
       let cur = 0, curB = 0; if(ct){ const t = 13-window.DDS.solve(H, ct.trump, (ct.decl+1)%4, []), sc = bridgeScore(ct.level, ct.trump, ct.dbl||0, sideVul(B.vul, ct.decl%2), t); cur = ct.decl%2===0 ? sc : -sc; if(ct.decl%2===0 && t>=ct.level+6) curB = brk(ct.level, ct.trump); }
-      if(bestSc - cur >= 300 && Math.min(brk(best.lvl, best.tr), 2) > curB && !B.tipN){
+      const bestB = Math.min(brk(best.lvl, best.tr), 2), ctB = ct ? brk(ct.level, ct.trump) : 0, bn = best.lvl+(best.tr===4 ? 'SA' : '<span class="'+SUITS[best.tr]+'">'+SYM[SUITS[best.tr]]+'</span>');
+      if(bestSc - cur >= 300 && bestB > curB && !B.tipN){
         const el = $('bidsum'), d = document.createElement('div'); d.className = 'abtip';
-        d.innerHTML = TIP_T+'<div><p>Er zat flink meer in. Jouw biedingen volgden je systeemkaart, dus aan jou lag het niet: hier liet partner het liggen. Kijk naar de handen hieronder bij het naspelen.</p></div>';
+        const m = ct && ct.decl%2===1 ? 'De tegenpartij kreeg het contract, maar met open kaarten maakten jullie zelf '+bn+'. Jouw biedingen volgden je systeemkaart. Kijk bij het naspelen naar de handen.'
+          : ct && ctB>=bestB ? 'Jullie boden wel een manche, maar '+chtml(ct)+' gaat met open kaarten niet; '+bn+' wel. Jouw biedingen volgden je systeemkaart: soms kies je zo toch de verkeerde kleur. Kijk bij het naspelen waar de slagen ontbreken.'
+          : 'Er zat flink meer in: met open kaarten maakten jullie '+bn+'. Jouw biedingen volgden je systeemkaart, dus aan jou lag het niet: hier liet partner het liggen. Kijk naar de handen hieronder bij het naspelen.';
+        d.innerHTML = TIP_T+'<div><p>'+m+'</p></div>';
         if(el) el.insertBefore(d, el.firstChild.nextSibling);
       }
     }
@@ -11064,7 +11143,29 @@ function tipColors(doc){
   const w = doc.defaultView;
   doc.querySelectorAll('*').forEach(el=>{ const cs = w.getComputedStyle(el); props.forEach(p=>{ const v = cs.getPropertyValue(p); if(v && bad.test(v)) el.style.setProperty(p, fixv(v), 'important'); }); });
 }
+let htiP = null;
+function htiLoad(){
+  if(window.htmlToImage) return Promise.resolve();
+  if(!htiP) htiP = new Promise((ok, no)=>{ const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.js'; s.onload = ok; s.onerror = ()=>{ htiP = null; no(new Error('laden mislukt')); }; document.head.appendChild(s); });
+  return htiP;
+}
 async function tipShot(){
+  try{ return await tipShotHti(); }catch(e){}
+  return tipShotH2c();
+}
+async function tipShotHti(){
+  const ds = tipOpenDlgs(), dlg = ds.length ? ds[ds.length-1] : null;
+  await htiLoad();
+  const skip = n => n.nodeType===1 && (n.id==='tipdlg' || n.id==='tipfab' || n.id==='wmfab' || n.tagName==='SCRIPT' || (n.hidden && n.tagName!=='BODY') || (n.tagName==='DIALOG' && !n.open));
+  const opt = {pixelRatio:Math.min(1.5, 900/innerWidth), backgroundColor:getComputedStyle(document.body).backgroundColor || '#FFFFFF', filter:n=>!skip(n), cacheBust:false};
+  if(/^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent)){ try{ await htmlToImage.toCanvas(dlg || document.body, Object.assign({}, opt, dlg ? {} : {width:innerWidth, height:innerHeight})); }catch(e){} }      // Safari tekent de eerste keer soms niet alles
+  const c = dlg ? await htmlToImage.toCanvas(dlg, opt) : await htmlToImage.toCanvas(document.body, Object.assign(opt, {width:innerWidth, height:innerHeight}));
+  let cv = c;
+  if(c.width>720){ cv = document.createElement('canvas'); cv.width = 720; cv.height = Math.round(c.height*720/c.width); cv.getContext('2d').drawImage(c, 0, 0, cv.width, cv.height); }
+  const u = cv.toDataURL('image/jpeg', .6); if(u.length<3000) throw new Error('leeg');
+  return u;
+}
+async function tipShotH2c(){
   const ds = tipOpenDlgs(), target = ds.length ? ds[ds.length-1] : document.body;
   await h2cLoad();
   const opt = {scale:Math.min(1.5, 900/innerWidth), logging:false, useCORS:true, backgroundColor:getComputedStyle(document.body).backgroundColor || '#FFFFFF',
@@ -11351,15 +11452,24 @@ function gRender(){
   if(!G) return;
   gClubBack();
   const def = G.role==='tegen';
+  // als tegenspeler zit jij onderaan: de tafel draait mee, de dummy ligt links of rechts van je
+  const rot = s => def ? (s - G.me + 6) % 4 : s, dpos = rot(0);
   ['gnorth','gsouth'].forEach((id,k)=>{
     const seat = k===0 ? 0 : (def ? G.me : 2), el = $(id);
-    el.innerHTML = k===0 ? gRowHTML(seat) : gHandHTML(seat);
+    el.innerHTML = k===0 ? (def ? '' : gRowHTML(seat)) : gHandHTML(seat);
     el.classList.toggle('turn', !G.over && !gBusy && G.turn===seat);
   });
-  ['tN','tE','tS','tW'].forEach((id,seat)=>{
-    const c = gShown[seat];
-    $(id).innerHTML = c===null ? ['N','O','Z','W'][seat] : playHTML(SUITS[gSuit(c)]+gRank(c));
-    $(id).classList.toggle('on', c!==null);
+  $('gnorth').hidden = def; $('gnorth').classList.toggle('gside', def);
+  { const tw = document.querySelector('#game .tablewrap'); tw.classList.toggle('sqrow', def);
+    const L = []; if(def) SUITS.forEach((s,si)=>G.hands[0].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>L.push({s, t:RANK[gRank(c)]||gRank(c)})));
+    const row = def ? handRow(L, dpos===3 ? 'l' : 'r') : '';
+    $('gdl').innerHTML = def && dpos===3 ? row : ''; $('gdr').innerHTML = def && dpos===1 ? row : '';
+    $('gdl').classList.toggle('turn', def && dpos===3 && !G.over && G.turn===0); $('gdr').classList.toggle('turn', def && dpos===1 && !G.over && G.turn===0); }
+  const TID = ['tN','tE','tS','tW'];
+  [0,1,2,3].forEach(seat=>{
+    const c = gShown[seat], el = $(TID[rot(seat)]);
+    el.innerHTML = c===null ? gLt(seat) : playHTML(SUITS[gSuit(c)]+gRank(c));
+    el.classList.toggle('on', c!==null);
   });
   $('cntW').textContent = G.hands[3].length;
   $('cntE').textContent = G.hands[1].length;
@@ -11387,8 +11497,34 @@ function gRender(){
   $('gcontract').innerHTML = '';
   { const t = s => !G.over && G.turn===s;
     const O = {N:{name:gNm(0), d:1, turn:t(0)}, O:{name:def ? (G.me===1 ? 'Jij' : 'Partner') : gNm(1), turn:t(1)}, Z:{name:def ? gNm(2) : 'Jij', l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:def ? (G.me===3 ? 'Jij' : 'Partner') : gNm(3), turn:t(3)}};
-    $('gsqnm').innerHTML = [['t','N',0],['r','O',1],['b','Z',2],['l','W',3]].map(([pos,k,s])=>tblPill(pos, O[k].name, gLt(s), O[k])).join(''); }
+    $('gsqnm').innerHTML = [['N',0],['O',1],['Z',2],['W',3]].map(([k,s])=>tblPill(['t','r','b','l'][rot(s)], O[k].name, gLt(s), O[k])).join(''); }
 }
+// Dummy opzij op een smal scherm: past de rij (dummy + tafel) niet, dan wordt alleen de tafel iets kleiner; de kaarten houden hun maat.
+function sqFit(){
+  document.querySelectorAll('#qwrap.sqrow, #game .tablewrap.sqrow, #samenbody .sqrow').forEach(r=>{
+    const sq = r.querySelector(':scope > .smsq'); if(!sq) return;
+    sq.style.removeProperty('--w');
+    if(!r.offsetParent) return;
+    let side = 0; r.querySelectorAll(':scope > .sqs').forEach(e=>{ const c = e.firstElementChild; if(c) side += c.getBoundingClientRect().width; });
+    const lap = matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').matches, pc = getComputedStyle(r.parentNode),
+      pw = r.parentNode.clientWidth - parseFloat(pc.paddingLeft) - parseFloat(pc.paddingRight), lw = lap ? 31 * parseFloat(getComputedStyle(document.documentElement).fontSize) : Infinity;
+    const gap = parseFloat(getComputedStyle(r).columnGap) || 0, avail = Math.min(pw, lw), w = sq.getBoundingClientRect().width, z = parseFloat(getComputedStyle(sq).zoom) || 1;
+    if(side + w + 2*gap > avail + .5) sq.style.setProperty('--w', Math.max(110, Math.floor((avail - side - 2*gap) / z))+'px');
+  });  // je eigen hand recht onder de tafel, ook als de dummy er opzij naast ligt
+  [['main.table > #hand','main.table.sd #qwrap > .smsq'], ['#game > #gsouth','#game .tablewrap.sqrow > .smsq']].forEach(([hs, ts])=>{
+    const h = document.querySelector(hs); if(!h) return; h.style.removeProperty('translate');
+    const t = document.querySelector(ts); if(!t || !t.offsetParent || !h.offsetParent) return;
+    const a = t.getBoundingClientRect(), b = h.getBoundingClientRect(), P = h.parentNode.getBoundingClientRect();
+    let dx = (a.left + a.width/2) - (b.left + b.width/2);
+    dx = Math.max(P.left + 4 - b.left, Math.min(P.right - 4 - b.right, dx));
+    if(Math.abs(dx)>1) h.style.translate = Math.round(dx)+'px 0';
+  });
+}
+{ let sqT = 0; const kick = ()=>{ cancelAnimationFrame(sqT); sqT = requestAnimationFrame(sqFit); };
+  const mo = new MutationObserver(kick);
+  { const m = document.querySelector('main.table'); if(m) mo.observe(m, {attributes:true, attributeFilter:['class','hidden']}); }
+  ['qwrap','gsq','samenbody','gdl','gdr'].forEach(id=>{ const e = document.getElementById(id); if(e) mo.observe(id==='gsq' ? e.parentNode : e, {childList:true, subtree:true, attributes:true, attributeFilter:['hidden','class']}); });
+  addEventListener('resize', kick); }
 function gScoreTxt(){
   const sc = v => bridgeScore(gLevel(G), G.trump, G.dbl||0, v, G.ns), def = G.role==='tegen' ? -1 : 1;
   if(G.dvul===undefined) return ' Score: <b>'+scoreTxt(def*sc(false))+'</b> niet kwetsbaar, '+scoreTxt(def*sc(true))+' kwetsbaar.';
@@ -11426,6 +11562,7 @@ function gDefRender(){
   $('grole').hidden = !ddsOK() || bied; $('gct').hidden = bied; $('gbidnote').hidden = !bied;
   $('grole').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.grole==='tegen' ? 'tegen' : 'leider')===b.dataset.grole)));
   $('gct').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gct==='sa' || state.gct==='troef' ? state.gct : 'mix')===b.dataset.gct)));
+  $('gtipsc').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gtips==='uit' ? 'uit' : 'aan')===b.dataset.gtips)));
   $('gopp').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.oppSys==='std' ? 'std' : 'eigen')===b.dataset.gopp)));
   $('gdef').hidden = !ddsOK();
   $('gdeflab').textContent = state.grole==='tegen' ? 'Je partner:' : 'Tegenspel:';
@@ -11603,18 +11740,45 @@ function gStart(){
   $(id).addEventListener('click', e=>{
     const b = e.target.closest('.card'), seat = k===0 ? 0 : (G && G.role==='tegen' ? G.me : 2);
     if(!b || b.disabled || !G || gBusy || G.over || G.turn!==seat || !gMine(seat)) return;
-    const card = +b.dataset.c, pre = (G.pre && G.pre.at===G.played.length && G.pre.seat===seat) ? G.pre.ev : null, tip = gTip(G, seat, card, pre);
+    const card = +b.dataset.c, pre = (G.pre && G.pre.at===G.played.length && G.pre.seat===seat) ? G.pre.ev : null, tip = state.gtips==='uit' ? null : gTip(G, seat, card, pre);
     if(!tip){ gDo(seat, card); return; }
     gPending = {seat, card};
     gBusy = true; gRender();
     G.tips = (G.tips||0)+1;
-    $('gtiptext').innerHTML = tip.text;
+    $('gtiptext').innerHTML = tip.text; gTipMode(false);
     $('gtip').hidden = false;
   });
 });
 $('gnew').addEventListener('click', ()=>{ if(G && clubSerActive('speel', G.clubNr)){ clubSerNext(); return; } gStart(); });
 { const gf0 = gFinish; gFinish = function(){ const r = gf0.apply(this, arguments); $('gnew').textContent = G && clubSerActive('speel', G.clubNr) ? clubSerNextLab() : 'Nieuw spel'; return r; }; }
 setTimeout(()=>{ try{ gDefRender(); }catch(e){} }, 0);
+$('gtipsc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gtips = b.dataset.gtips; save(); gDefRender(); });
+// Het lampje: een tip vooraf, als jij aan de beurt bent (bieden of spelen). Telt niet als fout.
+function gTipMode(vooraf){ $('gtipback').hidden = vooraf; $('gtipgo').hidden = vooraf; $('gtipok').hidden = !vooraf; }
+function gLampText(){
+  const B = BIDS;
+  if(B && !B.done){
+    if((B.dealer+B.calls.length)%4!==2) return 'Een tip krijg je zodra jij aan de beurt bent.';
+    let a = null; try{ a = brBid(makeHand(B.hands[2]), B.calls, (B.dealer+2)%4); }catch(e){}
+    if(!a) return 'Hier heb ik geen tip voor.';
+    if(!bidLegal(B, a.bid)) a = {bid:'pas', why:a.why};
+    return 'Bied <b>'+(a.bid==='pas' ? 'pas' : a.bid==='X' || a.bid==='XX' ? a.bid : bidHTML(a.bid))+'</b>. '+(a.why ? a.why.charAt(0).toUpperCase()+a.why.slice(1)+'.' : 'Zo staat het op jullie systeemkaart.');
+  }
+  if(!G || G.over) return 'Een tip krijg je tijdens het bieden of spelen.';
+  const s = G.turn; if(gBusy || !gMine(s)) return 'Een tip krijg je zodra jij aan de beurt bent.';
+  const st = Object.assign({}, G); let c = null;
+  try{ c = G.role==='tegen' ? (state.gdef==='sterk' && ddsOK() ? gAIStrong(st, s) : gAI(st, s)) : gDeclAI(st, s); }catch(e){}
+  if(c==null) return 'Hier heb ik geen tip voor.';
+  document.querySelectorAll('#game .card.hint').forEach(x=>x.classList.remove('hint'));
+  const el = document.querySelector('#game .card[data-c="'+c+'"]'); if(el) el.classList.add('hint');
+  const lead = !G.trick.length, from = s===0 && G.role!=='tegen' ? 'uit de dummy ' : '';
+  const why = gWhy(G, s, c);
+  return 'Speel '+from+'<b>'+cardHTML(SUITS[gSuit(c)]+gRank(c))+'</b>. '+(why || (lead && !G.played.length && G.role==='tegen' ? 'Volgens jullie uitkomstafspraken.' : ''));
+}
+$('glamp').addEventListener('click', ()=>{ if(!$('gtip').hidden && $('gtipok').hidden) return;
+  $('gtiptext').innerHTML = '<b>Tip:</b> '+gLampText(); gTipMode(true); $('gtip').hidden = false;
+  if(G) G.asked = (G.asked||0)+1; });
+$('gtipok').addEventListener('click', ()=>{ $('gtip').hidden = true; gTipMode(false); });
 $('gopp').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.oppSys = b.dataset.gopp; save(); gDefRender(); });
 $('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gbid = b.dataset.gbid; state.gonlybid = false; save(); gDefRender(); });
 $('grole').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.grole = b.dataset.grole; save(); gDefRender(); });
