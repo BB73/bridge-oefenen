@@ -117,7 +117,7 @@ button.score .swide{font-weight:400;color:var(--muted)}
 .gdef{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .gdef button{font:inherit;font-size:.9rem;padding:.3rem .8rem;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}
 .gdef button[aria-pressed="true"]{background:var(--accent, #1F6B47);border-color:transparent;color:#fff;font-weight:600}
-.gend .gdef{margin:.25rem 0}
+.gend .gdef{margin:.25rem 0} .gend .gnote{margin:.2rem 0;font-size:.85rem;color:var(--muted)}
 @media (max-height:760px){ .gend{max-height:84dvh!important} .gend .gdef{margin:.12rem 0;gap:.3rem;font-size:.88rem} .gend .gdef button{padding:.18rem .6rem;font-size:.85rem} .gend #gresult{font-size:.88rem;line-height:1.3} .gend .gview, .gend .navclear{margin:.2rem 0} }
 .gview{display:block;margin:.6rem 0 0;padding:.5rem .9rem;border-radius:10px;border:2px solid var(--felt);background:transparent;color:var(--felt);font:inherit;font-weight:700;cursor:pointer}
 .rvsum{margin:.2rem 0 .5rem}
@@ -224,7 +224,9 @@ table.clubsum.wzt td.none{text-align:left !important;font-weight:400 !important;
 #game.bidmode #gsouth li{font-size:clamp(1.05rem,2.6dvh,1.3rem);line-height:1.15;margin:.05rem 0;gap:.5rem;min-height:0}
 #game.bidmode .gstatus{min-height:0}
 @media (max-height:700px){ #game.bidmode .abwhy{font-size:.78rem;margin:.1rem 0 .2rem} #game.bidmode .bid{height:clamp(1.8rem,4.6dvh,2.6rem)} #game.bidmode .btab{gap:.15rem .3rem;padding:.25rem .35rem} #game.bidmode .bk{height:1.5rem;width:2.4rem;font-size:.82rem;padding-top:.08rem} #game.bidmode #gsouth li{font-size:1rem} }
-#game.bidmode #gsouth .sym{font-size:1em;width:1.2em}
+#game.bidmode:has(#bidsum .abres) #gbid > .abwhy{display:none!important}
+#game.bidmode:has(#bidsum .abres) #bidsum{flex:1 1 0!important;min-height:7rem;overflow-y:auto}
+#game.bidmode:has(#bidsum .abres){overflow:hidden!important}
 #game.bidmode .handlabel{margin-top:.1rem}
 .btab{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto minmax(2rem,auto) auto;grid-template-areas:". n ." "w m e" ". s .";gap:.25rem .35rem;align-items:center;justify-items:center;margin:.2rem auto .35rem;padding:.35rem .4rem;max-width:26rem;border-radius:16px;background:var(--felt);box-shadow:inset 0 0 0 3px color-mix(in srgb, #000 12%, var(--felt))}
 .bseat{display:flex;flex-direction:column;align-items:center;gap:.15rem;min-width:0}
@@ -1301,7 +1303,7 @@ main.table:is(.ns, :not(.ns)) > #hand, #game > #gsouth{display:flex!important;fl
 main.table > #hand > li, #game > #gsouth > li, #samenbody .smrows .smrow{display:flex!important;align-items:center!important;gap:.22rem!important;margin:0!important;min-height:var(--tile)!important;line-height:1!important;font-size:calc(var(--H) / .74)!important}
 main.table > #hand > li:has(.ranks.tap), #game > #gsouth > li:has(.card:not(:disabled)), #game.turn > #gsouth > li, #samenbody .smrows .smrow:has(button.mk){min-height:var(--tile2)!important}
 main.table > #hand .ranks, #game > #gsouth .ranks{display:flex!important;flex-wrap:nowrap!important;gap:.22rem!important;font-size:inherit!important}
-main.table > #hand .mk, main.table > #hand .card, #game > #gsouth .card, #samenbody .smrows .mk{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-direction:row!important;box-sizing:border-box!important;
+main.table > #hand .mk, main.table > #hand .card, #game > #gsouth .card, #game > #gsouth .mk, #samenbody .smrows .mk{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-direction:row!important;box-sizing:border-box!important;
   height:var(--tile)!important;min-width:calc(var(--H) * 1.55)!important;width:auto!important;aspect-ratio:auto!important;padding:0 .14em!important;margin:0!important;
   border:1px solid #B9C4BD!important;border-radius:5px!important;background:#FFFFFF!important;box-shadow:none!important;opacity:1;
   font:inherit!important;font-size:calc(var(--H) / .74)!important;font-weight:800!important;line-height:1!important;letter-spacing:-.02em!important}
@@ -1309,10 +1311,10 @@ main.table > #hand .ranks.tap .card, #game > #gsouth .card:not(:disabled), #same
 #game > #gsouth .card:disabled{opacity:.55!important}
 #game.bidmode > #gsouth .card, #game > #gsouth:not(.turn) .card{opacity:1!important}
 #samenbody .smrows .mk.off{opacity:.45!important}
-main.table > #hand .mk.S, main.table > #hand .card.kS, #game > #gsouth .card.kS, #samenbody .smrows .mk.S{color:#123462!important}
-main.table > #hand .mk.H, main.table > #hand .card.kH, #game > #gsouth .card.kH, #samenbody .smrows .mk.H{color:#9B1D38!important}
-main.table > #hand .mk.D, main.table > #hand .card.kD, #game > #gsouth .card.kD, #samenbody .smrows .mk.D{color:#BF5A02!important}
-main.table > #hand .mk.C, main.table > #hand .card.kC, #game > #gsouth .card.kC, #samenbody .smrows .mk.C{color:#216B50!important}
+main.table > #hand .mk.S, main.table > #hand .card.kS, #game > #gsouth .card.kS, #game > #gsouth .mk.S, #samenbody .smrows .mk.S{color:#123462!important}
+main.table > #hand .mk.H, main.table > #hand .card.kH, #game > #gsouth .card.kH, #game > #gsouth .mk.H, #samenbody .smrows .mk.H{color:#9B1D38!important}
+main.table > #hand .mk.D, main.table > #hand .card.kD, #game > #gsouth .card.kD, #game > #gsouth .mk.D, #samenbody .smrows .mk.D{color:#BF5A02!important}
+main.table > #hand .mk.C, main.table > #hand .card.kC, #game > #gsouth .card.kC, #game > #gsouth .mk.C, #samenbody .smrows .mk.C{color:#216B50!important}
 main.table > #hand .card .pip, #game > #gsouth .card .pip{display:none!important}
 main.table > #hand .void, #game > #gsouth .void, #samenbody .smrows .mkd{font-size:calc(var(--H) / .74)!important;line-height:1}
 /* v326: biedkastje smaller; niveau en kleursymbool even groot als in de hand */
@@ -1503,6 +1505,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
     <div class="gend" id="gend" hidden>
       <p id="gresult"></p>
       <p class="gdef" id="gbidc">Eerst bieden: <button data-gbid="ja">Ja</button><button data-gbid="nee">Nee</button></p>
+      <p class="gnote" id="gbidnote" hidden>Wie de leider wordt en wat het contract is, volgt uit de bieding: jullie spelen het af of verdedigen.</p>
       <p class="gdef" id="grole">Jij bent: <button data-grole="leider">Leider</button><button data-grole="tegen">Tegenspeler</button></p>
       <p class="gdef" id="gct">Contract: <button data-gct="sa">3SA</button><button data-gct="troef">Troef</button><button data-gct="mix">Afwisselend</button></p>
       <p class="gdef" id="gopp">Tegenstanders: <button data-gopp="eigen">Jullie systeem</button><button data-gopp="std">Standaard</button></p>
@@ -4461,7 +4464,7 @@ function gameNew(){
   if(CLUB_PRESET){
     const P = CLUB_PRESET; CLUB_PRESET = null;
     const hN = makeHand(P.hands[0]), hS = makeHand(P.hands[2]);
-    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul};
+    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul, rk:P.rk||0};
   }
   const want = state.gct==='sa' ? 'sa' : state.gct==='troef' ? 'troef' : (rnd(2) ? 'sa' : 'troef');
   for(;;){
@@ -7976,7 +7979,7 @@ const CONV_SUBS = {
            ['Slagen maken',[['Met honneurs',['ontwikkel','snijden','dsnit']], ['Met lengte',['vrij']], ['De volgorde',['combi']]]],
            ['Troef',['troef','weggooi']],
            ['Verbindingen en veiligheid',[['Tegen hun lange kleur',['ophouden','gevaar']], ['Oversteken',['entree']], ['Op zeker spelen',['veilig']]]],
-           ['Heel spel',['spel']]],
+           ],
   convsT:[['Uitkomen',[['Jij komt uit',['uitkomst']], ['Partner komt uit',['regel11']]]],
           ['Signalen',[['Aan, af en voorkeur',['signaal']], ['Lengte',['lengte']]]],
           ['Welke kaart leg je?',[['Vuistregels',['handen','dekken']], ['Wachten',['ophoudt']]]],
@@ -8464,6 +8467,7 @@ function renderModes(){
   else if(T==='test'){ cr.push(['Challenge jezelf', 1]); if(mode) cr.push([mode==='toets' ? 'Test je systeemkaart' : mode==='fris' ? 'Opfrisser butler of paren' : 'Leerpad basisregels', 2]); if(mode==='fris' && nav[2]) cr.push([nav[2]==='butler' ? 'Butler' : 'Paren', 3]); }
   else if(T==='bieden' && cardMode){ cr.push(['Mijn systeemkaart', 'k']); cr.push(['Eigen specifieke systeemkaart', 'e']); cr.push(['Bieden', 2]); }
   else if(T==='doel') cr.push(['Bieden & spelen', 1]);
+  else if(T==='heel'){ cr.push(['Bieden & spelen', 'o']); cr.push(['Zelf een heel spel spelen', 1]); }
   else if(T==='regels') cr.push(['De afspraken', 1]);
   else if(T){ cr.push(['Bieden & spelen', 'o']); cr.push([(T==='bieden' ? 'Bieden' : 'Spelen')+(learnPage ? ': leerpad' : ''), 2]); }
   if(cat) cr.push([cat.name, visSubs.length>1 ? 3 : 4]);
@@ -8500,7 +8504,16 @@ function renderModes(){
       : '<p class="hint">Hier oefen je losse onderdelen: alleen de biedingen en spelsituaties die bij de afspraken op je systeemkaart horen.</p>'
         + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
         + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
+        + '<button class="homebtn'+(state.conv==='spel' ? ' has' : '')+'" data-go="heel"><b>Zelf een heel spel spelen</b><small>Tegen de computer: bieden, spelen als leider of tegenspelen</small></button>'
         + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Eerst inloggen of een account maken.</small></button>' : '')+'</div>';
+  }else if(T==='heel'){
+    const cur = state.conv==='spel' ? (state.gonlybid ? 'bied' : state.gbid==='ja' ? 'beide' : state.grole==='tegen' ? 'tegen' : 'leider') : null;
+    const row = (k, a, b) => '<button class="navrow'+(cur===k ? ' has' : '')+'" data-heel="'+k+'"><span>'+a+'</span><small>'+b+'</small></button>';
+    pg = '<p class="hint">Je speelt alleen, tegen de computer. Je partner en de tegenstanders bieden en spelen volgens je systeemkaart (de tegenstanders kun je na een spel ook een standaardsysteem geven).</p>'
+       + row('beide', 'Bieden en daarna spelen', 'Pas na de bieding weet je of jullie het spel spelen of verdedigen')
+       + row('bied', 'Alleen bieden', 'Je biedt met de computer als partner; daarna zie je wat er met open kaarten in zat')
+       + row('leider', 'Alleen spelen als leider', 'Het contract ligt al vast; jij speelt het af')
+       + row('tegen', 'Alleen tegenspelen', 'Het contract ligt al vast; jij verdedigt samen met de computer');
   }else if(T==='test' && !mode){
     const TS = state.test;
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
@@ -8623,7 +8636,7 @@ function renderModes(){
   $('optbox').hidden = !boxes.length && $('stepsbox').hidden;
   const emptySel = (state.conv==='biedmix' && !state.bidSet.length) || (state.conv==='spelmix' && !state.playSet.length);
   $('close').disabled = emptySel;
-  $('close').parentNode.hidden = nav[0]==='test' && nav[1]==='fris';      // in de opfrisser hoort de knop naar de gewone oefeningen niet
+  $('close').parentNode.hidden = (nav[0]==='test' && nav[1]==='fris') || nav[0]==='heel';      // in de opfrisser en bij 'Zelf een heel spel spelen' start je met de keuzes zelf      // in de opfrisser hoort de knop naar de gewone oefeningen niet
   $('close').textContent = emptySel ? 'Kies eerst iets om te oefenen' : 'Aan de slag: '+(state.conv==='biedmix' ? 'bieden, '+state.bidSet.length+' onderdelen door elkaar' : state.conv==='spelmix' ? 'spelen, '+state.playSet.length+' onderdelen door elkaar' : CONVS[state.conv]);
   chips($('steps'), pkSteps, (pk && state.conv!==pk) ? 'alles' : state.step, 'step');
   chips($('rkc'), {'1430':'1430', '3014':'3014'}, state.rkc, 'rkc');
@@ -10218,7 +10231,7 @@ function bidStartRandom(){
     const d = Array.from({length:52},(_,i)=>i);
     for(let i=51;i>0;i--){ const j = rnd(i+1); const z = d[i]; d[i] = d[j]; d[j] = z; }
     const H = [0,1,2,3].map(k=>d.slice(k*13,k*13+13)), pN = makeHand(H[0]).hcp, pS = makeHand(H[2]).hcp;
-    if(pN+pS<20 || pS<6) continue;
+    if(!(state.gbid==='ja' && !state.gonlybid) && (pN+pS<20 || pS<6)) continue;      // bieden en spelen: elke verdeling, dus soms verdedigen jullie
     return bidStart({hands:H, dealer:rnd(4), vul:['-','NZ','OW','Allen'][rnd(4)]});
   }
 }
@@ -10305,7 +10318,7 @@ function bidSummary(){
   if(tips.length) h += '<div class="abtip">'+TIP_T+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
   h += '<p id="bidopen" class="abwhy">Met open kaarten rekenen…</p>';
   if(B.tables) h += '<p class="abwhy">Aan de tafels van jouw lijn: '+B.tables+'</p>';
-  h += '<div class="clubplay">'+(ct ? '<button class="gview" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
+  h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
   el.innerHTML = h;
   const run = gRun;
   ddsLoad().then(()=>{
@@ -10350,7 +10363,7 @@ document.addEventListener('click', e=>{
     const B = BIDS, ct = B && brContract(B.calls, B.dealer); if(!ct) return;
     const k = (2 - ct.decl + 4) % 4, hands = [[],[],[],[]];
     B.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
-    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), label: B.club || ''};
+    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), label: B.club || '', rk: B.clubNr ? 0 : k};
     BIDS = null; state.grole = ct.decl%2===0 ? 'leider' : 'tegen'; save(); bidRender(); gStart(); return;
   }
   if(x.dataset.clubback!==undefined){
@@ -10384,7 +10397,7 @@ function clubBid(nr){
     bidStart({hands, dealer:(b.dealer+k)%4, vul, club:'Spel '+b.nr, clubNr:b.nr, tables: tables || null});
   }
 }
-function bidStartRandomOrGame(){ if(state.gbid==='ja' && state.grole!=='tegen') bidStartRandom(); else gStart(); }
+function bidStartRandomOrGame(){ if(state.gbid==='ja') bidStartRandom(); else gStart(); }
 const THEORY = {puppet2:['Puppet Stayman'], puppet1:['Puppet Stayman'], zwak2h:['Zwakke twee','Antwoorden op de zwakke twee'], zwak2a:['Zwakke twee','Antwoorden op de zwakke twee'], openen:['Openen'], stayman:['Opening','Stayman','Uitnodigingen'], jacoby:['Opening','Jacoby','Uitnodigingen'],
   geen:['Opening','Stayman','Jacoby','Uitnodigingen'], doublet:['Informatiedoublet'], volgbod:['Volgbod'], negatief:['Negatief doublet'], wet:['Wet van de troeven'], steun:['Steunen: storend'], rkcb:['RKC'], exclusion:['Exclusion'], gerber:['Gerber'], acol2:['Acol-tweeën'], benji:['Benjamin'], leaping:['Wereldconventie'], bergen:['Bergen-raises'], jac2n:['Jacoby 2SA'], splinter:['Splinters'], montreal:['Montreal relay'], walsh:['Walsh'], twalsh:['Transfer Walsh'], bart:['Bart'], gazzilli:['Gazzilli'], bijbod:['Bijbod'], tellen:['Spelen: vaste'], snijden:['Spelen: snijden'], uitkomst:['Tegenspel: uitkomen'], doorsterk:['Tegenspel: door sterk'], handen:['Tegenspel: tweede hand'], signaal:['Tegenspel: signaleren'], ontwikkel:['Spelen: slagen ontwikkelen'], verliezers:['Spelen: verliezers tellen'], troef:['Spelen: troef trekken'], antw2:['Antwoorden op'], twee1:['2 over 1'], gambling:['Gambling'], inverted:['Inverted'], uppercue:['Upper cuebid'], unusual:['Upper cuebid'], rubensohl:['Rubensohl'], ballumer:['Ballumer'], checkback:['Checkback'], blackwood:['Blackwood'], nadbl:['Na een informatiedoublet'], ophouden:['Spelen: ophouden'], gevaar:['Spelen: de gevaarlijke'], entree:['Spelen: entrees'], veilig:['Spelen: veiligheidsspel'], dekken:['Tegenspel: honneur'], regel11:['Tegenspel: de regel van 11'], dsnit:['Spelen: dubbele snit'], combi:['Spelen: kansen combineren'], vrij:['Spelen: lange kleur'], weggooi:['Spelen: weggooien'], telhand:['Spelen: de hand uittellen'], lezen:['Spelen: de tegenpartij lezen'], terug:['Tegenspel: terugspelen'], lengte:['Tegenspel: lengtesignaal'], ophoudt:['Tegenspel: je aas ophouden'], actief:['Tegenspel: actief of passief'], landy:['Landy'], mlandy:['Multi-Landy'], multi:['Multi 2'], nmf:['New Minor'], vierde:['Vierde kleur'], reverse:['Reverse'], texas:['Texas'], na2sa:['Na een 2SA-opening'], dont:['DONT'], muiderberg:['Muiderberg'], spel:['Spelen: een heel spel']};
 ['openen','zwak2h','zwak2a','volgbod','multi','muiderberg','uppercue','unusual','wet'].forEach(k=>{ if(THEORY[k]) THEORY[k].push('Kwetsbaarheid'); });
@@ -11310,6 +11323,8 @@ $('theory').addEventListener('click', e=>{ if(e.target===$('theory') && $('theor
 // ---------- Heel spel: scherm ----------
 let G = null, gShown = [null,null,null,null], gBusy = false, gRun = 0, gPending = null;
 const SEATNAME = ['Noord','Oost','Zuid','West'];
+// Na een bieding draait de app de tafel zo dat de leider onderaan zit; de namen blijven die van de bieding (Noord, Oost, Zuid, West).
+const gOrig = s => (s - ((typeof G!=='undefined' && G && G.rk) || 0) + 4) % 4, gNm = s => SEATNAME[gOrig(s)], gLt = s => 'NOZW'[gOrig(s)];
 // Leider: jij speelt Noord (dummy) en Zuid. Tegenspeler: jij speelt West of Oost (G.me), de computer de rest.
 const gLevel = g => g.level || (g.trump===4 ? 3 : 4);
 const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trump]+'">'+SYM[SUITS[g.trump]]+'</span>')+(g.dbl===2 ? ' XX' : g.dbl ? ' X' : '');
@@ -11352,7 +11367,7 @@ function gRender(){
   $('nameE').textContent = def ? (G.me===1 ? 'Oost (jij)' : 'Oost (partner)') : 'Oost';
   $('cntW').style.visibility = def && G.me===3 ? 'hidden' : '';
   $('cntE').style.visibility = def && G.me===1 ? 'hidden' : '';
-  $('gslabel').textContent = def ? 'Jouw hand ('+(G.me===3 ? 'West' : 'Oost')+') · Zuid is leider' : 'Jouw hand (Zuid)';
+  $('gslabel').textContent = def ? 'Jouw hand ('+gNm(G.me)+') · '+gNm(2)+' is leider' : 'Jouw hand ('+gNm(2)+')';
   $('seatW').classList.toggle('turn', !G.over && G.turn===3);
   $('seatE').classList.toggle('turn', !G.over && G.turn===1);
   let who = '';
@@ -11360,10 +11375,10 @@ function gRender(){
     if(def){
       const down = 14-G.need;
       if(gBusy) who = !gMine(G.turn) && gShown.filter(x=>x!==null).length<4 ? (G.turn===0 ? 'De leider speelt uit de dummy' : G.turn===2 ? 'Zuid (leider) is aan de beurt' : 'Partner is aan de beurt') : '';
-      else if(!G.played.length) who = (G.club ? G.club+': j' : 'J')+'ij komt uit tegen '+gLevel(G)+(G.trump===4 ? 'SA' : ' '+SNAME[SUITS[G.trump]])+' van Zuid. Om hem down te spelen hebben jullie '+down+' slagen nodig.';
+      else if(!G.played.length) who = (G.club ? G.club+': j' : 'J')+'ij komt uit tegen '+gLevel(G)+(G.trump===4 ? 'SA' : ' '+SNAME[SUITS[G.trump]])+' van '+gNm(2)+'. Om hem down te spelen hebben jullie '+down+' slagen nodig.';
       else who = 'Jouw beurt. Jullie hebben '+down+' slagen nodig om hem down te spelen.';
     }
-    else if(gBusy) who = (G.turn===1 || G.turn===3) && gShown.filter(x=>x!==null).length<4 ? SEATNAME[G.turn]+' is aan de beurt' : '';
+    else if(gBusy) who = (G.turn===1 || G.turn===3) && gShown.filter(x=>x!==null).length<4 ? gNm(G.turn)+' is aan de beurt' : '';
     else if(G.played.length===1) who = G.trump===4 ? 'Tel eerst: je hebt '+G.top+' vaste slagen en hebt er '+G.need+' nodig'+(G.top<G.need ? '. Waar haal je de andere '+(G.need-G.top)+' vandaan?' : '.')+' Speel dan uit de dummy.'
       : 'Tel eerst je verliezers: in je hand zijn het er '+G.los+', met de hoge kaarten van de dummy meegeteld. Je mag er '+(13-G.need)+' hebben.'+(G.los>13-G.need ? ' Kun je er '+(G.los-13+G.need)+' introeven in de dummy of wegwerken?' : '')+' Denk aan troef trekken.';
     else who = G.turn===0 ? 'Speel een kaart uit de dummy' : 'Speel een kaart uit je hand';
@@ -11371,7 +11386,8 @@ function gRender(){
   $('gstatus').innerHTML = (def ? 'Jullie '+G.ew+', leider '+G.ns+' · down bij '+(14-G.need) : 'Jij '+G.ns+', zij '+G.ew+' · nodig '+G.need)+(who ? '<br>'+who : '');
   $('gcontract').innerHTML = '';
   { const t = s => !G.over && G.turn===s;
-    $('gsqnm').innerHTML = tblPills({N:{name:'Noord', d:1, turn:t(0)}, O:{name:def ? (G.me===1 ? 'Jij' : 'Partner') : 'Oost', turn:t(1)}, Z:{name:def ? 'Zuid' : 'Jij', l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:def ? (G.me===3 ? 'Jij' : 'Partner') : 'West', turn:t(3)}}); }
+    const O = {N:{name:gNm(0), d:1, turn:t(0)}, O:{name:def ? (G.me===1 ? 'Jij' : 'Partner') : gNm(1), turn:t(1)}, Z:{name:def ? gNm(2) : 'Jij', l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:def ? (G.me===3 ? 'Jij' : 'Partner') : gNm(3), turn:t(3)}};
+    $('gsqnm').innerHTML = [['t','N',0],['r','O',1],['b','Z',2],['l','W',3]].map(([pos,k,s])=>tblPill(pos, O[k].name, gLt(s), O[k])).join(''); }
 }
 function gScoreTxt(){
   const sc = v => bridgeScore(gLevel(G), G.trump, G.dbl||0, v, G.ns), def = G.role==='tegen' ? -1 : 1;
@@ -11406,7 +11422,8 @@ function ddsLoad(){
 }
 function gDefRender(){
   $('gbidc').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gbid==='ja' ? 'ja' : 'nee')===b.dataset.gbid)));
-  $('grole').hidden = !ddsOK();
+  const bied = state.gbid==='ja';                     // met bieden volgt uit de bieding wie leider wordt en wat het contract is
+  $('grole').hidden = !ddsOK() || bied; $('gct').hidden = bied; $('gbidnote').hidden = !bied;
   $('grole').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.grole==='tegen' ? 'tegen' : 'leider')===b.dataset.grole)));
   $('gct').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gct==='sa' || state.gct==='troef' ? state.gct : 'mix')===b.dataset.gct)));
   $('gopp').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.oppSys==='std' ? 'std' : 'eigen')===b.dataset.gopp)));
@@ -11573,10 +11590,10 @@ function gDo(seat, card){
 }
 function gStart(){
   gcEvent('heel-spel');
-  if(!CLUB_PRESET && state.gbid==='ja' && state.grole!=='tegen'){ bidStartRandom(); return; }
+  if(!CLUB_PRESET && state.gbid==='ja'){ bidStartRandom(); return; }
   if(BIDS){ BIDS = null; bidRender(); }
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
-  G.role = state.grole==='tegen' ? 'tegen' : 'leider'; G.me = G.role==='tegen' ? (rnd(2) ? 3 : 1) : 2;
+  G.role = state.grole==='tegen' ? 'tegen' : 'leider'; G.me = G.role==='tegen' ? (G.rk ? (2 + G.rk) % 4 : (rnd(2) ? 3 : 1)) : 2;      // na een bieding verdedig je met je eigen hand
   G.start = G.hands.map(h=>h.slice()); G.log = []; ddsLoad();
   $('gtip').hidden = true;
   $('gend').hidden = true;
@@ -11599,7 +11616,7 @@ $('gnew').addEventListener('click', ()=>{ if(G && clubSerActive('speel', G.clubN
 { const gf0 = gFinish; gFinish = function(){ const r = gf0.apply(this, arguments); $('gnew').textContent = G && clubSerActive('speel', G.clubNr) ? clubSerNextLab() : 'Nieuw spel'; return r; }; }
 setTimeout(()=>{ try{ gDefRender(); }catch(e){} }, 0);
 $('gopp').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.oppSys = b.dataset.gopp; save(); gDefRender(); });
-$('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gbid = b.dataset.gbid; save(); gDefRender(); });
+$('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gbid = b.dataset.gbid; state.gonlybid = false; save(); gDefRender(); });
 $('grole').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.grole = b.dataset.grole; save(); gDefRender(); });
 $('gct').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gct = b.dataset.gct; save(); gDefRender(); });
 $('gdef').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gdef = b.dataset.gdef; save(); gDefRender(); });
@@ -12017,7 +12034,8 @@ $('convs').addEventListener('click', e=>{
   if(d.tstart){ testStart(); save(); renderModes(); shut(); next(true); return; }
   if(d.tresume){ testArm(); save(); renderModes(); shut(); next(true); return; }
   if(d.tplan || d.tone){ testPractice(d.tone ? [d.tone] : testPlan().map(r=>r.k)); save(); renderModes(); shut(); next(true); return; }
-  if(d.go){ learnView = null; nav = d.go==='kaart' ? ['kaart'] : d.go==='test' ? ['test'] : d.go==='doel' ? ['doel'] : state.learn.on ? [d.go,'leer'] : [d.go,'oefen']; top(); return; }
+  if(d.heel){ const m = d.heel; state.gonlybid = m==='bied'; state.gbid = (m==='bied' || m==='beide') ? 'ja' : 'nee'; if(m==='leider' || m==='tegen') state.grole = m; state.conv = 'spel'; state.step = 'alles'; save(); renderModes(); shut(); next(true); return; }
+  if(d.go){ learnView = null; nav = d.go==='kaart' ? ['kaart'] : d.go==='test' ? ['test'] : d.go==='doel' ? ['doel'] : d.go==='heel' ? ['heel'] : state.learn.on ? [d.go,'leer'] : [d.go,'oefen']; top(); return; }
   if(d.kgo){ nav = d.kgo==='bieden' ? ['bieden','kaart'] : d.kgo==='std' ? ['kaart','std'] : d.kgo==='eigen' ? ['kaart','eigen'] : ['kaart','leads']; top(); return; }
   if(d.kstd){ nav = ['kaart','std',d.kstd]; top(); return; }
   if(d.kpreset){ const id = d.kpreset; if(presetMatch()===id) return; askConfirm(PRESETS[id].name+' kiezen?', '<p>Je systeemkaart wordt vervangen door <b>'+PRESETS[id].name+'</b>. Je scores en voortgang blijven bewaard.</p><p>'+PRESETS[id].sub+'</p>', 'Kiezen', ()=>presetApply(id)); return; }
