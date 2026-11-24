@@ -1299,8 +1299,13 @@ main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{fon
 #game .hrow.vl, #game .hrow.vr, main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
 main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
 /* v335: telefoon - dummy en eigen hand elk op een rij, de tafel vult de rest; dummy pas zichtbaar na de uitkomst */
-#game.flat:not(.bidmode) > #gsouth{display:none!important}
-#game:not(.flat) > #gsrow, #game.bidmode > #gsrow, #game.allhands > #gsrow{display:none!important}
+#game.flat > #gsouth{display:none!important}
+#game:not(.flat) > #gsrow, #game.allhands > #gsrow{display:none!important}
+#game.bidmode #gsrow{order:3}
+/* hoge telefoon: hand en dummy elk in twee rijen met grote kaarten */
+#game.big :is(#gnorth, #gsrow){--H:min(1.5rem, calc(((100vw - 1.7rem) / 10 - 3px) * .685));--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem);--dgap:.3rem}
+#game.big :is(#gnorth, #gsrow) .hrowli + .hrowli{margin-top:.22rem!important}
+#game.big :is(#gnorth, #gsrow) .hrow{min-height:var(--dh);justify-content:center}
 #game .dhide{visibility:hidden!important}
 #game .ghand .dcap{display:block!important;min-height:0!important;margin:0 .15rem .1rem!important;font-size:.74rem!important;line-height:1.1!important;font-weight:700;color:var(--muted);letter-spacing:.02em}
 #game .ghand .dcap.r{text-align:right}
@@ -10431,6 +10436,9 @@ function bidRender(){
   if(!def) return;
   $('gslabel').textContent = 'Jouw hand (Zuid)';
   $('gsouth').innerHTML = handHTML(makeHand(B.hands[2]));
+  { const flat = !LAPTOP(), L = []; gFlat = flat; $('game').classList.toggle('flat', flat); $('game').classList.toggle('big', gBig());
+    if(flat) [0,1,2,3].forEach(si=>B.hands[2].filter(c=>Math.floor(c/13)===si).sort((a,b)=>b-a).forEach(c=>{ const r = (c%13)+2; L.push({s:SUITS[si], t:RANK[r]||r}); }));
+    $('gsrow').innerHTML = flat ? gRows(L) : ''; $('gsrow').classList.remove('turn'); }
   const order = [3,0,1,2], NM = ['Noord','Oost','Zuid','West'];
   const rows = []; let row = new Array(4).fill('');
   let col = order.indexOf(B.dealer);
@@ -11589,10 +11597,21 @@ function gHandHTML(seat){
     return '<li><span class="sym '+s+'">'+SYM[s]+'</span>'+(btns ? '<span class="ranks tap">'+btns+'</span>' : '<span class="void">–</span>')+'</li>';
   }).join('');
 }
+// Hoge telefoon: 13 kaarten in twee rijen (de kleuren zo verdeeld dat de rijen ongeveer even lang zijn), zodat de kaarten groot kunnen.
+const gBig = () => !LAPTOP() && matchMedia('(min-height:800px)').matches;
+function gSplit(L){ L = rowOrder(L); const ord = []; L.forEach(c=>{ if(!ord.includes(c.s)) ord.push(c.s); });
+  let best = 1, bm = 99; for(let k=1; k<ord.length; k++){ const a = L.filter(c=>ord.indexOf(c.s)<k).length, m = Math.max(a, L.length-a); if(m<bm){ bm = m; best = k; } }
+  return ord.slice(0, best); }
+function gRows(L, top){
+  if(!gBig()) return '<li class="hrowli">'+handRow(L)+'</li>';
+  if(!L.length) return '<li class="hrowli">'+handRow1([])+'</li>';
+  top = top || gSplit(L);
+  return [L.filter(c=>top.includes(c.s)), L.filter(c=>!top.includes(c.s))].map(r=>'<li class="hrowli">'+(r.length ? handRow1(rowOrder(r)) : '<div class="hrow" style="--n:2;--g:0"></div>')+'</li>').join(''); }
 function gRowHTML(seat){
   const myTurn = G && !G.over && !gBusy && G.turn===seat && gMine(seat), legal = myTurn ? gLegal(G, seat) : [], L = [];
   SUITS.forEach((s,si)=>G.hands[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>L.push({s, t:RANK[gRank(c)]||gRank(c), tag:'button', cls:'card', at:' data-c="'+c+'"'+(myTurn && legal.includes(c) ? '' : ' disabled')})));
-  return '<li class="hrowli">'+handRow(L)+'</li>';
+  G.rs = G.rs || {}; if(!G.rs[seat] && L.length) G.rs[seat] = gSplit(L);
+  return gRows(L, G.rs[seat]);
 }
 function gClubBack(){
   const nr = BIDS ? BIDS.clubNr : G && G.clubNr, el = $('gclubback');
@@ -11608,7 +11627,7 @@ function gRender(){
   const rot = s => def ? (s - G.me + 6) % 4 : s, dpos = rot(0);
   // telefoon: dummy en eigen hand elk naast elkaar op een rij, zodat de tafel groot kan; laptop: dummy van de tegenpartij opzij
   const flat = !LAPTOP(), side = def && !flat, dhide = def && !G.played.length;   // jij komt uit: de dummy gaat pas open na de uitkomst
-  gFlat = flat; $('game').classList.toggle('flat', flat);
+  gFlat = flat; $('game').classList.toggle('flat', flat); $('game').classList.toggle('big', gBig());
   ['gnorth','gsouth','gsrow'].forEach((id,k)=>{
     const seat = k===0 ? 0 : (def ? G.me : 2), el = $(id);
     el.innerHTML = k===0 ? (side ? '' : (def ? '<li class="dcap'+(dpos===1 ? ' r' : '')+'">Dummy · '+gNm(0)+'</li>' : '')+gRowHTML(seat)) : k===1 ? gHandHTML(seat) : flat ? gRowHTML(seat) : '';
@@ -11679,23 +11698,34 @@ function sqFit(){
 }
 // Telefoon, heel spel: de tafel wordt zo groot als de breedte en de vrije hoogte toelaten, zonder dat het scherm gaat schuiven.
 function gFit(){
-  const sq = document.getElementById('gsq'), g = document.getElementById('game'); if(!sq || !g) return;
-  if(sq.dataset.fit){ sq.style.removeProperty('--w'); delete sq.dataset.fit; }
-  if(!g.classList.contains('flat') || g.classList.contains('bidmode') || !sq.offsetParent || sq.parentNode.classList.contains('sqrow')) return;
-  const z = parseFloat(getComputedStyle(sq).zoom) || 1, pc = getComputedStyle(g), pw = g.clientWidth - parseFloat(pc.paddingLeft) - parseFloat(pc.paddingRight);
-  const base = Math.round(sq.getBoundingClientRect().width / z), se = document.scrollingElement;
-  let w = Math.floor((pw - 2) / z); if(w <= base) return;
-  sq.dataset.fit = '1';
-  for(let i=0; i<5; i++){
-    sq.style.setProperty('--w', w+'px');
+  const g = document.getElementById('game'); if(!g) return;
+  const bid = g.classList.contains('bidmode'), sqs = [document.getElementById('gsq'), g.querySelector('#gbid > .smsq')];
+  sqs.forEach(e=>{ if(e && e.dataset.fit){ e.style.removeProperty('zoom'); delete e.dataset.fit; } });
+  const sq = sqs[bid ? 1 : 0];
+  if(!sq || !g.classList.contains('flat') || !sq.offsetParent || sq.parentNode.classList.contains('sqrow')) return;
+  const z0 = parseFloat(getComputedStyle(sq).zoom) || 1, pc = getComputedStyle(g), pw = g.clientWidth - parseFloat(pc.paddingLeft) - parseFloat(pc.paddingRight);
+  const base = sq.getBoundingClientRect().width, w0 = base / z0, se = document.scrollingElement;
+  let w = Math.floor(pw - 2); if(w <= base + 1) return;
+  // tijdens het bieden blijft de tafel even groot: ruimte voor twee regels uitleg, en binnen een spel wordt hij alleen kleiner
+  const box = bid && g.querySelector('#gbid > .box'), live = !!(box && box.offsetParent), key = (typeof BIDS!=='undefined' ? BIDS : null), vp = innerWidth+'x'+innerHeight;
+  if(gFitM.key!==key || gFitM.vp!==vp) gFitM = {key, vp, w:Infinity};
+  if(live) w = Math.min(w, gFitM.w);
+  const why = live && g.querySelector('#gbid > .abwhy'), res = live ? Math.max(0, 2.7 * parseFloat(getComputedStyle(box).fontSize || 16) * .88 - (why && why.offsetParent ? why.getBoundingClientRect().height : 0)) : 0;
+  sq.dataset.fit = '1'; if(res) box.style.marginBottom = res+'px';
+  for(let i=0; i<6; i++){
+    sq.style.zoom = w / w0;
     let over = Math.max(se.scrollHeight - innerHeight, g.scrollHeight - g.clientHeight);
     // de tip na een kaart schuift onderaan over het scherm: je eigen hand blijft erboven zichtbaar
     { const tip = document.getElementById('gtip'), hr = document.getElementById('gsrow');
-      if(tip && hr && !tip.hidden && tip.getClientRects().length && getComputedStyle(tip).position==='fixed') over = Math.max(over, hr.getBoundingClientRect().bottom + 4 - tip.getBoundingClientRect().top); }
+      if(!bid && tip && hr && !tip.hidden && tip.getClientRects().length && getComputedStyle(tip).position==='fixed') over = Math.max(over, hr.getBoundingClientRect().bottom + 4 - tip.getBoundingClientRect().top); }
     if(over <= 0 || w <= base) break;
-    w = Math.max(base, Math.floor(w - over / z - 1));
+    w = Math.max(base, Math.floor(w - over - 1));
   }
+  if(box) box.style.marginBottom = '';
+  if(live) gFitM.w = Math.min(gFitM.w, w);
+  if(w <= base){ sq.style.removeProperty('zoom'); delete sq.dataset.fit; }
 }
+let gFitM = {key:null, vp:'', w:Infinity};
 { let sqT = 0; const kick = ()=>{ cancelAnimationFrame(sqT); sqT = requestAnimationFrame(sqFit); };
   const mo = new MutationObserver(kick);
   { const m = document.querySelector('main.table'); if(m) mo.observe(m, {attributes:true, attributeFilter:['class','hidden']}); }
