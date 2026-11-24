@@ -1293,12 +1293,43 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) 
 main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
 main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
 main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
-main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{font-size:var(--tsym);line-height:1;vertical-align:-.08em}
+main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{font-size:var(--tsym);line-height:0;vertical-align:-.08em}
 #game .tablewrap:not(.sqrow) > .sqs{display:none!important} #game .tablewrap.sqrow:not([hidden]){display:grid!important;grid-template-columns:auto auto auto!important;justify-content:center!important} #game .tablewrap.sqrow > .seat{display:none!important}
 #game > .tablewrap.sqrow{zoom:1!important} #game > .tablewrap.sqrow > #gsq{zoom:var(--tz)}
 .hcols{display:flex;gap:.25rem;align-items:flex-start;flex:none} .hcols.vr{align-items:flex-end}
 #game .hrow.vl, #game .hrow.vr, main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
 main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
+/* v331: stempel "Under construction" bij een rubriek waar nog tips over openstaan */
+.crumbs .ucstamp, .ucmini{display:inline-block;font-family:var(--display);font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:1;color:#B3261E;border:2px solid #B3261E;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-5deg);white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(179,38,30,.25)}
+.crumbs .ucstamp{font-size:.68rem;padding:.22rem .4rem;margin-left:.5rem;cursor:pointer}
+.crumbs .ucstamp[aria-expanded="true"]{background:#B3261E;color:#fff}
+.homebtn, .navrow{position:relative}
+.ucmini{position:absolute;top:-.45rem;right:.5rem;font-size:.52rem;padding:.14rem .3rem;pointer-events:none;z-index:1}
+.ucbox{border:1px dashed #B3261E;border-radius:10px;padding:.5rem .7rem;margin:0 0 .5rem;font-size:.92rem;background:rgba(179,38,30,.05)} .ucbox p{margin:0 0 .3rem} .ucbox ul{margin:0;padding-left:1.1rem} .ucbox li{margin:.15rem 0}
+/* v332 */
+/* donkere stand: biedkaartjes en het kleursymbool voor je hand zien eruit als op een licht scherm (witte kaartjes, dezelfde kleuren als de kaarten) */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) :is(main.table, #game, #samenbody) :is(.box, .smbb){--surface:#FFFFFF;--s:#123462;--h:#9B1D38;--d:#BF5A02;--c:#216B50;--muted:#56655E;--ink:#14211C;--line:#C9D4CD}
+  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i{background:#FFFFFF;border-radius:5px;height:var(--tile);display:inline-flex!important;align-items:center;justify-content:center}
+  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.S, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.S{color:#123462!important} :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.H, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.H{color:#9B1D38!important}
+  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.D, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.D{color:#BF5A02!important} :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.C, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.C{color:#216B50!important} }
+:root[data-theme="dark"] :is(main.table, #game, #samenbody) :is(.box, .smbb){--surface:#FFFFFF;--s:#123462;--h:#9B1D38;--d:#BF5A02;--c:#216B50;--muted:#56655E;--ink:#14211C;--line:#C9D4CD}
+/* hoge telefoon: de tafel mag groter, er is ruimte genoeg */
+@media (min-height:800px) and (max-width:999px){ :root{--tw:min(calc(100vw - 2rem), 15rem, 30dvh)} }
+/* pas, doublet en redoublet in een stapel biedkaartjes: de letters staan gedraaid langs de rand die zichtbaar blijft */
+.bst .bc.p, .bst .bc.xx, .bst .bc.x{display:block!important;writing-mode:vertical-lr;text-orientation:mixed;padding:.18rem 0 0 .1rem!important;line-height:1!important;font-size:calc(var(--bf, .9rem) * .78)!important;letter-spacing:.02em;text-align:left}
+.bst.l .bc.p, .bst.l .bc.xx, .bst.l .bc.x{writing-mode:vertical-rl;transform:rotate(180deg);padding:.18rem .1rem 0 0!important}
+/* laptop: de keuzevensters groeien mee met het scherm */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ dialog:not(#samen){zoom:var(--dz, 1);max-height:calc(92dvh / var(--dz, 1))!important} }
+/* alle vier de handen na "alleen bieden" */
+.dgm4{display:grid;grid-template-columns:repeat(3, auto);justify-content:center;gap:.25rem .9rem;margin:.3rem auto;font-size:calc(var(--H) / .74 * .82);line-height:1.22;font-weight:700}
+.dgm4 > div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:.2rem .45rem;white-space:nowrap} .dgm4 > div > b{display:block;font-size:.7em;font-weight:600;color:#56655E}
+.dgm4 .hn{grid-column:2;grid-row:1} .dgm4 .hw{grid-column:1;grid-row:2} .dgm4 .he{grid-column:3;grid-row:2} .dgm4 .hz{grid-column:2;grid-row:3} .dgm4 .hmid{grid-column:2;grid-row:2;border:0;background:none;align-self:center;text-align:center;color:var(--muted);font-weight:600}
+.dgm4 .S{color:#123462} .dgm4 .H{color:#9B1D38} .dgm4 .D{color:#BF5A02} .dgm4 .C{color:#216B50} .dgm4 i{font-style:normal;display:inline-block;width:1.15em}
+#game.allhands > #gsouth, #game.allhands > #gslabel{display:none!important} #game.allhands #bidsum > .abtip{display:none!important}
+@media (max-height:700px){ .dgm4{font-size:calc(var(--H) / .74 * .72);line-height:1.15;gap:.15rem .5rem} }
+.abtip img.tipmark{background:#fff;object-fit:cover}
+#goppsel{font:inherit;font-size:.9rem;padding:.3rem .5rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.oppline{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.5rem 0 0;font-size:.92rem}
 /* v326: de eigen hand ziet er overal hetzelfde uit: per kleur één rij, symbool links, de kaarten als witte kaartjes;
    symbool en rang zijn even groot als op de dummy en op tafel (--H). Kaarten die je kunt spelen liggen iets "op", de rest vlak. */
 main.table, #game, #samenbody{--tile:max(calc(var(--H) * 1.8), 1.4rem);--tile2:max(calc(var(--H) * 2.3), 2.35rem)}
@@ -1527,7 +1558,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <p class="gdef" id="grole">Jij bent: <button data-grole="leider">Leider</button><button data-grole="tegen">Tegenspeler</button></p>
       <p class="gdef" id="gct">Contract: <button data-gct="sa">3SA</button><button data-gct="troef">Troef</button><button data-gct="mix">Afwisselend</button></p>
       <p class="gdef" id="gtipsc">Tips achteraf: <button data-gtips="aan">Aan</button><button data-gtips="uit">Uit</button></p>
-      <p class="gdef" id="gopp">Tegenstanders: <button data-gopp="eigen">Jullie systeem</button><button data-gopp="std">Standaard</button></p>
+      <p class="gdef" id="gopp">Tegenstanders spelen: <span id="goppbox"></span></p>
       <p class="gdef" id="gdef" hidden><span id="gdeflab">Tegenspel:</span> <button data-gdef="vuist">Gewoon</button><button data-gdef="sterk">Sterk</button></p>
       <button class="next" id="gnew">Nieuw spel</button>
     </div>
@@ -4023,6 +4054,8 @@ function pcsMeasure(){ try{
   const pr = document.getElementById('prompt'); if(pr) ro.observe(pr);
   window.addEventListener('resize', run); if(mq.addEventListener) mq.addEventListener('change', run);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  const dz = () => { const z = mq.matches ? Math.max(1, Math.min(27, innerHeight/40, innerWidth/72)/16) : 1; document.documentElement.style.setProperty('--dz', z.toFixed(3)); };
+  dz(); window.addEventListener('resize', dz); if(mq.addEventListener) mq.addEventListener('change', dz);
   window.rightAlign = () => C.forEach(one); run(); })();
 pcsMeasure(); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ glyphRefresh(); pcsMeasure(); });
 try{ Promise.all([document.fonts.load('700 100px Suits', SYM.S+SYM.H+SYM.D+SYM.C), document.fonts.load('400 100px "Atkinson Hyperlegible"', '10AHVB')]).then(()=>setTimeout(pcsMeasure, 50)).catch(()=>{}); }catch(e){}
@@ -4533,11 +4566,23 @@ function gPlay(st, seat, card){
 // De tegenstanders spelen standaard met jullie eigen systeemkaart; kies je "Standaard", dan bieden en spelen zij dit.
 const STDSYS = {card:['openen','bijbod','volgbod','doublet','stayman','jacoby','zwak2h','blackwood','negatief'], nt5:false, bergr:false, t1r:'klassiek',
   leadAK:'A', lp:{serie:'top', onder:'top', hvx:'klein', twee:'hoog'}, lt:{}, xs:'laag', xt:'laag', leadLen:'4', leadSuit:'4', sig:'std', att:'hoog', cnt:'std', dis:'aanaf'};
+// Welke systeemkaart spelen de tegenstanders: jullie eigen kaart, de eenvoudige standaard of een van de standaardkaarten.
+function oppSysOf(){ const v = state.oppSys;
+  if(v==='std') return STDSYS;
+  if(typeof v==='string' && v.slice(0,2)==='p:' && typeof PRESETS!=='undefined' && PRESETS[v.slice(2)]){ const P = PRESETS[v.slice(2)], o = P.opts || {};
+    const S = Object.assign({}, STDSYS, {card:['openen'].concat(CARDKEYS.filter(k=>P.card.includes(k)))});
+    ['leadAK','xs','xt','leadLen','leadSuit','sig','att','cnt','dis'].forEach(k=>{ if(o[k]!==undefined) S[k] = o[k]; }); S._multi = !!o.multi; return S; }
+  return null; }
+function oppSelHTML(){ const v = state.oppSys || 'eigen', op = (k, l) => '<option value="'+k+'"'+(v===k ? ' selected' : '')+'>'+l+'</option>';
+  return '<select id="goppsel" aria-label="Systeemkaart van de tegenstanders">'+op('eigen', 'Jullie systeemkaart')+op('std', 'Eenvoudig standaard')
+    + Object.keys(PRESET_GROUPS).map(g=>'<optgroup label="'+PRESET_GROUPS[g].name+'">'+PRESET_GROUPS[g].ids.filter(id=>PRESETS[id]).map(id=>op('p:'+id, PRESETS[id].tag)).join('')+'</optgroup>').join('')+'</select>'; }
+document.addEventListener('change', e=>{ if(e.target && e.target.id==='goppsel'){ state.oppSys = e.target.value; save(); try{ gDefRender(); }catch(err){} } });
 function withSys(opp, fn){
-  if(!opp || typeof state==='undefined' || state.oppSys!=='std') return fn();
+  const SY = opp && typeof state!=='undefined' ? oppSysOf() : null;
+  if(!SY) return fn();
   const keys = Object.keys(STDSYS), save = {}; keys.forEach(k=>{ save[k] = state[k]; });
   const g = {LEAD_SA, LEAD_SUIT, LEAD_AK, SIG, ATT, MULTI};
-  try{ keys.forEach(k=>{ state[k] = STDSYS[k]; }); LEAD_SA = '4'; LEAD_SUIT = '4'; LEAD_AK = 'A'; SIG = 'std'; ATT = 'hoog'; MULTI = false; return fn(); }
+  try{ keys.forEach(k=>{ state[k] = SY[k]; }); LEAD_SA = SY.leadLen; LEAD_SUIT = SY.leadSuit; LEAD_AK = SY.leadAK; SIG = SY.sig; ATT = SY.att; MULTI = !!SY._multi; return fn(); }
   finally{ keys.forEach(k=>{ state[k] = save[k]; }); ({LEAD_SA, LEAD_SUIT, LEAD_AK, SIG, ATT, MULTI} = g); }
 }
 // Met welke kaart kom je uit in deze kleur? Volgens jullie uitkomstkaart (honneurreeksen, aas-heer, vierde/derde-vijfde, Romeins, uit kleintjes).
@@ -8582,11 +8627,12 @@ function renderModes(){
   }else if(T==='heel'){
     const cur = state.conv==='spel' ? (state.gonlybid ? 'bied' : state.gbid==='ja' ? 'beide' : state.grole==='tegen' ? 'tegen' : 'leider') : null;
     const row = (k, a, b) => '<button class="navrow'+(cur===k ? ' has' : '')+'" data-heel="'+k+'"><span>'+a+'</span><small>'+b+'</small></button>';
-    pg = '<p class="hint">Je speelt alleen, tegen de computer. Je partner en de tegenstanders bieden en spelen volgens je systeemkaart (de tegenstanders kun je na een spel ook een standaardsysteem geven).</p>'
+    pg = '<p class="hint">Je speelt alleen, tegen de computer. Je partner biedt en speelt volgens je systeemkaart.</p>'
        + row('beide', 'Bieden en daarna spelen', 'Pas na de bieding weet je of jullie het spel spelen of verdedigen')
        + row('bied', 'Alleen bieden', 'Je biedt met de computer als partner; daarna zie je wat er met open kaarten in zat')
        + row('leider', 'Alleen spelen als leider', 'Het contract ligt al vast; jij speelt het af')
-       + row('tegen', 'Alleen tegenspelen', 'Het contract ligt al vast; jij verdedigt samen met de computer');
+       + row('tegen', 'Alleen tegenspelen', 'Het contract ligt al vast; jij verdedigt samen met de computer')
+       + '<p class="oppline">Tegenstanders spelen: '+oppSelHTML().replace('id="goppsel"', 'id="goppsel" data-menu="1"')+'</p>';
   }else if(T==='test' && !mode){
     const TS = state.test;
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
@@ -8697,6 +8743,7 @@ function renderModes(){
   }
   if(cardMode && cardNote && cardNote.nav===nav.slice(0,4).join('/') && !pk) pg = '<p class="cnote" role="status">'+cardNote.html+'</p>'+pg;
   $('navpage').innerHTML = pg;
+  try{ ucDecorate(); }catch(e){}
   $('tipT').hidden = !!T; $('accT').hidden = !!T;
   $('wmT').hidden = true; try{ wmCheck(); }catch(e){}
   $('settitle').textContent = T==='test' ? 'Challenge jezelf' : learnPage ? 'Leerpad voor beginners' : (cardMode || T==='kaart') ? 'Systeemkaart maken' : 'Wat wil je oefenen?';
@@ -9789,9 +9836,11 @@ function brOpen(h){
   }
   if(p>=6 && p<=10){
     if(onCardK('muiderberg')){ const m = [0,1].find(i=>L[i]===5 && (L[2]>=4 || L[3]>=4)); if(m!==undefined) return {bid:'2'+SUITS[m], why:'Muiderberg: vijf '+SNAME[SUITS[m]]+' en een vierkaart lage kleur, 6–10 punten'}; }
-    if(L[0]===6 && BR.weak2()) return {bid:'2S', why:'zwakke twee: zes schoppen, 6–10 punten'};
-    if(L[1]===6 && BR.weak2()) return {bid:'2H', why:'zwakke twee: zes harten, 6–10 punten'};
-    if(L[2]===6 && onCardK('zwak2a') && !MULTI) return {bid:'2D', why:'zwakke twee: zes ruiten, 6–10 punten'};
+    const w2 = [BR.weak2(), BR.weak2(), onCardK('zwak2a') && !MULTI], s6 = [0,1,2].find(i=>L[i]===6);
+    if(s6!==undefined && w2[s6]){
+      if([0,1].some(j=>j!==s6 && L[j]>=4)) return {bid:'pas', why:'een zwakke twee open je niet met een vierkaart hoog ernaast'};
+      return {bid:'2'+SUITS[s6], why:'zwakke twee: zes '+SNAME[SUITS[s6]]+', 6–10 punten'}; }
+    if(s6===2 && !L.some(n=>n>=7)) return {bid:'pas', why:'een zwakke 2♦ staat niet op jullie systeemkaart'};
     const s7 = L.findIndex(n=>n>=7); if(s7>=0) return {bid:'3'+SUITS[s7], why:'zeven kaarten en weinig punten: preëmptief'};
   }
   if(p===11 && L.some(n=>n>=6) && L[0]+L[1]>=5) return {bid: L[0]>=L[1] && L[0]>=5 ? '1S' : L[1]>=5 ? '1H' : '1'+SUITS[L.indexOf(Math.max(...L))], why:'11 punten met een lange kleur'};
@@ -10341,6 +10390,7 @@ function bidLegal(B, b){
 }
 function bidRender(){
   const B = BIDS, def = !!B;
+  $('game').classList.remove('allhands');
   $('game').classList.toggle('bidmode', def);
   gClubBack();
   ['gnlabel','gnorth'].forEach(id=>{ $(id).hidden = def; });
@@ -10382,6 +10432,7 @@ function bidRender(){
   $('gbid').innerHTML = html + alh + (alh ? '' : pw) + (B.done ? '<div id="bidsum"></div>' : box);
   $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? 'De bieding is klaar.' : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
 }
+const lampMark = () => '<img class="tipmark" alt="Tip" src="'+$('glamp').querySelector('img').src+'">';
 function bidSummary(){
   gcEvent(BIDS && BIDS.clubNr ? 'clubspel-geboden' : 'spel-geboden');
   const B = BIDS, el = $('bidsum'); if(!el) return;
@@ -10390,10 +10441,11 @@ function bidSummary(){
   let h = ct ? '<p class="abres">Contract: <b>'+chtml(ct)+(ct.dbl===2 ? ' XX' : ct.dbl ? ' X' : '')+'</b> door '+NM[ct.decl]+(ct.decl%2 ? ' (jullie verdedigen)' : '')+'.</p>' : '<p class="abres">Iedereen paste: het spel is uitgepast.</p>';
   const tips = Object.entries(B.adv||{}).filter(([i, a])=>a && a.bid!==B.calls[i]).map(([i, a])=>'Je bood '+(B.calls[i]==='pas' ? 'pas' : bidHTML(B.calls[i]))+'; volgens je systeemkaart was '+(a.bid==='pas' ? 'pas' : bidHTML(a.bid))+' beter'+(a.why ? ' ('+a.why+')' : '')+'.');
   B.tipN = tips.length;
-  if(tips.length && state.gtips!=='uit') h += '<div class="abtip">'+TIP_T+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
-  h += '<p id="bidopen" class="abwhy">Met open kaarten rekenen…</p>';
+  if(tips.length && state.gtips!=='uit') h += '<div class="abtip">'+lampMark()+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>';
+  const play = !!(ct && !(state.gonlybid && !B.clubNr)), later = !B.clubNr;      // de open-kaartenuitslag hoort bij de vier handen: na alleen bieden achter een knop, anders na het spelen
+  h += '<div id="bidopenwrap"'+(later ? ' hidden' : '')+'><p id="bidopen" class="abwhy">Met open kaarten rekenen…</p></div>';
   if(B.tables) h += '<p class="abwhy">Aan de tafels van jouw lijn: '+B.tables+'</p>';
-  h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview prim" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
+  h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview prim" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+(later && !play ? '<button class="gview" data-aball="1">Alle handen</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
   el.innerHTML = h;
   const run = gRun;
   ddsLoad().then(()=>{
@@ -10417,11 +10469,11 @@ function bidSummary(){
       const bestB = Math.min(brk(best.lvl, best.tr), 2), ctB = ct ? brk(ct.level, ct.trump) : 0, bn = best.lvl+(best.tr===4 ? 'SA' : '<span class="'+SUITS[best.tr]+'">'+SYM[SUITS[best.tr]]+'</span>');
       if(bestSc - cur >= 300 && bestB > curB && !B.tipN){
         const el = $('bidsum'), d = document.createElement('div'); d.className = 'abtip';
-        const m = ct && ct.decl%2===1 ? 'De tegenpartij kreeg het contract, maar met open kaarten maakten jullie zelf '+bn+'. Jouw biedingen volgden je systeemkaart. Kijk bij het naspelen naar de handen.'
-          : ct && ctB>=bestB ? 'Jullie boden wel een manche, maar '+chtml(ct)+' gaat met open kaarten niet; '+bn+' wel. Jouw biedingen volgden je systeemkaart: soms kies je zo toch de verkeerde kleur. Kijk bij het naspelen waar de slagen ontbreken.'
-          : 'Er zat flink meer in: met open kaarten maakten jullie '+bn+'. Jouw biedingen volgden je systeemkaart, dus aan jou lag het niet: hier liet partner het liggen. Kijk naar de handen hieronder bij het naspelen.';
-        d.innerHTML = TIP_T+'<div><p>'+m+'</p></div>';
-        if(el) el.insertBefore(d, el.firstChild.nextSibling);
+        const m = ct && ct.decl%2===1 ? 'De tegenpartij kreeg het contract, maar met open kaarten maakten jullie zelf '+bn+'. Jouw biedingen volgden je systeemkaart. Bekijk de handen.'
+          : ct && ctB>=bestB ? 'Jullie boden wel een manche, maar '+chtml(ct)+' gaat met open kaarten niet; '+bn+' wel. Jouw biedingen volgden je systeemkaart: soms kies je zo toch de verkeerde kleur. Bekijk in de handen waar de slagen ontbreken.'
+          : 'Er zat flink meer in: met open kaarten maakten jullie '+bn+'. Jouw biedingen volgden je systeemkaart, dus aan jou lag het niet: hier liet partner het liggen.';
+        d.innerHTML = lampMark()+'<div><p>'+m+'</p></div>';
+        const wr = $('bidopenwrap'); if(wr) wr.insertBefore(d, wr.firstChild);
       }
     }
     if(best) txt += ' Het beste contract voor jullie volgens open kaarten: <b>'+best.lvl+(best.tr===4 ? 'SA' : '<span class="'+SUITS[best.tr]+'">'+SYM[SUITS[best.tr]]+'</span>')+'</b> ('+best.t+' slagen, '+scoreTxt(bridgeScore(best.lvl, best.tr, 0, sideVul(B.vul, 0), best.t))+').';
@@ -10429,8 +10481,13 @@ function bidSummary(){
   }).catch(()=>{ const o = $('bidopen'); if(o) o.textContent = ''; });
 }
 document.addEventListener('click', e=>{
-  const x = e.target.closest && e.target.closest('[data-abid],[data-abplay],[data-abnew],[data-clubbid],[data-clubback]');
+  const x = e.target.closest && e.target.closest('[data-abid],[data-abplay],[data-abnew],[data-clubbid],[data-clubback],[data-aball]');
   if(!x) return;
+  if(x.dataset.aball!==undefined){ const B = BIDS; if(!B) return;
+    const NMs = ['Noord (partner)','Oost','Zuid (jij)','West'], cls = ['hn','he','hz','hw'];
+    const hh = s => { const hd = makeHand(B.hands[s]); return '<div class="'+cls[s]+'"><b>'+NMs[s]+'</b>'+[0,1,2,3].map(si=>{ const cs = hd.suits[si].slice().sort((a,b)=>b-a); return '<span class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(r=>RANK[r]||r).join('\u2009') : '–')+'</span>'; }).join('<br>')+'</div>'; };
+    const sq = document.querySelector('#gbid .smsq'); if(sq) sq.outerHTML = '<div class="dgm4">'+hh(0)+hh(3)+hh(1)+hh(2)+'</div>';
+    $('game').classList.add('allhands'); const wr = $('bidopenwrap'); if(wr) wr.hidden = false; x.remove(); return; }
   if(x.dataset.abid!==undefined){
     const B = BIDS; if(!B || B.done || (B.dealer+B.calls.length)%4!==2 || !bidLegal(B, x.dataset.abid)) return;
     let adv = null; try{ adv = brBid(makeHand(B.hands[2]), B.calls, (B.dealer+2)%4); }catch(err){}
@@ -11178,7 +11235,7 @@ async function tipShotH2c(){
 }
 function openTip(){
   const run = ++TIP.run;
-  TIP.img = ''; TIP.where = tipWhere();
+  TIP.img = ''; TIP.where = tipWhere(); TIP.cat = tipCat();
   $('tipbody').querySelectorAll('[data-tipform]').forEach(e=>e.hidden = false);
   $('tipimg').hidden = true; $('tipimg').removeAttribute('src');
   $('tipshotmsg').hidden = false; $('tipshotmsg').textContent = 'Schermafbeelding maken…';
@@ -11193,6 +11250,58 @@ function openTip(){
     .catch(()=>{ if(run!==TIP.run) return; $('tipshotmsg').textContent = 'Een schermafbeelding lukte niet. Je tip kun je wel versturen.'; $('tipwithimg').checked = false; $('tipwithimg').disabled = true; });
   gcEvent('tip-geopend');
 }
+// ---------- Openstaande tips per rubriek: stempel "Under construction" ----------
+// Wie een tip stuurt, zet er een kopie (rubriek + tekst, zonder e-mail of afbeelding) van in tipopen/<id>; die mag iedereen lezen.
+// De webmaster haalt hem daar weg zodra de tip verwerkt is.
+let TIPOPEN = [], ucShow = false, ucAt = 0;
+try{ TIPOPEN = JSON.parse(localStorage.getItem('tipopen') || '[]') || []; }catch(e){}
+function navCat(n){ const T = n && n[0];
+  if(!T) return 'home';
+  if(T==='heel') return 'doel/heel';
+  if(T==='bieden' || T==='spelen') return n[1]==='kaart' ? 'kaart/bieden' : 'doel/'+T+(n[2] && n[1]!=='leer' ? '/'+n[2] : '');
+  return T; }
+function tipCat(){
+  const ds = tipOpenDlgs().map(d=>d.id), top = ds[ds.length-1];
+  if(top==='settings') return navCat(nav);
+  if(top) return top==='samen' ? 'doel/samen' : top;
+  const c = state.conv;
+  if(c==='spel') return 'doel/heel';
+  if(c==='biedmix') return 'doel/bieden'; if(c==='spelmix') return 'doel/spelen';
+  for(const T of ['bieden','spelen']){ const g = NAV[T].find(x=>(CONV_GROUPS[x.id]||[]).includes(c)); if(g) return 'doel/'+T+'/'+g.id; }
+  return 'doel/'+tabOf(c); }
+const ucFor = cat => cat==='home' ? [] : TIPOPEN.filter(t=>t.cat===cat || String(t.cat||'').startsWith(cat+'/'));
+async function tipOpenLoad(force){
+  if(!force && Date.now()-ucAt<300000) return; ucAt = Date.now();
+  try{
+    let v;
+    if(SAMEN_TEST) v = JSON.parse(localStorage.getItem('tipopentest') || '{}');
+    else { if(!FB_CONFIG) return; const r = await fetch(FB_CONFIG.databaseURL+'/tipopen.json', {cache:'no-store'}); if(!r.ok) return; v = await r.json(); }
+    const L = Object.entries(v || {}).filter(([,t])=>t && t.cat).map(([id, t])=>({id, cat:String(t.cat), msg:String(t.msg||'').slice(0, 200), t:t.t||0})).sort((a,b)=>b.t-a.t);
+    const ch = JSON.stringify(L)!==JSON.stringify(TIPOPEN); TIPOPEN = L;
+    try{ localStorage.setItem('tipopen', JSON.stringify(L)); }catch(e){}
+    if(ch && $('settings').open) renderModes();
+  }catch(e){ ucAt = 0; }
+}
+async function tipOpenSet(id, tip){
+  try{
+    if(SAMEN_TEST){ const v = JSON.parse(localStorage.getItem('tipopentest') || '{}'); if(tip) v[id] = tip; else delete v[id]; localStorage.setItem('tipopentest', JSON.stringify(v)); }
+    else await firebase.database().ref('tipopen/'+id).set(tip);
+  }catch(e){}
+  tipOpenLoad(true);
+}
+// na het tekenen van een menupagina: stempel naast de paginatitel, lijstje erboven, en een klein stempel op de knoppen die naar zo'n rubriek leiden
+function ucDecorate(){
+  const cat = navCat(nav), L = ucFor(cat), cr = $('crumbs'), pg = $('navpage');
+  if(L.length && cr) cr.insertAdjacentHTML('beforeend', '<span class="ucstamp" role="button" tabindex="0" data-uc="1" aria-expanded="'+ucShow+'" aria-label="Under construction: '+L.length+' openstaande tip'+(L.length===1 ? '' : 's')+', tik om ze te lezen">Under construction</span>');
+  if(L.length && ucShow && pg) pg.insertAdjacentHTML('afterbegin', '<div class="ucbox"><p><b>Hier wordt aan gewerkt.</b> '+(L.length===1 ? 'Er staat 1 tip open' : 'Er staan '+L.length+' tips open')+' over dit onderdeel:</p><ul>'+L.slice(0, 8).map(t=>'<li>'+esc(t.msg)+'</li>').join('')+'</ul>'+(L.length>8 ? '<p>… en nog '+(L.length-8)+'.</p>' : '')+'</div>');
+  if(!pg) return;
+  const mark = (b, c) => { if(c && c!==cat && ucFor(c).length) b.insertAdjacentHTML('beforeend', '<i class="ucmini" aria-label="Under construction">Under construction</i>'); };
+  pg.querySelectorAll('button').forEach(b=>{ const d = b.dataset;
+    if(d.go) mark(b, navCat([d.go])); else if(d.cat) mark(b, navCat([nav[0], nav[1], d.cat])); else if(d.samen) mark(b, 'doel/samen'); });
+}
+document.addEventListener('click', e=>{ const s = e.target.closest && e.target.closest('[data-uc]'); if(!s) return; ucShow = !ucShow; renderModes(); if(ucShow) $('dbody').scrollTop = 0; });
+document.addEventListener('keydown', e=>{ if((e.key==='Enter' || e.key===' ') && e.target.matches && e.target.matches('[data-uc]')){ e.preventDefault(); e.target.click(); } });
+setTimeout(()=>tipOpenLoad(), 2500);
 function tipClose(){ const d = $('tipdlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
 async function tipSend(){
   if($('tipsend').dataset.done){ tipClose(); return; }
@@ -11202,12 +11311,13 @@ async function tipSend(){
   if(mail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){ st.textContent = 'Dit e-mailadres klopt niet. Laat het leeg als je geen bericht terug wilt.'; $('tipmail').focus(); return; }
   $('tipsend').disabled = true; st.className = 'tipstat'; st.textContent = 'Versturen…';
   let ver = ''; try{ const t = await (await fetch('sw.js', {cache:'no-store'})).text(); ver = (/bridge-v\d+/.exec(t)||[''])[0]; }catch(e){}
-  const tip = {msg, mail, img:($('tipwithimg').checked && TIP.img) || '', where:TIP.where, ver, scr:innerWidth+'x'+innerHeight, ua:navigator.userAgent.slice(0, 160), status:'nieuw'};
+  const tip = {msg, mail, img:($('tipwithimg').checked && TIP.img) || '', where:TIP.where, ver, scr:innerWidth+'x'+innerHeight, ua:navigator.userAgent.slice(0, 160), status:'nieuw', cat:TIP.cat||''};
   try{
     let id;
     if(SAMEN_TEST){ const all = JSON.parse(localStorage.getItem('tipstest')||'[]'); tip.t = Date.now(); all.push(tip); localStorage.setItem('tipstest', JSON.stringify(all)); id = 't'+Date.now(); }
     else { const {db} = await fbLoad(); tip.t = firebase.database.ServerValue.TIMESTAMP; id = (await db.ref('tips').push(tip)).key; }
     state.myTips = (Array.isArray(state.myTips) ? state.myTips : []).concat({id, msg:msg.slice(0, 160), t:Date.now()}).slice(-20); save();
+    if(tip.cat) tipOpenSet(id, {cat:tip.cat, msg:msg.slice(0, 200), t:Date.now()});
   }catch(e){
     $('tipsend').disabled = false; st.className = 'tipstat err';
     st.innerHTML = 'Versturen lukte niet. Heb je internet? Probeer het zo nog eens, of mail je tip naar <b>'+TIPMAIL+'</b>.';
@@ -11374,6 +11484,10 @@ async function taLoad(){
     if(!wmIs()){ el.innerHTML = '<p>Deze pagina is alleen voor de webmaster.</p><p class="ta-meta">Ingelogd als '+esc(u.email||'')+(u.emailVerified ? '' : ' (e-mailadres nog niet bevestigd)')+'</p>'; return; }
     const snap = await firebase.database().ref('tips').once('value'), v = snap.val() || {};
     TA.list = Object.entries(v).map(([id, t])=>Object.assign({id}, t)).sort((a,b)=>(b.t||0)-(a.t||0)); TA.err = '';
+    try{ const op = (await firebase.database().ref('tipopen').once('value')).val() || {};      // tipopen gelijk houden met de tips die nog nieuw zijn
+      for(const id in op){ const tp = v[id]; if(!tp || (tp.status||'nieuw')!=='nieuw') firebase.database().ref('tipopen/'+id).set(null).catch(()=>{}); }
+      TA.list.forEach(tp=>{ if((tp.status||'nieuw')==='nieuw' && tp.cat && !op[tp.id]) firebase.database().ref('tipopen/'+tp.id).set({cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()}).catch(()=>{}); });
+      tipOpenLoad(true); }catch(e){}
   }catch(e){ TA.list = []; TA.err = e.code==='PERMISSION_DENIED' || /permission/i.test(e.message||'') ? 'Geen toegang. Staat het e-mailadres van dit Google-account in de regels?' : (e.message||'Ophalen lukte niet'); }
   taRoute();
 }
@@ -11405,6 +11519,7 @@ $('tabody').addEventListener('click', async e=>{
   if(b.dataset.tas){ const box = b.closest('.ta-tip'), id = box.dataset.id, note = box.querySelector('input').value.trim();
     try{ await firebase.database().ref('tips/'+id).update({status:b.dataset.tas, note});
       await firebase.database().ref('tipreply/'+id).set(b.dataset.tas==='nieuw' ? null : {status:b.dataset.tas, note, t:firebase.database.ServerValue.TIMESTAMP});
+      { const tp = TA.list.find(x=>x.id===id); tipOpenSet(id, b.dataset.tas==='nieuw' && tp && tp.cat ? {cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()} : null); }
       const t = TA.list.find(x=>x.id===id); if(t){ t.status = b.dataset.tas; t.note = note; } taDraw(); }
     catch(err){ TA.err = 'Opslaan lukte niet: '+(err.message||''); taDraw(); } }
 });
@@ -11563,7 +11678,7 @@ function gDefRender(){
   $('grole').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.grole==='tegen' ? 'tegen' : 'leider')===b.dataset.grole)));
   $('gct').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gct==='sa' || state.gct==='troef' ? state.gct : 'mix')===b.dataset.gct)));
   $('gtipsc').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gtips==='uit' ? 'uit' : 'aan')===b.dataset.gtips)));
-  $('gopp').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.oppSys==='std' ? 'std' : 'eigen')===b.dataset.gopp)));
+  $('goppbox').innerHTML = oppSelHTML();
   $('gdef').hidden = !ddsOK();
   $('gdeflab').textContent = state.grole==='tegen' ? 'Je partner:' : 'Tegenspel:';
   $('gdef').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed', String((state.gdef==='sterk' ? 'sterk' : 'vuist')===b.dataset.gdef)));
@@ -11779,7 +11894,6 @@ $('glamp').addEventListener('click', ()=>{ if(!$('gtip').hidden && $('gtipok').h
   $('gtiptext').innerHTML = '<b>Tip:</b> '+gLampText(); gTipMode(true); $('gtip').hidden = false;
   if(G) G.asked = (G.asked||0)+1; });
 $('gtipok').addEventListener('click', ()=>{ $('gtip').hidden = true; gTipMode(false); });
-$('gopp').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.oppSys = b.dataset.gopp; save(); gDefRender(); });
 $('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gbid = b.dataset.gbid; state.gonlybid = false; save(); gDefRender(); });
 $('grole').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.grole = b.dataset.grole; save(); gDefRender(); });
 $('gct').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gct = b.dataset.gct; save(); gDefRender(); });
@@ -11787,7 +11901,7 @@ $('gdef').addEventListener('click', e=>{ const b = e.target.closest('button'); i
 $('gtipback').addEventListener('click', ()=>{ $('gtip').hidden = true; gPending = null; gBusy = false; gRender(); });
 $('gtipgo').addEventListener('click', ()=>{ const p = gPending; $('gtip').hidden = true; gPending = null; gBusy = false; if(p) gDo(p.seat, p.card); });
 const dlg = $('settings');
-const openMenu = () => { nav = []; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); dlg.scrollTop = 0; };
+const openMenu = () => { tipOpenLoad(); ucShow = false; nav = []; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); dlg.scrollTop = 0; };
 $('menu').addEventListener('click', openMenu);
 $('crumbs').addEventListener('click', e=>{
   const b = e.target.closest('button');
