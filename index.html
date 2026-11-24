@@ -1207,7 +1207,6 @@ button.cbd{cursor:pointer}
 .hrow .rc b{font-weight:800;min-width:calc(var(--ds) - .3rem);text-align:center} .hrow .rc i{font-style:normal;font-size:.92em;min-width:calc(var(--ds) - .3rem);text-align:center;letter-spacing:0}
 .hrow .rc.kS{color:#123462!important} .hrow .rc.kH{color:#9B1D38!important} .hrow .rc.kD{color:#BF5A02!important} .hrow .rc.kC{color:#216B50!important}
 .hrow button.rc.rc:not(:disabled){cursor:pointer;border-color:#1E6A4E!important;transform:translateY(-.3rem)}
-.hrow .rc.rc.off, .hrow:has(button.rc:not(:disabled)) button.rc.rc:disabled{background:#D9DFDB!important}
 .hrow .rc.tipc{outline:3px solid #FFD54F;outline-offset:-2px}
 .hrowli{display:block!important;width:100%;margin:0!important;min-height:0!important;grid-column:1 / -1}
 main.table.ns #dummyhand:has(.hrow){display:block}
@@ -1299,6 +1298,13 @@ main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{fon
 .hcols{display:flex;gap:.25rem;align-items:flex-start;flex:none} .hcols.vr{align-items:flex-end}
 #game .hrow.vl, #game .hrow.vr, main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
 main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
+/* v335: telefoon - dummy en eigen hand elk op een rij, de tafel vult de rest; dummy pas zichtbaar na de uitkomst */
+#game.flat:not(.bidmode) > #gsouth{display:none!important}
+#game:not(.flat) > #gsrow, #game.bidmode > #gsrow, #game.allhands > #gsrow{display:none!important}
+#game .dhide{visibility:hidden!important}
+#game .ghand .dcap{display:block!important;min-height:0!important;margin:0 .15rem .1rem!important;font-size:.74rem!important;line-height:1.1!important;font-weight:700;color:var(--muted);letter-spacing:.02em}
+#game .ghand .dcap.r{text-align:right}
+#game.flat:not(.bidmode) > #gstatus{min-height:4.05em;min-height:3lh}
 /* v331: stempel "Under construction" bij een rubriek waar nog tips over openstaan */
 .crumbs .ucstamp, .ucmini{display:inline-block;font-family:var(--display);font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:1;color:#B3261E;border:2px solid #B3261E;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-5deg);white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(179,38,30,.25)}
 .crumbs .ucstamp{font-size:.68rem;padding:.22rem .4rem;margin-left:.5rem;cursor:pointer}
@@ -1357,7 +1363,7 @@ main.table > #hand .mk, main.table > #hand .card, #game > #gsouth .card, #game >
   border:1px solid #B9C4BD!important;border-radius:5px!important;background:#FFFFFF!important;box-shadow:none!important;opacity:1;
   font:inherit!important;font-size:calc(var(--H) / .74)!important;font-weight:800!important;line-height:1!important;letter-spacing:-.02em!important}
 main.table > #hand .ranks.tap .card, #game > #gsouth .card:not(:disabled), #samenbody .smrows button.mk{height:var(--tile2)!important;min-width:calc(var(--H) * 1.9)!important;border-bottom-width:3px!important;box-shadow:0 1px 3px rgba(0,0,0,.25)!important;cursor:pointer}
-#game > #gsouth .card:disabled{opacity:.55!important}
+#game > #gsouth .card:disabled{opacity:1!important}
 #game.bidmode > #gsouth .card, #game > #gsouth:not(.turn) .card{opacity:1!important}
 #samenbody .smrows .mk.off{opacity:.45!important}
 main.table > #hand .mk.S, main.table > #hand .card.kS, #game > #gsouth .card.kS, #game > #gsouth .mk.S, #samenbody .smrows .mk.S{color:#123462!important}
@@ -1562,6 +1568,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
     </div>
     <p class="handlabel" id="gslabel">Jouw hand (Zuid)</p>
     <ul class="hand ghand" id="gsouth"></ul>
+    <ul class="hand ghand" id="gsrow"></ul>
     <div class="gtip" id="gtip" hidden>
       <p id="gtiptext"></p>
       <div class="gtipbtns"><button id="gtipback">Kies opnieuw</button><button id="gtipgo">Toch spelen</button><button id="gtipok" hidden>Begrepen</button></div>
@@ -11592,23 +11599,28 @@ function gClubBack(){
   if(el){ el.hidden = !nr; const bt = el.querySelector('button'), ser = CS && CS.list[CS.at]===nr && ((BIDS && CS.kind==='bied') || (!BIDS && CS.kind==='speel'));
     if(bt) bt.textContent = ser ? '‹ Stoppen · '+SER_NAME[CS.kind].toLowerCase()+' spel '+(CS.at+1)+' van '+CS.list.length : '‹ Terug naar de uitslagen van dit spel'; }
 }
+let gFlat = null;
 function gRender(){
   if(!G) return;
   gClubBack();
   const def = G.role==='tegen';
   // als tegenspeler zit jij onderaan: de tafel draait mee, de dummy ligt links of rechts van je
   const rot = s => def ? (s - G.me + 6) % 4 : s, dpos = rot(0);
-  ['gnorth','gsouth'].forEach((id,k)=>{
+  // telefoon: dummy en eigen hand elk naast elkaar op een rij, zodat de tafel groot kan; laptop: dummy van de tegenpartij opzij
+  const flat = !LAPTOP(), side = def && !flat, dhide = def && !G.played.length;   // jij komt uit: de dummy gaat pas open na de uitkomst
+  gFlat = flat; $('game').classList.toggle('flat', flat);
+  ['gnorth','gsouth','gsrow'].forEach((id,k)=>{
     const seat = k===0 ? 0 : (def ? G.me : 2), el = $(id);
-    el.innerHTML = k===0 ? (def ? '' : gRowHTML(seat)) : gHandHTML(seat);
+    el.innerHTML = k===0 ? (side ? '' : (def ? '<li class="dcap'+(dpos===1 ? ' r' : '')+'">Dummy · '+gNm(0)+'</li>' : '')+gRowHTML(seat)) : k===1 ? gHandHTML(seat) : flat ? gRowHTML(seat) : '';
     el.classList.toggle('turn', !G.over && !gBusy && G.turn===seat);
   });
-  $('gnorth').hidden = def; $('gnorth').classList.toggle('gside', def);
-  { const tw = document.querySelector('#game .tablewrap'); tw.classList.toggle('sqrow', def);
+  $('gnorth').hidden = side; $('gnorth').classList.toggle('gside', side); $('gnorth').classList.toggle('dhide', dhide);
+  $('gdl').classList.toggle('dhide', dhide); $('gdr').classList.toggle('dhide', dhide);
+  { const tw = document.querySelector('#game .tablewrap'); tw.classList.toggle('sqrow', side);
     const L = []; if(def) SUITS.forEach((s,si)=>G.hands[0].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>L.push({s, t:RANK[gRank(c)]||gRank(c)})));
-    const row = def ? handRow(L, dpos===3 ? 'l' : 'r') : '';
-    $('gdl').innerHTML = def && dpos===3 ? row : ''; $('gdr').innerHTML = def && dpos===1 ? row : '';
-    $('gdl').classList.toggle('turn', def && dpos===3 && !G.over && G.turn===0); $('gdr').classList.toggle('turn', def && dpos===1 && !G.over && G.turn===0); }
+    const row = side ? handRow(L, dpos===3 ? 'l' : 'r') : '';
+    $('gdl').innerHTML = side && dpos===3 ? row : ''; $('gdr').innerHTML = side && dpos===1 ? row : '';
+    $('gdl').classList.toggle('turn', side && dpos===3 && !G.over && G.turn===0); $('gdr').classList.toggle('turn', side && dpos===1 && !G.over && G.turn===0); }
   const TID = ['tN','tE','tS','tW'];
   [0,1,2,3].forEach(seat=>{
     const c = gShown[seat], el = $(TID[rot(seat)]);
@@ -11663,10 +11675,32 @@ function sqFit(){
     dx = Math.max(P.left + 4 - b.left, Math.min(P.right - 4 - b.right, dx));
     if(Math.abs(dx)>1) h.style.translate = Math.round(dx)+'px 0';
   });
+  gFit();
+}
+// Telefoon, heel spel: de tafel wordt zo groot als de breedte en de vrije hoogte toelaten, zonder dat het scherm gaat schuiven.
+function gFit(){
+  const sq = document.getElementById('gsq'), g = document.getElementById('game'); if(!sq || !g) return;
+  if(sq.dataset.fit){ sq.style.removeProperty('--w'); delete sq.dataset.fit; }
+  if(!g.classList.contains('flat') || g.classList.contains('bidmode') || !sq.offsetParent || sq.parentNode.classList.contains('sqrow')) return;
+  const z = parseFloat(getComputedStyle(sq).zoom) || 1, pc = getComputedStyle(g), pw = g.clientWidth - parseFloat(pc.paddingLeft) - parseFloat(pc.paddingRight);
+  const base = Math.round(sq.getBoundingClientRect().width / z), se = document.scrollingElement;
+  let w = Math.floor((pw - 2) / z); if(w <= base) return;
+  sq.dataset.fit = '1';
+  for(let i=0; i<5; i++){
+    sq.style.setProperty('--w', w+'px');
+    let over = Math.max(se.scrollHeight - innerHeight, g.scrollHeight - g.clientHeight);
+    // de tip na een kaart schuift onderaan over het scherm: je eigen hand blijft erboven zichtbaar
+    { const tip = document.getElementById('gtip'), hr = document.getElementById('gsrow');
+      if(tip && hr && !tip.hidden && tip.getClientRects().length && getComputedStyle(tip).position==='fixed') over = Math.max(over, hr.getBoundingClientRect().bottom + 4 - tip.getBoundingClientRect().top); }
+    if(over <= 0 || w <= base) break;
+    w = Math.max(base, Math.floor(w - over / z - 1));
+  }
 }
 { let sqT = 0; const kick = ()=>{ cancelAnimationFrame(sqT); sqT = requestAnimationFrame(sqFit); };
   const mo = new MutationObserver(kick);
   { const m = document.querySelector('main.table'); if(m) mo.observe(m, {attributes:true, attributeFilter:['class','hidden']}); }
+  { const g = document.getElementById('game'); if(g) mo.observe(g, {childList:true, subtree:true, attributes:true, attributeFilter:['hidden','class']}); }
+  addEventListener('resize', ()=>{ if(G && gFlat!==null && gFlat===LAPTOP() && !document.getElementById('game').hidden) gRender(); });
   ['qwrap','gsq','samenbody','gdl','gdr'].forEach(id=>{ const e = document.getElementById(id); if(e) mo.observe(id==='gsq' ? e.parentNode : e, {childList:true, subtree:true, attributes:true, attributeFilter:['hidden','class']}); });
   addEventListener('resize', kick); }
 function gScoreTxt(){
@@ -11880,7 +11914,7 @@ function gStart(){
   $('gend').hidden = true;
   gAdvance();
 }
-['gnorth','gsouth'].forEach((id,k)=>{
+['gnorth','gsouth','gsrow'].forEach((id,k)=>{
   $(id).addEventListener('click', e=>{
     const b = e.target.closest('.card'), seat = k===0 ? 0 : (G && G.role==='tegen' ? G.me : 2);
     if(!b || b.disabled || !G || gBusy || G.over || G.turn!==seat || !gMine(seat)) return;
