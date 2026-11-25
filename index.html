@@ -221,9 +221,9 @@ table.clubsum.wzt td.none{text-align:left !important;font-weight:400 !important;
 .gclubback{margin:0 0 .2rem} .gclubback .navclear{padding:0;font-size:.9rem}
 .clubplay{display:flex;gap:.5rem;flex-wrap:wrap} .clubplay .gview{margin:0} .gview.prim{background:var(--felt);color:var(--on-felt, #fff)}
 .clubentry{display:block;margin:.6rem 0 0;width:100%;text-align:left}
-#game.bidmode #gsouth li{font-size:clamp(1.05rem,2.6dvh,1.3rem);line-height:1.15;margin:.05rem 0;gap:.5rem;min-height:0}
+
 #game.bidmode .gstatus{min-height:0}
-@media (max-height:700px){ #game.bidmode .abwhy{font-size:.78rem;margin:.1rem 0 .2rem} #game.bidmode .bid{height:clamp(1.8rem,4.6dvh,2.6rem)} #game.bidmode .btab{gap:.15rem .3rem;padding:.25rem .35rem} #game.bidmode .bk{height:1.5rem;width:2.4rem;font-size:.82rem;padding-top:.08rem} #game.bidmode #gsouth li{font-size:1rem} }
+@media (max-height:700px){ #game.bidmode .abwhy{font-size:.78rem;margin:.1rem 0 .2rem} #game.bidmode .bid{height:clamp(1.8rem,4.6dvh,2.6rem)} #game.bidmode .btab{gap:.15rem .3rem;padding:.25rem .35rem} #game.bidmode .bk{height:1.5rem;width:2.4rem;font-size:.82rem;padding-top:.08rem}  }
 #game.bidmode:has(#bidsum .abres) #gbid > .abwhy{display:none!important}
 #game.bidmode:has(#bidsum .abres) #bidsum{flex:1 1 0!important;min-height:7rem;overflow-y:auto}
 #game.bidmode:has(#bidsum .abres){overflow:hidden!important}
@@ -1077,7 +1077,7 @@ main.table.ns #dummyhand li, main.table.ns #hand li{font-size:1.15rem;line-heigh
 /* heel spel, bieden: tafel, dan je hand, dan de biedbox */
 #game.bidmode{display:flex;flex-direction:column}
 #game.bidmode #gbid{display:contents}
-#game.bidmode #gbid > .smsq{order:1} #game.bidmode #gbid > .abwhy{order:2} #game.bidmode #gsouth{order:3}
+#game.bidmode #gbid > .smsq{order:1} #game.bidmode #gbid > .abwhy{order:2} 
 #game.bidmode #gbid > .box, #game.bidmode #gbid > #bidsum{order:4} #game.bidmode > .gend, #game.bidmode > .gtip{order:5}
 
 /* de kaarten van de dummy staan altijd boven de tafel, ook als hij links of rechts zit */
@@ -1170,11 +1170,11 @@ button.cbd{cursor:pointer}
 .hrow.vl, .hrow.vr{flex-direction:column}
 .hrow.vl .rc.rc, .hrow.vr .rc.rc{width:var(--dh)!important;height:var(--dw)!important;font-size:var(--dvf)!important;letter-spacing:-.08em!important;gap:.08rem!important;box-shadow:0 -1px 2px rgba(0,0,0,.18)!important}
 .hrow.vl .rc.rc{margin:calc(var(--ds) - var(--dw)) 0 0 0!important;flex-direction:row-reverse!important;align-items:flex-start!important;padding:.1rem .14rem 0 0!important}
-.hrow.vl .rc.rc:first-child{margin-top:0!important} .hrow.vl .rc.rc.g{margin-left:0!important;margin-top:calc(var(--ds) - var(--dw) + var(--dgap))!important}
+.hrow.vl .rc.rc:first-child{margin-top:0!important} 
 .hrow.vr .rc.rc{margin:calc(var(--ds) - var(--dw)) 0 0 0!important;flex-direction:row!important;align-items:flex-start!important;padding:.1rem 0 0 .14rem!important}
-.hrow.vr .rc.rc:first-child{margin-top:0!important} .hrow.vr .rc.rc.g{margin-left:0!important;margin-top:calc(var(--ds) - var(--dw) + var(--dgap))!important}
-.hrow.vl .rc b, .hrow.vl .rc i, .hrow.vr .rc b, .hrow.vr .rc i{writing-mode:vertical-rl;text-orientation:sideways;min-width:0;min-height:calc(var(--ds) - .2rem);text-align:center;line-height:1}
-.hrow.vr .rc b, .hrow.vr .rc i{transform:rotate(180deg)}
+ 
+
+
 /* laag scherm: zodra de uitleg verschijnt, maakt de vraag plaats en schuift een dummy opzij in elkaar */
 @media (max-height:700px){ main.table:has(#feedback:not([hidden])) .prompt{display:none!important} main.table:has(#feedback:not([hidden])) .hrow.vl, main.table:has(#feedback:not([hidden])) .hrow.vr{--dv:var(--tw)} }
 /* gespeelde kaart op tafel */
@@ -1204,9 +1204,9 @@ button.cbd{cursor:pointer}
   font:inherit;font-weight:800!important;font-size:var(--df)!important;line-height:1!important;letter-spacing:-.06em!important;opacity:1!important;transform:none;cursor:default}
 .hrow .rc.rc:first-child{margin-left:0!important}
 
-.hrow .rc b{font-weight:800;min-width:calc(var(--ds) - .3rem);text-align:center} .hrow .rc i{font-style:normal;font-size:.92em;min-width:calc(var(--ds) - .3rem);text-align:center;letter-spacing:0}
+ 
 .hrow .rc.kS{color:#123462!important} .hrow .rc.kH{color:#9B1D38!important} .hrow .rc.kD{color:#BF5A02!important} .hrow .rc.kC{color:#216B50!important}
-.hrow button.rc.rc:not(:disabled){cursor:pointer;border-color:#1E6A4E!important;transform:translateY(-.3rem)}
+
 #game .hrow button.rc.rc:not(:disabled), #samenbody .hrow button.rc.rc:not(:disabled), main.table .hrow button.rc.rc:not(:disabled){transform:none!important;border-color:#9FADA5!important;box-shadow:-1px 0 2px rgba(0,0,0,.18)!important;cursor:pointer}
 .hrow .rc.tipc{outline:3px solid #FFD54F;outline-offset:-2px}
 .hrowli{display:block!important;width:100%;margin:0!important;min-height:0!important;grid-column:1 / -1}
@@ -1241,21 +1241,21 @@ main.table.ns #dummyhand:has(.hrow){display:block}
 /* dummykaarten volgens kaart K: cijfer boven, symbool eronder, gelijke witruimte; alleen in het zichtbare deel van de kaart */
 .hrow .rc.rc{padding:0!important;display:block!important;position:relative}
 .hrow .rc .rci{position:absolute;left:0;top:0;width:calc(var(--ds) - 1px);height:calc(var(--dh) - 2px);--dsh:min(calc(var(--dh) - 2px - 3 * var(--pg) - var(--dr) * var(--rc)), calc(var(--ds) - 5px))}
-.hrow.vl .rc .rci, .hrow.vr .rc .rci{left:calc((var(--dh) - 2px) / 2 - (var(--ds) - 1px) / 2);top:calc((var(--ds) - 1px) / 2 - (var(--dh) - 2px) / 2)}
+
 .hrow.vl .rc .rci{transform:rotate(90deg)} .hrow.vr .rc .rci{transform:rotate(-90deg)}
 .hrow .rc .rci > b{position:absolute;left:0;right:0;top:calc(var(--pg) - var(--dr) * (var(--rb) - var(--rc)));font-size:var(--dr)!important;line-height:1;font-weight:400!important;text-align:center;letter-spacing:-.03em!important;min-width:0!important;min-height:0!important;writing-mode:horizontal-tb!important;transform:none!important}
 .hrow .rc .rci > i{position:absolute;left:0;right:0;text-align:center;font-style:normal;min-width:0!important;min-height:0!important;writing-mode:horizontal-tb!important;letter-spacing:0!important;
   --fs:calc(var(--dsh) * var(--gf, 1.3)); font-size:var(--fs)!important; line-height:var(--fs);
   top:calc(var(--dh) - 2px - var(--pg) - var(--dsh) - var(--fs) * var(--gy, .2)); transform:translateX(calc(var(--fs) * var(--gx, 0) * -1))!important}
-.hrow .rc.kS i{--gf:var(--gfS);--gy:var(--gyS);--gx:var(--gxS)} .hrow .rc.kH i{--gf:var(--gfH);--gy:var(--gyH);--gx:var(--gxH)}
-.hrow .rc.kD i{--gf:var(--gfD);--gy:var(--gyD);--gx:var(--gxD)} .hrow .rc.kC i{--gf:var(--gfC);--gy:var(--gyC);--gx:var(--gxC)}
+ 
+ 
 /* kaart L: cijfer en symbool even hoog, de witruimte ertussen precies op het midden van de kaart */
 .smsq .tc.on, .smsq .tcd .pc{--mid:calc((var(--ph) - 2px) / 2); --ch:calc((var(--ph) - 2px - 3 * var(--pg)) / 2)}
 .smsq .tc.on > b, .smsq .tcd .pc > b{font-size:calc(var(--ch) / var(--rc))!important;top:0!important;transform:translateY(calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc))))!important}
 .smsq .tc.on > i.pcs, .smsq .tcd .pc > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:0!important;transform:translateX(calc(var(--fs) * var(--gx, 0) * -1)) translateY(calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2))) scaleX(var(--pwd))!important}
 .hrow .rc .rci{--mid:calc((var(--dh) - 2px) / 2); --ch:min(calc((var(--dh) - 2px - 3 * var(--pg)) / 2), calc((var(--ds) - 3px) / 1.08 * var(--rc)), calc(var(--ds) - 5px))}
-.hrow .rc .rci > b{font-size:calc(var(--ch) / var(--rc))!important;top:0!important;transform:translateY(calc(var(--mid) - var(--pg) / 2 - var(--ch) - var(--ch) / var(--rc) * (var(--rb) - var(--rc))))!important}
-.hrow .rc .rci > i{--fs:calc(var(--ch) * var(--gf, 1.3));top:0!important;transform:translateX(calc(var(--fs) * var(--gx, 0) * -1)) translateY(calc(var(--mid) + var(--pg) / 2 - var(--fs) * var(--gy, .2)))!important}
+
+
 /* kaart M: cijfer en symbool als SVG precies in hun vak (inkt van boven tot onder), vakken exact op de witruimte */
 .smsq .tc.on > b, .smsq .tcd .pc > b, .hrow .rc .rci > b{top:calc(var(--mid) - var(--pg) / 2 - var(--ch))!important;height:var(--ch)!important;transform:none!important;font-size:0!important;line-height:0!important;letter-spacing:0!important}
 .smsq .tc.on > i.pcs, .smsq .tcd .pc > i, .hrow .rc .rci > i{top:calc(var(--mid) + var(--pg) / 2)!important;height:var(--ch)!important;transform:none!important;font-size:0!important;line-height:0!important}
@@ -1267,8 +1267,8 @@ svg.gl text{font-family:inherit}
 .accT .accph{width:2.34rem;height:2.34rem;border-radius:50%;border:0;margin-top:.08rem;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 /* v315: dummy groter als er ruimte is (minder kaarten) */
 :root{--dstep:2.3rem}
-.hrow:not(.vl):not(.vr){--dh:clamp(2.9rem, calc(var(--ds) * 1.65), 3.7rem)}
-@media (max-height:700px){ :root{--dstep:1.9rem} .hrow:not(.vl):not(.vr){--dh:clamp(2.9rem, calc(var(--ds) * 1.65), 3.2rem)} }
+
+@media (max-height:700px){ :root{--dstep:1.9rem}  }
 /* v315: kaarten die je aantikt zijn groter, en het aantikvlak loopt iets door */
 .hand .ranks.tap .card, #game .ghand .card:not(.rc), .smrows .mk{position:relative;height:var(--tk)!important;min-width:var(--tkw)!important;font-size:var(--tkf)!important}
 .hand .ranks.tap .card::after, #game .ghand .card:not(.rc)::after, .smrows button.mk::after{content:"";position:absolute;inset:-4px -2px}
@@ -1290,17 +1290,18 @@ svg.gl text{font-family:inherit}
    Telefoon: --H is zo groot dat een dummy van 13 kaarten nog op één rij past; laptop: zie het blok hieronder. */
 :root{--H:clamp(13px, calc(((100vw - 4.6rem - 6px) / 13 - 3px) * .685), 19px);--tz:1}
 main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem);--tkf:calc(var(--H) / .74)!important;--tsym:calc(var(--H) / .74)!important}
-main.table .smsq, #game .smsq, #samenbody .smsq{--ph:calc(2 * var(--H) / var(--tz) + 3 * var(--pg) + 2px);--pw:calc(var(--ph) * .73)}
+/* de gespeelde kaart op tafel is dezelfde kaart als in hand en dummy: zelfde opbouw (rand 1, wit 2,5, rang, wit 2,5, symbool, wit 2,5, rand 1) en zelfde breedteformule; de tafelzoom wordt eruit gedeeld */
+main.table .smsq, #game .smsq, #samenbody .smsq{--pg:calc(2.5px / var(--tz));--ph:calc((2 * var(--H) + 9.5px) / var(--tz));--pw:calc((var(--H) * 1.08 / var(--rc, .74) + 3px + .25rem) / var(--tz))}
+main.table .smsq .tc.on, #game .smsq .tc.on, #samenbody .smsq .tc.on, #samenbody .smsq .tcd .pc{border-radius:calc(6px / var(--tz))!important;--mid:calc((var(--ph) - 2px / var(--tz)) / 2)!important;--ch:calc((var(--ph) - 2px / var(--tz) - 3 * var(--pg)) / 2)!important}
 main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
 main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
 main.table .prompt :is(span.S,span.H,span.D,span.C), main.table .prompt .bks{font-size:var(--tsym);line-height:0;vertical-align:-.08em}
 #game .tablewrap:not(.sqrow) > .sqs{display:none!important} #game .tablewrap.sqrow:not([hidden]){display:grid!important;grid-template-columns:auto auto auto!important;justify-content:center!important} #game .tablewrap.sqrow > .seat{display:none!important}
 #game > .tablewrap.sqrow{zoom:1!important} #game > .tablewrap.sqrow > #gsq{zoom:var(--tz)}
-.hcols{display:flex;gap:.25rem;align-items:flex-start;flex:none} .hcols.vr{align-items:flex-end}
+.hcols{display:flex;gap:.25rem;align-items:flex-start;flex:none} 
 #game .hrow.vl, #game .hrow.vr, main.table .hrow.vl, main.table .hrow.vr, #samenbody .hrow.vl, #samenbody .hrow.vr{--ds:var(--dstep)!important;flex-wrap:wrap!important;max-height:calc(var(--w, var(--tw)) * var(--tz))!important;width:auto!important;align-content:center;column-gap:.25rem}
-main.table > #hand .sym, #game > #gsouth .sym, #samenbody .smrows .smrow > i{font-size:calc(var(--H) / .74)!important;width:calc(var(--H) * 1.55)!important;flex:none;text-align:center}
-/* v335: telefoon - dummy en eigen hand elk op een rij, de tafel vult de rest; dummy pas zichtbaar na de uitkomst */
-#game#game > #gsouth{display:none!important}
+
+/* v335: telefoon - de tafel vult de rest; dummy pas zichtbaar na de uitkomst */
 #game.allhands > #gsrow{display:none!important}
 #game.bidmode #gsrow{order:3}
 #game .dhide{visibility:hidden!important}
@@ -1338,9 +1339,9 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dgap:.7rem}
 /* v332 */
 /* donkere stand: biedkaartjes en het kleursymbool voor je hand zien eruit als op een licht scherm (witte kaartjes, dezelfde kleuren als de kaarten) */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) :is(main.table, #game, #samenbody) :is(.box, .smbb){--surface:#FFFFFF;--s:#123462;--h:#9B1D38;--d:#BF5A02;--c:#216B50;--muted:#56655E;--ink:#14211C;--line:#C9D4CD}
-  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i{background:#FFFFFF;border-radius:5px;height:var(--tile);display:inline-flex!important;align-items:center;justify-content:center}
-  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.S, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.S{color:#123462!important} :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.H, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.H{color:#9B1D38!important}
-  :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.D, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.D{color:#BF5A02!important} :root:not([data-theme="light"]) :is(main.table > #hand, #game > #gsouth) .sym.C, :root:not([data-theme="light"]) #samenbody .smrows .smrow > i.C{color:#216B50!important} }
+  
+   
+    }
 :root[data-theme="dark"] :is(main.table, #game, #samenbody) :is(.box, .smbb){--surface:#FFFFFF;--s:#123462;--h:#9B1D38;--d:#BF5A02;--c:#216B50;--muted:#56655E;--ink:#14211C;--line:#C9D4CD}
 /* hoge telefoon: de tafel mag groter, er is ruimte genoeg */
 @media (min-height:800px) and (max-width:999px){ :root{--tz:1.4;--tw:min(calc((100vw - 2rem) / 1.4), 12rem)}
@@ -1356,7 +1357,7 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dgap:.7rem}
 .dgm4 > div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:.2rem .45rem;white-space:nowrap} .dgm4 > div > b{display:block;font-size:.7em;font-weight:600;color:#56655E}
 .dgm4 .hn{grid-column:2;grid-row:1} .dgm4 .hw{grid-column:1;grid-row:2} .dgm4 .he{grid-column:3;grid-row:2} .dgm4 .hz{grid-column:2;grid-row:3} .dgm4 .hmid{grid-column:2;grid-row:2;border:0;background:none;align-self:center;text-align:center;color:var(--muted);font-weight:600}
 .dgm4 .S{color:#123462} .dgm4 .H{color:#9B1D38} .dgm4 .D{color:#BF5A02} .dgm4 .C{color:#216B50} .dgm4 i{font-style:normal;display:inline-block;width:1.15em}
-#game.allhands > #gsouth, #game.allhands > #gslabel{display:none!important} #game.allhands #bidsum > .abtip{display:none!important}
+#game.allhands > #gslabel{display:none!important} #game.allhands #bidsum > .abtip{display:none!important}
 @media (max-height:700px){ .dgm4{font-size:calc(var(--H) / .74 * .72);line-height:1.15;gap:.15rem .5rem} }
 .abtip img.tipmark{background:#fff;object-fit:cover}
 #goppsel{font:inherit;font-size:.9rem;padding:.3rem .5rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
@@ -1377,24 +1378,21 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dgap:.7rem}
    symbool en rang zijn even groot als op de dummy en op tafel (--H). Kaarten die je kunt spelen liggen iets "op", de rest vlak. */
 main.table, #game, #samenbody{--tile:max(calc(var(--H) * 1.8), 1.4rem);--tile2:max(calc(var(--H) * 2.3), 2.35rem)}
 @media (max-height:760px){ main.table, #game, #samenbody{--tile:max(calc(var(--H) * 1.62), 1.25rem)} main.table:is(.ns, :not(.ns)) > #hand{row-gap:.06rem!important} }
-main.table:is(.ns, :not(.ns)) > #hand, #game > #gsouth{display:flex!important;flex-direction:column!important;align-items:flex-start!important;grid-template-columns:none!important;column-gap:0!important;row-gap:.12rem!important;width:fit-content!important;margin-left:auto!important;margin-right:auto!important}
-main.table > #hand > li, #game > #gsouth > li, #samenbody .smrows .smrow{display:flex!important;align-items:center!important;gap:.22rem!important;margin:0!important;min-height:var(--tile)!important;line-height:1!important;font-size:calc(var(--H) / .74)!important}
-main.table > #hand > li:has(.ranks.tap), #game > #gsouth > li:has(.card:not(:disabled)), #game.turn > #gsouth > li, #samenbody .smrows .smrow:has(button.mk){min-height:var(--tile2)!important}
-main.table > #hand .ranks, #game > #gsouth .ranks{display:flex!important;flex-wrap:nowrap!important;gap:.22rem!important;font-size:inherit!important}
-main.table > #hand .mk, main.table > #hand .card, #game > #gsouth .card, #game > #gsouth .mk, #samenbody .smrows .mk{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex-direction:row!important;box-sizing:border-box!important;
-  height:var(--tile)!important;min-width:calc(var(--H) * 1.55)!important;width:auto!important;aspect-ratio:auto!important;padding:0 .14em!important;margin:0!important;
-  border:1px solid #B9C4BD!important;border-radius:5px!important;background:#FFFFFF!important;box-shadow:none!important;opacity:1;
-  font:inherit!important;font-size:calc(var(--H) / .74)!important;font-weight:800!important;line-height:1!important;letter-spacing:-.02em!important}
-main.table > #hand .ranks.tap .card, #game > #gsouth .card:not(:disabled), #samenbody .smrows button.mk{height:var(--tile2)!important;min-width:calc(var(--H) * 1.9)!important;border-bottom-width:3px!important;box-shadow:0 1px 3px rgba(0,0,0,.25)!important;cursor:pointer}
-#game > #gsouth .card:disabled{opacity:1!important}
-#game.bidmode > #gsouth .card, #game > #gsouth:not(.turn) .card{opacity:1!important}
-#samenbody .smrows .mk.off{opacity:.45!important}
-main.table > #hand .mk.S, main.table > #hand .card.kS, #game > #gsouth .card.kS, #game > #gsouth .mk.S, #samenbody .smrows .mk.S{color:#123462!important}
-main.table > #hand .mk.H, main.table > #hand .card.kH, #game > #gsouth .card.kH, #game > #gsouth .mk.H, #samenbody .smrows .mk.H{color:#9B1D38!important}
-main.table > #hand .mk.D, main.table > #hand .card.kD, #game > #gsouth .card.kD, #game > #gsouth .mk.D, #samenbody .smrows .mk.D{color:#BF5A02!important}
-main.table > #hand .mk.C, main.table > #hand .card.kC, #game > #gsouth .card.kC, #game > #gsouth .mk.C, #samenbody .smrows .mk.C{color:#216B50!important}
-main.table > #hand .card .pip, #game > #gsouth .card .pip{display:none!important}
-main.table > #hand .void, #game > #gsouth .void, #samenbody .smrows .mkd{font-size:calc(var(--H) / .74)!important;line-height:1}
+main.table:is(.ns, :not(.ns)) > #hand{display:flex!important;flex-direction:column!important;align-items:flex-start!important;grid-template-columns:none!important;column-gap:0!important;row-gap:.12rem!important;width:fit-content!important;margin-left:auto!important;margin-right:auto!important}
+main.table > #hand > li{display:flex!important;align-items:center!important;gap:.22rem!important;margin:0!important;min-height:var(--tile)!important;line-height:1!important;font-size:calc(var(--H) / .74)!important}
+
+
+
+
+
+
+
+
+
+
+
+
+main.table > #hand .void{font-size:calc(var(--H) / .74)!important;line-height:1}
 /* v326: biedkastje smaller; niveau en kleursymbool even groot als in de hand */
 .box:has(> .bid[class*=" d-"]){width:fit-content!important;max-width:100%;margin-left:auto!important;margin-right:auto!important;grid-template-columns:repeat(5, calc(var(--H) * 3.7))!important}
 .box > .bid[class*=" d-"], .box > .bid[data-bid="pas"], .box > .bid[data-bid="X"], .box > .bid[data-bid="XX"]{font-size:calc(var(--H) / .74)!important;line-height:1}
@@ -1419,11 +1417,11 @@ main.table > #hand .void, #game > #gsouth .void, #samenbody .smrows .mkd{font-si
   #game > .tablewrap{zoom:var(--tz);width:auto!important}
   #game > .tablewrap #gsq{--w:12.5rem!important}
   /* de eigen hand */
-  main.table > #hand, #game > #gsouth{width:fit-content!important;max-width:var(--lw)!important;align-self:center;margin-left:auto;margin-right:auto}
+  main.table > #hand{width:fit-content!important;max-width:var(--lw)!important;align-self:center;margin-left:auto;margin-right:auto}
   main.table:not([hidden]), #game:not([hidden]), #samenbody{--tk:2.6rem!important;--tkw:2.3rem!important}
   main.table > #hand li{margin:.1rem 0!important;gap:.15rem!important}
-  #game > #gsouth{margin-top:.1rem!important;margin-bottom:0!important} #game > #gsouth li{margin:.08rem 0!important}
-  #game > #gsouth li:not(:has(.ranks.tap)){font-size:calc(var(--H) / .74)!important;line-height:1.15!important} #game > #gsouth li:not(:has(.ranks.tap)) > .sym{font-size:calc(var(--H) / .74)!important;width:2.2rem!important}
+   
+   
   #game .abwhy, #game #bidsum{font-size:1.1rem!important;line-height:1.3}
   #game.bidmode:has(#bidsum .abres) #bidsum{flex:none!important;min-height:0!important;max-height:calc(100dvh - 15rem);overflow-x:hidden!important;overflow-y:auto}      /* laptop: de samenvatting krijgt de ruimte die ze nodig heeft */
   /* rechts: grotere tekst; de vraag blijft altijd even groot, een lange uitleg schuift binnen zijn vak */
@@ -1589,7 +1587,6 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <div class="sqs r" id="gdr"></div><div class="seat" id="seatE"><span id="nameE">Oost</span><span class="back" id="cntE"></span></div>
     </div>
     <p class="handlabel" id="gslabel">Jouw hand (Zuid)</p>
-    <ul class="hand ghand" id="gsouth"></ul>
     <ul class="hand ghand" id="gsrow"></ul>
     <div class="gtip" id="gtip" hidden>
       <p id="gtiptext"></p>
@@ -4023,6 +4020,8 @@ const SUITPATH = {"♠":{"d":"M365 -740Q371 -733 374 -725.5Q377 -718 380.5 -710.
 //   dus op elk toestel (ook iPhone/Safari) en meteen bij het openen precies goed.
 // Rang (A, H, V, B, 10, 9 ...): tekst in Atkinson. De inkt wordt één keer per teken opgemeten (niet per kaart) en bewaard;
 //   pas als Atkinson echt geladen is, en daarna worden kaarten die al op het scherm staan bijgesteld.
+// De dertien rangen als vaste tekening (omtrek uit Atkinson Hyperlegible Regular, SIL Open Font License): de kaart hangt zo niet meer af van een lettertype dat van buiten geladen wordt.
+const RANKPATH = {"A":{"d":"M10 0 261 -669H366L616 0H516L465 -146H161L110 0ZM190 -227H436L313 -574Z","b":[10,-669,606,669]},"H":{"d":"M76 0V-668H170V-384H520V-668H614V0H520V-303H170V0Z","b":[76,-668,538,668]},"V":{"d":"M239 0 10 -668H113L294 -110L476 -668H579L349 0Z","b":[10,-668,569,668]},"B":{"d":"M76 0V-668H345Q418 -668 463.5 -644Q509 -620 530.5 -582.5Q552 -545 552 -502Q552 -462 534 -423Q516 -384 482 -355Q532 -329 556.5 -284.5Q581 -240 581 -192Q581 -144 556.5 -100Q532 -56 483 -28Q434 0 361 0ZM170 -382H355Q406 -382 431.5 -414Q457 -446 457 -484Q457 -510 445.5 -534Q434 -558 411.5 -573.5Q389 -589 355 -589H170ZM170 -79H371Q408 -79 433 -96Q458 -113 471 -139.5Q484 -166 484 -195Q484 -224 471.5 -249.5Q459 -275 433.5 -291.5Q408 -308 370 -308H170Z","b":[76,-668,505,668]},"T":{"d":"M232 0V-587H10V-668H548V-587H326V0Z","b":[10,-668,538,668]},"2":{"d":"M34 0V-75Q152 -162 235.5 -235Q319 -308 363.5 -371.5Q408 -435 408 -494Q408 -546 375 -578Q342 -610 283 -610Q236 -610 195.5 -584.5Q155 -559 143 -498L59 -522Q77 -595 137 -637.5Q197 -680 285 -680Q347 -680 394.5 -659.5Q442 -639 469.5 -600Q497 -561 497 -505Q497 -447 469 -391.5Q441 -336 392 -283.5Q343 -231 280 -179.5Q217 -128 147 -77H515V0Z","b":[34,-680,481,680]},"3":{"d":"M272 12Q205 12 157.5 -10Q110 -32 82 -69Q54 -106 42 -151L125 -175Q136 -123 172.5 -90.5Q209 -58 273 -58Q339 -58 381.5 -91.5Q424 -125 424 -187Q424 -225 408 -249.5Q392 -274 367 -287Q342 -300 313.5 -306Q285 -312 259.5 -313Q234 -314 218 -314V-390Q246 -390 278.5 -393Q311 -396 340.5 -406.5Q370 -417 388.5 -439.5Q407 -462 407 -501Q407 -555 368.5 -582.5Q330 -610 277 -610Q216 -610 180 -579Q144 -548 134 -498L52 -522Q70 -593 128.5 -636.5Q187 -680 279 -680Q337 -680 386 -663.5Q435 -647 465 -609.5Q495 -572 495 -510Q495 -459 467 -418Q439 -377 386 -355Q461 -332 487.5 -286.5Q514 -241 514 -188Q514 -121 480 -76.5Q446 -32 391 -10Q336 12 272 12Z","b":[42,-680,472,692]},"4":{"d":"M370 0V-165H38V-244L369 -668H454V-244H576V-165H454V0ZM129 -244H370V-553Z","b":[38,-668,538,668]},"5":{"d":"M284 12Q217 12 170 -10Q123 -32 95 -69Q67 -106 54 -151L136 -175Q148 -120 183.5 -89Q219 -58 284 -58Q324 -58 358 -77Q392 -96 412.5 -132Q433 -168 433 -219Q433 -275 410.5 -310Q388 -345 353.5 -361.5Q319 -378 283 -378Q231 -378 198 -353.5Q165 -329 154 -304L72 -328L113 -668H496V-587H181L158 -400Q184 -426 222.5 -438Q261 -450 302 -450Q361 -450 410.5 -423Q460 -396 490.5 -345Q521 -294 521 -220Q521 -144 487.5 -92Q454 -40 400 -14Q346 12 284 12Z","b":[54,-668,467,680]},"6":{"d":"M303 12Q178 12 119 -72Q60 -156 60 -310Q60 -381 73.5 -447Q87 -513 117.5 -565.5Q148 -618 198 -649Q248 -680 321 -680Q395 -680 441 -649Q487 -618 509 -573L424 -548Q409 -577 380 -593.5Q351 -610 311 -610Q233 -610 191.5 -539Q150 -468 147 -352Q170 -391 213 -418Q256 -445 323 -445Q385 -445 433.5 -416Q482 -387 510 -336Q538 -285 538 -218Q538 -156 509 -103.5Q480 -51 427.5 -19.5Q375 12 303 12ZM303 -59Q369 -59 408.5 -102.5Q448 -146 448 -215Q448 -284 408.5 -327.5Q369 -371 303 -371Q236 -371 196.5 -327.5Q157 -284 157 -215Q157 -146 196.5 -102.5Q236 -59 303 -59Z","b":[60,-680,478,692]},"7":{"d":"M93 0 383 -587H15V-668H476V-587L198 0Z","b":[15,-668,461,668]},"8":{"d":"M307 12Q238 12 182 -11.5Q126 -35 93 -79.5Q60 -124 60 -188Q60 -253 94 -298.5Q128 -344 183 -366Q157 -391 141.5 -425Q126 -459 126 -499Q126 -549 150.5 -590Q175 -631 216 -655.5Q257 -680 307 -680Q358 -680 399 -655.5Q440 -631 464.5 -590Q489 -549 489 -499Q489 -459 473.5 -425Q458 -391 432 -366Q488 -344 521.5 -298.5Q555 -253 555 -188Q555 -124 522 -79.5Q489 -35 433 -11.5Q377 12 307 12ZM307 -391Q351 -391 382.5 -422.5Q414 -454 414 -500Q414 -544 382.5 -575Q351 -606 307 -606Q263 -606 231.5 -575Q200 -544 200 -500Q200 -454 231.5 -422.5Q263 -391 307 -391ZM307 -62Q379 -62 421.5 -96Q464 -130 464 -188Q464 -247 421.5 -282Q379 -317 307 -317Q236 -317 193.5 -282Q151 -247 151 -188Q151 -130 193.5 -96Q236 -62 307 -62Z","b":[60,-680,495,692]},"9":{"d":"M213 0Q213 0 226.5 -19Q240 -38 261.5 -69Q283 -100 307 -136.5Q331 -173 352 -207Q327 -201 299 -201Q234 -201 179.5 -233.5Q125 -266 92.5 -320.5Q60 -375 60 -441Q60 -507 92 -561Q124 -615 178.5 -647Q233 -679 299 -679Q368 -679 422 -646.5Q476 -614 507 -559.5Q538 -505 538 -439Q538 -393 520 -348Q515 -336 497 -301.5Q479 -267 451.5 -218Q424 -169 389.5 -112.5Q355 -56 317 0ZM299 -287Q342 -287 377 -308Q412 -329 433 -364Q454 -399 454 -441Q454 -483 433 -518Q412 -553 377 -573.5Q342 -594 299 -594Q257 -594 222 -573.5Q187 -553 166.5 -518Q146 -483 146 -441Q146 -399 166.5 -364Q187 -329 222 -308Q257 -287 299 -287Z","b":[60,-679,478,679]}};
 const RANKFONT = '"Atkinson Hyperlegible"';
 function rankBox(t, w){
   const W = 400, H = 240, X = 150, Y = 170;
@@ -4036,6 +4035,8 @@ function rankBox(t, w){
 function rankReady(w, t){ try{ return !!(document.fonts && document.fonts.check(w+' 100px '+RANKFONT, t)); }catch(e){ return true; } }
 function glyph(t, w){
   if(String(t)==='10') t = 'T';
+  const rp = RANKPATH[String(t)];
+  if(rp) return '<svg class="gl" viewBox="'+rp.b.join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="'+rp.d+'"/></svg><span class="glt">'+t+'</span>';
   const sp = SUITPATH[String(t).charAt(0)];
   if(sp) return '<svg class="gl" viewBox="'+sp.b.join(' ')+'" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="'+sp.d+'"/></svg><span class="glt">'+t+'</span>';
   const k = w+'|'+t; let v = GLY[k];
@@ -11645,9 +11646,9 @@ function gRender(){
   // telefoon: dummy en eigen hand elk naast elkaar op een rij, zodat de tafel groot kan; laptop: dummy van de tegenpartij opzij
   const flat = !LAPTOP(), side = def, dhide = def && !G.played.length;   // jij komt uit: de dummy gaat pas open na de uitkomst
   gFlat = flat; $('game').classList.toggle('flat', flat);
-  ['gnorth','gsouth','gsrow'].forEach((id,k)=>{
+  ['gnorth','gsrow'].forEach((id,k)=>{
     const seat = k===0 ? 0 : (def ? G.me : 2), el = $(id);
-    el.innerHTML = k===0 ? (side ? '' : (def ? '<li class="dcap'+(dpos===1 ? ' r' : '')+'">Dummy · '+gNm(0)+'</li>' : '')+gRowHTML(seat, 't')) : k===1 ? '' : gRowHTML(seat);
+    el.innerHTML = k===0 ? (side ? '' : (def ? '<li class="dcap'+(dpos===1 ? ' r' : '')+'">Dummy · '+gNm(0)+'</li>' : '')+gRowHTML(seat, 't')) : gRowHTML(seat);
     el.classList.toggle('turn', !G.over && !gBusy && G.turn===seat);
   });
   $('gnorth').hidden = side; $('gnorth').classList.toggle('gside', side); $('gnorth').classList.toggle('dhide', dhide);
@@ -11980,7 +11981,7 @@ function gStart(){
   $('gend').hidden = true;
   gAdvance();
 }
-['gnorth','gsouth','gsrow'].forEach((id,k)=>{
+['gnorth','gsrow'].forEach((id,k)=>{
   $(id).addEventListener('click', e=>{
     const b = e.target.closest('.card'), seat = k===0 ? 0 : (G && G.role==='tegen' ? G.me : 2);
     if(!b || b.disabled || !G || gBusy || G.over || G.turn!==seat || !gMine(seat)) return;
