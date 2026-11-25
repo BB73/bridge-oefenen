@@ -1291,7 +1291,7 @@ svg.gl text{font-family:inherit}
 :root{--H:clamp(13px, calc(((100vw - 4.6rem - 6px) / 13 - 3px) * .685), 19px);--tz:1}
 main.table:not([hidden]), #game:not([hidden]), #samenbody{--dstep:calc(var(--H) * 1.08 / var(--rc, .74) + 3px);--dw:calc(var(--dstep) + .25rem);--tkf:calc(var(--H) / .74)!important;--tsym:calc(var(--H) / .74)!important}
 /* de gespeelde kaart op tafel is dezelfde kaart als in hand en dummy: zelfde opbouw (rand 1, wit 2,5, rang, wit 2,5, symbool, wit 2,5, rand 1) en zelfde breedteformule; de tafelzoom wordt eruit gedeeld */
-main.table .smsq, #game .smsq, #samenbody .smsq{--pg:calc(2.5px / var(--tz));--ph:calc((2 * var(--H) + 9.5px) / var(--tz));--pw:calc((var(--H) * 1.08 / var(--rc, .74) + 3px + .25rem) / var(--tz))}
+main.table .smsq, #game .smsq, #samenbody .smsq{--pg:calc(2.5px / var(--tz));--ph:calc((2 * var(--HC) + 9.5px) / var(--tz));--pw:calc((var(--HC) * 1.08 / var(--rc, .74) + 3px + .25rem) / var(--tz))}
 main.table .smsq .tc.on, #game .smsq .tc.on, #samenbody .smsq .tc.on, #samenbody .smsq .tcd .pc{border-radius:calc(6px / var(--tz))!important;--mid:calc((var(--ph) - 2px / var(--tz)) / 2)!important;--ch:calc((var(--ph) - 2px / var(--tz) - 3 * var(--pg)) / 2)!important}
 main.table .hrow, #game .hrow, #samenbody .hrow{--dh:calc(2 * var(--H) + 3 * var(--pg) + 2px)!important}
 main.table .sqrow, #samenbody > .sqrow{grid-template-columns:auto auto auto!important;justify-content:center!important}
@@ -1329,6 +1329,19 @@ main.table:not([hidden]), #game:not([hidden]), #samenbody{--dgap:.7rem}
 .hcols{gap:3px!important;align-items:center!important}
 #game .tablewrap.sqrow{align-items:center!important;column-gap:6px!important}
 #samenbody .smrows:has(.hrow){display:block!important;width:100%!important;max-width:100%!important}
+/* v347 */
+details.gpar{display:block;margin:.35rem 0 0} details.gpar > summary{cursor:pointer;font-weight:700;color:var(--felt)} details.gpar > p{margin:.25rem 0 0}
+/* kwetsbaar blijft rood, ook als die speler aan de beurt is: de beurt is dan een gele rand */
+.smsq .st.vul.turn{background:#C0392B!important;color:#fff!important;box-shadow:0 0 0 3px #FFD54F!important}
+/* biedkaartjes op tafel: dezelfde kleuren als de biedbox, in de lichte en de donkere stand */
+.bc.n.d-C{background:color-mix(in srgb, #216B50 16%, #FFFFFF)!important;border-top:3px solid #216B50!important}
+.bc.n.d-D{background:color-mix(in srgb, #BF5A02 16%, #FFFFFF)!important;border-top:3px solid #BF5A02!important}
+.bc.n.d-H{background:color-mix(in srgb, #9B1D38 14%, #FFFFFF)!important;border-top:3px solid #9B1D38!important}
+.bc.n.d-S{background:color-mix(in srgb, #123462 14%, #FFFFFF)!important;border-top:3px solid #123462!important}
+.bc.n.d-N{background:color-mix(in srgb, #56655E 14%, #FFFFFF)!important;border-top:3px solid #56655E!important}
+.bc.n .bkl, .bc.n .bks.sa{color:#14211C!important} .bc.n .bks.S{color:#123462!important} .bc.n .bks.H{color:#9B1D38!important} .bc.n .bks.D{color:#BF5A02!important} .bc.n .bks.C{color:#216B50!important}
+/* telefoon: de biedbox staat helemaal onderaan, los van de hand */
+@media not ((min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)){ #game.bidmode #gbid > .box{margin-top:auto!important} }
 /* v331: stempel "Under construction" bij een rubriek waar nog tips over openstaan */
 .crumbs .ucstamp, .ucmini{display:inline-block;font-family:var(--display);font-style:normal;font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:1;color:#B3261E;border:2px solid #B3261E;border-radius:5px;background:rgba(255,255,255,.75);transform:rotate(-5deg);white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(179,38,30,.25)}
 .crumbs .ucstamp{font-size:.68rem;padding:.22rem .4rem;margin-left:.5rem;cursor:pointer}
@@ -4563,7 +4576,7 @@ function gameNew(){
   if(CLUB_PRESET){
     const P = CLUB_PRESET; CLUB_PRESET = null;
     const hN = makeHand(P.hands[0]), hS = makeHand(P.hands[2]);
-    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul, rk:P.rk||0};
+    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul, ovul:P.ovul, rk:P.rk||0};
   }
   const want = state.gct==='sa' ? 'sa' : state.gct==='troef' ? 'troef' : (rnd(2) ? 'sa' : 'troef');
   for(;;){
@@ -8398,10 +8411,20 @@ function ctrBadge(c, dbl, btn){ const m = /^(\d)(SA|N|[SHDC])$/.exec(String(c ||
   return '<'+tag+' class="cbd k'+d+'"'+(btn ? ' data-smauc="1" aria-label="Contract '+m[1]+(d==='N' ? 'SA' : SNAME[d] ? ' '+SNAME[d] : '')+', biedverloop bekijken"' : '')+'>'+m[1]+(d==='N' ? '<b class="sa">SA</b>' : '<b>'+SYM[d]+'</b>')+(dbl===2 ? '<u>xx</u>' : dbl ? '<u>x</u>' : '')+'</'+tag+'>'; }
 function tblPill(pos, name, letter, o){ o = o || {};
   return '<span class="sml st '+pos+(o.vul ? ' vul' : '')+(o.turn ? ' turn' : '')+'"><span class="nmx">'+name+'</span> <span class="smw">('+letter+')</span>'+(o.g ? '<i class="bd">G</i>' : '')+(o.c ? o.c : o.l ? '<i class="bd l">L</i>' : '')+(o.d ? '<i class="bd d">D</i>' : '')+'</span>'; }
+// Namen aan tafel: jij met je eigen naam (als je bent ingelogd), partner en tegenstanders met een willekeurige naam die past bij hun systeemkaart.
+const NAMEPOOL = {nl:['Anne','Bram','Sanne','Daan','Lotte','Thijs','Femke','Joost','Marieke','Ruben','Inge','Wouter','Hanneke','Pieter'], us:['Mike','Susan','Bob','Linda','Jeff','Karen','Steve','Nancy'], it:['Giorgio','Lucia','Marco','Chiara','Paolo','Giulia'], no:['Lars','Ingrid','Geir','Solveig','Tor','Astrid'], fr:['Pierre','Camille','Luc','Élodie','Michel','Sylvie']};
+const namePoolOf = v => { const id = typeof v==='string' && v.slice(0,2)==='p:' ? v.slice(2) : ''; return NAMEPOOL[{sayc:'us', us21:'us', ita:'it', nor:'no', sef:'fr'}[id] || 'nl']; };
+let TNAMES = null;
+function tableNames(fresh){ const key = String(state.oppSys||'');
+  if(!TNAMES || TNAMES.key!==key || fresh){ const me = myNm(), pick = (pool, not) => { const c = pool.filter(x=>!not.includes(x)); return c[rnd(c.length)] || pool[0]; };
+    const p = (TNAMES && TNAMES.p) || pick(NAMEPOOL.nl, [me]), op = namePoolOf(key), o1 = pick(op, [me, p]), o3 = pick(op, [me, p, o1]); TNAMES = {key, p, o1, o3}; }
+  return TNAMES; }
+const myNm = () => { const n = String(state.myName||'').trim(); return n || 'Jij'; };
+const seatNm = o => { const t = tableNames(); return o===2 ? myNm() : o===0 ? t.p : o===1 ? t.o1 : t.o3; };      // o: 0 = partner, 1 = rechts, 2 = jij, 3 = links (de plaatsen van het bieden)
 function tblPills(o){ const P = {N:['t','Partner'], O:['r','Oost'], Z:['b','Jij'], W:['l','West']}; o = o || {};
   return Object.keys(P).map(k=>tblPill(P[k][0], (o[k] && o[k].name) || P[k][1], k, o[k])).join(''); }
 function tblBid(b, extra, inner){ const k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
-  return '<span class="bc '+k+(extra || '')+'">'+(b==='pas' ? 'pas' : k!=='n' ? b : '<span class="bkl">'+b[0]+'</span>'+(b[1]==='N' ? '<span class="bks sa">SA</span>' : '<span class="bks '+b[1]+'">'+SYM[b[1]]+'</span>'))+(inner || '')+'</span>'; }
+  return '<span class="bc '+k+(k==='n' ? ' d-'+b[1] : '')+(extra || '')+'">'+(b==='pas' ? 'pas' : k!=='n' ? b : '<span class="bkl">'+b[0]+'</span>'+(b[1]==='N' ? '<span class="bks sa">SA</span>' : '<span class="bks '+b[1]+'">'+SYM[b[1]]+'</span>'))+(inner || '')+'</span>'; }
 function tblStack(pos, arr){ return arr.length ? '<div class="bst '+pos+'"'+(arr.length>1 ? ' style="--n:'+arr.length+'"' : '')+'>'+arr.join('')+'</div>' : ''; }
 function tblCol(h, only){ return '<div class="pcol">'+[0,1,2,3].filter(si=>only==null || only===si).map(si=>{ const cs = h.suits[si].slice().sort((a,b)=>b-a); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(r=>RANK[r]||r).join(' ') : '–')+'</div>'; }).join('')+'</div>'; }
 function renderQTable(mine){
@@ -9822,7 +9845,7 @@ function clubPlay(role){
   const b = c.boards[CV.i], pc = clubPlayContract(b); if(!pc) return;
   const k = (2 - pc.decl + 4) % 4, hands = [[],[],[],[]];
   b.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
-  CLUB_PRESET = {clubNr: b.nr, hands, trump: pc.trump, level: pc.level, dbl: (/(x+)\s*$/i.exec(pc.c||'')||['',''])[1].length, dvul: sideVul(b.vul, pc.decl%2), label: 'Spel '+b.nr};
+  CLUB_PRESET = {clubNr: b.nr, hands, trump: pc.trump, level: pc.level, dbl: (/(x+)\s*$/i.exec(pc.c||'')||['',''])[1].length, dvul: sideVul(b.vul, pc.decl%2), ovul: sideVul(b.vul, 1 - pc.decl%2), label: 'Spel '+b.nr};
   state.grole = role; state.conv = 'spel'; save();
   const t = $('theory'); if(t.open) t.close();
   if($('settings').open) $('settings').close();
@@ -10012,7 +10035,8 @@ function brRebid(h, open, resp){
       if(L[oi]>=6) return {bid: p>=16 ? '3'+os : '2'+os, why:'zes kaarten'};
       const sec = [3,2,1,0].filter(i=>i!==oi && i!==ri && L[i]>=4 && (bidRank('2'+SUITS[i])<bidRank('2'+os) || p>=16));
       if(sec.length) return {bid: brCheapest(SUITS[sec[0]], resp), why:'tweede kleur'};
-      return {bid:'2'+os, why:'herhaal je kleur'};
+      { const hi = [3,2,1,0].find(i=>i!==oi && i!==ri && L[i]>=4 && bidRank('2'+SUITS[i])>bidRank('2'+os));
+        return {bid:'2'+os, why:'herhaal je vijfkaart: dat belooft liefst een zeskaart, maar er is geen beter bod. 1SA kan niet met een onevenwichtige hand'+(hi!==undefined ? ', en '+bidHTML('2'+SUITS[hi])+' zou 16+ punten beloven' : '')}; }
     }
     // 2-niveau-antwoord
     if(L[ri]>=4 && !isMaj) return {bid:'3'+rs, why:'steun voor partners kleur'};
@@ -10416,6 +10440,22 @@ function bridgeScore(level, trump, dbl, vul, tricks){
   for(let i=1;i<=u;i++) p += vul ? (i===1 ? 200 : 300) : (i===1 ? 100 : i<=3 ? 200 : 300);
   return -p*(dbl===2 ? 2 : 1);
 }
+// Met open kaarten: het hoogst scorende contract dat elke partij maakt, en het par (de uitkomst als beide partijen perfect bieden).
+// H: de vier handen (plaatsen 0 en 2 zijn één partij); us: welke partij 'jullie' is (0 of 1).
+async function ddParInfo(H, vulNS, vulEW, us, alive){
+  const T = [[],[]], vul = [!!vulNS, !!vulEW], pause = () => new Promise(r=>setTimeout(r, 0));
+  for(let tr=0; tr<5; tr++) for(let side=0; side<2; side++){ let m = 0;
+    for(const s of [side, side+2]){ const t = 13 - window.DDS.solve(H.map(x=>x.slice()), tr, (s+1)%4, []); if(t>m && t<=13) m = t; await pause(); if(alive && !alive()) return ''; }
+    T[side][tr] = m; }
+  const cn = (lvl, tr) => lvl+(tr===4 ? 'SA' : '<span class="'+SUITS[tr]+'">'+SYM[SUITS[tr]]+'</span>');
+  const best = side => { let b = null; for(let tr=0; tr<5; tr++) for(let lvl=1; lvl<=T[side][tr]-6; lvl++){ const sc = bridgeScore(lvl, tr, 0, vul[side], T[side][tr]); if(!b || sc>b.sc) b = {lvl, tr, sc, t:T[side][tr]}; } return b; };
+  let par = {ns:0, c:null};
+  for(let lvl=1; lvl<=7; lvl++) for(const tr of [3,2,1,0,4]) for(let side=0; side<2; side++){ const t = T[side][tr], made = t>=lvl+6, sc = bridgeScore(lvl, tr, made ? 0 : 1, vul[side], t), ns = side===0 ? sc : -sc;
+    if(side===0 ? ns>par.ns : ns<par.ns) par = {ns, c:{lvl, tr, side, dbl:!made, t}}; }
+  const one = (side, lab) => { const b = best(side); return '<b>'+lab+'</b> '+(b ? cn(b.lvl, b.tr)+' ('+b.t+' slagen, '+scoreTxt(b.sc)+')' : 'niets'); };
+  const usSc = us===0 ? par.ns : -par.ns;
+  return 'Haalbaar met open kaarten: '+one(us, 'jullie')+'; '+one(1-us, 'zij')+'. <b>Par:</b> '+(par.c ? cn(par.c.lvl, par.c.tr)+(par.c.dbl ? ' gedoubleerd' : '')+' door '+(par.c.side===us ? 'jullie' : 'hen')+', '+scoreTxt(usSc)+' voor jullie.' : 'rondpas.');
+}
 const sideVul = (vul, side) => vul==='Allen' || (side===0 ? vul==='NZ' : vul==='OW');   // side 0 = NZ, 1 = OW
 const scoreTxt = n => (n>0 ? '+' : n<0 ? '−' : '')+Math.abs(n);
 // de sierlijke gouden T als teken voor een tip
@@ -10432,7 +10472,7 @@ function bidStartRandom(){
 }
 function bidStart(o){
   gRun++; G = null; gBusy = false;
-  BIDS = Object.assign({calls:[], why:[], done:false}, o);
+  BIDS = Object.assign({calls:[], why:[], done:false}, o); tableNames(true);
   $('gtip').hidden = true; $('gend').hidden = true; try{ gDefRender(); }catch(e){}
   bidAdvance();
 }
@@ -10493,7 +10533,7 @@ function bidRender(){
   const AL = B.done ? new Map() : bidAlerts(B);
   const stk = (s, pos) => { const arr = []; B.calls.forEach((b,i)=>{ if((B.dealer+i)%4===s) arr.push(tblBid(b, i===B.calls.length-1 ? ' new' : '', AL.has(i) ? '<i class="alc vast" aria-label="Alert">A</i>' : '')); }); if(!B.done && turn===s && s===2) arr.push('<span class="bc ask">?</span>'); return tblStack(pos, arr); };
   const pl = s => ({vul:vulOf(s), g:s===B.dealer, turn:!B.done && turn===s});
-  let html = '<div class="smsq sqb">'+tblPills({N:Object.assign({name:'Partner'}, pl(0)), O:pl(1), Z:pl(2), W:pl(3)})+stk(0,'t')+stk(3,'l')+stk(1,'r')+stk(2,'b')+'</div>';
+  let html = '<div class="smsq sqb">'+tblPills({N:Object.assign({name:seatNm(0)}, pl(0)), O:Object.assign({name:seatNm(1)}, pl(1)), Z:Object.assign({name:seatNm(2)}, pl(2)), W:Object.assign({name:seatNm(3)}, pl(3))})+stk(0,'t')+stk(3,'l')+stk(1,'r')+stk(2,'b')+'</div>';
   // laatste uitleg van partner
   const explain = who => { const ni = B.calls.map((b,i)=>who.includes((B.dealer+i)%4) && b!=='pas' ? i : -1).filter(i=>i>=0).pop(); if(ni===undefined || !B.why[ni]) return ''; const sn = NM[(B.dealer+ni)%4]; return '<p class="abwhy">'+(who.length===1 ? 'Partner' : sn)+': '+bidHTML(B.calls[ni])+' – '+B.why[ni]+'.</p>'; };
   const pw = explain([0]) + explain([1,3]);
@@ -10554,7 +10594,7 @@ function bidSummary(){
         const wr = $('bidopenwrap'); if(wr) wr.insertBefore(d, wr.firstChild);
       }
     }
-    if(best) txt += ' Het beste contract voor jullie volgens open kaarten: <b>'+best.lvl+(best.tr===4 ? 'SA' : '<span class="'+SUITS[best.tr]+'">'+SYM[SUITS[best.tr]]+'</span>')+'</b> ('+best.t+' slagen, '+scoreTxt(bridgeScore(best.lvl, best.tr, 0, sideVul(B.vul, 0), best.t))+').';
+    ddParInfo(H, sideVul(B.vul, 0), sideVul(B.vul, 1), 0, ()=>run===gRun && BIDS===B).then(x=>{ const o2 = $('bidopen'); if(x && o2 && run===gRun && BIDS===B) o2.insertAdjacentHTML('beforeend', ' '+x); }).catch(()=>{});
     const o = $('bidopen'); if(o) o.innerHTML = txt;
   }).catch(()=>{ const o = $('bidopen'); if(o) o.textContent = ''; });
 }
@@ -10570,14 +10610,26 @@ document.addEventListener('click', e=>{
     const B = BIDS; if(!B || B.done || (B.dealer+B.calls.length)%4!==2 || !bidLegal(B, x.dataset.abid)) return;
     let adv = null; try{ adv = brBid(makeHand(B.hands[2]), B.calls, (B.dealer+2)%4); }catch(err){}
     if(adv && !bidLegal(B, adv.bid)) adv = {bid:'pas', why:adv.why};
-    (B.adv = B.adv || {})[B.calls.length] = adv;
-    B.calls.push(x.dataset.abid); B.why.push(''); bidAdvance(); return;
+    const call = x.dataset.abid, at = B.calls.length, commit = () => { if(BIDS!==B || B.done || B.calls.length!==at) return; (B.adv = B.adv || {})[at] = adv; B.calls.push(call); B.why.push(''); bidAdvance(); };
+    // Controle op een bod dat een vergissing kan zijn. Alle drie moeten gelden: het wijkt af van je systeemkaart, het ligt minstens twee niveaus boven dat bod (of op 5-niveau of hoger), en met open kaarten gaat het minstens drie down.
+    const lv = b => /^[1-7][SHDCN]$/.test(b) ? +b[0] : 0, lvl = lv(call), ref = adv ? (lv(adv.bid) || Math.max(0, ...B.calls.map(lv))) : 0;
+    if(lvl && adv && adv.bid!==call && (lvl>=ref+2 || lvl>=5) && B.sure!==at+'|'+call){
+      const run = gRun;
+      ddsLoad().then(()=>{ if(run!==gRun || BIDS!==B) return;
+        const tr = call[1]==='N' ? 4 : SUITS.indexOf(call[1]); let t = 0; [0,2].forEach(sd=>{ const v = 13 - window.DDS.solve(B.hands.map(h=>h.slice()), tr, (sd+1)%4, []); if(v>t && v<=13) t = v; });
+        if(lvl+6-t < 3){ commit(); return; }
+        bidPending = {go:()=>{ B.sure = at+'|'+call; commit(); }};
+        $('gtiptext').innerHTML = '<b>Weet je het zeker?</b> '+bidHTML(call)+' wijkt sterk af van je systeemkaart; die zegt hier '+(adv.bid==='pas' ? 'pas' : bidHTML(adv.bid))+'. Het kan een vergissing zijn.';
+        gTipMode(false); $('gtipgo').textContent = 'Toch bieden'; $('gtip').hidden = false;
+      }).catch(commit);
+      return; }
+    commit(); return;
   }
   if(x.dataset.abplay!==undefined){
     const B = BIDS, ct = B && brContract(B.calls, B.dealer); if(!ct) return;
     const k = (2 - ct.decl + 4) % 4, hands = [[],[],[],[]];
     B.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
-    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), label: B.club || '', rk: B.clubNr ? 0 : k};
+    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), ovul: sideVul(B.vul, 1 - ct.decl%2), label: B.club || '', rk: B.clubNr ? 0 : k};
     BIDS = null; state.grole = ct.decl%2===0 ? 'leider' : 'tegen'; save(); bidRender(); gStart(); return;
   }
   if(x.dataset.clubback!==undefined){
@@ -11691,7 +11743,7 @@ function gRender(){
   $('gstatus').innerHTML = (def ? 'Jullie '+G.ew+', leider '+G.ns+' · down bij '+(14-G.need) : 'Jij '+G.ns+', zij '+G.ew+' · nodig '+G.need)+(who ? '<br>'+who : '');
   $('gcontract').innerHTML = '';
   { const t = s => !G.over && G.turn===s;
-    const O = {N:{name:gNm(0), d:1, turn:t(0)}, O:{name:def ? (G.me===1 ? 'Jij' : 'Partner') : gNm(1), turn:t(1)}, Z:{name:def ? gNm(2) : 'Jij', l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:def ? (G.me===3 ? 'Jij' : 'Partner') : gNm(3), turn:t(3)}};
+    const O = {N:{name:seatNm(gOrig(0)), d:1, turn:t(0)}, O:{name:seatNm(gOrig(1)), turn:t(1)}, Z:{name:seatNm(gOrig(2)), l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:seatNm(gOrig(3)), turn:t(3)}};
     $('gsqnm').innerHTML = [['N',0],['O',1],['Z',2],['W',3]].map(([k,s])=>tblPill(['t','r','b','l'][rot(s)], O[k].name, gLt(s), O[k])).join(''); }
 }
 // Dummy opzij op een smal scherm: past de rij (dummy + tafel) niet, dan wordt alleen de tafel iets kleiner; de kaarten houden hun maat.
@@ -11941,6 +11993,8 @@ function gVerdict(){
       : d===0 ? 'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in, en die heb je allemaal gehaald. Beter kan niet.'
       : 'Met open kaarten zaten er na deze uitkomst tegen perfect tegenspel <b>'+sl(max)+'</b> in; jij haalde er '+g.ns+'. De tegenspelers lieten dus iets liggen.';
     $('gresult').insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>'+(g.log && g.log.length===52 ? '<button class="gview" data-greview="1">Bekijk per slag waar het misging</button>' : ''));
+  }).then(()=>{ if(g!==G || !window.DDS || !g.start) return;
+    return ddParInfo(g.start, g.dvul, g.ovul, g.role==='tegen' ? 1 : 0, ()=>g===G).then(x=>{ const r = $('gresult'); if(x && r && g===G && !r.querySelector('.gpar')) { const body = x+(g.dvul===undefined ? '<small> Gerekend met niemand kwetsbaar.</small>' : ''); r.insertAdjacentHTML('beforeend', LAPTOP() ? '<span class="gdd gpar"><br>'+body+'</span>' : '<details class="gdd gpar"><summary>Haalbaar en par met open kaarten</summary><p>'+body+'</p></details>'); } });
   }).catch(()=>{});
 }
 function gAdvance(){
@@ -11974,6 +12028,7 @@ function gStart(){
   gcEvent('heel-spel');
   if(!CLUB_PRESET && state.gbid==='ja'){ bidStartRandom(); return; }
   if(BIDS){ BIDS = null; bidRender(); }
+  if(!CLUB_PRESET || CLUB_PRESET.rk===undefined) tableNames(true);      // een spel zonder bieding vooraf: nieuwe tegenstanders
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
   G.role = state.grole==='tegen' ? 'tegen' : 'leider'; G.me = G.role==='tegen' ? (G.rk ? (2 + G.rk) % 4 : (rnd(2) ? 3 : 1)) : 2;      // na een bieding verdedig je met je eigen hand
   G.start = G.hands.map(h=>h.slice()); G.log = []; ddsLoad();
@@ -12028,8 +12083,9 @@ $('gbidc').addEventListener('click', e=>{ const b = e.target.closest('button'); 
 $('grole').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.grole = b.dataset.grole; save(); gDefRender(); });
 $('gct').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gct = b.dataset.gct; save(); gDefRender(); });
 $('gdef').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gdef = b.dataset.gdef; save(); gDefRender(); });
-$('gtipback').addEventListener('click', ()=>{ $('gtip').hidden = true; gPending = null; gBusy = false; gRender(); });
-$('gtipgo').addEventListener('click', ()=>{ const p = gPending; $('gtip').hidden = true; gPending = null; gBusy = false; if(p) gDo(p.seat, p.card); });
+let bidPending = null;
+$('gtipback').addEventListener('click', ()=>{ $('gtip').hidden = true; if(bidPending){ bidPending = null; $('gtipgo').textContent = 'Toch spelen'; return; } gPending = null; gBusy = false; gRender(); });
+$('gtipgo').addEventListener('click', ()=>{ if(bidPending){ const b = bidPending; bidPending = null; $('gtip').hidden = true; $('gtipgo').textContent = 'Toch spelen'; b.go(); return; } const p = gPending; $('gtip').hidden = true; gPending = null; gBusy = false; if(p) gDo(p.seat, p.card); });
 const dlg = $('settings');
 const openMenu = () => { tipOpenLoad(); ucShow = false; nav = []; renderModes(); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open',''); dlg.scrollTop = 0; };
 $('menu').addEventListener('click', openMenu);
@@ -13397,7 +13453,7 @@ function smGameHTML(g){
   if(g.phase==='bid'){
     const turn = (g.dealer+g.calls.length)%4, last = g.calls.length-1;
     const bcard = i => { const b = g.calls[i], k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
-      return '<button class="bc '+k+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : '<span class="bkl">'+b[0]+'</span>'+(b[1]==='N' ? '<span class="bks sa">SA</span>' : '<span class="bks '+b[1]+'">'+SYM[b[1]]+'</span>'))+'</button>'; };
+      return '<button class="bc '+k+(k==='n' ? ' d-'+b[1] : '')+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : '<span class="bkl">'+b[0]+'</span>'+(b[1]==='N' ? '<span class="bks sa">SA</span>' : '<span class="bks '+b[1]+'">'+SYM[b[1]]+'</span>'))+'</button>'; };
     const stacks = [0,1,2,3].map(s=>{ const mine = g.calls.map((b,i)=>i).filter(i=>(g.dealer+i)%4===s); return mine.length ? '<div class="bst '+pos(s)+'"'+(mine.length>1 ? ' style="--n:'+mine.length+'"' : '')+'>'+mine.map(bcard).join('')+'</div>' : ''; }).join('');
     const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
     const sq = '<div class="smsq sqb">'+labels(turn)+stacks+'</div>';
