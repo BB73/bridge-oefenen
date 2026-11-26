@@ -619,6 +619,12 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .tipmail{display:inline-block;margin:.2rem 0 .5rem;padding:.6rem 1rem;border-radius:10px;background:var(--felt);color:#fff;font-weight:600;text-decoration:none}
 .homebtn b{font-family:var(--display);font-size:1.35rem}
 @media (max-width:420px){ .homegrid .homebtn b{font-size:1.12rem;letter-spacing:-.01em} }
+.homegrid .homebtn.daily.daily{background:var(--felt);border-color:var(--felt);color:#fff} .homegrid .homebtn.daily.daily small{color:#DDEBE4} .homegrid .homebtn.daily b{color:#fff}
+.dstreak{display:inline-block;font-weight:700;color:#1F5C45;background:#F4D35E;border-radius:999px;padding:0 .45em;margin-right:.4em}
+.bst.top{z-index:3} .bst .bc .alc.mini{display:none} .bst .bc:has(.alc.mini){box-shadow:inset 0 0 0 2.5px #2F7BEA, 0 1px 2px rgba(0,0,0,.3)} .bstep{display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.35rem auto .1rem;width:var(--rw, 100%);order:3} .bstep .bsb{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 1.5rem/1 system-ui;display:grid;place-items:center;padding:0} .bstep .bsb:disabled{opacity:.35} .bstx{flex:1;text-align:center;font-size:.95rem;line-height:1.25;min-width:0} .bstx small{display:block;color:var(--muted);font-size:.85rem;min-height:1.1em}
+#game.dailyend #gend .gdef, #game.dailyend #gend .gnote{display:none!important}
+.gtip.dok{border-color:var(--felt);background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .dbidex{font-size:.9rem;margin:.2rem 0} .dbidex ul{margin:.2rem 0 .2rem 1.1rem;padding:0} .dbidex li{margin:.1rem 0}
+.dverd p{margin:.25em 0} .dverd .dbar{display:grid;grid-template-columns:auto 1fr auto;gap:.15em .5em;align-items:center;font-size:.92em;margin:.2em 0 .35em} .dverd .dbar i{display:block;height:.6em;border-radius:3px;background:#B9CEC3} .dverd .dbar i.me{background:var(--felt)}
 .homebtn small{font-size:.85rem;color:var(--muted)}
 .homebtn.has{background:color-mix(in srgb, var(--felt) 10%, var(--surface))}
 .homebtn.has small{color:var(--felt)}
@@ -4576,7 +4582,7 @@ function gameNew(){
   if(CLUB_PRESET){
     const P = CLUB_PRESET; CLUB_PRESET = null;
     const hN = makeHand(P.hands[0]), hS = makeHand(P.hands[2]);
-    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul, ovul:P.ovul, rk:P.rk||0};
+    return {hands:P.hands, turn:3, trick:[], ns:0, ew:0, played:[], defSuit:null, over:false, voids:[{},{},{},{}], trump:P.trump, level:P.level, contract:P.level+(P.trump===4 ? 'N' : SUITS[P.trump]), need:P.level+6, top:topTricks(hN,hS).total, los:gLosers(hS,hN), club:P.label, clubNr:P.clubNr, dbl:P.dbl||0, dvul:P.dvul, ovul:P.ovul, rk:P.rk||0, daily:P.daily};
   }
   const want = state.gct==='sa' ? 'sa' : state.gct==='troef' ? 'troef' : (rnd(2) ? 'sa' : 'troef');
   for(;;){
@@ -8695,12 +8701,12 @@ function renderModes(){
   let pg = '';
   if(!T){
     const nPr = nPrB + nPrS;
-    pg = '<div class="homebtns homegrid"><button class="homebtn'+(nPr ? ' has' : '')+'" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>'+(nPr ? '✓ je oefent nu '+(nPrB ? nPrB+(nPrB===1 ? ' biedonderdeel' : ' biedonderdelen') : '')+(nPrB && nPrS ? ' en ' : '')+(nPrS ? nPrS+(nPrS===1 ? ' speelonderdeel' : ' speelonderdelen') : '') : 'Losse biedingen en spelsituaties oefenen')+'</small></button>'
+    pg = '<div class="homebtns homegrid">'+dailyHomeBtn()+'<button class="homebtn'+(nPr ? ' has' : '')+'" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>'+(nPr ? '✓ je oefent nu '+(nPrB ? nPrB+(nPrB===1 ? ' biedonderdeel' : ' biedonderdelen') : '')+(nPrB && nPrS ? ' en ' : '')+(nPrS ? nPrS+(nPrS===1 ? ' speelonderdeel' : ' speelonderdelen') : '') : 'Losse biedingen en spelsituaties oefenen')+'</small></button>'
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+(presetMatch() && presetMatch()!=='app' ? PRESETS[presetMatch()].tag : state.card.length+' afspraken')+' · uitkomen · afdrukken</small></button>'
        + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
     if(state.learn.on) pg = '<p class="cnote lnote"><b>Het leerpad staat aan</b>, daarom zie je je systeemkaart niet. <button class="navclear" data-loff="1">Leerpad uitzetten</button></p>'
-       + '<div class="homebtns homegrid"><button class="homebtn has" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>Leerpad: bieden '+(state.learn.step.bieden+1)+'/'+LEARN.bieden.length+', spelen '+(state.learn.step.spelen+1)+'/'+LEARN.spelen.length+'</small></button>'
+       + '<div class="homebtns homegrid">'+dailyHomeBtn()+'<button class="homebtn has" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>Leerpad: bieden '+(state.learn.step.bieden+1)+'/'+LEARN.bieden.length+', spelen '+(state.learn.step.spelen+1)+'/'+LEARN.spelen.length+'</small></button>'
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
   }else if(T==='regels'){
@@ -10448,7 +10454,7 @@ async function ddParInfo(H, vulNS, vulEW, us, alive){
     for(const s of [side, side+2]){ const t = 13 - window.DDS.solve(H.map(x=>x.slice()), tr, (s+1)%4, []); if(t>m && t<=13) m = t; await pause(); if(alive && !alive()) return ''; }
     T[side][tr] = m; }
   const cn = (lvl, tr) => lvl+(tr===4 ? 'SA' : '<span class="'+SUITS[tr]+'">'+SYM[SUITS[tr]]+'</span>');
-  const best = side => { let b = null; for(let tr=0; tr<5; tr++) for(let lvl=1; lvl<=T[side][tr]-6; lvl++){ const sc = bridgeScore(lvl, tr, 0, vul[side], T[side][tr]); if(!b || sc>b.sc) b = {lvl, tr, sc, t:T[side][tr]}; } return b; };
+  const best = side => { let b = null; for(let tr=0; tr<5; tr++) for(let lvl=1; lvl<=T[side][tr]-6; lvl++){ const sc = bridgeScore(lvl, tr, 0, vul[side], T[side][tr]); if(!b || sc>=b.sc) b = {lvl, tr, sc, t:T[side][tr]}; } return b; };
   let par = {ns:0, c:null};
   for(let lvl=1; lvl<=7; lvl++) for(const tr of [3,2,1,0,4]) for(let side=0; side<2; side++){ const t = T[side][tr], made = t>=lvl+6, sc = bridgeScore(lvl, tr, made ? 0 : 1, vul[side], t), ns = side===0 ? sc : -sc;
     if(side===0 ? ns>par.ns : ns<par.ns) par = {ns, c:{lvl, tr, side, dbl:!made, t}}; }
@@ -10530,9 +10536,16 @@ function bidRender(){
     const wait = !B.done && turn===s ? (s===2 ? '<span class="bk ask">?</span>' : '<span class="bk wait">…</span>') : '';
     return '<div class="bseat '+pos+(!B.done && turn===s ? ' turn' : '')+'"><span class="bname'+(vulOf(s) ? ' kw' : '')+'">'+NM[s]+(s===2 ? ' (jij)' : '')+(s===B.dealer ? ' · gever' : '')+'</span><div class="bfan">'+mine+wait+'</div></div>';
   };
-  const AL = B.done ? new Map() : bidAlerts(B);
-  const stk = (s, pos) => { const arr = []; B.calls.forEach((b,i)=>{ if((B.dealer+i)%4===s) arr.push(tblBid(b, i===B.calls.length-1 ? ' new' : '', AL.has(i) ? '<i class="alc vast" aria-label="Alert">A</i>' : '')); }); if(!B.done && turn===s && s===2) arr.push('<span class="bc ask">?</span>'); return tblStack(pos, arr); };
-  const pl = s => ({vul:vulOf(s), g:s===B.dealer, turn:!B.done && turn===s});
+  const AL = B.done ? (B.alerts ? new Map(B.alerts.map(i=>[i, B.why[i] || 'Kunstmatig bod'])) : (()=>{ try{ return alertSet(B.calls, ''); }catch(e){ return new Map(); } })()) : bidAlerts(B);
+  const lim = B.done && B.step!=null ? B.step : B.calls.length, stepping = B.done && B.step!=null, nC = B.calls.length;
+  const ctD = B.done ? brContract(B.calls, B.dealer) : null, tail = i => B.done && i>=nC-3 && B.calls[i]==='pas';
+  const stk = (s, pos) => { const arr = [];
+    B.calls.forEach((b,i)=>{ if(i>=lim || (B.dealer+i)%4!==s) return; const cur = stepping ? i===lim-1 : (!B.done && i===nC-1);
+      if(tail(i) && !cur) return;
+      arr.push(tblBid(b, cur ? ' new' : '', AL.has(i) ? '<i class="alc vast'+(B.done ? ' mini' : '')+'" aria-label="Alert">A</i>' : '')); });
+    if(!B.done && turn===s && s===2) arr.push('<span class="bc ask">?</span>');
+    const h = tblStack(pos, arr); return ctD && s%2===ctD.decl%2 ? h.replace('class="bst ', 'class="bst top ') : h; };
+  const pl = s => ({vul:vulOf(s), g:s===B.dealer && !(ctD && s===ctD.decl), turn:!B.done && turn===s, c: ctD && s===ctD.decl ? ctrBadge(ctD.level+(ctD.trump===4 ? 'SA' : SUITS[ctD.trump]), ctD.dbl) : ''});
   let html = '<div class="smsq sqb">'+tblPills({N:Object.assign({name:seatNm(0)}, pl(0)), O:Object.assign({name:seatNm(1)}, pl(1)), Z:Object.assign({name:seatNm(2)}, pl(2)), W:Object.assign({name:seatNm(3)}, pl(3))})+stk(0,'t')+stk(3,'l')+stk(1,'r')+stk(2,'b')+'</div>';
   // laatste uitleg van partner
   const explain = who => { const ni = B.calls.map((b,i)=>who.includes((B.dealer+i)%4) && b!=='pas' ? i : -1).filter(i=>i>=0).pop(); if(ni===undefined || !B.why[ni]) return ''; const sn = NM[(B.dealer+ni)%4]; return '<p class="abwhy">'+(who.length===1 ? 'Partner' : sn)+': '+bidHTML(B.calls[ni])+' – '+B.why[ni]+'.</p>'; };
@@ -10543,12 +10556,20 @@ function bidRender(){
     for(let l=from; l<=Math.min(7, from+3); l++) for(const d of DEN){ const b = l+d; box += '<button class="bid d-'+d+'" data-abid="'+b+'"'+(last && bidRank(b)<=bidRank(last) ? ' disabled' : '')+'>'+bidHTML(b)+'</button>'; }
     box = '<div class="box'+(bidLegal(B,'X') || bidLegal(B,'XX') ? ' withdbl' : '')+'">'+box+'<button class="bid pas" data-abid="pas">Pas</button>'+(bidLegal(B,'X') ? '<button class="bid dbl" data-abid="X">X</button>' : '')+(bidLegal(B,'XX') ? '<button class="bid rdbl" data-abid="XX">XX</button>' : '')+'</div>';
   }
-  const alh = [...AL].map(([i,w])=>'<p class="abwhy abal"><i class="alc vast">A</i> '+(((B.dealer+i)%4)===0 ? 'Partner' : NM[(B.dealer+i)%4])+' '+tblBidTxt(B.calls[i])+': '+(B.why[i] || w)+'.</p>').join('');
+  const alh = B.done ? '' : [...AL].map(([i,w])=>'<p class="abwhy abal"><i class="alc vast">A</i> '+(((B.dealer+i)%4)===0 ? 'Partner' : NM[(B.dealer+i)%4])+' '+tblBidTxt(B.calls[i])+': '+(B.why[i] || w)+'.</p>').join('');
+  if(B.done){ const n = B.calls.length, i = lim-1, who = i>=0 ? seatNm((B.dealer+i)%4)+' ('+'NOZW'[(B.dealer+i)%4]+')' : '', c = i>=0 ? B.calls[i] : '';
+    html += '<div class="bstep"><button class="bsb" data-bstep="-1" aria-label="Vorig bod"'+(lim<=1 ? ' disabled' : '')+'>‹</button><div class="bstx">'+(stepping
+      ? '<b>Bod '+lim+' van '+n+'</b> · '+who+' '+(c==='pas' ? 'pas' : c==='X' || c==='XX' ? c : bidHTML(c))+(B.why[i] || AL.has(i) ? '<small class="altxt">'+(AL.has(i) ? '<i class="alc vast">A</i> ' : '')+(B.why[i] || AL.get(i))+'</small>' : '<small>&nbsp;</small>')
+      : '<b>Speel de bieding na</b><small>bod voor bod, met uitleg</small>')+'</div><button class="bsb" data-bstep="1" aria-label="Volgend bod"'+(!stepping ? ' disabled' : '')+'>›</button></div>'; }
+  const keep = B.done && $('bidsum') ? $('bidsum').innerHTML : null;
   $('gbid').innerHTML = html + alh + (alh ? '' : pw) + (B.done ? '<div id="bidsum"></div>' : box);
-  $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? 'De bieding is klaar.' : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
+  if(keep!==null) $('bidsum').innerHTML = keep;
+  $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? (B.ask || 'De bieding is klaar.') : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
 }
 const lampMark = () => '<img class="tipmark" alt="Tip" src="'+$('glamp').querySelector('img').src+'">';
 const LAPTOP = () => matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').matches;
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-bstep]'); if(!x || !BIDS || !BIDS.done) return; const B = BIDS, n = B.calls.length, d = +x.dataset.bstep;
+  B.step = B.step==null ? (d<0 ? 1 : n) : Math.max(1, Math.min(n, B.step + d)); if(B.step===n && d>0) B.step = null; bidRender(); });
 document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-abtipx]'); if(x){ const d = x.closest('details'); if(d) d.open = false; } });
 function bidSummary(){
   gcEvent(BIDS && BIDS.clubNr ? 'clubspel-geboden' : 'spel-geboden');
@@ -10560,9 +10581,12 @@ function bidSummary(){
   B.tipN = tips.length;
   if(tips.length && state.gtips!=='uit') h += LAPTOP() ? '<div class="abtip">'+lampMark()+'<div>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></div>'
     : '<details class="abtipd"><summary>'+lampMark()+'<span>'+(tips.length===1 ? '1 tip bij je bieding' : tips.length+' tips bij je biedingen')+'</span></summary><div class="abtipsheet"><button class="abtipx" data-abtipx="1" aria-label="Sluiten">×</button>'+tips.map(t=>'<p>'+t+'</p>').join('')+'</div></details>';      // telefoon: uitklapbaar, het spel blijft staan
-  const play = !!(ct && !(state.gonlybid && !B.clubNr)), later = !B.clubNr;      // de open-kaartenuitslag hoort bij de vier handen: na alleen bieden achter een knop, anders na het spelen
+  const play = !!(ct && (B.daily || !(state.gonlybid && !B.clubNr))), later = !B.clubNr;      // de open-kaartenuitslag hoort bij de vier handen: na alleen bieden achter een knop, anders na het spelen
   h += '<div id="bidopenwrap"'+(later ? ' hidden' : '')+'><p id="bidopen" class="abwhy">Met open kaarten rekenen…</p></div>';
   if(B.tables) h += '<p class="abwhy">Aan de tafels van jouw lijn: '+B.tables+'</p>';
+  if(B.daily){ const NMd = s => seatNm(s)+' ('+'NOZW'[s]+')', ex = B.calls.map((c,i)=>B.why[i] ? '<li>'+NMd((B.dealer+i)%4)+' '+(c==='X' || c==='XX' ? c : bidHTML(c))+': '+B.why[i]+'</li>' : '').join('');
+    if(ex) h += '<details class="dbidex"'+(LAPTOP() ? ' open' : '')+'><summary>De bieding uitgelegd</summary><ul>'+ex+'</ul></details>';
+    h += '<div class="clubplay"><button class="gview prim" data-abplay="1">'+(DAILY[B.daily].type==='uitkomen' ? 'Kies je uitkomst' : 'Speel het')+'</button></div>'; el.innerHTML = h; return; }
   h += '<div class="clubplay">'+(ct && !(state.gonlybid && !B.clubNr) ? '<button class="gview prim" data-abplay="1">'+(ct.decl%2 ? 'Verdedig het' : 'Speel het')+'</button>' : '')+(later && !play ? '<button class="gview" data-aball="1">Alle handen</button>' : '')+'<button class="gview" data-abnew="1">'+(clubSerActive('bied', B.clubNr) ? clubSerNextLab() : B.clubNr ? 'Terug naar de clubavond' : 'Nieuw spel')+'</button></div>';
   el.innerHTML = h;
   const run = gRun;
@@ -10629,7 +10653,7 @@ document.addEventListener('click', e=>{
     const B = BIDS, ct = B && brContract(B.calls, B.dealer); if(!ct) return;
     const k = (2 - ct.decl + 4) % 4, hands = [[],[],[],[]];
     B.hands.forEach((h, s)=>{ hands[(s+k)%4] = h.slice(); });
-    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), ovul: sideVul(B.vul, 1 - ct.decl%2), label: B.club || '', rk: B.clubNr ? 0 : k};
+    CLUB_PRESET = {clubNr: B.clubNr, hands, trump: ct.trump, level: ct.level, dbl: ct.dbl, dvul: sideVul(B.vul, ct.decl%2), ovul: sideVul(B.vul, 1 - ct.decl%2), label: B.club || '', rk: B.clubNr ? 0 : k, daily: B.daily};
     BIDS = null; state.grole = ct.decl%2===0 ? 'leider' : 'tegen'; save(); bidRender(); gStart(); return;
   }
   if(x.dataset.clubback!==undefined){
@@ -11842,6 +11866,110 @@ function gFinish(){
   gDefRender();
   gVerdict();
 }
+// ---------- Probleem van de dag: elke dag hetzelfde probleem voor iedereen, met vergelijking met andere bezoekers ----------
+const DPH = s => s.split('.').flatMap((x, su)=>x==='-' ? [] : [...x].map(ch=>su*13+'23456789TJQKA'.indexOf(ch)));
+const DAILY = {
+  lightner: {type:'uitkomen', hands:['753.AJT97.-.QT832','AQJ982.Q52.62.AK','6.843.Q9854.J764','KT4.K6.AKJT73.95'], dealer:1, vul:'-',
+    calls:['1S','pas','2D','pas','2S','pas','3S','pas','4N','pas','5H','pas','6S','pas','pas','X','pas','pas','pas'],
+    why:['','','2 over 1: mancheforcing','','zeskaart schoppen','','steun voor schoppen','','RKC: vraagt naar de sleutelkaarten','','twee sleutelkaarten zonder troefvrouw','','','','','doublet van het slem','','',''],
+    alert:[2,8,10,15], pointe:'Een Lightner-doublet van een slem vraagt om een ongewone uitkomst, meestal de eerstgeboden kleur van de dummy. Partner heeft geen ruiten: na ♦ troeft hij en maakt hij daarna ♥A. Na elke andere uitkomst maakt de leider zijn slem.',
+    odds:'In andere liggingen die bij deze bieding passen, verslaat ♦ het slem in 90%; de andere uitkomsten in ongeveer 45%.'},
+  inspelen: {type:'afspelen', hands:['KQT4.A76.AK5.AJ4','2.832.T862.Q9752','AJ987.K54.74.KT3','653.QJT9.QJ93.86'], dealer:2, vul:'-',
+    calls:['1S','pas','2N','pas','4S','pas','4N','pas','5C','pas','6S','pas','pas','pas'],
+    why:['','','Jacoby 2SA: steun, mancheforcing','','minimum zonder korte kleur','','RKC: vraagt naar de sleutelkaarten','','één of vier sleutelkaarten','','','','',''],
+    alert:[2,4,6,8], pointe:'Je hoeft de ♣V niet te raden. Trek troef, speel ♦A, ♦H en troef de derde ruiten, speel ♥A, ♥H en geef de derde harten weg. Wie die slag wint, moet klaveren voorspelen of een troef-en-afgooi geven: dan verlies je geen klaverslag.',
+    odds:'Elimineren en inspelen slaagt in 96% van de liggingen, snijden naar een van beide kanten in ongeveer 50%.'},
+  stayman: {type:'uitkomen', hands:['43.JT6.JT5.AKQT7','K5.AQ93.KQ74.J96','QJT98.752.982.43','A762.K84.A63.852'], dealer:1, vul:'-',
+    calls:['1N','pas','2C','X','2H','pas','3N','pas','pas','pas'],
+    why:['15–17, evenwichtig','','Stayman: vraagt naar een hoge vierkaart','doublet van 2♣ (Stayman)','vierkaart harten','','geen fit in harten: manche','','',''],
+    alert:[2,3], pointe:'Partner doubleerde 2♣ (Stayman): dat vraagt om een klaverenuitkomst. Na ♣ maakt partner vijf klaverslagen, want de ♣B valt in de derde ronde: één down. Na ♠V, van je eigen reeks, haalt de leider tien slagen.',
+    odds:'In andere liggingen die bij deze bieding passen, verslaat ♣ het contract in 28%, ♠ in 6%. In elke ligging waarin 3SA te verslaan is, doet ♣ dat.'},
+  actief: {type:'uitkomen', hands:['7532.64.AT76.J82','KQ6.AJT952.J82.4','JT98.83.K954.973','A4.KQ7.Q3.AKQT65'], dealer:1, vul:'-',
+    calls:['1H','pas','2C','pas','2H','pas','3H','pas','3S','pas','4C','pas','4N','pas','5D','pas','6H','pas','pas','pas'],
+    why:['','','2 over 1: mancheforcing','','zeskaart harten','','steun voor harten','','controle in schoppen','','controle in klaveren','','RKC: vraagt naar de sleutelkaarten','','nul of drie sleutelkaarten','','','','',''],
+    alert:[2,8,10,12,14], pointe:'De dummy heeft een lange, vaste klaverkleur: daarop gooit de leider zijn ruitenverliezers weg. Niemand toonde een ruitencontrole. Kom dus nú actief met ruiten uit, ook van je heer af: partner wint met ♦A en speelt ruiten terug. Na ♠B maakt de leider zijn slem.',
+    odds:'Als Noord-Zuid geen ♦A hebben, verslaat ♦ het slem in 47% van de liggingen, ♠ in 5%. In elke ligging waarin het slem te verslaan is, doet ♦ dat.'}
+};
+const DAILY_DD = {"lightner": {"par": "Haalbaar met open kaarten: <b>jullie</b> 2<span class=\"C\">♣︎</span> (8 slagen, +90); <b>zij</b> 6SA (12 slagen, +990). <b>Par:</b> 6SA door hen, −990 voor jullie.", "lt": {"4": 1, "14": 1, "15": 1, "19": 1, "28": 2, "29": 2, "32": 2, "33": 2, "36": 2, "41": 1, "43": 1, "44": 1, "48": 1}, "need": 2}, "inspelen": {"par": "Haalbaar met open kaarten: <b>jullie</b> 6SA (12 slagen, +990); <b>zij</b> niets. <b>Par:</b> 6SA door jullie, +990 voor jullie.", "lt": null, "need": 2}, "stayman": {"par": "Haalbaar met open kaarten: <b>jullie</b> niets; <b>zij</b> 4<span class=\"H\">♥︎</span> (10 slagen, +420). <b>Par:</b> 4<span class=\"H\">♥︎</span> door hen, −420 voor jullie.", "lt": {"6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "13": 3, "16": 3, "18": 3, "26": 3, "32": 3, "33": 3, "40": 5, "41": 5}, "need": 5}, "actief": {"par": "Haalbaar met open kaarten: <b>jullie</b> niets; <b>zij</b> 5SA (11 slagen, +460). <b>Par:</b> 3SA door hen, −460 voor jullie.", "lt": {"6": 0, "7": 0, "8": 0, "9": 0, "14": 0, "19": 0, "28": 2, "29": 2, "33": 2, "37": 2, "40": 0, "44": 0, "46": 0}, "need": 2}};
+const DAILY_ORDER = ['lightner','inspelen','stayman','actief'];
+const dKey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dNum = d => Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/864e5);
+function dailyToday(){ const d = new Date(), i = ((dNum(d) - 20783) % DAILY_ORDER.length + DAILY_ORDER.length) % DAILY_ORDER.length; return {date:dKey(d), id:DAILY_ORDER[i]}; }
+function dailyState(){ if(!state.dly || typeof state.dly!=='object') state.dly = {last:'', streak:0, res:{}}; return state.dly; }
+function dailyStreak(){ const s = dailyState(), y = new Date(); y.setDate(y.getDate()-1); return (s.last===dKey(new Date()) || s.last===dKey(y)) ? s.streak : 0; }
+function dailyHomeBtn(){
+  const t = dailyToday(), p = DAILY[t.id], s = dailyState(), done = s.res[t.date], n = dailyStreak();
+  return '<button class="homebtn daily" data-daily="1"><b>Probleem van de dag</b><small>'+(n>=2 ? '<span class="dstreak">'+n+' dagen op rij</span>' : '')+(done ? '✓ Vandaag gedaan · morgen een nieuw probleem' : (p.type==='uitkomen' ? 'Uitkomen' : 'Afspelen')+' · ± 2 minuten')+'</small></button>';
+}
+function dailyQuiet(){ return !!((BIDS && BIDS.daily) || (G && G.daily && !G.dailyDone && state.conv==='spel')); }
+function dailyStart(){
+  const t = dailyToday(), p = DAILY[t.id];
+  const th = $('theory'); if(th && th.open) th.close(); if($('settings').open) $('settings').close();
+  state.conv = 'spel'; save(); renderModes();
+  $('game').hidden = false; document.querySelector('main.table').hidden = true; $('feedback').hidden = true;
+  gcEvent('probleem-van-de-dag');
+  BIDS_LAST_DAILY[t.id] = t.date;
+  bidStart({hands:p.hands.map(DPH), dealer:p.dealer, vul:p.vul, calls:p.calls.slice(), why:p.why.slice(), alerts:p.alert, club:'Probleem van de dag', daily:t.id, ddate:t.date,
+    ask: p.type==='uitkomen' ? 'Jij komt uit. Welke kaart kies je?' : 'Jij speelt '+bidHTML(p.calls.filter(c=>/^[1-7]/.test(c)).pop())+'. Hoe maak je het zeker?'});
+}
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-daily]'); if(x) dailyStart(); });
+function dailyDone(id, date, ans){
+  const s = dailyState(); if(s.res[date]) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  if(date===dKey(new Date())){ s.streak = s.last===dKey(y) ? (s.streak||0)+1 : s.last===date ? s.streak : 1; s.last = date; }
+  s.res[date] = ans; const ks = Object.keys(s.res).sort(); while(ks.length>40) delete s.res[ks.shift()];
+  save();
+}
+async function dailyOthers(date, ans){
+  try{
+    if(!FB_CONFIG || !navigator.onLine) return null;
+    const {db, uid} = await fbLoad();
+    if(!state.noStats) await db.ref('daily/'+date+'/'+uid).set(ans).catch(()=>{});
+    return (await db.ref('daily/'+date).once('value')).val() || null;
+  }catch(e){ return null; }
+}
+function dailyBars(v, keyOf, labels, mine){
+  const n = {}; let tot = 0; Object.values(v||{}).forEach(a=>{ if(typeof a!=='string') return; const k = keyOf(a); n[k] = (n[k]||0)+1; tot++; });
+  if(!tot) return '';
+  return '<p><b>Andere bezoekers vandaag</b> ('+tot+(tot===1 ? ' speler' : ' spelers')+')</p><div class="dbar">'+Object.keys(labels).filter(k=>n[k]).sort((a,b)=>n[b]-n[a]).map(k=>{ const pc = Math.round(100*n[k]/tot); return '<span>'+labels[k]+'</span><i class="'+(k===mine ? 'me' : '')+'" style="width:'+Math.max(4, pc)+'%"></i><span>'+pc+'%</span>'; }).join('')+'</div>';
+}
+const DSYM = {S:'<span class="S">♠︎</span>', H:'<span class="H">♥︎</span>', D:'<span class="D">♦︎</span>', C:'<span class="C">♣︎</span>'};
+function dailyLeadTable(id){
+  const D = DAILY_DD[id]; if(!D || !D.lt) return '';
+  const P = DAILY[id], ct = brContract(P.calls, P.dealer), by = {};
+  Object.entries(D.lt).forEach(([c, t])=>{ const su = SUITS[Math.floor(c/13)]; by[su] = Math.max(by[su]==null ? -1 : by[su], t); });
+  const res = t => { const dt = 13 - t, d = dt - (ct.level+6); return d<0 ? '<b>'+(-d)+' down</b>' : d===0 ? 'precies gemaakt' : 'gemaakt +'+d; };
+  const groups = {}; SUITS.forEach(su=>{ if(by[su]==null) return; const k = res(by[su]); (groups[k] = groups[k] || []).push(su); });
+  return '<p><b>Uitkomsten met open kaarten:</b> '+Object.entries(groups).sort((a,b)=>Math.min(...b[1].map(s=>by[s]))-Math.min(...a[1].map(s=>by[s]))).map(([k, ss])=>ss.map(su=>DSYM[su]).join(' ')+' '+k).join(' · ')+'.</p>';
+}
+function dailyLead(card){
+  const g = G, p = DAILY[g.daily], D = DAILY_DD[g.daily], date = (BIDS_LAST_DAILY||{})[g.daily] || dailyToday().date;
+  const su = SUITS[Math.floor(card/13)];
+  if(!D || !D.lt){ g.dailyDone = true; return; }
+  const ok = (D.lt[card]||0)>=D.need, kill = [...new Set(Object.keys(D.lt).filter(c=>D.lt[c]>=D.need).map(c=>SUITS[Math.floor(c/13)]))];
+  g.dailyDone = true; g.dailyLead = {su, ok}; dailyDone(g.daily, date, su+(ok ? '1' : '0'));
+  const head = ok ? '<b>Goed gevonden!</b> Met '+DSYM[su]+' verslaan jullie het contract.' : '<b>Helaas:</b> na '+DSYM[su]+' maakt de leider het contract. '+(kill.length ? 'Alleen '+kill.map(k=>DSYM[k]).join(' of ')+' verslaat het.' : '');
+  $('gtiptext').innerHTML = '<div class="dverd"><p>'+head+'</p><p>'+p.pointe+'</p><p>'+p.odds+'</p><div id="dothers"></div></div>';
+  gTipMode(true); $('gtip').classList.toggle('dok', ok); $('gtip').hidden = false;
+  dailyOthers(date, su+(ok ? '1' : '0')).then(v=>{ const o = $('dothers'); if(!o || G!==g) return;
+    o.innerHTML = v ? dailyBars(v, a=>a[0], DSYM, su) : '<p><small>De vergelijking met andere bezoekers is nog niet beschikbaar.</small></p>'; });
+}
+let BIDS_LAST_DAILY = {};
+{ const gd0 = gDo; gDo = function(seat, card){ const first = G && G.daily && DAILY[G.daily].type==='uitkomen' && !G.played.length && seat===G.me; const r = gd0.apply(this, arguments); if(first) dailyLead(card); return r; }; }
+{ const gf1 = gFinish; gFinish = function(){ const r = gf1.apply(this, arguments); $('game').classList.toggle('dailyend', !!(G && G.daily));
+  if(G && G.daily && DAILY[G.daily].type==='uitkomen' && G.dailyLead){
+    const g = G, p = DAILY[g.daily], L = g.dailyLead, date = (BIDS_LAST_DAILY||{})[g.daily] || dailyToday().date;
+    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> je kwam uit met '+DSYM[L.su]+(L.ok ? ': goed gevonden.' : ': niet de goede uitkomst.')+'</p>'+dailyLeadTable(g.daily)+'<p>'+DAILY_DD[g.daily].par+'</p><div id="dothers2"></div></div>');
+    dailyOthers(date, L.su+(L.ok ? '1' : '0')).then(v=>{ const o = $('dothers2'); if(o && v && G===g) o.innerHTML = dailyBars(v, a=>a[0], DSYM, L.su); });
+  }
+  if(G && G.daily && DAILY[G.daily].type==='afspelen' && !G.dailyDone){
+    const g = G, p = DAILY[g.daily], date = (BIDS_LAST_DAILY||{})[g.daily] || dailyToday().date, ok = g.ns>=g.need;
+    g.dailyDone = true; dailyDone(g.daily, date, ok ? 'M' : 'D');
+    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> '+(ok ? 'gemaakt!' : 'net niet.')+' '+p.pointe+'</p><p>'+p.odds+'</p><p>'+DAILY_DD[g.daily].par+'</p><div id="dothers"></div></div>');
+    dailyOthers(date, ok ? 'M' : 'D').then(v=>{ const o = $('dothers'); if(!o || G!==g) return;
+      o.innerHTML = v ? dailyBars(v, a=>a[0], {M:'gemaakt', D:'down'}, ok ? 'M' : 'D') : '<p><small>De vergelijking met andere bezoekers is nog niet beschikbaar.</small></p>'; });
+  }
+  return r; }; }
 // Dubbel-dummyrekenaar (DDS) in een apart bestand: pas ophalen als je een heel spel speelt. Lukt dat niet, dan blijft het oordeel gewoon weg.
 let ddsWait = null;
 function ddsLoad(){
@@ -12040,7 +12168,7 @@ function gStart(){
   $(id).addEventListener('click', e=>{
     const b = e.target.closest('.card'), seat = k===0 ? 0 : (G && G.role==='tegen' ? G.me : 2);
     if(!b || b.disabled || !G || gBusy || G.over || G.turn!==seat || !gMine(seat)) return;
-    const card = +b.dataset.c, pre = (G.pre && G.pre.at===G.played.length && G.pre.seat===seat) ? G.pre.ev : null, tip = state.gtips==='uit' ? null : gTip(G, seat, card, pre);
+    const card = +b.dataset.c, pre = (G.pre && G.pre.at===G.played.length && G.pre.seat===seat) ? G.pre.ev : null, tip = (state.gtips==='uit' || dailyQuiet()) ? null : gTip(G, seat, card, pre);
     if(!tip){ gDo(seat, card); return; }
     gPending = {seat, card};
     gBusy = true; gRender();
@@ -12054,8 +12182,9 @@ $('gnew').addEventListener('click', ()=>{ if(G && clubSerActive('speel', G.clubN
 setTimeout(()=>{ try{ gDefRender(); }catch(e){} }, 0);
 $('gtipsc').addEventListener('click', e=>{ const b = e.target.closest('button'); if(!b) return; state.gtips = b.dataset.gtips; save(); gDefRender(); });
 // Het lampje: een tip vooraf, als jij aan de beurt bent (bieden of spelen). Telt niet als fout.
-function gTipMode(vooraf){ $('gtipback').hidden = vooraf; $('gtipgo').hidden = vooraf; $('gtipok').hidden = !vooraf; }
+function gTipMode(vooraf){ $('gtip').classList.remove('dok'); $('gtipback').hidden = vooraf; $('gtipgo').hidden = vooraf; $('gtipok').hidden = !vooraf; }
 function gLampText(){
+  if(dailyQuiet()) return 'Bij het probleem van de dag krijg je geen tip: probeer het eerst zelf.';
   const B = BIDS;
   if(B && !B.done){
     if((B.dealer+B.calls.length)%4!==2) return 'Een tip krijg je zodra jij aan de beurt bent.';
