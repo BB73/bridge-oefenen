@@ -1576,6 +1576,17 @@ html.kimg #game .rc.dhl .kf, html.kimg #game .tc.dhl .kf{box-shadow:inset 0 0 0 
   html.klas #game.demo > #gstatus{display:none!important}
   html.klas #game.demo > #gnorth{display:block!important}
 }
+
+#game .tc.dbad, #game .rc.dbad{box-shadow:0 0 0 3px #C62828, 0 0 12px 3px rgba(198,40,40,.6)!important;z-index:2}
+#game .tc.dwin:not(.dbad){box-shadow:0 0 0 3px #2E9E5B, 0 0 10px 2px rgba(46,158,91,.55)!important}
+html.kimg #game .rc.dbad .kf, html.kimg #game .tc.dbad .kf{box-shadow:inset 0 0 0 3px #C62828} html.kimg #game .tc.dwin:not(.dbad) .kf{box-shadow:inset 0 0 0 3px #2E9E5B}
+.gdemo .dmsum{margin:.2rem 0 .4rem;font-size:.92em;color:var(--muted, #5E6B65)} .gdemo .dmnotes{margin:.2rem 0 0;padding-left:1.1rem} .gdemo .dmnotes li{margin:.15rem 0}
+.gdemo .dmnotes li.zij{color:var(--muted, #5E6B65)} .gdemo .dbadt{background:#F8D3D0;border-radius:4px;padding:0 .1em}
+.gdemo .dmcnt{min-width:3.5rem;text-align:center}
+.gdemo .dmjump{margin:.5rem 0 0;font-size:.9em} .gdemo .dmjump button{min-width:2rem;margin:0 .15rem;border:1px solid var(--line, #C9D4CD);border-radius:8px;background:var(--surface, #fff);font:600 .95em inherit;padding:.1rem .3rem}
+.gdemo .dmjump button[aria-current]{background:var(--felt, #2E6B4E);color:#fff}
+.gdemo .dmleg{margin:.5rem 0 0;font-size:.82em;color:var(--muted, #5E6B65)} .gdemo .dmleg i{display:inline-block;width:.8em;height:.8em;border-radius:3px;vertical-align:-.05em;margin-left:.3em}
+.gdemo .dmleg .lb{background:#C62828} .gdemo .dmleg .ly{background:#F4B400} .gdemo .dmleg .lg{background:#2E9E5B}
 /* v367: biedkaartjes op tafel 20% groter op de laptop (tip) */
 @media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ #game{--bw:2.4rem;--bh:2.58rem;--bf:1.08rem;--bstep:1.38rem} }
 /* v357: klassieke laptopweergave (profiel: Laptop = Klassiek) met kaarten met plaatjes (publiek domein, Byron Knoll) */
@@ -11848,7 +11859,7 @@ function gClubBack(){
 let gFlat = null;
 function gRender(){
   if(!G) return;
-  if(DEMO){ if(G.daily===DEMO.id && G.over) return demoRender(); DEMO = null; $('game').classList.remove('demo'); const dp = $('gdemo'); if(dp) dp.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>$(i).classList.remove('dmo')); }
+  if(DEMO){ if(G.over && (DEMO.kind==='rev' || G.daily===DEMO.id)) return demoRender(); DEMO = null; $('game').classList.remove('demo'); const dp = $('gdemo'); if(dp) dp.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>$(i).classList.remove('dmo')); }
   gClubBack();
   const def = G.role==='tegen';
   // als tegenspeler zit jij onderaan: de tafel draait mee, de dummy ligt links of rechts van je
@@ -12128,13 +12139,12 @@ const dmCard = x => { const si = 'SHDC'.indexOf(x[0]), r = {A:14,K:13,Q:12,J:11,
 function dmHands(id){ return DAILY[id].hands.map(h=>{ const out = []; h.split('.').forEach((cs, si)=>cs.split('').forEach(ch=>out.push(dmCard('SHDC'[si]+ch)))); return out; }); }
 function demoStart(){ if(!G || !G.daily || !DEMO_DATA[G.daily]) return; const id = G.daily, d = DEMO_DATA[id], start = dmHands(id);
   const plays = d.play.split(/\s+/).filter(Boolean).map(x=>{ const c = dmCard(x); return {c, seat: start.findIndex(h=>h.includes(c))}; });
-  DEMO = {id, i:0, start, plays, steps:d.steps}; $('game').classList.add('demo'); demoRender(); }
+  DEMO = {kind:'daily', id, i:0, start, plays, steps:d.steps}; $('game').classList.add('demo'); demoRender(); }
 function demoStop(){ DEMO = null; $('game').classList.remove('demo'); const p = $('gdemo'); if(p) p.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ const e = $(i); if(e) e.classList.remove('dmo'); }); gRender(); }
-function demoRender(){
-  const D = DEMO, st = D.steps[D.i], at = st.at, hl = new Set((st.hl||'').split(/\s+/).filter(Boolean).map(dmCard));
-  const left = D.start.map(h=>h.slice()); D.plays.slice(0, at).forEach(p=>{ const h = left[p.seat]; h.splice(h.indexOf(p.c), 1); });
-  const t0 = at>0 && !st.cl ? Math.floor((at-1)/4)*4 : at, trick = D.plays.slice(t0, at);
-  const L = seat => { const out = []; SUITS.forEach((su, si)=>left[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>out.push({s:su, t:RANK[gRank(c)]||gRank(c), cls: hl.has(c) ? 'dhl' : ''}))); return out; };
+// Tafelweergave voor uitleg en terugkijken: H = vier handen per plek (0 boven, 1 rechts, 2 onder, 3 links), trick = [{pos, c, cls}]
+function tvDraw(H, trick, hl, bad, panel){
+  const cls = c => bad.has(c) ? 'dbad' : hl.has(c) ? 'dhl' : '';
+  const L = pos => { const out = []; SUITS.forEach((su, si)=>H[pos].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>out.push({s:su, t:RANK[gRank(c)]||gRank(c), cls: cls(c)}))); return out; };
   const wide = LAPTOP();
   $('gnorth').hidden = false; $('gnorth').classList.remove('gside','dhide'); $('gnorth').innerHTML = handRow(L(0), 't');
   $('gsrow').innerHTML = handRow(L(2)); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ $(i).classList.remove('turn'); $(i).classList.add('dmo'); });
@@ -12142,21 +12152,52 @@ function demoRender(){
   $('gdl').classList.remove('dhide'); $('gdr').classList.remove('dhide');
   $('gdl').innerHTML = wide ? handRow(L(3), 'l') : ''; $('gdr').innerHTML = wide ? handRow(L(1), 'r') : '';
   const TID = ['tN','tE','tS','tW'];
-  [0,1,2,3].forEach(seat=>{ const p = trick.find(x=>x.seat===seat), el = $(TID[seat]);
-    el.innerHTML = p ? playHTML(SUITS[gSuit(p.c)]+gRank(p.c)) : ''; el.classList.toggle('on', !!p); el.classList.toggle('dhl', !!p && hl.has(p.c)); });
-  const ct = c => '<span class="'+(hl.has(c) ? 'dhlt' : '')+'">'+cardHTML(SUITS[gSuit(c)]+gRank(c))+'</span>';
+  [0,1,2,3].forEach(pos=>{ const p = trick.find(x=>x.pos===pos), el = $(TID[pos]);
+    el.innerHTML = p ? playHTML(SUITS[gSuit(p.c)]+gRank(p.c)) : ''; el.classList.toggle('on', !!p);
+    ['dhl','dbad','dwin'].forEach(k=>el.classList.toggle(k, !!p && (k==='dwin' ? !!p.win : cls(p.c)===k))); });
+  const ct = c => '<span class="'+(bad.has(c) ? 'dbadt' : hl.has(c) ? 'dhlt' : '')+'">'+cardHTML(SUITS[gSuit(c)]+gRank(c))+'</span>';
   const small = innerHeight < 700;
-  const sideTxt = wide ? '' : (small ? '<details class="dmsd"><summary>Handen links en rechts</summary>' : '')+'<p class="dmside">'+[[3,'Links'],[1,'Rechts']].map(([seat, nm])=>'<span><b>'+nm+':</b> '+SUITS.map((su, si)=>{ const cs = left[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return cs.length ? cs.map(ct).join(' ') : ''; }).filter(Boolean).join(' · ')+'</span>').join('')+'</p>'+(small ? '</details>' : '');
+  const sideTxt = wide ? '' : (small ? '<details class="dmsd"><summary>Handen links en rechts</summary>' : '')+'<p class="dmside">'+[[3,'Links'],[1,'Rechts']].map(([pos, nm])=>'<span><b>'+nm+':</b> '+SUITS.map((su, si)=>{ const cs = H[pos].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return cs.length ? cs.map(ct).join(' ') : ''; }).filter(Boolean).join(' · ')+'</span>').join('')+'</p>'+(small ? '</details>' : '');
   let p = $('gdemo'); if(!p){ p = document.createElement('div'); p.id = 'gdemo'; p.className = 'gdemo'; $('gend').insertAdjacentElement('beforebegin', p); }
-  const n = D.steps.length;
-  p.innerHTML = '<div class="dmst">Uitleg met kaarten · stap '+(D.i+1)+' van '+n+'</div><h3>'+st.h+'</h3><p class="dmt">'+st.t+'</p>'+sideTxt
-    + '<div class="dmnav"><button class="prevb" data-dm="-1" aria-label="Vorige stap"'+(D.i===0 ? ' disabled' : '')+'>‹</button><span class="dmdots">'+D.steps.map((_, k)=>'<i'+(k<=D.i ? ' class="on"' : '')+'></i>').join('')+'</span><button class="prevb" data-dm="1" aria-label="Volgende stap"'+(D.i===n-1 ? ' disabled' : '')+'>›</button><button class="dmback" data-dmstop="1">Terug naar de uitslag</button></div>';
+  p.innerHTML = panel.replace('<!--side-->', sideTxt);
   $('gstatus').innerHTML = '';
+}
+const tvNav = (i, n, lab) => '<div class="dmnav"><button class="prevb" data-dm="-1" aria-label="Vorige '+lab+'"'+(i===0 ? ' disabled' : '')+'>‹</button>'+(n<=8 ? '<span class="dmdots">'+Array.from({length:n}, (_, k)=>'<i'+(k<=i ? ' class="on"' : '')+'></i>').join('')+'</span>' : '<b class="dmcnt">'+(i+1)+' / '+n+'</b>')+'<button class="prevb" data-dm="1" aria-label="Volgende '+lab+'"'+(i===n-1 ? ' disabled' : '')+'>›</button><button class="dmback" data-dmstop="1">Terug naar de uitslag</button></div>';
+function demoRender(){
+  const D = DEMO;
+  if(D.kind==='rev') return revRender();
+  const st = D.steps[D.i], at = st.at, hl = new Set((st.hl||'').split(/\s+/).filter(Boolean).map(dmCard));
+  const left = D.start.map(h=>h.slice()); D.plays.slice(0, at).forEach(p=>{ const h = left[p.seat]; h.splice(h.indexOf(p.c), 1); });
+  const t0 = at>0 && !st.cl ? Math.floor((at-1)/4)*4 : at, trick = D.plays.slice(t0, at).map(p=>({pos:p.seat, c:p.c}));
+  tvDraw(left, trick, hl, new Set(), '<div class="dmst">Uitleg met kaarten · stap '+(D.i+1)+' van '+D.steps.length+'</div><h3>'+st.h+'</h3><p class="dmt">'+st.t+'</p><!--side-->'+tvNav(D.i, D.steps.length, 'stap'));
+}
+// Terugkijken per slag, op de tafel zelf
+function revRender(){
+  const R = RV, t = R.rows[R.i], def = R.role==='tegen', rot = s => def ? (s - R.me + 6) % 4 : s;
+  const ct = c => cardHTML(SUITS[gSuit(c)]+gRank(c)), sl = n => n+' slag'+(n===1 ? '' : 'en');
+  const NAME = def ? ['De dummy', R.me===1 ? 'Jij' : 'Partner', 'De leider', R.me===3 ? 'Jij' : 'Partner'] : ['De dummy','Oost','Jij','West'];
+  const H = [[],[],[],[]], played = new Set(t.plays.map(p=>p.card));
+  t.before.forEach((h, seat)=>{ H[rot(seat)] = h.filter(c=>!played.has(c)); });
+  const bad = new Set(t.plays.filter(p=>p.loss>0).map(p=>p.card)), hl = new Set();
+  t.plays.filter(p=>p.loss>0).forEach(p=>p.best.slice(0,2).forEach(c=>hl.add(c)));
+  const trick = t.plays.map(p=>({pos:rot(p.seat), c:p.card, win: p.seat===t.winner}));
+  const notes = t.plays.filter(p=>p.loss>0).map(p=>{ const alt = p.best.slice(0,2).map(ct).join(' of '), mine = def ? p.seat%2===1 : p.seat%2===0;
+    return '<li class="'+(mine ? 'wij' : 'zij')+'">'+NAME[p.seat]+(p.seat===0 && !def ? ' (jij speelde)' : '')+': '+ct(p.card)+' kostte '+sl(p.loss)+'. Beter: '+alt+'.</li>'; }).join('');
+  const errs = R.rows.map((r, k)=>r.plays.some(p=>p.loss>0 && (def ? p.seat===R.me : p.seat%2===0)) ? k : -1).filter(k=>k>=0);
+  tvDraw(H, trick, hl, bad, '<div class="dmst">Terugkijken · slag '+t.n+' van '+R.rows.length+'</div>'
+    + (R.i===0 || !R.shown ? '<p class="dmsum">'+R.sum+'</p>' : '')
+    + (notes ? '<ul class="dmnotes">'+notes+'</ul>' : '<p class="dmt">In deze slag kostte geen enkele kaart een slag.</p>')
+    + '<!--side-->' + tvNav(R.i, R.rows.length, 'slag')
+    + (errs.length ? '<p class="dmjump">Slagen met een fout van jou: '+errs.map(k=>'<button data-rvgo="'+k+'"'+(k===R.i ? ' aria-current="true"' : '')+'>'+(k+1)+'</button>').join('')+'</p>' : '')
+    + '<p class="dmleg"><i class="lb"></i> kostte een slag · <i class="ly"></i> beter · <i class="lg"></i> wint de slag</p>');
+  R.shown = true;
 }
 document.addEventListener('click', e=>{
   const go = e.target.closest && e.target.closest('[data-demo]'); if(go){ demoStart(); return; }
   const st = e.target.closest && e.target.closest('[data-dmstop]'); if(st && DEMO){ demoStop(); return; }
+  const g2 = e.target.closest && e.target.closest('[data-rvgo]'); if(g2 && DEMO && DEMO.kind==='rev'){ RV.i = +g2.dataset.rvgo; demoRender(); return; }
   const b = e.target.closest && e.target.closest('[data-dm]'); if(!b || !DEMO) return;
+  if(DEMO.kind==='rev'){ RV.i = Math.max(0, Math.min(RV.rows.length-1, RV.i + (+b.dataset.dm))); demoRender(); return; }
   DEMO.i = Math.max(0, Math.min(DEMO.steps.length-1, DEMO.i + (+b.dataset.dm))); demoRender(); });
 let BIDS_LAST_DAILY = {};
 { const gd0 = gDo; gDo = function(seat, card){ const first = G && G.daily && DAILY[G.daily].type==='uitkomen' && !G.played.length && seat===G.me; const r = gd0.apply(this, arguments); if(first) dailyLead(card); return r; }; }
@@ -12250,6 +12291,7 @@ function gReviewOpen(){
   const first = rows.findIndex(t=>t.plays.some(p=>p.loss>0 && p.seat%2===0));
   RV = {rows, sum, i: first>=0 ? first : 0, trump: g.trump, ch: gCHTML(g), role: 'leider', me: 2};
   }
+  RV.shown = false; DEMO = {kind:'rev'}; $('game').classList.add('demo'); demoRender(); return;
   const t = $('theory');
   $('theorytitle').textContent = 'Terugkijken per slag';
   gReviewDraw();
