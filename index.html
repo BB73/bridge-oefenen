@@ -1677,6 +1677,10 @@ html.kimg #game .rc.dbad .kf, html.kimg #game .tc.dbad .kf{box-shadow:inset 0 0 
 .bst .bc.bg2 > .bkl{top:1.5px!important} .bst .bc.bg2 > .bks{top:calc(var(--bch) + 3px)!important}
 .bst .bc.bg2 svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
 .bst .bc.bg2 .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* v379: knop "Niet mee eens?" bij een fout antwoord */
+.bzbtn{float:right;margin:-.1rem 0 .2rem .5rem;font:600 .85rem/1 var(--body, inherit);padding:.45rem .7rem;border-radius:999px;border:1.5px solid #B3141E;background:#fff;color:#B3141E;cursor:pointer}
+.bzbtn:disabled{border-color:#9AA59F;color:#56655E;cursor:default}
+#bzintro{margin:0 0 .5rem} #bzmsg{width:100%;box-sizing:border-box;font:inherit;font-size:1rem;border:1px solid var(--line, #C9D4CD);border-radius:10px;padding:.5rem}
 /* v378: systeemkeuzes voor de openingen: twee knoppen naast elkaar, zodat de pagina niet hoeft te scrollen */
 #sysbox > .modes, #openbox > .modes:not([hidden]){display:grid!important;grid-template-columns:repeat(2, minmax(0, 1fr))!important;gap:6px!important}
 #sysbox > .modes > button, #openbox > .modes > button{width:auto!important;min-width:0!important;margin:0!important}
@@ -2859,6 +2863,16 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
 </dialog>
 <button class="tipfab wm" id="wmfab" hidden aria-label="Webmaster" title="Webmaster">M</button>
 <button class="tipfab" id="tipfab" data-tip="1" aria-label="Geef een tip aan de bouwer" title="Tip voor de bouwer"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 13H35M24 13V37" fill="none" stroke="#151515" stroke-width="6" stroke-linecap="round"/></svg></button>
+<dialog id="bzdlg" aria-labelledby="bztitle">
+  <div class="dhead"><h2 id="bztitle">Niet mee eens?</h2></div>
+  <div class="dbody" id="bzbody">
+    <p data-bzform id="bzintro"></p>
+    <textarea data-bzform id="bzmsg" rows="3" maxlength="900" placeholder="Wat klopt er volgens jou niet? (mag leeg blijven)" aria-label="Wat klopt er niet"></textarea>
+    <p data-bzform class="tiphint" id="bzhint"></p>
+    <p class="tipstat" id="bzstat" aria-live="polite"></p>
+  </div>
+  <div class="dfoot"><div class="wfoot"><button class="reset" id="bzcancel">Annuleren</button><button class="close" id="bzsend">Verstuur</button></div></div>
+</dialog>
 <dialog id="tipdlg" aria-labelledby="tiptitle">
   <div class="dhead"><h2 id="tiptitle">Tip voor de bouwer</h2></div>
   <div class="dbody" id="tipbody">
@@ -9295,6 +9309,8 @@ function answer(bid){
   $('verdict').innerHTML = q.suitPick ? (ok ? 'Goed: '+suitName(q.answer) : 'Niet goed. Jij koos '+suitName(bid)+', beter is '+suitName(q.answer)) : q.cards ? (ok ? 'Goed: '+cardHTML(bid) : 'Niet goed. Jij koos '+cardHTML(bid)+', beter is '+cardHTML(q.answer)) : q.choices ? (ok ? 'Goed' : 'Niet goed. Beter: '+q.d.goodText.charAt(0).toLowerCase()+q.d.goodText.slice(1))
     : ok ? (bid!==q.answer ? 'Goed: '+bidHTML(bid)+' (ook goed: '+bidHTML(q.answer)+')' : 'Goed: '+bidHTML(q.answer)) : 'Niet goed. Jij koos '+bidHTML(bid)+', juist is '+bidHTML(q.answer)+(q.accept && q.accept.length && !q.cards ? ' (of '+q.accept.map(bidHTML).join(', ')+')' : '');
   const pickC = q.choices && !ok ? q.choices.find(c=>c.id===bid) : null;
+  if(!ok && !q.isTest) $('verdict').insertAdjacentHTML('afterbegin', '<button class="bzbtn" id="bzopen" type="button">Niet mee eens?</button>');
+  BZ.q = q; BZ.bid = bid;
   $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+(ok ? '' : varNote(q.conv))+learnMsg;
   if(q.partner){
     $('partnerlabel').textContent = 'Hand van partner (Noord), '+q.partner.hcp+' punten';
@@ -11834,7 +11850,8 @@ async function tipOpenLoad(force){
     let v;
     if(SAMEN_TEST) v = JSON.parse(localStorage.getItem('tipopentest') || '{}');
     else { if(!FB_CONFIG) return; const r = await fetch(FB_CONFIG.databaseURL+'/tipopen.json', {cache:'no-store'}); if(!r.ok) return; v = await r.json(); }
-    const L = Object.entries(v || {}).filter(([,t])=>t && t.cat).map(([id, t])=>({id, cat:String(t.cat), msg:String(t.msg||'').slice(0, 200), t:t.t||0})).sort((a,b)=>b.t-a.t);
+    const L = Object.entries(v || {}).filter(([,t])=>t && t.cat).map(([id, t])=>({id, cat:String(t.cat), msg:String(t.msg||'').slice(0, 200), t:t.t||0, blk:t.blk ? String(t.blk) : ''})).sort((a,b)=>b.t-a.t);
+    BLOCKED = new Set(L.filter(t=>t.blk).map(t=>t.blk)); try{ localStorage.setItem('bzblk', JSON.stringify([...BLOCKED])); }catch(e){}
     const ch = JSON.stringify(L)!==JSON.stringify(TIPOPEN); TIPOPEN = L;
     try{ localStorage.setItem('tipopen', JSON.stringify(L)); }catch(e){}
     if(ch && $('settings').open) renderModes();
@@ -11860,6 +11877,61 @@ function ucDecorate(){
 document.addEventListener('click', e=>{ const s = e.target.closest && e.target.closest('[data-uc]'); if(!s) return; ucShow = !ucShow; renderModes(); if(ucShow) $('dbody').scrollTop = 0; });
 document.addEventListener('keydown', e=>{ if((e.key==='Enter' || e.key===' ') && e.target.matches && e.target.matches('[data-uc]')){ e.preventDefault(); e.target.click(); } });
 setTimeout(()=>tipOpenLoad(), 2500);
+// ===== v379: bezwaar tegen een vraag. De soort vraag gaat voor iedereen uit tot de webmaster hem vrijgeeft =====
+// Opslag: als tip (tips/…, soort 'bezwaar') met in tipopen/… het veld blk = de soort vraag; iedereen leest tipopen al.
+const BZ = {q:null, bid:null, cat:''};
+const qSig = x => x ? x.conv+':'+(x.d && x.d.kind!=null ? x.d.kind : (x.idx||1)) : '';
+const qSigName = x => (CONVS[x.conv] || (typeof STAT_LABEL!=='undefined' && STAT_LABEL[x.conv]) || x.conv)+(x.d && x.d.kind!=null ? ' · '+String(x.d.kind) : x.idx>1 ? ' · stap '+x.idx : '');
+let BLOCKED = new Set();
+try{ (JSON.parse(localStorage.getItem('bzblk') || '[]')).forEach(k=>BLOCKED.add(k)); }catch(e){}
+const qBlocked = x => !!x && BLOCKED.has(qSig(x));
+const newQuestion0 = newQuestion;
+newQuestion = function(conv, idx, stepKey){ let x; for(let i=0;i<25;i++){ x = newQuestion0(conv, idx, stepKey); if(!qBlocked(x)) return x; } return x; };
+const handTxt = h => h && h.suits ? SUITS.map((su,i)=>SYM[su]+' '+(h.suits[i].length ? h.suits[i].slice().sort((a,b)=>b-a).map(r=>RANK[r]||r).join(' ') : '–')).join(' · ')+(h.hcp!=null ? ' · '+h.hcp+' punten' : '') : '';
+const bidTxt = b => b==null ? '' : String(b).replace(/^([1-7])([SHDC])$/, (m,l,su)=>l+SYM[su]).replace(/^([1-7])N$/, '$1SA');
+function bzOpen(){
+  const x = BZ.q; if(!x) return;
+  BZ.cat = tipCat();
+  const good = x.suitPick ? SYM[x.answer]+' '+SNAME[x.answer] : x.cards ? bidTxt(x.answer) : bidTxt(x.answer);
+  $('bzintro').innerHTML = 'De app zegt <b>'+esc(good)+'</b>'+(BZ.bid!=null ? ', jij koos <b>'+esc(bidTxt(BZ.bid))+'</b>' : '')+'.';
+  $('bzhint').innerHTML = 'Deze soort vraag (<b>'+esc(CONVS[x.conv] || x.conv)+'</b>, met deze soort hand) wordt dan voor <b>iedereen</b> overgeslagen tot de webmaster ernaar gekeken heeft. Het antwoord zie je bij je tips.';
+  $('bzmsg').value = ''; $('bzstat').textContent = ''; $('bzstat').className = 'tipstat';
+  $('bzbody').querySelectorAll('[data-bzform]').forEach(e=>e.hidden = false);
+  $('bzsend').textContent = 'Verstuur'; delete $('bzsend').dataset.done; $('bzcancel').hidden = false; $('bzsend').disabled = false;
+  const d = $('bzdlg'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
+}
+function bzClose(){ const d = $('bzdlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
+async function bzSend(){
+  if($('bzsend').dataset.done){ bzClose(); return; }
+  const x = BZ.q, st = $('bzstat'); if(!x) return;
+  const note = $('bzmsg').value.trim(), sig = qSig(x);
+  $('bzsend').disabled = true; st.textContent = 'Versturen…';
+  let ver = ''; try{ const t = await (await fetch('sw.js', {cache:'no-store'})).text(); ver = (/bridge-v\d+/.exec(t)||[''])[0]; }catch(e){}
+  const whyTxt = ($('why').textContent || '').replace(/\s+/g, ' ').trim().slice(0, 900);
+  const msg = 'Bezwaar: '+qSigName(x)+' — app: '+bidTxt(x.answer)+', speler: '+bidTxt(BZ.bid)+(note ? ' — "'+note+'"' : '');
+  const tip = {kind:'bezwaar', msg, note0:note, sig, sigName:qSigName(x), conv:x.conv, ans:String(x.answer), bid:String(BZ.bid), hand:handTxt(x.me), why:whyTxt,
+               where:($('prompt').textContent||'').slice(0, 300), mail:'', img:'', ver, scr:innerWidth+'x'+innerHeight, ua:navigator.userAgent.slice(0, 160), status:'nieuw', cat:BZ.cat||'doel'};
+  try{
+    let id;
+    if(SAMEN_TEST){ const all = JSON.parse(localStorage.getItem('tipstest')||'[]'); tip.t = Date.now(); all.push(tip); localStorage.setItem('tipstest', JSON.stringify(all)); id = 'b'+Date.now(); }
+    else { const {db} = await fbLoad(); tip.t = firebase.database.ServerValue.TIMESTAMP; id = (await db.ref('tips').push(tip)).key; }
+    state.myTips = (Array.isArray(state.myTips) ? state.myTips : []).concat({id, msg:msg.slice(0, 160), t:Date.now()}).slice(-20); save();
+    BLOCKED.add(sig); try{ localStorage.setItem('bzblk', JSON.stringify([...BLOCKED])); }catch(e){}
+    tipOpenSet(id, {cat:tip.cat, msg:msg.slice(0, 200), t:Date.now(), blk:sig});
+  }catch(e){
+    $('bzsend').disabled = false; st.className = 'tipstat err';
+    st.innerHTML = 'Versturen lukte niet. Heb je internet? Probeer het zo nog eens.';
+    return;
+  }
+  $('bzbody').querySelectorAll('[data-bzform]').forEach(e=>e.hidden = true);
+  st.className = 'tipstat tipdone'; st.textContent = 'Dank je wel! Deze soort vraag komt niet meer voor tot de webmaster ernaar gekeken heeft.';
+  $('bzsend').disabled = false; $('bzsend').textContent = 'Sluiten'; $('bzsend').dataset.done = '1'; $('bzcancel').hidden = true;
+  const bb = $('bzopen'); if(bb){ bb.disabled = true; bb.textContent = 'Bezwaar verstuurd'; }
+  gcEvent('bezwaar');
+}
+document.addEventListener('click', e=>{ if(e.target.closest && e.target.closest('#bzopen')) bzOpen(); });
+$('bzsend').addEventListener('click', bzSend);
+$('bzcancel').addEventListener('click', bzClose);
 function tipClose(){ const d = $('tipdlg'); if(d.close) d.close(); else d.removeAttribute('open'); }
 async function tipSend(){
   if($('tipsend').dataset.done){ tipClose(); return; }
@@ -12044,20 +12116,31 @@ async function taLoad(){
     TA.list = Object.entries(v).map(([id, t])=>Object.assign({id}, t)).sort((a,b)=>(b.t||0)-(a.t||0)); TA.err = '';
     try{ const op = (await firebase.database().ref('tipopen').once('value')).val() || {};      // tipopen gelijk houden met de tips die nog nieuw zijn
       for(const id in op){ const tp = v[id]; if(!tp || (tp.status||'nieuw')!=='nieuw') firebase.database().ref('tipopen/'+id).set(null).catch(()=>{}); }
-      TA.list.forEach(tp=>{ if((tp.status||'nieuw')==='nieuw' && tp.cat && !op[tp.id]) firebase.database().ref('tipopen/'+tp.id).set({cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()}).catch(()=>{}); });
+      TA.list.forEach(tp=>{ if((tp.status||'nieuw')==='nieuw' && tp.cat && !op[tp.id]) firebase.database().ref('tipopen/'+tp.id).set(Object.assign({cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()}, tp.sig ? {blk:tp.sig} : {})).catch(()=>{}); });
       tipOpenLoad(true); }catch(e){}
   }catch(e){ TA.list = []; TA.err = e.code==='PERMISSION_DENIED' || /permission/i.test(e.message||'') ? 'Geen toegang. Staat het e-mailadres van dit Google-account in de regels?' : (e.message||'Ophalen lukte niet'); }
   taRoute();
 }
+function taBzItem(t, fd){
+  const open = (t.status||'nieuw')==='nieuw';
+  return '<div class="ta-tip" data-id="'+esc(t.id)+'"><h4>'+fd(t)+(t.ver ? ' · '+esc(t.ver) : '')+'<span class="ta-badge" style="'+(open ? 'background:#F8D3D0;color:#7A1414' : '')+'">'+(open ? 'bezwaar · vraag staat uit' : 'bezwaar · '+esc(t.status))+'</span></h4>'
+    + '<p class="ta-msg"><b>'+esc(t.sigName||t.sig||'')+'</b> — de app zei '+esc(bidTxt(t.ans))+', de speler koos '+esc(bidTxt(t.bid))+'.</p>'
+    + (t.note0 ? '<p class="ta-msg">“'+esc(t.note0)+'”</p>' : '')
+    + '<p class="ta-meta">'+esc(t.where||'')+'</p>'
+    + (t.hand ? '<p class="ta-meta">Hand: '+esc(t.hand)+(t.scr ? ' · '+esc(t.scr) : '')+'</p>' : '')
+    + (t.why ? '<p class="ta-meta">Uitleg van de app: '+esc(t.why)+'</p>' : '')
+    + '<div class="ta-st"><input placeholder="Bericht aan de speler" value="'+esc(t.note||'')+'"><button class="ta-btn" data-tas="verwerkt" style="background:#2E9E5B;color:#fff;border-color:#2E9E5B">Vrijgeven</button><button class="ta-btn" data-tas="nieuw">Blijft uit</button></div></div>';
+}
 function taDraw(){
   const el = $('tabody'), u = window.firebase && firebase.auth().currentUser;
-  const n = s => TA.list.filter(t=>(t.status||'nieuw')===s).length;
-  const shown = TA.list.filter(t=>TA.filter==='alle' || (t.status||'nieuw')===TA.filter);
+  const isBz = t => t.kind==='bezwaar', nb = TA.list.filter(t=>isBz(t) && (t.status||'nieuw')==='nieuw').length;
+  const n = s => TA.list.filter(t=>(t.status||'nieuw')===s && !(s==='nieuw' && isBz(t))).length;
+  const shown = TA.list.filter(t=>TA.filter==='alle' || (TA.filter==='bezwaar' ? isBz(t) && (t.status||'nieuw')==='nieuw' : (t.status||'nieuw')===TA.filter && !(TA.filter==='nieuw' && isBz(t))));
   const fd = t => t.t ? new Date(t.t).toLocaleString('nl-NL', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
   el.innerHTML = taTabs() + (u && !u.isAnonymous ? '<p class="ta-meta">Ingelogd als '+esc(u.email||'')+'</p>' : '')
     + (TA.err ? '<p class="leadnote bad">'+esc(TA.err)+'</p>' : '')
-    + '<div class="ta-bar">'+[['nieuw','Nieuw'],['verwerkt','Verwerkt'],['niet','Niets mee'],['alle','Alle']].map(([k,l])=>'<button class="ta-btn'+(TA.filter===k ? ' on' : '')+'" data-taf="'+k+'">'+l+' ('+(k==='alle' ? TA.list.length : n(k))+')</button>').join('')+'<button class="ta-btn" data-tar="1">Vernieuwen</button></div>'
-    + (shown.length ? shown.map(t=>'<div class="ta-tip" data-id="'+esc(t.id)+'"><h4>'+fd(t)+(t.ver ? ' · '+esc(t.ver) : '')+'<span class="ta-badge '+esc(t.status||'nieuw')+'">'+esc(t.status||'nieuw')+'</span></h4>'
+    + '<div class="ta-bar">'+[['nieuw','Nieuw'],['bezwaar','Bezwaren'],['verwerkt','Verwerkt'],['niet','Niets mee'],['alle','Alle']].map(([k,l])=>'<button class="ta-btn'+(TA.filter===k ? ' on' : '')+'" data-taf="'+k+'">'+l+' ('+(k==='alle' ? TA.list.length : k==='bezwaar' ? nb : n(k))+')</button>').join('')+'<button class="ta-btn" data-tar="1">Vernieuwen</button></div>'
+    + (shown.length ? shown.map(t=>isBz(t) ? taBzItem(t, fd) : '<div class="ta-tip" data-id="'+esc(t.id)+'"><h4>'+fd(t)+(t.ver ? ' · '+esc(t.ver) : '')+'<span class="ta-badge '+esc(t.status||'nieuw')+'">'+esc(t.status||'nieuw')+'</span></h4>'
         + '<p class="ta-msg">'+esc(t.msg||'')+'</p>'
         + '<p class="ta-meta">'+(t.mail ? '✉ '+esc(t.mail)+' · ' : '')+esc(t.where||'')+(t.scr ? ' · '+esc(t.scr) : '')+'</p>'
         + (t.img ? '<img class="ta-img" src="'+esc(t.img)+'" alt="Schermafbeelding bij de tip">' : '')
@@ -12077,7 +12160,7 @@ $('tabody').addEventListener('click', async e=>{
   if(b.dataset.tas){ const box = b.closest('.ta-tip'), id = box.dataset.id, note = box.querySelector('input').value.trim();
     try{ await firebase.database().ref('tips/'+id).update({status:b.dataset.tas, note});
       await firebase.database().ref('tipreply/'+id).set(b.dataset.tas==='nieuw' ? null : {status:b.dataset.tas, note, t:firebase.database.ServerValue.TIMESTAMP});
-      { const tp = TA.list.find(x=>x.id===id); tipOpenSet(id, b.dataset.tas==='nieuw' && tp && tp.cat ? {cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()} : null); }
+      { const tp = TA.list.find(x=>x.id===id); tipOpenSet(id, b.dataset.tas==='nieuw' && tp && tp.cat ? Object.assign({cat:tp.cat, msg:String(tp.msg||'').slice(0, 200), t:tp.t||Date.now()}, tp.sig ? {blk:tp.sig} : {}) : null); }
       const t = TA.list.find(x=>x.id===id); if(t){ t.status = b.dataset.tas; t.note = note; } taDraw(); }
     catch(err){ TA.err = 'Opslaan lukte niet: '+(err.message||''); taDraw(); } }
 });
