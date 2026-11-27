@@ -1,9 +1,9 @@
 // Verhoog dit nummer bij elke nieuwe versie, dan halen telefoons de nieuwe bestanden op.
-const VERSION = 'bridge-v385';
+const VERSION = 'bridge-v386';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'dds.js'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES.map(f => new Request(f, {cache: 'reload'})))).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(
@@ -16,7 +16,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, {cache: 'no-cache'})      // altijd bij de server navragen, niet de kopie van de browser
       .then(res => {
         const copy = res.clone();
         caches.open(VERSION).then(c => c.put(e.request, copy));
