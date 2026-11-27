@@ -1669,14 +1669,50 @@ html.kimg #game .rc.dbad .kf, html.kimg #game .tc.dbad .kf{box-shadow:inset 0 0 
    1 binnenruimte onder 1,5 px · 2 midden 1,5 px wit tussen niveau en kleur · 3 binnenruimte boven 1,5 px
    4 stapelrand = zichtbare stap · 5 binnenruimte voor de stapelrand 1,5 px · 6 binnenruimte links 1 px · 7 middellijn tussen 5 en 6.
    Niveau en kleursymbool vullen hun vak van boven tot onder (zelfde tekening als de handkaarten), gecentreerd op lijn 7. */
-.bst[style]{--step:var(--bstep)!important}
+.bst{--m:calc(.8rem + var(--nh));--L:calc(var(--bw) + (var(--n, 1) - 1) * var(--step))}
+.bst[style]{--step:max(calc(var(--bstep) * .6), min(var(--bstep), calc((var(--w) - 2 * var(--m) - var(--bh) - 3px - var(--bw)) / (var(--n) - 1))))!important}
+/* v381: windmolen. Elke stapel begint in zijn eigen hoek: Noord linksboven naar rechts, Oost rechtsboven naar beneden, Zuid rechtsonder naar links, West linksonder naar boven */
+.bst.t{left:calc(var(--m) + var(--L) / 2)!important} .bst.b{left:calc(100% - var(--m) - var(--L) / 2)!important}
+.bst.r{top:calc(var(--m) + var(--L) / 2)!important} .bst.l{top:calc(100% - var(--m) - var(--L) / 2)!important}
 .bst{gap:0!important} /* v376: geen extra ruimte tussen de kaartjes (de klasse .top gaf 0,5rem); de stap is precies --bstep */
 /* SA: inkt van lijn 6 tot lijn 5 (vakbreedte), hoogte volgt uit de vorm, verticaal midden in het kleurvak */
 .bst .bc.bg2{position:relative;padding:0!important;display:block!important;font-size:0!important;line-height:0!important;--bch:calc((var(--bh) - 8.5px) / 2)}
 .bst .bc.bg2 > .bkl, .bst .bc.bg2 > .bks{position:absolute!important;left:1px!important;width:calc(var(--step, var(--bstep)) - 3.5px)!important;height:var(--bch)!important;margin:0!important;padding:0!important;font-size:0!important;line-height:0!important}
 .bst .bc.bg2 > .bkl{top:1.5px!important} .bst .bc.bg2 > .bks{top:calc(var(--bch) + 3px)!important}
 .bst .bc.bg2 svg.gl{display:block;position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;fill:currentColor}
+.bst .bc.bg2{writing-mode:horizontal-tb!important;text-orientation:mixed!important}
+.bst .bc.bg2:is(.p,.x,.xx){padding:0!important;transform:none!important;line-height:0!important}
+/* v380: pas en doublet: één vak van lijn 3 tot lijn 1 en van lijn 6 tot lijn 5 (rand 1 px rondom); redoublet: X boven en X onder */
+.bst .bc.bg2 > .bkf{position:absolute!important;left:1px!important;top:1.5px!important;bottom:1.5px!important;width:calc(var(--step, var(--bstep)) - 3.5px)!important;font-size:0!important;line-height:0!important}
+.bst .bc.bg2.xx > .bkl, .bst .bc.bg2.xx > .bks{height:calc((var(--bh) - 6.5px) / 2)!important}
+.bst .bc.bg2.xx > .bks{top:calc((var(--bh) - 6.5px) / 2 + 3px)!important}
+.bst.l .bc.bg2.p > .bkf{transform:rotate(180deg)}
 .bst .bc.bg2 .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* v381: biedbox 7 x 5 op de laptop; elke knop: niveau rechts tegen het midden, kleur links ertegen, 1,5 px wit ertussen, inkt even hoog */
+.box.grid7{display:grid!important;grid-template-columns:repeat(5, minmax(0, 1fr))!important;gap:5px!important;container-type:inline-size;--bbh:2.3rem;--cw:calc((100cqw - 20px) / 5);--hw:calc((var(--cw) - 6.5px) / 2);--ih:min(calc(var(--bbh) - 7px), calc(var(--hw) / .945));max-width:none!important}
+.box.grid7 > .bid{position:relative!important;height:var(--bbh)!important;min-height:0!important;min-width:0!important;width:auto!important;padding:0!important;margin:0!important;font-size:0!important;line-height:0!important;overflow:hidden;grid-column:auto!important}
+.box.grid7 > .bid.pas, .box.grid7 > .bid.dbl, .box.grid7 > .bid.rdbl{grid-column:span 5;display:none}
+.box.grid7 > .bid.pas{grid-column:1 / span 2!important;display:block} .box.grid7 > .bid.dbl{grid-column:3 / span 2!important;display:block} .box.grid7 > .bid.rdbl{grid-column:5 / span 1!important;display:block}
+.box.grid7 > .bid > i{position:absolute;top:50%;height:var(--ih);transform:translateY(-50%);display:block;font-style:normal}
+.box.grid7 > .bid > i svg{position:absolute;inset:0;width:100%;height:100%;fill:currentColor;overflow:visible} .box.grid7 .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.box.grid7 > .bid > i.bl{right:calc(50% + .75px);width:var(--hw);color:#14211C} .box.grid7 > .bid > i.bs{left:calc(50% + .75px);width:var(--hw)}
+.box.grid7 > .bid > i.bf{left:1.5px;right:1.5px;color:#fff} .box.grid7 > .bid > i.bp{height:calc(var(--hw) / 1.69)}
+.box.grid7 > .bid.d-C > i.bs{color:var(--kC)} .box.grid7 > .bid.d-D > i.bs{color:var(--kD)} .box.grid7 > .bid.d-H > i.bs{color:var(--kH)} .box.grid7 > .bid.d-S > i.bs{color:var(--kS)} .box.grid7 > .bid.d-N > i.bs{color:#14211C}
+.box.grid7 > .bid.pas{background:#2E8B57!important;border-color:#1F6B42!important} .box.grid7 > .bid.dbl{background:#C0392B!important;border-color:#962D22!important} .box.grid7 > .bid.rdbl{background:#1C3D8F!important;border-color:#142C66!important}
+.box.grid7 > .bid:disabled{opacity:.32}
+/* v381: de vier beginhanden na afloop */
+#game.dealon > #gstatus, #game.dealon > .tablewrap, #game.dealon #gnorth, #game.dealon #gsrow, #game.dealon #gdl, #game.dealon #gdr{visibility:hidden!important}
+.gdeal{position:absolute!important;z-index:4;margin:0!important;transform:none!important;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:auto auto auto;gap:calc(var(--dH) * .5) calc(var(--dH) * .6);align-items:center;justify-items:center;align-content:center;justify-content:center;box-sizing:border-box}
+.gdeal .p0{grid-column:2;grid-row:1} .gdeal .p3{grid-column:1;grid-row:2;justify-self:end} .gdeal .dctr{grid-column:2;grid-row:2} .gdeal .p1{grid-column:3;grid-row:2;justify-self:start} .gdeal .p2{grid-column:2;grid-row:3}
+.gdeal .dh{background:var(--surface, #fff);border-radius:10px;padding:calc(var(--dH) * .5) calc(var(--dH) * .6);box-shadow:0 1px 3px rgba(0,0,0,.18);min-width:calc(var(--dH) * (2.5 + var(--dn) * 1.0))}
+.gdeal .dh > b{display:block;font-size:calc(var(--dH) * .72);line-height:1;color:var(--muted, #56655E);margin:0 0 calc(var(--dH) * .35);white-space:nowrap}
+.gdeal .dr{display:flex;align-items:center;height:var(--dH);margin:0 0 calc(var(--dH) * .45)} .gdeal .dr:last-child{margin:0}
+.gdeal .dr > i{position:relative;display:block;height:var(--dH);flex:none;font-style:normal} .gdeal .dr svg{position:absolute;inset:0;width:100%;height:100%;fill:currentColor} .gdeal .glt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.gdeal .dsy{width:calc(var(--dH) * 1.1);margin-right:calc(var(--dH) * .35)} .gdeal .drk{width:calc(var(--dH) * .8);margin-right:calc(var(--dH) * .2);color:var(--ink, #14211C)} .gdeal .drk.dash{opacity:.5}
+.gdeal .dsy.S{color:var(--kS)} .gdeal .dsy.H{color:var(--kH)} .gdeal .dsy.D{color:var(--kD)} .gdeal .dsy.C{color:var(--kC)}
+.gdeal .dctr{width:calc(var(--dH) * 6.5);aspect-ratio:1;background:var(--felt, #2E6B4E);border-radius:14px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--dH) * .3);font-size:calc(var(--dH) * .8)}
+.gdeal .dct{background:#fff;color:#14211C;border-radius:999px;padding:.1em .6em;font-weight:700;font-size:calc(var(--dH) * 1.1)} .gdeal .dct .S{color:var(--kS)} .gdeal .dct .H{color:var(--kH)} .gdeal .dct .D{color:var(--kD)} .gdeal .dct .C{color:var(--kC)}
+.gdeal .dres{font-weight:700}
 /* v379: knop "Niet mee eens?" bij een fout antwoord */
 .bzbtn{float:right;margin:-.1rem 0 .2rem .5rem;font:600 .85rem/1 var(--body, inherit);padding:.45rem .7rem;border-radius:999px;border:1.5px solid #B3141E;background:#fff;color:#B3141E;cursor:pointer}
 .bzbtn:disabled{border-color:#9AA59F;color:#56655E;cursor:default}
@@ -4274,7 +4310,9 @@ const SUITPATH = {"♠":{"d":"M365 -740Q371 -733 374 -725.5Q377 -718 380.5 -710.
 // De dertien rangen als vaste tekening (omtrek uit Atkinson Hyperlegible Regular, SIL Open Font License): de kaart hangt zo niet meer af van een lettertype dat van buiten geladen wordt.
 const RANKPATH = {"A":{"d":"M10 0 261 -669H366L616 0H516L465 -146H161L110 0ZM190 -227H436L313 -574Z","b":[10,-669,606,669]},"H":{"d":"M76 0V-668H170V-384H520V-668H614V0H520V-303H170V0Z","b":[76,-668,538,668]},"V":{"d":"M239 0 10 -668H113L294 -110L476 -668H579L349 0Z","b":[10,-668,569,668]},"B":{"d":"M76 0V-668H345Q418 -668 463.5 -644Q509 -620 530.5 -582.5Q552 -545 552 -502Q552 -462 534 -423Q516 -384 482 -355Q532 -329 556.5 -284.5Q581 -240 581 -192Q581 -144 556.5 -100Q532 -56 483 -28Q434 0 361 0ZM170 -382H355Q406 -382 431.5 -414Q457 -446 457 -484Q457 -510 445.5 -534Q434 -558 411.5 -573.5Q389 -589 355 -589H170ZM170 -79H371Q408 -79 433 -96Q458 -113 471 -139.5Q484 -166 484 -195Q484 -224 471.5 -249.5Q459 -275 433.5 -291.5Q408 -308 370 -308H170Z","b":[76,-668,505,668]},"T":{"d":"M232 0V-587H10V-668H548V-587H326V0Z","b":[10,-668,538,668]},"2":{"d":"M34 0V-75Q152 -162 235.5 -235Q319 -308 363.5 -371.5Q408 -435 408 -494Q408 -546 375 -578Q342 -610 283 -610Q236 -610 195.5 -584.5Q155 -559 143 -498L59 -522Q77 -595 137 -637.5Q197 -680 285 -680Q347 -680 394.5 -659.5Q442 -639 469.5 -600Q497 -561 497 -505Q497 -447 469 -391.5Q441 -336 392 -283.5Q343 -231 280 -179.5Q217 -128 147 -77H515V0Z","b":[34,-680,481,680]},"3":{"d":"M272 12Q205 12 157.5 -10Q110 -32 82 -69Q54 -106 42 -151L125 -175Q136 -123 172.5 -90.5Q209 -58 273 -58Q339 -58 381.5 -91.5Q424 -125 424 -187Q424 -225 408 -249.5Q392 -274 367 -287Q342 -300 313.5 -306Q285 -312 259.5 -313Q234 -314 218 -314V-390Q246 -390 278.5 -393Q311 -396 340.5 -406.5Q370 -417 388.5 -439.5Q407 -462 407 -501Q407 -555 368.5 -582.5Q330 -610 277 -610Q216 -610 180 -579Q144 -548 134 -498L52 -522Q70 -593 128.5 -636.5Q187 -680 279 -680Q337 -680 386 -663.5Q435 -647 465 -609.5Q495 -572 495 -510Q495 -459 467 -418Q439 -377 386 -355Q461 -332 487.5 -286.5Q514 -241 514 -188Q514 -121 480 -76.5Q446 -32 391 -10Q336 12 272 12Z","b":[42,-680,472,692]},"4":{"d":"M370 0V-165H38V-244L369 -668H454V-244H576V-165H454V0ZM129 -244H370V-553Z","b":[38,-668,538,668]},"5":{"d":"M284 12Q217 12 170 -10Q123 -32 95 -69Q67 -106 54 -151L136 -175Q148 -120 183.5 -89Q219 -58 284 -58Q324 -58 358 -77Q392 -96 412.5 -132Q433 -168 433 -219Q433 -275 410.5 -310Q388 -345 353.5 -361.5Q319 -378 283 -378Q231 -378 198 -353.5Q165 -329 154 -304L72 -328L113 -668H496V-587H181L158 -400Q184 -426 222.5 -438Q261 -450 302 -450Q361 -450 410.5 -423Q460 -396 490.5 -345Q521 -294 521 -220Q521 -144 487.5 -92Q454 -40 400 -14Q346 12 284 12Z","b":[54,-668,467,680]},"6":{"d":"M303 12Q178 12 119 -72Q60 -156 60 -310Q60 -381 73.5 -447Q87 -513 117.5 -565.5Q148 -618 198 -649Q248 -680 321 -680Q395 -680 441 -649Q487 -618 509 -573L424 -548Q409 -577 380 -593.5Q351 -610 311 -610Q233 -610 191.5 -539Q150 -468 147 -352Q170 -391 213 -418Q256 -445 323 -445Q385 -445 433.5 -416Q482 -387 510 -336Q538 -285 538 -218Q538 -156 509 -103.5Q480 -51 427.5 -19.5Q375 12 303 12ZM303 -59Q369 -59 408.5 -102.5Q448 -146 448 -215Q448 -284 408.5 -327.5Q369 -371 303 -371Q236 -371 196.5 -327.5Q157 -284 157 -215Q157 -146 196.5 -102.5Q236 -59 303 -59Z","b":[60,-680,478,692]},"7":{"d":"M93 0 383 -587H15V-668H476V-587L198 0Z","b":[15,-668,461,668]},"8":{"d":"M307 12Q238 12 182 -11.5Q126 -35 93 -79.5Q60 -124 60 -188Q60 -253 94 -298.5Q128 -344 183 -366Q157 -391 141.5 -425Q126 -459 126 -499Q126 -549 150.5 -590Q175 -631 216 -655.5Q257 -680 307 -680Q358 -680 399 -655.5Q440 -631 464.5 -590Q489 -549 489 -499Q489 -459 473.5 -425Q458 -391 432 -366Q488 -344 521.5 -298.5Q555 -253 555 -188Q555 -124 522 -79.5Q489 -35 433 -11.5Q377 12 307 12ZM307 -391Q351 -391 382.5 -422.5Q414 -454 414 -500Q414 -544 382.5 -575Q351 -606 307 -606Q263 -606 231.5 -575Q200 -544 200 -500Q200 -454 231.5 -422.5Q263 -391 307 -391ZM307 -62Q379 -62 421.5 -96Q464 -130 464 -188Q464 -247 421.5 -282Q379 -317 307 -317Q236 -317 193.5 -282Q151 -247 151 -188Q151 -130 193.5 -96Q236 -62 307 -62Z","b":[60,-680,495,692]},"9":{"d":"M213 0Q213 0 226.5 -19Q240 -38 261.5 -69Q283 -100 307 -136.5Q331 -173 352 -207Q327 -201 299 -201Q234 -201 179.5 -233.5Q125 -266 92.5 -320.5Q60 -375 60 -441Q60 -507 92 -561Q124 -615 178.5 -647Q233 -679 299 -679Q368 -679 422 -646.5Q476 -614 507 -559.5Q538 -505 538 -439Q538 -393 520 -348Q515 -336 497 -301.5Q479 -267 451.5 -218Q424 -169 389.5 -112.5Q355 -56 317 0ZM299 -287Q342 -287 377 -308Q412 -329 433 -364Q454 -399 454 -441Q454 -483 433 -518Q412 -553 377 -573.5Q342 -594 299 -594Q257 -594 222 -573.5Q187 -553 166.5 -518Q146 -483 146 -441Q146 -399 166.5 -364Q187 -329 222 -308Q257 -287 299 -287Z","b":[60,-679,478,679]}};
 // v374: ook het niveau 1 en SA op een biedkaartje als vaste tekening (Atkinson Hyperlegible Regular)
+Object.assign(RANKPATH, {"pasR":{"d":"M-161 70H496V131L418 154Q457 177 480.5 217.0Q504 257 504 315Q504 372 473.5 420.5Q443 469 385.5 498.5Q328 528 246 528Q165 528 107.0 498.5Q49 469 18.5 420.5Q-12 372 -12 315Q-12 257 11.5 217.0Q35 177 75 154H-161ZM60 293Q60 357 109.0 395.5Q158 434 246 434Q335 434 383.5 395.5Q432 357 432 293Q432 229 383.5 190.5Q335 152 246 152Q158 152 109.0 190.5Q60 229 60 293ZM-12 775Q-12 728 5.0 689.0Q22 650 54.0 627.0Q86 604 131 604Q190 604 224.0 645.5Q258 687 276.5 762.5Q295 838 306 939Q369 941 403.0 914.0Q437 887 437 827Q437 782 416.5 753.5Q396 725 360 717L384 636Q441 656 472.5 707.5Q504 759 504 826Q504 929 455.5 976.5Q407 1024 303 1024H187Q125 1024 80.0 1029.0Q35 1034 0 1041V964L68 944Q31 922 9.5 881.0Q-12 840 -12 775ZM55 793Q55 832 69.0 867.0Q83 902 116.5 924.0Q150 946 208 946H239Q231 870 219.5 814.0Q208 758 187.5 727.5Q167 697 133 697Q98 697 76.5 722.5Q55 748 55 793ZM-12 1331Q-12 1288 1.5 1246.5Q15 1205 42.5 1172.5Q70 1140 112 1123L142 1204Q98 1215 78.5 1252.5Q59 1290 59 1331Q59 1361 68.0 1387.5Q77 1414 94.0 1431.0Q111 1448 133 1448Q174 1448 191.0 1415.5Q208 1383 217 1338L231 1269Q239 1233 253.5 1202.0Q268 1171 295.0 1152.0Q322 1133 367 1133Q412 1133 442.5 1161.0Q473 1189 489.0 1232.5Q505 1276 505 1324Q505 1383 480.5 1435.5Q456 1488 404 1510L375 1431Q405 1418 419.5 1385.5Q434 1353 434 1318Q434 1280 417.0 1249.0Q400 1218 368 1218Q336 1218 321.5 1244.5Q307 1271 299 1310L286 1375Q278 1415 263.0 1451.0Q248 1487 218.5 1510.0Q189 1533 136 1533Q89 1533 56.0 1504.0Q23 1475 5.5 1429.0Q-12 1383 -12 1331Z","b":[-161,70,666,1463]},"X":{"d":"M10 0 255 -344 24 -668H136L311 -423L486 -668H599L368 -344L613 0H500L311 -265L123 0Z","b":[10,-668,603,668]}});
 Object.assign(RANKPATH, {"1":{"d":"M220 0V-504H42V-571Q90 -571 131.5 -578.0Q173 -585 203.5 -606.0Q234 -627 248 -668H304V0Z","b":[42,-668,440,668]},"SA":{"d":"M296 12Q241 12 189.0 -5.0Q137 -22 97.5 -57.0Q58 -92 40 -146L127 -172Q139 -136 166.0 -112.5Q193 -89 228.5 -78.0Q264 -67 300 -67Q340 -67 376.0 -80.0Q412 -93 434.5 -119.5Q457 -146 457 -186Q457 -227 427.0 -251.0Q397 -275 323 -294L238 -313Q192 -325 147.5 -345.0Q103 -365 74.5 -402.0Q46 -439 46 -501Q46 -558 81.5 -598.0Q117 -638 173.5 -659.0Q230 -680 291 -680Q338 -680 383.5 -666.5Q429 -653 465.5 -625.5Q502 -598 523 -555L437 -530Q418 -565 375.5 -583.0Q333 -601 287 -601Q251 -601 218.0 -589.5Q185 -578 164.0 -555.0Q143 -532 143 -497Q143 -464 162.5 -444.0Q182 -424 214.5 -412.5Q247 -401 286 -392L359 -376Q410 -364 455.0 -343.0Q500 -322 528.0 -284.0Q556 -246 556 -182Q556 -136 534.0 -99.5Q512 -63 475.0 -38.5Q438 -14 391.5 -1.0Q345 12 296 12ZM606 0 857 -669H962L1212 0H1112L1061 -146H757L706 0ZM786 -227H1032L909 -574Z","b":[40,-680,1172,692]}});
+Object.assign(RANKPATH, {"XX":{"d":"M10 0 255 -344 24 -668H136L311 -423L486 -668H599L368 -344L613 0H500L311 -265L123 0ZM633 0 878 -344 647 -668H759L934 -423L1109 -668H1222L991 -344L1236 0H1123L934 -265L746 0Z","b":[10,-668,1226,668]},"Pas":{"d":"M76 -1V-668H285Q367 -668 429.5 -652.0Q492 -636 527.5 -592.5Q563 -549 563 -466Q563 -384 527.5 -340.5Q492 -297 429.5 -281.5Q367 -266 285 -266H170V-1ZM170 -347H293Q342 -347 381.0 -354.0Q420 -361 443.5 -386.5Q467 -412 467 -466Q467 -521 443.5 -547.0Q420 -573 381.0 -581.0Q342 -589 293 -589H170ZM810 12Q763 12 724.0 -5.0Q685 -22 662.0 -54.0Q639 -86 639 -131Q639 -190 680.5 -224.0Q722 -258 797.5 -276.5Q873 -295 974 -306Q976 -369 949.0 -403.0Q922 -437 862 -437Q817 -437 788.5 -416.5Q760 -396 752 -360L671 -384Q691 -441 742.5 -472.5Q794 -504 861 -504Q964 -504 1011.5 -455.5Q1059 -407 1059 -303V-187Q1059 -125 1064.0 -80.0Q1069 -35 1076 0H999L979 -68Q957 -31 916.0 -9.5Q875 12 810 12ZM828 -55Q867 -55 902.0 -69.0Q937 -83 959.0 -116.5Q981 -150 981 -208V-239Q905 -231 849.0 -219.5Q793 -208 762.5 -187.5Q732 -167 732 -133Q732 -98 757.5 -76.5Q783 -55 828 -55ZM1366 12Q1323 12 1281.5 -1.5Q1240 -15 1207.5 -42.5Q1175 -70 1158 -112L1239 -142Q1250 -98 1287.5 -78.5Q1325 -59 1366 -59Q1396 -59 1422.5 -68.0Q1449 -77 1466.0 -94.0Q1483 -111 1483 -133Q1483 -174 1450.5 -191.0Q1418 -208 1373 -217L1304 -231Q1268 -239 1237.0 -253.5Q1206 -268 1187.0 -295.0Q1168 -322 1168 -367Q1168 -412 1196.0 -442.5Q1224 -473 1267.5 -489.0Q1311 -505 1359 -505Q1418 -505 1470.5 -480.5Q1523 -456 1545 -404L1466 -375Q1453 -405 1420.5 -419.5Q1388 -434 1353 -434Q1315 -434 1284.0 -417.0Q1253 -400 1253 -368Q1253 -336 1279.5 -321.5Q1306 -307 1345 -299L1410 -286Q1450 -278 1486.0 -263.0Q1522 -248 1545.0 -218.5Q1568 -189 1568 -136Q1568 -89 1539.0 -56.0Q1510 -23 1464.0 -5.5Q1418 12 1366 12Z","b":[76,-668,1492,680]}});
 const RANKFONT = '"Atkinson Hyperlegible"';
 function rankBox(t, w){
   const W = 400, H = 240, X = 150, Y = 170;
@@ -8686,9 +8724,13 @@ const seatNm = o => { const t = tableNames(); return o===2 ? myNm() : o===0 ? t.
 function tblPills(o){ const P = {N:['t','Partner'], O:['r','Oost'], Z:['b','Jij'], W:['l','West']}; o = o || {};
   return Object.keys(P).map(k=>tblPill(P[k][0], (o[k] && o[k].name) || P[k][1], k, o[k])).join(''); }
 function tblBid(b, extra, inner){ const k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
-  return '<span class="bc '+k+(k==='n' ? ' d-'+b[1]+' bg2' : '')+(extra || '')+'">'+(b==='pas' ? 'pas' : k!=='n' ? b : bcFace(b))+(inner || '')+'</span>'; }
+  return '<span class="bc '+k+(k==='n' ? ' d-'+b[1] : '')+' bg2'+(extra || '')+'">'+bcFace(b)+(inner || '')+'</span>'; }
 // biedkaartje (v374): niveau en kleur elk in een eigen vak, de inkt vult het vak zoals bij de handkaarten
-function bcFace(b){ return '<span class="bkl">'+glyph(b[0], 400)+'</span>'+(b[1]==='N' ? '<span class="bks sa">'+glyph('SA', 400)+'</span>' : '<span class="bks '+b[1]+'">'+glyph(SYM[b[1]])+'</span>'); }
+function bcFace(b){
+  if(b==='pas') return '<span class="bkf">'+glyph('pasR').replace('>pasR<', '>pas<')+'</span>';
+  if(b==='X') return '<span class="bkf">'+glyph('X')+'</span>';
+  if(b==='XX') return '<span class="bkl">'+glyph('X')+'</span><span class="bks">'+glyph('X')+'</span>';
+  return '<span class="bkl">'+glyph(b[0], 400)+'</span>'+(b[1]==='N' ? '<span class="bks sa">'+glyph('SA', 400)+'</span>' : '<span class="bks '+b[1]+'">'+glyph(SYM[b[1]])+'</span>'); }
 function tblStack(pos, arr){ return arr.length ? '<div class="bst '+pos+'"'+(arr.length>1 ? ' style="--n:'+arr.length+'"' : '')+'>'+arr.join('')+'</div>' : ''; }
 function tblCol(h, only){ return '<div class="pcol">'+[0,1,2,3].filter(si=>only==null || only===si).map(si=>{ const cs = h.suits[si].slice().sort((a,b)=>b-a); return '<div class="'+SUITS[si]+'"><i>'+SYM[SUITS[si]]+'</i>'+(cs.length ? cs.map(r=>RANK[r]||r).join(' ') : '–')+'</div>'; }).join('')+'</div>'; }
 function renderQTable(mine){
@@ -8839,6 +8881,14 @@ function renderAuction(done){
     const WN = ['West','Partner','Oost'], L = done ? [] : a.calls.map((b,i)=>alOn(i) ? '<span><i class="alc vast">A</i> '+WN[(a.start+i)%4]+' '+tblBidTxt(b)+': '+al.get(i)+'.</span>' : '').filter(Boolean);
     p.innerHTML = L.join(''); p.hidden = !L.length; }
 }
+// v381: biedknop met vaste opbouw: niveau rechts tegen het midden, kleur links ertegen, 1,5 px wit ertussen, inkt even hoog
+const bbSide = (g, side) => g.replace('xMidYMid', side);
+function bidFace(b){
+  if(b==='pas') return '<i class="bf bp">'+glyph('Pas')+'</i>';
+  if(b==='X' || b==='XX') return '<i class="bf">'+glyph(b)+'</i>';
+  const d = b[1]; return '<i class="bl">'+bbSide(glyph(b[0], 400), 'xMaxYMid')+'</i><i class="bs'+(d==='N' ? ' sa' : '')+'">'+(d==='N' ? glyph('SA') : bbSide(glyph(SYM[d]), 'xMinYMid'))+'</i>';
+}
+const GRID7 = () => LAPTOP();
 function renderBox(){
   if(q.box==='suit'){
     $('box').className = 'box suits';
@@ -8867,11 +8917,12 @@ function renderBox(){
   const last = q.last ? bidRank(q.last) : -1, dbl = q.box==='dbl' || rdbl;
   const from = q.box==='slam' ? 5 : q.box==='g46' ? 4 : q.box==='mid' ? 3 : q.box==='std' || q.box==='slamlow' ? 2 : 1, to = q.box==='slam' ? 7 : q.box==='g46' ? 6 : q.box==='mid' ? 5 : dbl ? 3 : 4;
   let html = '';
-  for(let lvl=from; lvl<=to; lvl++){
-    for(const d of DEN){
-      const b = lvl+d;
-      html += '<button class="bid d-'+d+'" data-bid="'+b+'"'+(bidRank(b)<=last?' disabled':'')+'>'+bidHTML(b)+'</button>';
-    }
+  if(GRID7()){
+    for(let lvl=1; lvl<=7; lvl++) for(const d of DEN){ const b = lvl+d; html += '<button class="bid d-'+d+'" data-bid="'+b+'" aria-label="'+b+'"'+(bidRank(b)<=last ? ' disabled' : '')+'>'+bidFace(b)+'</button>'; }
+    html += '<button class="bid pas" data-bid="pas" aria-label="Pas">'+bidFace('pas')+'</button>'
+      + '<button class="bid dbl" data-bid="X" aria-label="Doublet"'+(dbl && !rdbl ? '' : ' disabled')+'>'+bidFace('X')+'</button>'
+      + '<button class="bid rdbl" data-bid="XX" aria-label="Redoublet"'+(rdbl ? '' : ' disabled')+'>'+bidFace('XX')+'</button>';
+    $('box').className = 'box grid7'; $('box').innerHTML = html; return;
   }
   if(dbl) html += rdbl ? '<button class="bid dbl" data-bid="XX">Redoublet</button>' : '<button class="bid dbl" data-bid="X">Doublet</button>';
   html += '<button class="bid pas" data-bid="pas">Pas</button>';
@@ -10823,8 +10874,13 @@ function bidRender(){
   let box = '';
   if(!B.done && turn===2){
     const last = [...B.calls].reverse().find(x=>x!=='pas' && x!=='X' && x!=='XX'), from = last ? Math.max(1, +last[0] + (last[1]==='N' ? 1 : 0)) : 1;
+    if(GRID7()){
+      for(let l=1; l<=7; l++) for(const d of DEN){ const b = l+d; box += '<button class="bid d-'+d+'" data-abid="'+b+'" aria-label="'+b+'"'+(last && bidRank(b)<=bidRank(last) ? ' disabled' : '')+'>'+bidFace(b)+'</button>'; }
+      box += '<button class="bid pas" data-abid="pas" aria-label="Pas">'+bidFace('pas')+'</button><button class="bid dbl" data-abid="X" aria-label="Doublet"'+(bidLegal(B,'X') ? '' : ' disabled')+'>'+bidFace('X')+'</button><button class="bid rdbl" data-abid="XX" aria-label="Redoublet"'+(bidLegal(B,'XX') ? '' : ' disabled')+'>'+bidFace('XX')+'</button>';
+      box = '<div class="box grid7">'+box+'</div>';
+    }else
     for(let l=from; l<=Math.min(7, from+3); l++) for(const d of DEN){ const b = l+d; box += '<button class="bid d-'+d+'" data-abid="'+b+'"'+(last && bidRank(b)<=bidRank(last) ? ' disabled' : '')+'>'+bidHTML(b)+'</button>'; }
-    box = '<div class="box'+(bidLegal(B,'X') || bidLegal(B,'XX') ? ' withdbl' : '')+'">'+box+'<button class="bid pas" data-abid="pas">Pas</button>'+(bidLegal(B,'X') ? '<button class="bid dbl" data-abid="X">X</button>' : '')+(bidLegal(B,'XX') ? '<button class="bid rdbl" data-abid="XX">XX</button>' : '')+'</div>';
+    if(!GRID7()) box = '<div class="box'+(bidLegal(B,'X') || bidLegal(B,'XX') ? ' withdbl' : '')+'">'+box+'<button class="bid pas" data-abid="pas">Pas</button>'+(bidLegal(B,'X') ? '<button class="bid dbl" data-abid="X">X</button>' : '')+(bidLegal(B,'XX') ? '<button class="bid rdbl" data-abid="XX">XX</button>' : '')+'</div>';
   }
   const alh = B.done ? '' : [...AL].map(([i,w])=>'<p class="abwhy abal"><i class="alc vast">A</i> '+(((B.dealer+i)%4)===0 ? 'Partner' : NM[(B.dealer+i)%4])+' '+tblBidTxt(B.calls[i])+': '+(B.why[i] || w)+'.</p>').join('');
   if(B.done){ const n = B.calls.length, i = lim-1, who = i>=0 ? seatNm((B.dealer+i)%4)+' ('+'NOZW'[(B.dealer+i)%4]+')' : '', c = i>=0 ? B.calls[i] : '';
@@ -12345,13 +12401,38 @@ function gEndHTML(head, full){
   $('gresult').innerHTML = '<span class="ghead">'+head+' · score <b>'+scoreTxt(def*sc(G.dvul===undefined ? false : G.dvul))+'</b></span><span id="gshort"></span>'
     + '<details class="gmore"><summary>Meer uitleg</summary><div id="gmore">'+full+'</div></details>';
 }
+// v381: na afloop de vier beginhanden, met vaste tekens: één kolom voor het symbool, elke rang in een vak van vaste breedte
+function dealHide(){ const d = $('gdeal'); if(d) d.hidden = true; $('game').classList.remove('dealon'); }
+function dealRender(){
+  const g = $('game');
+  if(!G || !G.over || !G.start || DEMO || state.conv!=='spel' || $('gend').hidden){ dealHide(); return; }
+  let d = $('gdeal'); if(!d){ d = document.createElement('div'); d.id = 'gdeal'; d.className = 'gdeal'; g.appendChild(d); }
+  const def = G.role==='tegen', rot = s => def ? (s - G.me + 6) % 4 : s;
+  const POS = ['Noord','Oost','Zuid','West'], RL = s => s===0 ? 'dummy' : s===2 ? 'leider' : '';
+  const ord = [0,1,2,3].map(p=>[0,1,2,3].find(s=>rot(s)===p));      // plek 0 boven, 1 rechts, 2 onder, 3 links
+  const maxN = Math.max(4, ...G.start.flatMap(h=>[0,1,2,3].map(si=>h.filter(c=>gSuit(c)===si).length)));
+  const hand = (s, p) => { const h = G.start[s], me = s===G.me;
+    return '<div class="dh p'+p+'"><b>'+(me ? 'Jij ('+POS[p][0]+')' : POS[p])+(RL(s) ? ' · '+RL(s) : '')+'</b>'
+      + [0,1,2,3].map(si=>{ const cs = h.filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a));
+        return '<div class="dr"><i class="dsy '+SUITS[si]+'">'+glyph(SYM[SUITS[si]])+'</i>'+(cs.length ? cs.map(c=>'<i class="drk">'+glyph(String(RANK[gRank(c)]||gRank(c)), 400)+'</i>').join('') : '<i class="drk dash">'+glyph('–', 400)+'</i>')+'</div>'; }).join('')+'</div>'; };
+  const lv = gLevel(G), ct = lv+(G.trump===4 ? 'SA' : '<span class="'+SUITS[G.trump]+'">'+SYM[SUITS[G.trump]]+'</span>')+(G.dbl===2 ? 'XX' : G.dbl ? 'X' : ''), diff = G.ns-G.need;
+  d.innerHTML = hand(ord[0], 0) + hand(ord[3], 3) + '<div class="dctr"><span class="dct">'+ct+' '+POS[rot(2)][0]+'</span><span>'+G.ns+' slagen</span><span class="dres">'+(diff>=0 ? 'gemaakt'+(diff ? ' +'+diff : '') : (-diff)+' down')+'</span></div>' + hand(ord[1], 1) + hand(ord[2], 2);
+  d.style.setProperty('--dn', maxN); d.hidden = false; g.classList.add('dealon');
+  // ruimte: op de laptop links van het uitslagvak, op de telefoon erboven
+  const gr = g.getBoundingClientRect(), er = $('gend').getBoundingClientRect(), side = er.left > gr.left + gr.width * .45;
+  const box = side ? {l:8, t:8, w:er.left - gr.left - 24, h:gr.height - 16} : {l:6, t:6, w:gr.width - 12, h:er.top - gr.top - 12};
+  const wu = 3 * (1.1 + .35 + maxN * 1.0 + 1.0) + 2 * .6, hu = 3 * (4 * 1.45 + 1.0 + 1.0) + 2 * .5;      // breedte en hoogte in eenheden van de tekenhoogte
+  const H = Math.max(9, Math.min(24, box.w / wu, box.h / hu));
+  [['left',box.l],['top',box.t],['width',box.w],['height',box.h],['max-width',box.w],['max-height',box.h]].forEach(([k,v])=>d.style.setProperty(k, v+'px', 'important')); d.style.setProperty('--dH', H+'px');
+}
+addEventListener('resize', ()=>{ if($('gdeal') && !$('gdeal').hidden) dealRender(); });
 function gFinish(){
   gcEvent(G.club ? 'clubspel-gespeeld' : 'heel-spel-gespeeld');
   const diff = G.ns-G.need;
   if(G.role==='tegen'){
     const full = (diff<0 ? '<b>Down gespeeld</b>: jullie haalden '+G.ew+' slagen, de leider kwam '+(-diff)+' tekort.' : '<b>Contract gemaakt</b> door de leider: jullie haalden '+G.ew+' slagen, er waren er '+(14-G.need)+' nodig.')+' '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.') + gScoreTxt();
     gEndHTML((diff<0 ? '<b>'+(-diff)+' down</b> · jullie '+G.ew+' slagen' : '<b>Contract gemaakt</b> · jullie '+G.ew+' slagen, '+(14-G.need)+' nodig'), full);
-    $('gend').hidden = false; gRender(); gDefRender(); gVerdict(); return;
+    $('gend').hidden = false; gRender(); gDefRender(); gVerdict(); setTimeout(dealRender, 60); return;
   }
   const full = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. '+(G.trump===4 ? 'Je begon met '+G.top+' vaste slagen. ' : 'Je begon met '+G.los+' verliezer'+(G.los===1 ? '' : 's')+' in je hand. ')+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.') + gScoreTxt();
   gEndHTML((diff>=0 ? '<b>Gemaakt</b>'+(diff>0 ? ' +'+diff : '')+' · '+G.ns+' slagen' : '<b>'+(-diff)+' down</b> · '+G.ns+' slagen'), full);
@@ -12359,6 +12440,7 @@ function gFinish(){
   gRender();
   gDefRender();
   gVerdict();
+  setTimeout(dealRender, 60);
 }
 // ---------- Probleem van de dag: elke dag hetzelfde probleem voor iedereen, met vergelijking met andere bezoekers ----------
 const DPH = s => s.split('.').flatMap((x, su)=>x==='-' ? [] : [...x].map(ch=>su*13+'23456789TJQKA'.indexOf(ch)));
@@ -12484,7 +12566,7 @@ function dmHands(id){ return DAILY[id].hands.map(h=>{ const out = []; h.split('.
 function demoStart(){ if(!G || !G.daily || !DEMO_DATA[G.daily]) return; const id = G.daily, d = DEMO_DATA[id], start = dmHands(id);
   const plays = d.play.split(/\s+/).filter(Boolean).map(x=>{ const c = dmCard(x); return {c, seat: start.findIndex(h=>h.includes(c))}; });
   DEMO = {kind:'daily', id, i:0, start, plays, steps:d.steps}; $('game').classList.add('demo'); demoRender(); }
-function demoStop(){ DEMO = null; $('game').classList.remove('demo'); const p = $('gdemo'); if(p) p.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ const e = $(i); if(e) e.classList.remove('dmo'); }); gRender(); }
+function demoStop(){ setTimeout(dealRender, 60); DEMO = null; $('game').classList.remove('demo'); const p = $('gdemo'); if(p) p.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ const e = $(i); if(e) e.classList.remove('dmo'); }); gRender(); }
 // Tafelweergave voor uitleg en terugkijken: H = vier handen per plek (0 boven, 1 rechts, 2 onder, 3 links), trick = [{pos, c, cls}]
 function tvDraw(H, trick, hl, bad, panel){
   const cls = c => bad.has(c) ? 'dbad' : hl.has(c) ? 'dhl' : '';
@@ -12507,7 +12589,7 @@ function tvDraw(H, trick, hl, bad, panel){
   $('gstatus').innerHTML = '';
 }
 const tvNav = (i, n, lab) => '<div class="dmnav"><button class="prevb" data-dm="-1" aria-label="Vorige '+lab+'"'+(i===0 ? ' disabled' : '')+'>‹</button>'+(n<=8 ? '<span class="dmdots">'+Array.from({length:n}, (_, k)=>'<i'+(k<=i ? ' class="on"' : '')+'></i>').join('')+'</span>' : '<b class="dmcnt">'+(i+1)+' / '+n+'</b>')+'<button class="prevb" data-dm="1" aria-label="Volgende '+lab+'"'+(i===n-1 ? ' disabled' : '')+'>›</button><button class="dmback" data-dmstop="1">Terug naar de uitslag</button></div>';
-function demoRender(){
+function demoRender(){ dealHide();
   const D = DEMO;
   if(D.kind==='rev') return revRender();
   const st = D.steps[D.i], at = st.at, hl = new Set((st.hl||'').split(/\s+/).filter(Boolean).map(dmCard));
@@ -12751,7 +12833,7 @@ function gStart(){
   if(!CLUB_PRESET || CLUB_PRESET.rk===undefined) tableNames(true);      // een spel zonder bieding vooraf: nieuwe tegenstanders
   gRun++; G = gameNew(); gShown = [null,null,null,null]; gBusy = false; gPending = null;
   G.role = state.grole==='tegen' ? 'tegen' : 'leider'; G.me = G.role==='tegen' ? (G.rk ? (2 + G.rk) % 4 : (rnd(2) ? 3 : 1)) : 2;      // na een bieding verdedig je met je eigen hand
-  G.start = G.hands.map(h=>h.slice()); G.log = []; ddsLoad();
+  G.start = G.hands.map(h=>h.slice()); G.log = []; ddsLoad(); dealHide();
   $('gtip').hidden = true;
   $('gend').hidden = true;
   gAdvance();
@@ -14185,7 +14267,7 @@ function smGameHTML(g){
   if(g.phase==='bid'){
     const turn = (g.dealer+g.calls.length)%4, last = g.calls.length-1;
     const bcard = i => { const b = g.calls[i], k = b==='pas' ? 'p' : b==='X' ? 'x' : b==='XX' ? 'xx' : 'n';
-      return '<button class="bc '+k+(k==='n' ? ' d-'+b[1]+' bg2' : '')+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+(b==='pas' ? 'pas' : b==='X' || b==='XX' ? b : bcFace(b))+'</button>'; };
+      return '<button class="bc '+k+(k==='n' ? ' d-'+b[1] : '')+' bg2'+(i===last ? ' new' : '')+'" data-smcall="'+i+'">'+bcFace(b)+'</button>'; };
     const stacks = [0,1,2,3].map(s=>{ const mine = g.calls.map((b,i)=>i).filter(i=>(g.dealer+i)%4===s); return mine.length ? '<div class="bst '+pos(s)+'"'+(mine.length>1 ? ' style="--n:'+mine.length+'"' : '')+'>'+mine.map(bcard).join('')+'</div>' : ''; }).join('');
     const oef = smHelpMe(), fb = smBidFeedback(g, me, ptn, nm, hu), ask = smAskLine(g, pn);
     const sq = '<div class="smsq sqb">'+labels(turn)+stacks+'</div>';
