@@ -622,10 +622,13 @@ dialog h2{font-family:var(--display);font-size:1.2rem;margin:0 0 .5rem}
 .tipmail{display:inline-block;margin:.2rem 0 .5rem;padding:.6rem 1rem;border-radius:10px;background:var(--felt);color:#fff;font-weight:600;text-decoration:none}
 .homebtn b{font-family:var(--display);font-size:1.35rem}
 @media (max-width:420px){ .homegrid .homebtn b{font-size:1.12rem;letter-spacing:-.01em} }
-.homegrid .homebtn.daily.daily{background:var(--felt);border-color:var(--felt);color:#fff} .homegrid .homebtn.daily.daily small{color:#DDEBE4} .homegrid .homebtn.daily b{color:#fff}
+.homegrid .homebtn.daily.daily{background:var(--felt);border-color:var(--felt);color:#fff} .homegrid .homebtn.daily.done{opacity:.62;cursor:default} .homegrid .homebtn.daily.daily small{color:#DDEBE4} .homegrid .homebtn.daily b{color:#fff}
 .dstreak{display:inline-block;font-weight:700;color:#1F5C45;background:#F4D35E;border-radius:999px;padding:0 .45em;margin-right:.4em}
-.bst.top{z-index:3} .bst .bc .alc.mini{display:none} .bst .bc:has(.alc.mini){box-shadow:inset 0 0 0 2.5px #2F7BEA, 0 1px 2px rgba(0,0,0,.3)} .bstep{display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.35rem auto .1rem;width:var(--rw, 100%);order:3} .bstep .bsb{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 1.5rem/1 system-ui;display:grid;place-items:center;padding:0} .bstep .bsb:disabled{opacity:.35} .bstx{flex:1;text-align:center;font-size:.95rem;line-height:1.25;min-width:0} .bstx small{display:block;color:var(--muted);font-size:.85rem;min-height:1.1em}
-#game.dailyend #gend .gdef, #game.dailyend #gend .gnote{display:none!important}
+.bst.top{z-index:3}
+/* v356: op de laptop is de biedingbox niet breder dan de tafel (tip: biedingbox te groot, tafel te klein) */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ #game #gbid > .box{max-width:calc(var(--tw) * var(--tz) * 1.15)!important;width:100%!important;grid-template-columns:repeat(5, minmax(0, 1fr))!important} #game #gbid > .box > button{min-width:0!important;width:auto!important;font-size:1.25rem!important;letter-spacing:-.02em} #game #gbid > .box > button *{font-size:inherit!important} } .bst .bc .alc.mini{display:none} .bst .bc:has(.alc.mini){box-shadow:inset 0 0 0 2.5px #2F7BEA, 0 1px 2px rgba(0,0,0,.3)} .bstep{display:flex;align-items:center;gap:.6rem;justify-content:center;margin:.35rem auto .1rem;width:var(--rw, 100%);order:3} .bstep .bsb{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:700 1.5rem/1 system-ui;display:grid;place-items:center;padding:0} .bstep .bsb:disabled{opacity:.35} .bstx{flex:1;text-align:center;font-size:.95rem;line-height:1.25;min-width:0} .bstx small{display:block;color:var(--muted);font-size:.85rem;min-height:1.1em}
+#game.dailyend #gend .gdef, #game.dailyend #gend .gnote, #game.dailyend #gend .gsets{display:none!important}
+#gend .ghead{display:block} #gend #gshort .gview{display:block;margin:.35rem 0 0} #gend details.gmore > summary, #gend details.gsets > summary{cursor:pointer;color:var(--accent, #1F6B47);font-weight:600;margin:.35rem 0;font-size:.95rem} #gend #gmore{font-size:.92rem}
 .gtip.dok{border-color:var(--felt);background:color-mix(in srgb, var(--felt) 10%, var(--surface))} .dbidex{font-size:.9rem;margin:.2rem 0} .dbidex ul{margin:.2rem 0 .2rem 1.1rem;padding:0} .dbidex li{margin:.1rem 0}
 .dverd p{margin:.25em 0} .dverd .dbar{display:grid;grid-template-columns:auto 1fr auto;gap:.15em .5em;align-items:center;font-size:.92em;margin:.2em 0 .35em} .dverd .dbar i{display:block;height:.6em;border-radius:3px;background:#B9CEC3} .dverd .dbar i.me{background:var(--felt)}
 .homebtn small{font-size:.85rem;color:var(--muted)}
@@ -1549,6 +1552,69 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 .navrow2 button{font:inherit;font-weight:600;font-size:.9rem;padding:.55rem .4rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
 #cloudmsg{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 0;text-align:center}
 
+
+/* v357: klassieke laptopweergave (profiel: Laptop = Klassiek) met kaarten met plaatjes (publiek domein, Byron Knoll) */
+.kf{display:none}
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+html.klas #game{--kh:min(21.5vh, 11vw);--c3:calc(2% + (96% - 3.2vw) * 2.55 / 3.6 + 3.2vw);--pr:calc(100% - var(--c3) + 1.6vw);--kw:calc(var(--kh) * .69);--ks:calc(var(--kw) * .37);position:relative!important}
+html.klas #game > #gnlabel, html.klas #game > #gslabel, html.klas #game .dcap{display:none!important}
+/* één rij per hand, kaarten overlappen; alleen de linkerrand met de index is zichtbaar */
+html.klas #game .hrows, html.klas #game .hrowli{display:contents!important}
+html.klas #game .hrow{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;width:auto!important;min-width:0!important;height:var(--kh)!important;margin:0!important;padding:0!important;transform:none!important;translate:none!important;position:relative!important;left:auto!important;top:auto!important;gap:0!important}
+html.klas #game .hrow .rc{position:relative!important;flex:none!important;width:var(--kw)!important;height:var(--kh)!important;min-width:0!important;margin:0 0 0 calc(var(--ks) - var(--kw))!important;left:auto!important;top:auto!important;right:auto!important;transform:none!important;border-radius:calc(var(--kw) * .07)!important;padding:0!important;overflow:hidden}
+html.klas #game .hrow .rc:first-child{margin-left:0!important}
+html.klas #game .hrow .rc.g{margin-left:calc(var(--ks) * 1.3 - var(--kw))!important}
+html.klas #game .hrow .rc .rci{position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;transform:none!important}
+html.klas #game .hrow .rc .rci > b{left:7%!important;right:auto!important;top:4%!important;width:27%!important;height:19%!important}
+html.klas #game .hrow .rc .rci > i{left:8%!important;right:auto!important;top:25%!important;width:25%!important;height:14%!important}
+html.klas #game button.rc.card:not([disabled]):hover{transform:translateY(-8%)!important}
+/* kaarten met plaatjes */
+html.kimg #game .rc .kf, html.kimg #game .tc.on .kf{display:block;position:absolute;left:0;top:0;width:100%;height:100%;background:url(kaarten-2.webp) calc(var(--x) * 100% / 12) calc(var(--y) * 100% / 3) / 1300% 400% no-repeat;border-radius:inherit;z-index:2}
+html.kimg[data-kleur="4"] #game .rc .kf, html.kimg[data-kleur="4"] #game .tc.on .kf{background-image:url(kaarten-4.webp)}
+html.kimg #game .rc .rci > b, html.kimg #game .rc .rci > i, html.kimg #game .tc.on > b, html.kimg #game .tc.on > i{visibility:hidden}
+html.kimg #game .hrow .rc, html.kimg #game .tc.on{background:transparent!important;border:0!important;box-shadow:0 1px 2px rgba(0,0,0,.3)!important}
+html.klas #game .sq #tN{top:1.5%!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important}
+html.klas #game .sq #tS{bottom:1.5%!important;top:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important}
+html.klas #game .sq #tW{left:1.5%!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important}
+html.klas #game .sq #tE{right:1.5%!important;left:auto!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important}
+html.klas #game .sq #tS.on{z-index:5} html.klas #game .sq #tW.on, html.klas #game .sq #tE.on{z-index:4}
+html.klas #game .sq .tc{height:var(--kh)!important;width:var(--kw)!important;aspect-ratio:auto!important;font-size:calc(var(--kh) * .3)!important;z-index:3} html.kimg #game .tc.on{border-radius:calc(var(--kw) * .07)!important;overflow:hidden}
+/* spelen: dummy boven, tafel in het midden, jouw hand onder, uitleg rechts */
+html.klas #game:not(.bidmode) > #gnorth{position:absolute!important;top:1.6vh!important;left:2%!important;right:var(--pr)!important;transform:none!important;width:auto!important;margin:0!important;display:block!important}
+html.klas #game:not(.bidmode) > #gsrow{position:absolute!important;bottom:1.6vh!important;left:2%!important;right:var(--pr)!important;transform:none!important;width:auto!important;margin:0!important;display:block!important}
+html.klas #game:not(.bidmode) > .tablewrap{position:absolute!important;left:calc((2% + 100% - var(--pr)) / 2)!important;top:calc(var(--kh) + 3.4vh)!important;bottom:calc(var(--kh) + 3.4vh)!important;transform:translateX(-50%)!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:1.2vw!important}
+html.klas #game > #gend:not([hidden]), html.klas #game > #gtip:not([hidden]){position:absolute!important;right:2%!important;left:var(--c3)!important;top:calc(1.6vh + 3.2rem)!important;bottom:auto!important;max-height:calc(100% - 3.2vh - 3.2rem)!important;overflow:auto!important;width:auto!important;transform:none!important;margin:0!important;z-index:20!important;box-sizing:border-box}
+html.klas #game:not(.bidmode) .tablewrap > .seat{display:none!important}
+html.klas #game:not(.bidmode) .tablewrap > .sqs{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;width:max-content!important;min-width:0!important;max-width:none!important;height:auto!important;margin:0!important}
+html.klas #game:not(.bidmode) .tablewrap > #gdl{right:calc(100% + 2vw)!important;left:auto!important} html.klas #game:not(.bidmode) .tablewrap > #gdr{left:calc(100% + 2vw)!important;right:auto!important}
+html.klas #game .kcols{display:flex;flex-direction:column;align-items:flex-start} html.klas #game .kcols.kl{align-items:flex-end}
+html.klas #game .kcols.kr > .hrow{justify-content:flex-start!important} html.klas #game .kcols.kl > .hrow{justify-content:flex-end!important}
+html.klas #game .kcols > .hrow + .hrow{margin-top:calc(var(--kh) * -.72)!important} html.klas #game .kcols .hrow .rc{margin-left:calc(var(--kw) * .3 - var(--kw))!important} html.klas #game .kcols .hrow .rc:first-child{margin-left:0!important}
+html.klas #game .hrow .void{display:none}
+html.klas #game:has(> #gend:not([hidden])) > #gstatus, html.klas #game:has(> #gtip:not([hidden])) > #gstatus{display:none!important}
+html.klas #game:not(.bidmode) > #gstatus{position:absolute!important;left:var(--c3)!important;right:auto!important;top:1.6vh!important;transform:none!important;width:calc(100% - var(--c3) - 2% - 3.4rem)!important;font-size:1.1rem!important;margin:0!important;text-align:left!important}
+/* bieden: verloop links, biedkast in het midden, jouw hand onder */
+html.klas #game.bidmode > #gsrow .hrow{justify-content:flex-start!important}
+html.klas #game.bidmode > #gsrow{position:absolute!important;bottom:1.6vh!important;left:2%!important;right:auto!important;transform:none!important;width:max-content!important;max-width:none!important;margin:0!important;display:block!important}
+html.klas #game.bidmode > #gbid{position:absolute!important;left:2%!important;right:calc(2% + 3.8rem)!important;top:1.6vh!important;bottom:calc(var(--kh) + 3.4vh)!important;display:grid!important;grid-template-columns:minmax(0, 1fr) 18rem!important;grid-template-rows:5.2rem auto minmax(0, 1fr)!important;gap:1.2vh 1.6vw!important;align-content:stretch!important;margin:0!important;width:auto!important;height:auto!important}
+html.klas #game.bidmode #gbid > .smsq, html.klas #game.bidmode #gbid > .bstep, html.klas #game.bidmode #gbid > .abwhy{display:none!important}
+html.klas #game.bidmode #gbid > .kbh{grid-area:1 / 1 / 4 / 2!important;display:grid;grid-template-rows:minmax(0, 1fr) auto;gap:1.2vh;align-content:stretch;min-height:0;min-width:0!important;width:auto!important;max-width:none!important;margin:0!important;overflow:hidden}
+html.klas #game.bidmode #gbid > .box{grid-area:2 / 2 / 3 / 3!important;margin:0!important;align-self:start!important;justify-self:stretch!important;width:100%!important;max-width:none!important;box-sizing:border-box} html.klas #game.bidmode #gbid > #bidsum *{max-width:100%;box-sizing:border-box;font-size:1.25rem!important;line-height:1.3!important} html.klas #game.bidmode #gbid > #bidsum svg, html.klas #game.bidmode #gbid > #bidsum img{font-size:inherit!important} html.klas #game.bidmode #gbid > #bidsum{grid-area:2 / 2 / 4 / 3!important;min-width:0;width:100%!important;max-width:100%!important;box-sizing:border-box;padding-right:0;margin:0!important;align-self:start;min-height:0;overflow:auto}
+html.klas #game{--ks:calc(var(--kw) * .4)} html.klas #game.bidmode{--kh:min(30vh, 15vw);} html.klas #game.bidmode .hrow{--ks:calc((var(--hw, 60rem) - var(--kw)) / var(--hd, 12.9))}
+html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3.8rem)!important;left:auto!important;top:1.6vh!important;width:18rem!important;height:5.2rem!important;overflow:hidden!important;font-size:1.25rem!important;line-height:1.3!important;margin:0!important;text-align:left!important;transform:none!important}
+.kbt{background:var(--surface, #fff);border:1px solid var(--line, #C9D4CD);border-radius:12px;overflow:hidden}
+.kbhd, .kbb{display:grid;grid-template-columns:repeat(4, minmax(0, 1fr))}
+.kbhd{background:rgba(0,0,0,.04);border-bottom:1px solid var(--line, #C9D4CD);font-weight:700;font-size:1.25rem;padding:.45rem .6rem}
+.kbhd span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .kbhd small{font-weight:400;opacity:.7;font-size:1em}
+.kbhd .kv{color:#B3141E} .kbhd .kg::after{content:'G';display:inline-grid;place-items:center;width:1.25em;height:1.25em;margin-left:.3em;border-radius:50%;background:#8A6A00;color:#fff;font-size:.72em;font-weight:700;vertical-align:.1em}
+.kbb{row-gap:.25rem;padding:.45rem .6rem;min-height:7.5rem;align-content:start} .kbt{display:flex;flex-direction:column;min-height:0;min-width:0} .kbh > *{min-width:0} .kbhd span{min-width:0} .kbt .kbb{flex:1;overflow:auto}
+.kbb .kbc{justify-self:start;font:inherit;font-weight:700;font-size:1.25rem;padding:.08rem .45rem;border-radius:6px;border:0;background:none;color:var(--ink, #14211C);cursor:pointer;min-height:0;min-width:0;line-height:1.35}
+.kbb .kbc:hover{background:rgba(0,0,0,.06)} .kbb .kbc.al{box-shadow:inset 0 0 0 2px #2F7BEA} .kbb .kbc.sel{background:#F4D35E}
+.kbb .kx{color:#B3261E} .kbb .kq{font-weight:700;font-size:1.25rem;color:#9AA39E;padding:.08rem .45rem}
+.kbx{background:var(--surface, #fff);border:1px solid var(--line, #C9D4CD);border-radius:12px;overflow:hidden}
+.kbx h4{margin:0;padding:.45rem .7rem;border-bottom:1px solid var(--line, #C9D4CD);background:rgba(0,0,0,.04);font-size:1.25rem}
+.kbx p{margin:.5rem .7rem;font-size:1.25rem;line-height:1.35} .kbx .kmut{color:var(--muted, #6B7570)}
+}
 </style>
 </head>
 <body>
@@ -1616,6 +1682,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
     </div>
     <div class="gend" id="gend" hidden>
       <p id="gresult"></p>
+      <details class="gsets"><summary>⚙︎ Instellingen voor het volgende spel</summary>
       <p class="gdef" id="gbidc">Eerst bieden: <button data-gbid="ja">Ja</button><button data-gbid="nee">Nee</button></p>
       <p class="gnote" id="gbidnote" hidden>Wie de leider wordt en wat het contract is, volgt uit de bieding: jullie spelen het af of verdedigen.</p>
       <p class="gdef" id="grole">Jij bent: <button data-grole="leider">Leider</button><button data-grole="tegen">Tegenspeler</button></p>
@@ -1623,6 +1690,7 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
       <p class="gdef" id="gtipsc">Tips achteraf: <button data-gtips="aan">Aan</button><button data-gtips="uit">Uit</button></p>
       <p class="gdef" id="gopp">Tegenstanders spelen: <span id="goppbox"></span></p>
       <p class="gdef" id="gdef" hidden><span id="gdeflab">Tegenspel:</span> <button data-gdef="vuist">Gewoon</button><button data-gdef="sterk">Sterk</button></p>
+      </details>
       <button class="next" id="gnew">Nieuw spel</button>
     </div>
   </section>
@@ -4071,7 +4139,9 @@ function glyphRefresh(){ for(const k in GLY) delete GLY[k];
     if(!v){ try{ v = rankBox(t, w); }catch(e){ return; } if(rankReady(w, t)) GLY[k] = v; }
     s.setAttribute('viewBox', v.map(x=>+x.toFixed(2)).join(' ')); }); }
 try{ if(document.fonts && document.fonts.load) Promise.all([document.fonts.load('400 100px '+RANKFONT, 'AHVBT0123456789'), document.fonts.load('700 100px '+RANKFONT, 'AHVBT0123456789')]).then(glyphRefresh, ()=>{}); }catch(e){}
-function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'; }
+const KF_R = {A:14, H:13, V:12, B:11, T:10};
+const kfHTML = (s, r) => '<u class="kf" style="--x:'+(r-2)+';--y:'+SUITS.indexOf(s)+'"></u>';
+function playHTML(id){ const s = id[0], r = +id.slice(1), t = ''+(RANK[r]||r); return '<b>'+glyph(t, 400)+'</b><i class="pcs '+s+'">'+glyph(SYM[s], 700)+'</i>'+kfHTML(s, r); }
 function pcsMeasure(){ try{
   // De browser zelf laten zeggen waar de basislijn ligt (regelhoogte = lettergrootte); het lettertype zegt hoe hoog de tekens boven de basislijn uitsteken.
   const fam = getComputedStyle(document.body).fontFamily, R = document.documentElement.style, cv = document.createElement('canvas').getContext('2d');
@@ -8325,7 +8395,13 @@ if(state.conv==='spelmix' && state.playSet.length<2) state.conv = state.playSet[
 if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
 tab = tabOf(state.conv);
 let CLUB_OVR = null;      // tijdens de analyse van een samen gespeeld spel staat hier de echte clubavond
-function kleurApply(){ try{ document.documentElement.dataset.kleur = state.kleur==='4' ? '4' : '2'; }catch(e){} }
+function kleurApply(){ try{ const h = document.documentElement; h.dataset.kleur = state.kleur==='4' ? '4' : '2'; h.classList.toggle('klas', state.lay==='klassiek'); h.classList.toggle('kimg', state.lay==='klassiek' && state.kaart!=='modern'); }catch(e){} }
+// klassiek bieden: de hand precies even breed als het blok met het biedverloop
+function klasFit(){ try{ const g = $('game'); if(!KLAS()){ g.style.removeProperty('--hw'); return; } const kb = document.querySelector('#gbid > .kbh .kbt') || $('gbid'), w = kb.getBoundingClientRect().width; if(w > 0) g.style.setProperty('--hw', w+'px');
+  const n = document.querySelectorAll('#gsrow .rc').length, k = document.querySelectorAll('#gsrow .rc.g').length; if(n > 1) g.style.setProperty('--hd', ((n-1) + .3*k).toFixed(2)); }catch(e){} }
+window.addEventListener('resize', ()=>klasFit());
+try{ new MutationObserver(()=>klasFit()).observe(document.getElementById('gsrow'), {childList:true}); }catch(e){}
+function layRerender(){ try{ if(BIDS) bidRender(); else if(G) gRender(); }catch(e){} }
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(CLUB_OVR ? Object.assign({}, state, {club:CLUB_OVR.club, clubMe:CLUB_OVR.me}) : state)); }catch(e){} }
 
 let q = null, answered = false, qSrc = null;
@@ -8404,7 +8480,18 @@ function handRows(list, plan){ plan = plan || rowPlan(list); const rows = [];
   return rows; }
 // Elke hand ligt zoals je eigen hand, meegedraaid met de plaats aan tafel: de eerste rij (met de troef) tegen de tafel, de troef rechts gezien vanaf het midden van de tafel.
 // side: 'l' of 'r' = dummy opzij (gedraaide kaarten in kolommen), 't' = bovenaan (een halve slag gedraaid), niets = je eigen hand onderaan.
+const KLAS = () => state.lay==='klassiek' && LAPTOP();
+// kleurvolgorde zonder twee zwarte of twee rode kleuren naast elkaar (schoppen, harten, klaveren, ruiten)
+function klasOrder(list){
+  const has = ['S','H','C','D'].filter(x=>list.some(c=>c.s===x)), red = x => x==='H' || x==='D';
+  const perms = a => a.length<2 ? [a] : a.flatMap((x,i)=>perms(a.filter((_,j)=>j!==i)).map(p=>[x,...p]));
+  const ok = p => p.every((x,i)=>i===0 || red(x)!==red(p[i-1]));
+  return perms(has).find(ok) || has; }
 function handRow(list, side, plan){
+  if(KLAS()){ const su = klasOrder(list);
+    list = su.flatMap(x=>list.filter(c=>c.s===x));
+    if(side!=='l' && side!=='r') return handRow1(list, null);
+    return '<div class="kcols k'+side+'">'+su.map(x=>handRow1(list.filter(c=>c.s===x), null)).join('')+'</div>'; }
   const one = !plan && list.length<=8 && list.every(c=>c.s===list[0].s), rows = one ? [list] : handRows(list, plan);
   const ph = v => '<div class="hrow'+(v ? ' v'+v : '')+' ph" style="--n:2;--g:0"></div>';
   if(side==='l' || side==='r') return '<div class="hcols v'+side+'">'+(side==='l' ? rows.slice().reverse() : rows).map(r=>r.length ? handRow1(r, side) : ph(side)).join('')+'</div>';
@@ -8412,7 +8499,7 @@ function handRow(list, side, plan){
   return '<div class="hrows">'+(side==='t' ? rows.slice().reverse() : rows).map(r=>r.length ? handRow1(side==='t' ? r.slice().reverse() : r) : ph()).join('')+'</div>'; }
 function handRow1(list, side){ let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
-    return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+glyph(''+c.t, 400)+'</b><i>'+glyph(SYM[c.s], 700)+'</i></span></'+tag+'>'; }).join('');
+    return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+glyph(''+c.t, 400)+'</b><i>'+glyph(SYM[c.s], 700)+'</i>'+kfHTML(c.s, KF_R[c.t] || +c.t)+'</span></'+tag+'>'; }).join('');
   return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+';--m:'+Math.max(1, list.length-1-g)+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
 function handRowOf(h, only, side, tr){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L, side, tr && only==null ? rowPlan(L, tr) : undefined); }
 // het contract: een rond bolletje in de troefkleur aan het naamplaatje van de leider
@@ -10566,10 +10653,25 @@ function bidRender(){
       ? '<b>Bod '+lim+' van '+n+'</b> · '+who+' '+(c==='pas' ? 'pas' : c==='X' || c==='XX' ? c : bidHTML(c))+(B.why[i] || AL.has(i) ? '<small class="altxt">'+(AL.has(i) ? '<i class="alc vast">A</i> ' : '')+(B.why[i] || AL.get(i))+'</small>' : '<small>&nbsp;</small>')
       : '<b>Speel de bieding na</b><small>bod voor bod, met uitleg</small>')+'</div><button class="bsb" data-bstep="1" aria-label="Volgend bod"'+(!stepping ? ' disabled' : '')+'>›</button></div>'; }
   const keep = B.done && $('bidsum') ? $('bidsum').innerHTML : null;
+  if(KLAS()) html = kbhHTML(B, AL, turn) + html;
   $('gbid').innerHTML = html + alh + (alh ? '' : pw) + (B.done ? '<div id="bidsum"></div>' : box);
   if(keep!==null) $('bidsum').innerHTML = keep;
+  klasFit();
   $('gstatus').innerHTML = (B.club ? B.club+' · ' : '')+'Gever '+NM[B.dealer]+' · '+VULTXT(B.vul)+'<br>'+(B.done ? (B.ask || 'De bieding is klaar.') : turn===2 ? 'Jij bent aan de beurt.' : NM[turn]+' is aan de beurt…');
 }
+function kbhHTML(B, AL, turn){
+  const ord = [3,0,1,2], nm = s => seatNm(s)+' <small>('+'NOZW'[s]+')</small>', vulOf = s => B.vul==='Allen' || (s%2===0 ? B.vul==='NZ' : B.vul==='OW');
+  const cells = []; for(let i=0; i<ord.indexOf(B.dealer); i++) cells.push('<span></span>');
+  const sel = B.ksel!=null && B.ksel<B.calls.length ? B.ksel : null;
+  B.calls.forEach((b,i)=>cells.push('<button class="kbc'+(AL.has(i) ? ' al' : '')+(i===sel ? ' sel' : '')+'" data-kbsel="'+i+'">'+(b==='pas' ? 'Pas' : b==='X' || b==='XX' ? '<span class="kx">'+b+'</span>' : bidHTML(b))+'</button>'));
+  if(!B.done) cells.push('<span class="kq">'+(turn===2 ? '?' : '…')+'</span>');
+  const i = sel!=null ? sel : B.calls.length-1;
+  let ex = '';
+  if(i>=0){ const c = B.calls[i], s = (B.dealer+i)%4, w = B.why[i] || (AL.has(i) ? AL.get(i) : '');
+    ex = '<h4>'+seatNm(s)+': '+(c==='pas' ? 'Pas' : c==='X' || c==='XX' ? c : bidHTML(c))+(AL.has(i) ? ' <i class="alc vast">A</i>' : '')+'</h4><p>'+(w ? w : '<span class="kmut">Geen uitleg bij dit bod.</span>')+'</p>'; }
+  else ex = '<h4>Bieden</h4><p class="kmut">Klik op een bod in de tabel om de uitleg te zien.</p>';
+  return '<div class="kbh"><div class="kbt"><div class="kbhd">'+ord.map(s=>'<span class="'+(vulOf(s) ? 'kv' : '')+(s===B.dealer ? ' kg' : '')+'">'+nm(s)+'</span>').join('')+'</div><div class="kbb">'+cells.join('')+'</div></div><div class="kbx">'+ex+'</div></div>'; }
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-kbsel]'); if(!x || !BIDS) return; BIDS.ksel = +x.dataset.kbsel; bidRender(); });
 const lampMark = () => '<img class="tipmark" alt="Tip" src="'+$('glamp').querySelector('img').src+'">';
 const LAPTOP = () => matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').matches;
 document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-bstep]'); if(!x || !BIDS || !BIDS.done) return; const B = BIDS, n = B.calls.length, d = +x.dataset.bstep;
@@ -11702,6 +11804,8 @@ const SEATNAME = ['Noord','Oost','Zuid','West'];
 const gOrig = s => (s - ((typeof G!=='undefined' && G && G.rk) || 0) + 4) % 4, gNm = s => SEATNAME[gOrig(s)], gLt = s => 'NOZW'[gOrig(s)];
 // Leider: jij speelt Noord (dummy) en Zuid. Tegenspeler: jij speelt West of Oost (G.me), de computer de rest.
 const gLevel = g => g.level || (g.trump===4 ? 3 : 4);
+// naam bij een plaats in het spel: als tegenspeler zonder bieding zit jij op G.me, je partner tegenover je
+const gSeatNm = s => (G && G.role==='tegen' && !G.rk && G.me!=null) ? seatNm((s - G.me + 6) % 4) : seatNm(gOrig(s));
 const gCHTML = g => gLevel(g)+(g.trump===4 ? 'SA' : '<span class="'+SUITS[g.trump]+'">'+SYM[SUITS[g.trump]]+'</span>')+(g.dbl===2 ? ' XX' : g.dbl ? ' X' : '');
 const gMine = seat => G && (G.role==='tegen' ? seat===G.me : seat%2===0);
 function gRows(L, plan, side){ return '<li class="hrowli">'+handRow(L, side || null, plan || rowPlan(L))+'</li>'; }
@@ -11771,7 +11875,7 @@ function gRender(){
   $('gstatus').innerHTML = (def ? 'Jullie '+G.ew+', leider '+G.ns+' · down bij '+(14-G.need) : 'Jij '+G.ns+', zij '+G.ew+' · nodig '+G.need)+(who ? '<br>'+who : '');
   $('gcontract').innerHTML = '';
   { const t = s => !G.over && G.turn===s;
-    const O = {N:{name:seatNm(gOrig(0)), d:1, turn:t(0)}, O:{name:seatNm(gOrig(1)), turn:t(1)}, Z:{name:seatNm(gOrig(2)), l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:seatNm(gOrig(3)), turn:t(3)}};
+    const O = {N:{name:gSeatNm(0), d:1, turn:t(0)}, O:{name:gSeatNm(1), turn:t(1)}, Z:{name:gSeatNm(2), l:1, turn:t(2), c:ctrBadge(gLevel(G)+(G.trump===4 ? 'SA' : SUITS[G.trump]), G.dbl)}, W:{name:gSeatNm(3), turn:t(3)}};
     $('gsqnm').innerHTML = [['N',0],['O',1],['Z',2],['W',3]].map(([k,s])=>tblPill(['t','r','b','l'][rot(s)], O[k].name, gLt(s), O[k])).join(''); }
 }
 // Dummy opzij op een smal scherm: past de rij (dummy + tafel) niet, dan wordt alleen de tafel iets kleiner; de kaarten houden hun maat.
@@ -11855,16 +11959,21 @@ function gScoreTxt(){
   if(G.dvul===undefined) return ' Score: <b>'+scoreTxt(def*sc(false))+'</b> niet kwetsbaar, '+scoreTxt(def*sc(true))+' kwetsbaar.';
   return ' Score: <b>'+scoreTxt(def*sc(G.dvul))+'</b>'+(G.dvul ? ' (leider kwetsbaar)' : ' (leider niet kwetsbaar)')+'.';
 }
+function gEndHTML(head, full){
+  const sc = v => bridgeScore(gLevel(G), G.trump, G.dbl||0, v, G.ns), def = G.role==='tegen' ? -1 : 1;
+  $('gresult').innerHTML = '<span class="ghead">'+head+' · score <b>'+scoreTxt(def*sc(G.dvul===undefined ? false : G.dvul))+'</b></span><span id="gshort"></span>'
+    + '<details class="gmore"><summary>Meer uitleg</summary><div id="gmore">'+full+'</div></details>';
+}
 function gFinish(){
   gcEvent(G.club ? 'clubspel-gespeeld' : 'heel-spel-gespeeld');
   const diff = G.ns-G.need;
   if(G.role==='tegen'){
-    $('gresult').innerHTML = (diff<0 ? '<b>Down gespeeld</b>: jullie haalden '+G.ew+' slagen, de leider kwam '+(-diff)+' tekort.' : '<b>Contract gemaakt</b> door de leider: jullie haalden '+G.ew+' slagen, er waren er '+(14-G.need)+' nodig.')+' '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
-    $('gresult').innerHTML += gScoreTxt();
+    const full = (diff<0 ? '<b>Down gespeeld</b>: jullie haalden '+G.ew+' slagen, de leider kwam '+(-diff)+' tekort.' : '<b>Contract gemaakt</b> door de leider: jullie haalden '+G.ew+' slagen, er waren er '+(14-G.need)+' nodig.')+' '+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.') + gScoreTxt();
+    gEndHTML((diff<0 ? '<b>'+(-diff)+' down</b> · jullie '+G.ew+' slagen' : '<b>Contract gemaakt</b> · jullie '+G.ew+' slagen, '+(14-G.need)+' nodig'), full);
     $('gend').hidden = false; gRender(); gDefRender(); gVerdict(); return;
   }
-  $('gresult').innerHTML = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. '+(G.trump===4 ? 'Je begon met '+G.top+' vaste slagen. ' : 'Je begon met '+G.los+' verliezer'+(G.los===1 ? '' : 's')+' in je hand. ')+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.');
-  $('gresult').innerHTML += gScoreTxt();
+  const full = (diff>=0 ? '<b>Gemaakt</b> met '+G.ns+' slagen'+(diff>0 ? ' ('+diff+' overslag'+(diff>1 ? 'en' : '')+')' : '') : '<b>'+(-diff)+' down</b>: '+G.ns+' slagen, je had er '+G.need+' nodig')+'. '+(G.trump===4 ? 'Je begon met '+G.top+' vaste slagen. ' : 'Je begon met '+G.los+' verliezer'+(G.los===1 ? '' : 's')+' in je hand. ')+(G.tips ? 'Onderweg kreeg je '+G.tips+' keer een tip.' : 'Onderweg was er geen moment waarop de app een duidelijk betere kaart zag.') + gScoreTxt();
+  gEndHTML((diff>=0 ? '<b>Gemaakt</b>'+(diff>0 ? ' +'+diff : '')+' · '+G.ns+' slagen' : '<b>'+(-diff)+' down</b> · '+G.ns+' slagen'), full);
   $('gend').hidden = false;
   gRender();
   gDefRender();
@@ -11895,6 +12004,7 @@ const DAILY = {
     odds:'Als Noord-Zuid geen ♦A hebben, verslaat ♦ het slem in 47% van de liggingen, ♠ in 5%. In elke ligging waarin het slem te verslaan is, doet ♦ dat.'}
 };
 const DAILY_DD = {"lightner": {"par": "Haalbaar met open kaarten: <b>jullie</b> 2<span class=\"C\">♣︎</span> (8 slagen, +90); <b>zij</b> 6SA (12 slagen, +990). <b>Par:</b> 6SA door hen, −990 voor jullie.", "lt": {"4": 1, "14": 1, "15": 1, "19": 1, "28": 2, "29": 2, "32": 2, "33": 2, "36": 2, "41": 1, "43": 1, "44": 1, "48": 1}, "need": 2}, "inspelen": {"par": "Haalbaar met open kaarten: <b>jullie</b> 6SA (12 slagen, +990); <b>zij</b> niets. <b>Par:</b> 6SA door jullie, +990 voor jullie.", "lt": null, "need": 2}, "stayman": {"par": "Haalbaar met open kaarten: <b>jullie</b> niets; <b>zij</b> 4<span class=\"H\">♥︎</span> (10 slagen, +420). <b>Par:</b> 4<span class=\"H\">♥︎</span> door hen, −420 voor jullie.", "lt": {"6": 3, "7": 3, "8": 3, "9": 3, "10": 3, "13": 3, "16": 3, "18": 3, "26": 3, "32": 3, "33": 3, "40": 5, "41": 5}, "need": 5}, "actief": {"par": "Haalbaar met open kaarten: <b>jullie</b> niets; <b>zij</b> 5SA (11 slagen, +460). <b>Par:</b> 3SA door hen, −460 voor jullie.", "lt": {"6": 0, "7": 0, "8": 0, "9": 0, "14": 0, "19": 0, "28": 2, "29": 2, "33": 2, "37": 2, "40": 0, "44": 0, "46": 0}, "need": 2}};
+let DAILY_BUSY = false;
 const DAILY_ORDER = ['lightner','inspelen','stayman','actief'];
 const dKey = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const dNum = d => Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/864e5);
@@ -11903,11 +12013,17 @@ function dailyState(){ if(!state.dly || typeof state.dly!=='object') state.dly =
 function dailyStreak(){ const s = dailyState(), y = new Date(); y.setDate(y.getDate()-1); return (s.last===dKey(new Date()) || s.last===dKey(y)) ? s.streak : 0; }
 function dailyHomeBtn(){
   const t = dailyToday(), p = DAILY[t.id], s = dailyState(), done = s.res[t.date], n = dailyStreak();
-  return '<button class="homebtn daily" data-daily="1"><b>Probleem van de dag</b><small>'+(n>=2 ? '<span class="dstreak">'+n+' dagen op rij</span>' : '')+(done ? '✓ Vandaag gedaan · morgen een nieuw probleem' : (p.type==='uitkomen' ? 'Uitkomen' : 'Afspelen')+' · ± 2 minuten')+'</small></button>';
+  return '<button class="homebtn daily'+(done ? ' done' : '')+'" data-daily="1"'+(done ? ' aria-disabled="true"' : '')+'><b>Probleem van de dag</b><small>'+(n>=2 ? '<span class="dstreak">'+n+' dagen op rij</span>' : '')+(done ? '✓ Vandaag gedaan · morgen een nieuw probleem' : (p.type==='uitkomen' ? 'Uitkomen' : 'Afspelen')+' · ± 2 minuten')+'</small></button>';
 }
 function dailyQuiet(){ return !!((BIDS && BIDS.daily) || (G && G.daily && !G.dailyDone && state.conv==='spel')); }
-function dailyStart(){
-  const t = dailyToday(), p = DAILY[t.id];
+async function dailyStart(){
+  const t = dailyToday(), p = DAILY[t.id], ds = dailyState();
+  if(ds.res[t.date]) return;                                   // vandaag al gedaan: niet nog eens
+  if(DAILY_BUSY) return; DAILY_BUSY = true;
+  try{ if(FB_CONFIG && navigator.onLine){ const {db, uid} = await Promise.race([fbLoad(), new Promise((_, no)=>setTimeout(()=>no(0), 2500))]);
+      const v = (await Promise.race([db.ref('daily/'+t.date+'/'+uid).once('value'), new Promise((_, no)=>setTimeout(()=>no(0), 2500))])).val();
+      if(typeof v==='string'){ ds.res[t.date] = v; save(); DAILY_BUSY = false; if(typeof openMenu==='function') openMenu(); return; } } }catch(e){}
+  DAILY_BUSY = false;
   const th = $('theory'); if(th && th.open) th.close(); if($('settings').open) $('settings').close();
   state.conv = 'spel'; save(); renderModes();
   $('game').hidden = false; document.querySelector('main.table').hidden = true; $('feedback').hidden = true;
@@ -12113,7 +12229,8 @@ function gVerdict(){
       if(ew<0) return;
       const sl = n => n+' slag'+(n===1 ? '' : 'en'), down = 14-g.need;
       const txt = 'Met open kaarten konden jullie vanaf het begin <b>'+sl(ew)+'</b> maken'+(ew>=down ? ', genoeg om hem down te spelen' : ', niet genoeg om hem down te spelen')+'. Jullie haalden er '+g.ew+'.';
-      $('gresult').insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms1+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>'+(g.log && g.log.length===52 ? '<button class="gview" data-greview="1">Bekijk per slag waar het misging</button>' : ''));
+      ($('gmore') || $('gresult')).insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms1+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>'+(g.log && g.log.length===52 ? '<button class="gview" data-greview="1">Bekijk per slag waar het misging</button>' : ''));
+      { const gs = $('gshort'), rb = $('gmore') && $('gmore').querySelector('[data-greview]'); if(gs){ gs.innerHTML = '<br>'+'Met open kaarten: <b>'+sl(ew)+'</b> voor jullie.'; if(rb) gs.appendChild(rb); } }
       return;
     }
     const hands = g.start.map(h=>h.slice()), t0 = performance.now();
@@ -12124,9 +12241,10 @@ function gVerdict(){
     const txt = d>0 ? 'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in; jij haalde er '+g.ns+'. Er zat'+(d===1 ? ' er 1' : 'en er '+d)+' meer in.'
       : d===0 ? 'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in, en die heb je allemaal gehaald. Beter kan niet.'
       : 'Met open kaarten zaten er na deze uitkomst tegen perfect tegenspel <b>'+sl(max)+'</b> in; jij haalde er '+g.ns+'. De tegenspelers lieten dus iets liggen.';
-    $('gresult').insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>'+(g.log && g.log.length===52 ? '<button class="gview" data-greview="1">Bekijk per slag waar het misging</button>' : ''));
+    ($('gmore') || $('gresult')).insertAdjacentHTML('beforeend', '<span class="gdd"><br>'+txt+'<small> Met open kaarten: alsof je alle vier de handen ziet. Berekend in '+ms+' ms met DDS (Bo Haglund en Soren Hein, Apache 2.0) via bridge-tools.</small></span>'+(g.log && g.log.length===52 ? '<button class="gview" data-greview="1">Bekijk per slag waar het misging</button>' : ''));
+    { const gs = $('gshort'), rb = $('gmore') && $('gmore').querySelector('[data-greview]'); if(gs){ gs.innerHTML = '<br>'+'Met open kaarten zaten er na deze uitkomst <b>'+sl(max)+'</b> in.'; if(rb) gs.appendChild(rb); } }
   }).then(()=>{ if(g!==G || !window.DDS || !g.start) return;
-    return ddParInfo(g.start, g.dvul, g.ovul, g.role==='tegen' ? 1 : 0, ()=>g===G).then(x=>{ const r = $('gresult'); if(x && r && g===G && !r.querySelector('.gpar')) { const body = x+(g.dvul===undefined ? '<small> Gerekend met niemand kwetsbaar.</small>' : ''); r.insertAdjacentHTML('beforeend', LAPTOP() ? '<span class="gdd gpar"><br>'+body+'</span>' : '<details class="gdd gpar"><summary>Haalbaar en par met open kaarten</summary><p>'+body+'</p></details>'); } });
+    return ddParInfo(g.start, g.dvul, g.ovul, g.role==='tegen' ? 1 : 0, ()=>g===G).then(x=>{ const r = $('gmore') || $('gresult'); if(x && r && g===G && !r.querySelector('.gpar')) { const body = x+(g.dvul===undefined ? '<small> Gerekend met niemand kwetsbaar.</small>' : ''); r.insertAdjacentHTML('beforeend', LAPTOP() ? '<span class="gdd gpar"><br>'+body+'</span>' : '<details class="gdd gpar"><summary>Haalbaar en par met open kaarten</summary><p>'+body+'</p></details>'); } });
   }).catch(()=>{});
 }
 function gAdvance(){
@@ -13123,7 +13241,8 @@ async function accStart(){
   if(!u || u.isAnonymous){ ACC.name = ''; if(state.acct){ delete state.acct; save(); } return; }
   const v = (await db.ref('users/'+u.uid).once('value')).val(); ACC.name = (v && v.name) || u.displayName || '';
   if(!ACC.name) return;
-  state.acct = 1; state.myName = ACC.name; if(v && (v.kleur==='2' || v.kleur==='4')){ state.kleur = v.kleur; kleurApply(); } save();
+  state.acct = 1; state.myName = ACC.name; if(v && (v.kleur==='2' || v.kleur==='4')){ state.kleur = v.kleur; kleurApply(); }
+  if(v && (v.lay==='tafel' || v.lay==='klassiek')){ state.lay = v.lay; kleurApply(); } if(v && (v.kaart==='klassiek' || v.kaart==='modern')){ state.kaart = v.kaart; kleurApply(); } save();
   try{ await u.reload(); }catch(e){}
   ACC.unver = !firebase.auth().currentUser.emailVerified;
   // net bevestigd? dan het toegangsbewijs vernieuwen, anders weigert de database het online zetten
@@ -13249,6 +13368,8 @@ function accHTML(){
       + '<input type="file" id="acfoto" accept="image/*" hidden><button class="gview alt" id="acfotobtn"'+(ACC.busy ? ' disabled' : '')+'>'+(f ? 'Andere foto kiezen' : 'Foto kiezen')+'</button>'
       + (f ? '<button class="gview alt" id="acfotodel"'+(ACC.busy ? ' disabled' : '')+'>Foto verwijderen</button>' : '')
       + '<p class="gdef ackleur">Kaartkleuren: <button data-kleur="4" aria-pressed="'+(state.kleur==='4')+'">Vier kleuren</button><button data-kleur="2" aria-pressed="'+(state.kleur!=='4')+'">Rood en zwart</button></p>'
+      + '<p class="gdef ackleur">Laptop: <button data-lay="tafel" aria-pressed="'+(state.lay!=='klassiek')+'">Tafel</button><button data-lay="klassiek" aria-pressed="'+(state.lay==='klassiek')+'">Klassiek</button></p>'
+      + (state.lay==='klassiek' ? '<p class="gdef ackleur">Kaarten op de laptop: <button data-kaart="klassiek" aria-pressed="'+(state.kaart!=='modern')+'">Met plaatjes</button><button data-kaart="modern" aria-pressed="'+(state.kaart==='modern')+'">Eenvoudig</button></p>' : '')
       + '<button class="gview alt" data-acv="edit">Naam, e-mail of wachtwoord wijzigen</button>'
       + '<button class="gview alt" id="acout">Uitloggen</button>'
       + '<button class="gview" id="acdone">Klaar</button>'
@@ -13805,6 +13926,10 @@ async function cardCloud(mode){
 }
 document.addEventListener('click', e=>{ const b = e.target.closest && e.target.closest('[data-cardcloud]'); if(b) cardCloud(b.dataset.cardcloud); });
 document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-kleur]'); if(!x || x.tagName!=='BUTTON') return; state.kleur = x.dataset.kleur; save(); kleurApply(); try{ const u = window.firebase && firebase.apps.length && firebase.auth().currentUser; if(u && !u.isAnonymous && state.acct) firebase.database().ref('users/'+u.uid+'/kleur').set(state.kleur).catch(()=>{}); }catch(err){} x.parentElement.querySelectorAll('[data-kleur]').forEach(b=>b.setAttribute('aria-pressed', b===x)); });
+document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-lay],[data-kaart]'); if(!x || x.tagName!=='BUTTON') return; const k = x.dataset.lay ? 'lay' : 'kaart'; state[k] = x.dataset[k]; save(); kleurApply(); layRerender();
+  try{ const u = window.firebase && firebase.apps.length && firebase.auth().currentUser; if(u && !u.isAnonymous && state.acct) firebase.database().ref('users/'+u.uid+'/'+k).set(state[k]).catch(()=>{}); }catch(err){}
+  if(k==='lay' && typeof samenDraw==='function'){ try{ samenDraw(); }catch(err){} } else x.parentElement.querySelectorAll('[data-'+k+']').forEach(b=>b.setAttribute('aria-pressed', b===x)); });
+matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').addEventListener('change', ()=>{ if(state.lay==='klassiek') layRerender(); });
 kleurApply();
 // ---------- Account op het hoofdscherm: silhouet = anoniem, naam (en foto) = ingelogd ----------
 const ACC_SVG = '<svg viewBox="0 0 38 34" aria-hidden="true"><rect x="3" y="2" width="32" height="30" rx="2"/><circle cx="19" cy="13" r="5.5"/><path d="M8 31.5c0-7 4.5-10.5 11-10.5s11 3.5 11 10.5"/></svg>';
