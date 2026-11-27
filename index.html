@@ -1556,6 +1556,81 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
 /* v370: in de klassieke weergave geen extra vergroting van de tafel: kaarten op tafel even groot als in de hand */
 @media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ html.klas #game #gsq, html.klas #game > .tablewrap, html.klas #game > .tablewrap > #gsq{zoom:1!important} html.klas #game:not(.bidmode) #gsq{width:calc(var(--kh) * 1.75)!important;height:calc(var(--kh) * 1.75)!important;max-width:none!important;max-height:none!important;flex:none!important} }
+/* v371: klassieke laptopweergave ook in de speeloefeningen: dezelfde kaarten, vaste plek voor de tafel */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+html.klas main.table:is(.play,.lead){--kh:min(19vh, 10vw);--kw:calc(var(--kh) * .69);--ks:calc(var(--kw) * .4);--lc:52%;position:relative!important;padding-left:var(--lc)!important;box-sizing:border-box!important}
+html.klas main.table:is(.play,.lead) .hrows, html.klas main.table:is(.play,.lead) .hrowli{display:contents!important} html.klas main.table:is(.play,.lead) #hand > li, html.klas main.table:is(.play,.lead) #dummyhand > li{display:contents!important} html.klas main.table:is(.play,.lead) .hrow, html.klas main.table:is(.play,.lead) #hand .hrow, html.klas main.table:is(.play,.lead) #dummyhand .hrow, html.klas main.table:is(.play,.lead) #qwrap .hrow{flex:none!important;width:max-content!important;min-width:0!important;max-width:none!important;container-type:normal!important}
+html.klas main.table:is(.play,.lead) .hrow{display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;width:auto!important;min-width:0!important;height:var(--kh)!important;margin:0!important;padding:0!important;transform:none!important;translate:none!important;position:relative!important;left:auto!important;top:auto!important;gap:0!important}
+html.klas main.table:is(.play,.lead) .hrow .rc{position:relative!important;flex:none!important;width:var(--kw)!important;height:var(--kh)!important;min-width:0!important;margin:0 0 0 calc(var(--ks) - var(--kw))!important;left:auto!important;top:auto!important;right:auto!important;transform:none!important;border-radius:calc(var(--kw) * .07)!important;padding:0!important;overflow:hidden;isolation:isolate}
+html.klas main.table:is(.play,.lead) .hrow .rc:first-child{margin-left:0!important}
+html.klas main.table:is(.play,.lead) .hrow .rc.g{margin-left:calc(var(--ks) * 1.3 - var(--kw))!important}
+html.klas main.table:is(.play,.lead) .hrow .rc .rci{position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;transform:none!important}
+html.klas main.table:is(.play,.lead) .hrow .rc .rci > b{left:7%!important;right:auto!important;top:4%!important;width:27%!important;height:19%!important}
+html.klas main.table:is(.play,.lead) .hrow .rc .rci > i{left:8%!important;right:auto!important;top:25%!important;width:25%!important;height:14%!important}
+html.kimg main.table:is(.play,.lead) .rc .kf, html.kimg main.table:is(.play,.lead) .tc.on .kf{display:block;position:absolute;left:0;top:0;width:100%;height:100%;background:url(kaarten-2.webp) calc(var(--x) * 100% / 12) calc(var(--y) * 100% / 3) / 1300% 400% no-repeat;border-radius:inherit;z-index:2}
+html.kimg[data-kleur="4"] main.table:is(.play,.lead) .rc .kf, html.kimg[data-kleur="4"] main.table:is(.play,.lead) .tc.on .kf{background-image:url(kaarten-4.webp)}
+html.kimg main.table:is(.play,.lead) .rc .rci > b, html.kimg main.table:is(.play,.lead) .rc .rci > i, html.kimg main.table:is(.play,.lead) .tc.on > b, html.kimg main.table:is(.play,.lead) .tc.on > i{visibility:hidden}
+html.kimg main.table:is(.play,.lead) .hrow .rc, html.kimg main.table:is(.play,.lead) .tc.on{background:transparent!important;border:0!important;box-shadow:0 1px 2px rgba(0,0,0,.3)!important}
+html.kimg main.table:is(.play,.lead) .tc.on{border-radius:calc(var(--kw) * .07)!important;overflow:hidden}
+html.klas main.table:is(.play,.lead) .kcols{display:flex;flex-direction:column;align-items:flex-start} html.klas main.table:is(.play,.lead) .kcols.kl{align-items:flex-end}
+html.klas main.table:is(.play,.lead) .kcols.kr > .hrow{justify-content:flex-start!important} html.klas main.table:is(.play,.lead) .kcols.kl > .hrow{justify-content:flex-end!important}
+html.klas main.table:is(.play,.lead) .kcols > .hrow + .hrow{margin-top:calc(var(--kh) * -.72)!important}
+html.klas main.table:is(.play,.lead) .kcols .hrow .rc{margin-left:calc(var(--kw) * .3 - var(--kw))!important} html.klas main.table:is(.play,.lead) .kcols .hrow .rc:first-child{margin-left:0!important}
+html.klas main.table:is(.play,.lead) .hrow .void{display:none}
+/* vaste plekken: dummy boven, tafel midden, jouw hand onder; de vraag rechts */
+html.klas main.table:is(.play,.lead) > #dummy:not([hidden]){position:absolute!important;left:2%!important;width:calc(var(--lc) - 4%)!important;top:2vh!important;margin:0!important;display:flex!important;justify-content:center!important}
+html.klas main.table:is(.play,.lead) > #dummy > *:not(#dummyhand){display:none!important}
+html.klas main.table:is(.play,.lead) > #hand:not([hidden]){position:absolute!important;left:2%!important;width:calc(var(--lc) - 4%)!important;bottom:2vh!important;top:auto!important;margin:0!important;display:flex!important;justify-content:center!important}
+html.klas main.table:is(.play,.lead) > #mylabel, html.klas main.table:is(.play,.lead) > #dummylabel{display:none!important}
+html.klas main.table:is(.play,.lead) > #qwrap, html.klas main.table:is(.play,.lead) > #qstrip{position:absolute!important;left:2%!important;width:calc(var(--lc) - 4%)!important;top:calc(var(--kh) + 4vh)!important;bottom:calc(var(--kh) + 4vh)!important;height:auto!important;margin:0!important;zoom:1!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;transform:none!important}
+html.klas main.table:is(.play,.lead) > #qstrip{left:calc(var(--lc) / 2 - min(var(--kh) * 1.6, 100% - 2 * var(--kh) - 8vh) / 2)!important;width:min(var(--kh) * 1.6, 100% - 2 * var(--kh) - 8vh)!important;top:50%!important;bottom:auto!important;height:min(var(--kh) * 1.6, 100% - 2 * var(--kh) - 8vh)!important;translate:0 -50%!important}
+html.klas main.table:is(.play,.lead) > #qwrap:not([hidden]){display:flex!important;align-items:center!important;justify-content:center!important;gap:1.5vw!important}
+html.klas main.table:is(.play,.lead) > #qwrap > #qtable{zoom:1!important;width:min(var(--kh) * 1.6, 100%)!important;height:min(var(--kh) * 1.6, 100%)!important;max-width:none!important;max-height:none!important;flex:none!important;aspect-ratio:1!important}
+html.klas main.table:is(.play,.lead) > #qwrap:not([hidden]){justify-content:center!important;position:absolute!important}
+html.klas main.table:is(.play,.lead) > #qwrap > .sqs{position:absolute!important;top:50%!important;translate:0 -50%!important;width:auto!important;height:auto!important;transform:none!important;margin:0!important}
+html.klas main.table:is(.play,.lead) > #qwrap > #qL{right:calc(50% + min(var(--kh) * .8, 50%) + 1.5vw)!important;left:auto!important}
+html.klas main.table:is(.play,.lead) > #qwrap > #qR{left:calc(50% + min(var(--kh) * .8, 50%) + 1.5vw)!important;right:auto!important}
+html.klas main.table:is(.play,.lead) #hand .hrow, html.klas main.table:is(.play,.lead) #dummyhand .hrow{margin-left:auto!important;margin-right:auto!important}
+html.klas main.table:is(.play,.lead) .sq .tc, html.klas main.table:is(.play,.lead) .smsq .tc{height:calc(var(--kh) * .6)!important;width:calc(var(--kw) * .6)!important;aspect-ratio:auto!important;font-size:calc(var(--kh) * .25)!important}
+}
+
+/* v372: Mijn voortgang */
+#results.vg{width:min(1120px, 96vw)!important;max-width:none!important}
+.pgk .l .sh{display:none} .pgd{border:0!important;margin:0!important;padding:0!important;background:none!important} .pgd > summary{cursor:pointer;font-weight:700;color:var(--felt,#2E6B4E);padding:6px 2px;font-size:.95rem}
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+  #results.vg{max-height:96vh!important} #results.vg .dhead{display:flex!important;align-items:center;gap:16px} #results.vg .dhead h2{margin:0!important;white-space:nowrap}
+  #results.vg #restabs{display:flex!important;gap:6px;margin:0 0 0 auto!important;width:auto!important} #results.vg #restabs button{width:auto!important;flex:none!important;padding:.35rem 1rem!important;min-height:0!important}
+  .pgd > summary{display:none}
+}
+.pgwrap{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:start}
+.pgkpis{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:8px;margin-bottom:10px}
+.pgk{background:var(--surface,#fff);border:1px solid var(--line,#CFD8D3);border-radius:12px;padding:8px 10px}
+.pgk .l{font-size:.8rem;color:var(--muted,#5E6B65);line-height:1.2;min-height:2em}.pgk .v{font-size:1.6rem;font-weight:700;line-height:1.15}.pgk .s{font-size:.78rem;line-height:1.2}
+.pgcard{background:var(--surface,#fff);border:1px solid var(--line,#CFD8D3);border-radius:14px;padding:10px 12px}
+.pgcard h3, .pgh2{margin:0 0 4px;font-size:1rem}.pgh2{margin-top:10px}
+.mut{color:var(--muted,#5E6B65);font-weight:400;font-size:.82rem}.up{color:#1F8A4C;font-weight:600}.dn{color:#B3261E;font-weight:600}
+.pglg{display:flex;gap:14px;font-size:.82rem}.pglg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.pgch{width:100%;height:auto;max-height:22vh;display:block} @media (max-height:650px){ .pgch{max-height:17vh} .pgk .l{min-height:0!important} .pgcard{padding:8px 10px} } .pgchs{display:grid;grid-template-columns:1fr 1fr;gap:6px} .pgchs .pgch2{margin:0;flex-wrap:nowrap;gap:6px;padding:6px 8px} .pgchs .pgch2 .tx{flex:1;min-width:0} .pgchs .pgch2 .tx small{display:block;line-height:1.25} .pgchs .pgch2 .go{padding:5px 9px} .pgchs .pgch2 .ic{display:none}
+.pgempty{margin:.2rem 0 0}
+.pgrow, .pglv{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:3px 0;font:inherit;font-size:.92rem;text-align:left;cursor:pointer;color:inherit}
+.pgrow .n{width:38%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pgrow .bar{flex:1;height:9px;background:#E4EAE6;border-radius:5px;position:relative;overflow:hidden}.pgrow .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.pgrow .p{width:3em;text-align:right;font-weight:600}.pgrow .t{width:1.4em}
+.pglv .n{flex:1}.pgb{width:24px;height:24px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:#fff}
+.pgb.b0{background:#D5DCD8;color:#5E6B65}.pgb.b1{background:#B07A3B}.pgb.b2{background:#8C979C}.pgb.b3{background:#C9A227}
+.pgsm{margin:0 0 4px}
+.pgch2{display:flex;align-items:center;gap:10px;border:1px solid var(--line,#CFD8D3);border-radius:10px;padding:6px 10px;margin:6px 0;background:var(--surface,#fff)}
+.pgch2.done{border-color:#2E9E5B;background:#EEF8F1}.pgch2 .ic{font-size:1.2rem}.pgch2 .tx{flex:1;min-width:0}.pgch2 .tx b{display:block;font-size:.95rem}.pgch2 .tx small{color:var(--muted,#5E6B65);font-size:.8rem}
+.pgch2 .go{flex:none;background:var(--felt,#2E6B4E);color:#fff;border:0;border-radius:9px;padding:6px 12px;font:700 .85rem inherit;cursor:pointer}.pgch2 .go:disabled{opacity:.4}
+@media (max-width:999px), (max-aspect-ratio:5/4){
+  .pgk .l .lg{display:none} .pgk .l .sh{display:inline} .pgk .s{font-size:.72rem} .pgkpis{grid-template-columns:repeat(4, minmax(0,1fr))!important;gap:4px!important} .pgk{padding:4px 5px!important} .pgk .l{font-size:.68rem!important} .pgk .s{display:none}
+  #results.vg #restabs{display:flex!important;gap:4px} #results.vg #restabs button{flex:1!important;padding:.3rem .2rem!important;min-height:0!important;font-size:.85rem!important}
+  .pgwrap{display:block} .pgwrap .pgl, .pgr{display:block} .pgl > .pgd, .pgr > .pgd{display:inline-block;vertical-align:top;margin-right:10px!important}
+  .pgd[open]{display:block!important}
+  .pgchs .pgch2 .tx small{display:none} .pgchs .pgch2{flex-wrap:wrap} .pgchs .pgch2 .go{width:100%;padding:4px} .pgchs .pgch2 .tx{flex-basis:100%}
+  .pgch2 .tx small{display:none} .pgch2 .tx b{font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .pgchs{display:grid;grid-template-columns:1fr 1fr;gap:5px} .pgch2{margin:0;flex-wrap:wrap;gap:4px 6px} .pgch2 .tx{flex-basis:calc(100% - 2rem)} .pgch2 .go{width:100%;padding:4px}
+  .pgwrap{grid-template-columns:1fr;gap:8px}.pgkpis{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}.pgk{padding:5px 8px}.pgk .v{font-size:1.25rem}.pgk .l{min-height:0}
+  .pgch{max-height:16vh}.pgh2{margin-top:6px}.pgch2{margin:4px 0;padding:4px 8px}
+}
 /* v368: uitleg met kaarten op de tafel zelf */
 .dmgo{display:block;margin:.4rem 0 .5rem;padding:.6rem 1rem;border-radius:12px;border:0;background:var(--felt, #2E6B4E);color:#fff;font:700 1.05rem/1.2 inherit;cursor:pointer}
 #game.demo > #gend{display:none!important} #game.demo > #gstatus{display:none!important}
@@ -1905,7 +1980,7 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
   </div>
   <div id="homeextra">
   <div class="scorebox">
-    <button class="reset" id="showres">Mijn resultaten</button>
+    <button class="reset" id="showres">Mijn voortgang</button>
     <button class="reset" id="welagain">Rondleiding</button>
     <span id="detailscore" hidden></span>
     <button class="reset" id="appshare">App delen</button>
@@ -2728,6 +2803,7 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
   <div class="dhead">
     <h2 id="restitle">Waar ben je goed in?</h2>
     <div class="tabs" id="restabs">
+      <button data-rtab="voortgang">Voortgang</button>
       <button data-rtab="bieden">Bieden</button>
       <button data-rtab="spelen">Spelen</button>
     </div>
@@ -4048,13 +4124,18 @@ function explainT(q){
   const d = q.d, R = [14,13,12,11,10,9,8,7,6,5,4,3,2];
   const parts = SUITS.map((s,i)=>{
     const x = d.suits[i], sym = '<span class="'+s+'">'+SYM[s]+'</span> ';
-    if(!x.k) return sym+'0';
+    if(!x.k){ // geen vaste slag: zeg waarom, en wat de kleur later nog kan opleveren
+      const all = q.me && q.dummy ? new Set(q.me.suits[i].concat(q.dummy.suits[i])) : null, mx = q.me && q.dummy ? Math.max(q.me.len[i], q.dummy.len[i]) : 0;
+      if(!all || !all.size) return sym+'0';
+      const miss = []; for(let r=14; r>=2 && miss.length<3; r--){ if(all.has(r)) break; miss.push(RANK[r]||r); }
+      const big = [...all].filter(r=>r>=10).length;
+      return sym+'0 (de '+miss.map(m=>SYM[s]+m).join(' en ')+' '+(miss.length===1 ? 'ontbreekt' : 'ontbreken')+(mx>=4 && big>=2 ? '; na het afgeven daarvan levert deze kleur nog '+Math.max(1, mx-miss.length)+' slag'+(mx-miss.length===1 ? '' : 'en')+' op, maar vast zijn ze nog niet' : '')+')'; }
     const tops = R.slice(0, Math.min(x.k,5)).map(r=>RANK[r]||r).join(' ');
     if(x.run) return sym+x.tricks+' ('+tops+', en de tegenpartij heeft er maar '+x.opp+': de hele kleur is hoog)';
     if(x.short) return sym+x.tricks+' ('+tops+', maar je langste hand heeft er maar '+['','één','twee','drie','vier','vijf','zes'][x.maxLen]+')';
     return sym+x.tricks+' ('+tops+')';
   });
-  let t = parts.join(' · ')+'. Samen '+d.total+' vaste slagen.';
+  let t = parts.join(' · ')+'. Samen '+d.total+' vaste slagen. <small>Vaste slagen zijn slagen die je kunt maken zonder de tegenpartij eerst aan slag te laten.</small>';
   if(d.total>=d.need) t += ' Dat is genoeg voor '+d.contract+' ('+d.need+' slagen).';
   else t += ' Voor '+d.contract+' heb je er '+d.need+' nodig: je moet er nog '+(d.need-d.total)+' ontwikkelen.';
   return t;
@@ -8835,11 +8916,11 @@ function renderModes(){
     pg = '<div class="homebtns homegrid">'+dailyHomeBtn()+'<button class="homebtn'+(nPr ? ' has' : '')+'" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>'+(nPr ? '✓ je oefent nu '+(nPrB ? nPrB+(nPrB===1 ? ' biedonderdeel' : ' biedonderdelen') : '')+(nPrB && nPrS ? ' en ' : '')+(nPrS ? nPrS+(nPrS===1 ? ' speelonderdeel' : ' speelonderdelen') : '') : 'Losse biedingen en spelsituaties oefenen')+'</small></button>'
        + clubHomeBtn()
        + '<button class="homebtn has" data-go="kaart"><b>Mijn systeemkaart</b><small>'+(presetMatch() && presetMatch()!=='app' ? PRESETS[presetMatch()].tag : state.card.length+' afspraken')+' · uitkomen · afdrukken</small></button>'
-       + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
+       + '<button class="homebtn'+(state.test ? ' has' : '')+'" data-go="test"><b>Challenge jezelf</b><small>Je voortgang, weekdoel en herkansing · toets je systeemkaart</small></button></div>';
     if(state.learn.on) pg = '<p class="cnote lnote"><b>Het leerpad staat aan</b>, daarom zie je je systeemkaart niet. <button class="navclear" data-loff="1">Leerpad uitzetten</button></p>'
        + '<div class="homebtns homegrid">'+dailyHomeBtn()+'<button class="homebtn has" data-go="doel"><b>Oefenen in Bieden &amp; Spelen</b><small>Leerpad: bieden '+(state.learn.step.bieden+1)+'/'+LEARN.bieden.length+', spelen '+(state.learn.step.spelen+1)+'/'+LEARN.spelen.length+'</small></button>'
        + clubHomeBtn()
-       + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Toets je eigen systeemkaart of doorloop een plan als starter/beginner</small></button></div>';
+       + '<button class="homebtn has" data-go="test"><b>Challenge jezelf</b><small>Je voortgang, weekdoel en herkansing · toets je systeemkaart</small></button></div>';
   }else if(T==='regels'){
     const src = document.querySelector('#rulesdet .rules');
     pg = '<h3 class="pagetitle">De afspraken waarmee deze app rekent</h3><div class="rules">'+(src ? src.innerHTML : '')+'</div><p><button class="gview" data-home="1">‹ Terug naar de hoofdpagina</button></p>';
@@ -8868,7 +8949,9 @@ function renderModes(){
        + (oppSysOf() ? '<button class="navrow has" data-oppgo="1"><span>Systeemkaart tegenstanders</span><small>'+oppName()+'</small></button>' : '');
   }else if(T==='test' && !mode){
     const TS = state.test;
+    let vgTxt = 'Je ontwikkeling, niveaus, weekdoel en herkansing'; try{ const P = window.pg(), a = pgWeekStart(), nw = pgTomorrow(); let n = 0, ok = 0; ['b','s','t'].forEach(c=>{ const x = pgSum(c, a, nw); n += x[0]; ok += x[1]; }); vgTxt = 'Weekdoel: '+n+' van '+PG_GOAL.n+' vragen'+(n ? ', '+Math.round(100*ok/n)+'% goed' : '')+(P.wrong.length ? ' · '+P.wrong.length+' voor herkansing' : ''); }catch(e){}
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
+       + '<button class="navrow has" data-tgo="vg"><span>Mijn voortgang en uitdagingen</span><small>'+vgTxt+'</small></button>'
        + '<button class="navrow'+(TS ? ' has' : '')+'" data-tgo="toets"><span>Test je systeemkaart</span><small>'+(TS && TS.done ? '✓ Uitslag en oefenplan staan klaar' : TS ? TS.i+' van '+TS.q.length+' vragen gedaan' : 'Je sterke en zwakke punten, met een oefenplan')+'</small></button>'
        + '<button class="navrow'+(state.fris.butler || state.fris.paren ? ' has' : '')+'" data-tgo="fris"><span>Opfrisser: butler of paren</span><small>Voor je aan een nieuwe serie begint</small></button>'
        + '<button class="navrow'+(state.learn.on ? ' has' : '')+'" data-tgo="pad"><span>Leerpad basisregels</span><small>'+(state.learn.on ? '✓ Staat aan' : 'Voor beginners: stap voor stap, eerst uitleg en dan oefenen')+'</small></button>';
@@ -9069,7 +9152,9 @@ function next(fresh){
     SYS.acol = state.card.includes('acol2');
     if(frisOn()){ q = frisQ(); $('menu').textContent = 'Opfrisser '+FQ.mode+': vraag '+(FQ.i+1)+' van '+FQ.items.length+' ▾'; }
     else if(testOn()){ q = newQuestion(state.test.q[state.test.i], 1+Math.floor(Math.random()*4), 'alles'); $('menu').textContent = 'Toets: vraag '+(state.test.i+1)+' van '+state.test.q.length+' ▾'; }      // de toets bepaalt de volgorde
+    else if(herkOn() && (q = herkPick())){ $('menu').textContent = 'Herkansing · nog '+state.prog.wrong.length+' ▾'; }
     else if(card){
+      if(state.prog && state.prog.herk){ state.prog.herk = null; }
       const k = pickMix(card, state.mixRecent, state.mixSince);
       card.forEach(x=>{ state.mixSince[x] = x===k ? 0 : (state.mixSince[x]||0)+1; });
       save();
@@ -9078,7 +9163,7 @@ function next(fresh){
   }
   answered = false;
   if(q.dummy && !q.dummyLabel && q.only==null && !q.lead) q.lead = leadFor(q);     // jij bent leider: West is al uitgekomen
-  $('prompt').innerHTML = (q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
+  $('prompt').innerHTML = (q.isHerk ? '<span class="rept">Herkansing</span>' : q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
   renderAuction(false);
   $('hand').className = 'hand';
   $('hand').innerHTML = q.only!=null && q.dummy && q.box!=='lead' ? '<li class="hrowli">'+handRowOf(q.me, q.only)+'</li>' : handHTML(q.me, q.only, q.box==='lead', qTr(q));      // één kleur: dezelfde kaartjes als de dummy
@@ -9130,6 +9215,7 @@ function answer(bid){
   hh.push(ok ? 1 : 0); if(hh.length>10) hh.shift();
   if(q.conv==='fris'){ delete state.stats.fris; delete state.hist.fris; }      // de opfrisser telt niet mee in je resultaten per afspraak
   state.streak = ok ? state.streak+1 : 0;
+  progAnswer(q, ok);
   let learnMsg = repAfter(ok);
   if(q.conv==='fris' && frisOn()){
     if(ok) FQ.good++;
@@ -11369,6 +11455,8 @@ function resWeak(which){
 }
 function renderResults(){
   document.querySelectorAll('#restabs button').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.rtab===resTab)));
+  $('results').classList.toggle('vg', resTab==='voortgang'); $('restitle').textContent = resTab==='voortgang' ? 'Mijn voortgang' : 'Waar ben je goed in?';
+  if(resTab==='voortgang') return renderProg();
   const rows = resRows(resTab), wat = resTab==='bieden' ? 'biedvragen' : 'speelvragen';
   if(!rows.length){ $('resbody').innerHTML = '<p class="ressum">Je hebt nog geen '+wat+' beantwoord. Speel er een paar, dan zie je hier waar je goed in bent en waar niet.</p>'; return; }
   const tot = rows.reduce((a,r)=>a+r.n,0), good = rows.reduce((a,r)=>a+r.good,0);
@@ -11391,7 +11479,7 @@ function renderResults(){
   $('resbody').innerHTML = h;
 }
 function openResults(){
-  resTab = tabOf(state.conv);
+  resTab = 'voortgang';
   renderResults();
   const d = $('results'); if(d.showModal) d.showModal(); else d.setAttribute('open','');
   $('resbody').scrollTop = 0;
@@ -11405,6 +11493,9 @@ $('restabs').addEventListener('click', e=>{ const b = e.target.closest('button')
 $('resbody').addEventListener('click', e=>{
   const b = e.target.closest('button');
   if(!b || b.disabled) return;
+  if(b.dataset.pggo){ pgGo(b.dataset.pggo); return; }
+  if(b.dataset.res==='') return;
+  if(state.prog) state.prog.herk = null;
   if(b.dataset.resweak){
     const ks = resWeak(resTab).map(r=>r.k);
     if(!ks.length) return;
@@ -11423,6 +11514,127 @@ $('resbody').addEventListener('click', e=>{
   state.step = 'alles';
   save(); renderModes(); closeResults(); next(true);
 });
+
+// ===== v372: Mijn voortgang — per dag bijhouden, niveaus en uitdagingen =====
+// state.prog = {d:{'jjjj-mm-dd':{b:[n,goed], s:[n,goed], t:[n,goed], ga:[spellen,gemist], gt:[spellen,gemist]}}, k:{onderdeel:[0/1 ...]}, best, bestDays, wrong:[{q,src}], herk}
+const PG_DAYS = 120, PG_K = 60, PG_WRONG = 30;
+function pg(){ const p = state.prog && typeof state.prog==='object' ? state.prog : (state.prog = {d:{}, k:{}, best:0, bestDays:0, wrong:[], herk:null});
+  p.d = p.d || {}; p.k = p.k || {}; p.wrong = p.wrong || []; p.best = p.best || 0; p.bestDays = p.bestDays || 0;
+  if(!p.seeded){ p.seeded = 1; try{ for(const k in (state.hist||{})) if(!p.k[k]) p.k[k] = state.hist[k].slice(); }catch(e){} }
+  return p; }
+const pgDay = (d = new Date()) => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const PG_DEF = () => (typeof CONV_GROUPS!=='undefined' && CONV_GROUPS.convsT) || [];
+const pgCat = k => PLAYABLE.includes(k) ? (PG_DEF().includes(k) ? 't' : 's') : 'b';
+function pgAdd(cat, n, ok){ const p = pg(), t = pgDay(), d = p.d[t] || (p.d[t] = {}); const x = d[cat] || (d[cat] = [0,0]); x[0] += n; x[1] += ok;
+  const ks = Object.keys(p.d).sort(); while(ks.length>PG_DAYS) delete p.d[ks.shift()];
+  const ds = pgStreakDays(); if(ds>p.bestDays) p.bestDays = ds; pgPushSoon(); }
+function progAnswer(qq, ok){ try{
+  if(!qq || qq.conv==='fris') return; const p = pg(), k = qq.conv;
+  pgAdd(pgCat(k), 1, ok ? 1 : 0);
+  const a = p.k[k] || (p.k[k] = []); a.push(ok ? 1 : 0); while(a.length>PG_K) a.shift();
+  if(state.streak>p.best) p.best = state.streak;
+  if(!ok && !qq.isHerk){ try{ const c = Object.assign({}, qq); delete c.isRep; delete c.isHerk; p.wrong.push({q:JSON.stringify(c), src:qSrc || k}); while(p.wrong.length>PG_WRONG) p.wrong.shift(); }catch(e){} }
+  if(!ok && qq.isHerk){ try{ const c = Object.assign({}, qq); delete c.isHerk; p.wrong.push({q:JSON.stringify(c), src:qSrc || k}); }catch(e){} }
+  save(); }catch(e){} }
+function progBids(B){ try{ if(!B || !B.done || B.pgDone || B.daily) return; B.pgDone = true; let n = 0, ok = 0;
+  Object.entries(B.adv||{}).forEach(([i, a])=>{ if(!a || !a.bid) return; n++; if(a.bid===B.calls[i]) ok++; });
+  if(n){ pgAdd('b', n, ok); save(); } }catch(e){} }
+function progGame(g){ try{ if(!g || g.pgDone || !g.log || !ddsOK()) return; g.pgDone = true; const rows = gReview(g), def = g.role==='tegen'; let lost = 0;
+  rows.forEach(t=>t.plays.forEach(p=>{ if(p.loss>0 && (def ? p.seat===g.me : p.seat%2===0)) lost += p.loss; }));
+  pgAdd(def ? 'gt' : 'ga', 1, lost); save(); }catch(e){} }
+function pgStreakDays(){ const p = state.prog; if(!p || !p.d) return 0; let n = 0; const d = new Date();
+  if(!p.d[pgDay(d)]) d.setDate(d.getDate()-1);
+  for(;;){ if(!p.d[pgDay(d)]) break; n++; d.setDate(d.getDate()-1); } return n; }
+function pgSum(cat, from, to){ const p = pg(); let n = 0, ok = 0; const d = new Date(from);
+  while(d<to){ const x = (p.d[pgDay(d)]||{})[cat]; if(x){ n += x[0]; ok += x[1]; } d.setDate(d.getDate()+1); } return [n, ok]; }
+const pgAgo = n => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-n); return d; };
+const pgTomorrow = () => pgAgo(-1);
+function pgWeekStart(){ const d = pgAgo(0), w = (d.getDay()+6)%7; d.setDate(d.getDate()-w); return d; }
+function pgIsoWeek(d){ const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const dn = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate()+4-dn); const y = new Date(Date.UTC(t.getUTCFullYear(),0,1)); return Math.ceil(((t-y)/864e5+1)/7); }
+const PG_GOAL = {n:60, pct:80};
+function pgLevel(k){ const a = (pg().k[k]||[]).slice(-30), n = a.length, ok = a.reduce((x,y)=>x+y,0), pct = n ? ok/n : 0;
+  const lv = n>=30 ? (pct>=.9 ? 3 : pct>=.8 ? 2 : pct>=.7 ? 1 : 0) : 0;
+  let next = '';
+  if(n<30) next = 'nog '+(30-n)+' vragen voor een niveau';
+  else if(lv<3){ const goal = [.7,.8,.9][lv]; let need = Math.max(1, Math.ceil(goal*30) - ok); next = 'nog '+need+' goed voor '+['brons','zilver','goud'][lv]; }
+  else next = 'goud';
+  return {k, n, ok, pct, lv, next}; }
+function pgName(k){ return CONVS[k] || (typeof STAT_LABEL!=='undefined' && STAT_LABEL[k]) || k; }
+function renderProg(){
+  const p = pg(), now = pgTomorrow(), m28 = pgAgo(27), m56 = pgAgo(55);
+  const pc = x => x[0] ? Math.round(100*x[1]/x[0]) : null, per = x => x[0] ? (x[1]/x[0]).toFixed(1).replace('.', ',') : null;
+  const b1 = pgSum('b', m28, now), b0 = pgSum('b', m56, m28), a1 = pgSum('ga', m28, now), a0 = pgSum('ga', m56, m28), t1 = pgSum('gt', m28, now), t0 = pgSum('gt', m56, m28);
+  const kpi = (lab, v, sub) => { const [lg, sh] = lab.split('|'); return '<div class="pgk"><div class="l"><span class="lg">'+lg+'</span><span class="sh">'+(sh||lg)+'</span></div><div class="v">'+(v==null ? '–' : v)+'</div><div class="s">'+sub+'</div></div>'; };
+  const trend = (now1, was, lowerBetter, unit) => { if(now1==null) return '<span class="mut">nog geen gegevens</span>'; if(was==null) return '<span class="mut">laatste 4 weken</span>';
+    const a = parseFloat(String(now1).replace(',','.')), b = parseFloat(String(was).replace(',','.')), better = lowerBetter ? a<b : a>b;
+    return a===b ? '<span class="mut">gelijk aan de 4 weken ervoor</span>' : '<span class="'+(better ? 'up' : 'dn')+'">'+(a>b ? '▲' : '▼')+' was '+was+unit+'</span>'; };
+  const ds = pgStreakDays();
+  let h = '<div class="pgwrap"><div class="pgl"><div class="pgkpis">'
+    + kpi('Bieden goed|Bieden goed', pc(b1)==null ? null : pc(b1)+'%', trend(pc(b1), pc(b0), false, '%'))
+    + kpi('Afspelen: slagen gemist per spel|Afspelen: gemist/spel', per(a1), trend(per(a1), per(a0), true, ''))
+    + kpi('Tegenspel: slagen gemist per spel|Tegenspel: gemist/spel', per(t1), trend(per(t1), per(t0), true, ''))
+    + kpi('Dagen op rij geoefend|Dagen op rij', ds, '<span class="mut">record '+Math.max(ds, p.bestDays)+'</span>') + '</div>';
+  // grafiek: 8 weken, percentage goed per week
+  const W = [], ws = pgWeekStart(); for(let i=7;i>=0;i--){ const a = new Date(ws); a.setDate(a.getDate()-7*i); const b = new Date(a); b.setDate(b.getDate()+7); W.push([a, b]); }
+  const L = [['b','Bieden','#2E6B4E',''],['s','Afspelen','#C9A227',''],['t','Tegenspel','#7A8FA6','6 4']];
+  const X = i => 46 + i*80, Y = v => 126 - (v-30)/70*112;
+  let svg = '<svg class="pgch" viewBox="0 0 640 150" aria-label="Percentage goed per week">';
+  [100,80,60,40].forEach(v=>{ svg += '<line x1="40" x2="630" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="#E4EAE6"/><text x="4" y="'+(Y(v)+4)+'" font-size="11" fill="#8A948F">'+v+'%</text>'; });
+  W.forEach((w,i)=>{ svg += '<text x="'+(X(i)-8)+'" y="146" font-size="11" fill="#8A948F">'+(i===0 ? 'wk ' : '')+pgIsoWeek(w[0])+'</text>'; });
+  let any = false;
+  L.forEach(([c, nm, col, dash])=>{ let path = '', pts = 0; W.forEach((w,i)=>{ const x = pgSum(c, w[0], w[1]); if(x[0]>=5){ const v = Math.max(30, 100*x[1]/x[0]); path += (path ? ' L' : 'M')+X(i)+' '+Y(v).toFixed(1); pts++; svg += '<circle cx="'+X(i)+'" cy="'+Y(v).toFixed(1)+'" r="3.2" fill="'+col+'"/>'; } });
+    if(pts) any = true; if(pts>1) svg += '<path d="'+path+'" fill="none" stroke="'+col+'" stroke-width="3"'+(dash ? ' stroke-dasharray="'+dash+'"' : '')+'/>'; });
+  svg += '</svg>';
+  const op = LAPTOP() ? ' open' : '';
+  h += '<details class="pgd"'+op+'><summary>Ontwikkeling per week</summary><div class="pgcard"><h3>Ontwikkeling per week <span class="mut">percentage goed, vanaf 5 vragen in een week</span></h3><div class="pglg">'+L.map(([c,nm,col])=>'<span><i style="background:'+col+'"></i>'+nm+'</span>').join('')+'</div>'+svg+(any ? '' : '<p class="mut pgempty">Vanaf nu houdt de app per dag bij hoe het gaat. Na een paar dagen oefenen zie je hier je lijn.</p>');
+  // per onderdeel: laatste 20 tegen de 20 daarvoor
+  const recent = Object.keys(p.k).filter(k=>p.k[k].length>=5 && (PLAYABLE.includes(k) || BIDDABLE.includes(k))).map(k=>{ const a = p.k[k], l = a.slice(-20), o = a.slice(-40, -20);
+      const pl = l.reduce((x,y)=>x+y,0)/l.length, po = o.length>=5 ? o.reduce((x,y)=>x+y,0)/o.length : null; return {k, pl, po, n:a.length}; })
+    .sort((x,y)=>y.n-x.n).slice(0,4).sort((x,y)=>y.pl-x.pl);
+  h += '</div></details><details class="pgd"'+op+'><summary>Per onderdeel</summary><div><h3 class="pgh2">Per onderdeel <span class="mut">laatste 20 vragen; pijl: vergeleken met de 20 daarvoor</span></h3>'
+    + (recent.length ? recent.map(r=>'<button class="pgrow" data-res="'+r.k+'"><span class="n">'+pgName(r.k)+'</span><span class="bar"><i style="width:'+Math.round(r.pl*100)+'%;background:'+(r.pl>=.8 ? '#2E9E5B' : r.pl>=.6 ? '#C9A227' : '#C62828')+'"></i></span><span class="p">'+Math.round(r.pl*100)+'%</span><span class="t">'+(r.po==null ? '' : r.pl>r.po ? '<b class="up">▲</b>' : r.pl<r.po ? '<b class="dn">▼</b>' : '')+'</span></button>').join('') : '<p class="mut">Nog te weinig vragen per onderdeel.</p>')
+    + '</div></details></div>';
+  // niveaus en uitdagingen
+  const lvs = Object.keys(p.k).filter(k=>(PLAYABLE.includes(k) || BIDDABLE.includes(k)) && p.k[k].length>=5).map(pgLevel).sort((a,b)=>b.lv-a.lv || b.n-a.n).slice(0,4);
+  const B = ['b0','b1','b2','b3'], BL = ['–','B','Z','G'];
+  h += '<div class="pgr"><details class="pgd"'+op+'><summary>Niveaus</summary><div class="pgcard"><h3>Niveaus</h3><p class="mut pgsm">Over je laatste 30 vragen: brons 70%, zilver 80%, goud 90% goed.</p>'
+    + (lvs.length ? lvs.map(l=>'<button class="pglv" data-res="'+l.k+'"><span class="pgb '+B[l.lv]+'">'+BL[l.lv]+'</span><span class="n">'+pgName(l.k)+'</span><span class="mut">'+l.next+'</span></button>').join('') : '<p class="mut">Speel per onderdeel minstens vijf vragen.</p>');
+  const wk = [0,0]; { const a = pgWeekStart(); ['b','s','t'].forEach(c=>{ const x = pgSum(c, a, now); wk[0] += x[0]; wk[1] += x[1]; }); }
+  const wpct = wk[0] ? Math.round(100*wk[1]/wk[0]) : 0, wdone = wk[0]>=PG_GOAL.n && wpct>=PG_GOAL.pct;
+  const allLv = Object.keys(p.k).filter(k=>(PLAYABLE.includes(k) || BIDDABLE.includes(k)) && p.k[k].length>=5).map(pgLevel).sort((a,b)=>a.pct-b.pct);
+  const weak = allLv[0];
+  h += '</div></details><h3 class="pgh2">Daag jezelf uit</h3><div class="pgchs">'
+    + '<div class="pgch2'+(wdone ? ' done' : '')+'"><span class="ic">🎯</span><span class="tx"><b>Weekdoel'+(wdone ? ' gehaald ✓' : '')+'</b><small>'+PG_GOAL.n+' vragen, '+PG_GOAL.pct+'% goed · nu '+wk[0]+(wk[0] ? ' · '+wpct+'%' : '')+'</small></span><button class="go" data-pggo="week">Verder</button></div>'
+    + '<div class="pgch2"><span class="ic">🔁</span><span class="tx"><b>Herkansing</b><small>'+(p.wrong.length ? 'de '+p.wrong.length+' vra'+(p.wrong.length===1 ? 'ag' : 'gen')+' die je fout had, opnieuw' : 'geen foute vragen om over te doen')+'</small></span><button class="go" data-pggo="herk"'+(p.wrong.length ? '' : ' disabled')+'>Start</button></div>'
+    + '<div class="pgch2"><span class="ic">⚡</span><span class="tx"><b>10 op een rij</b><small>zonder fout · nu '+state.streak+' · record '+Math.max(p.best, state.streak)+'</small></span><button class="go" data-pggo="rij">Start</button></div>'
+    + '<div class="pgch2"><span class="ic">🏆</span><span class="tx"><b>Zwakste onderdeel'+(weak ? ': '+pgName(weak.k) : '')+'</b><small>'+(weak ? Math.round(weak.pct*100)+'% goed; oefen alleen dit onderdeel' : 'nog niet bekend')+'</small></span><button class="go" data-res="'+(weak ? weak.k : '')+'"'+(weak ? '' : ' disabled')+'>Start</button></div>'
+    + '</div></div></div>';
+  $('resbody').innerHTML = h;
+}
+// herkansing: de foute vragen één voor één opnieuw
+function herkOn(){ const p = state.prog; return !!(p && p.herk && p.herk.conv===state.conv && p.wrong && p.wrong.length); }
+function herkPick(){ const p = pg(); const r = p.wrong.shift(); if(!r) return null; try{ const x = JSON.parse(r.q); x.isHerk = 1; qSrc = r.src; p.herk.left = p.wrong.length; save(); return x; }catch(e){ return null; } }
+function pgGo(kind){
+  const p = pg();
+  if(kind==='herk'){ if(!p.wrong.length) return; const src = p.wrong[0].src; p.herk = {conv:src};
+    if(PLAYABLE.includes(src)){ state.playSet = [src]; PLAY_SET = [src]; } else { try{ cardAdd(src); }catch(e){} state.bidSet = [src]; }
+    state.conv = src; state.step = 'alles'; save(); renderModes(); closeResults(); next(true); return; }
+  p.herk = null; save(); closeResults();
+  if(state.conv==='spel' || !q) next(true);
+}
+// synchroniseren met je profiel (ingelogd): als tekst in users/<uid>/prog
+let pgT = null;
+function pgPushSoon(){ clearTimeout(pgT); pgT = setTimeout(pgPush, 4000); }
+function pgPush(){ try{ if(!state.acct || !FB_CONFIG || SAMEN_TEST || !window.firebase || !firebase.apps.length) return; const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return;
+  const p = pg(), j = JSON.stringify({d:p.d, k:p.k, best:p.best, bestDays:p.bestDays, t:Date.now()}); if(j.length<300000) firebase.database().ref('users/'+u.uid+'/prog').set(j).catch(()=>{}); }catch(e){} }
+async function pgPull(){ try{ const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return; const j = (await firebase.database().ref('users/'+u.uid+'/prog').once('value')).val(); if(typeof j!=='string') return pgPush();
+  const R = JSON.parse(j), p = pg();
+  Object.keys(R.d||{}).forEach(day=>{ const r = R.d[day], l = p.d[day] || (p.d[day] = {}); Object.keys(r).forEach(c=>{ if(!l[c] || r[c][0]>l[c][0]) l[c] = r[c]; }); });
+  Object.keys(R.k||{}).forEach(k=>{ if(!p.k[k] || R.k[k].length>p.k[k].length) p.k[k] = R.k[k]; });
+  p.best = Math.max(p.best, R.best||0); p.bestDays = Math.max(p.bestDays, R.bestDays||0); save(); pgPush(); }catch(e){} }
+{ const accStart2 = accStart; accStart = async function(){ await accStart2(); try{ if(state.acct) pgPull(); }catch(e){} }; }
+{ const bs0 = bidSummary; bidSummary = function(){ const r = bs0.apply(this, arguments); try{ progBids(BIDS); }catch(e){} return r; }; }
+{ const gf2 = gFinish; gFinish = function(){ const r = gf2.apply(this, arguments); const g = G; setTimeout(()=>progGame(g), 1500); return r; }; }
 // ---------- Anoniem tellen (GoatCounter, zonder cookies): alleen op de echte site, niet in voorbeelden ----------
 const GC_ON = /(^|\.)github\.io$/.test(location.hostname);
 if(GC_ON){
@@ -12871,6 +13083,7 @@ $('convs').addEventListener('click', e=>{
   const d = b.dataset, top = () => { renderModes(); $('dbody').scrollTop = 0; };
   if(d.begin){ state.learn.on = !state.learn.on; save(); top(); return; }
   const shut = () => { if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); };
+  if(d.tgo==='vg'){ if(dlg.close) dlg.close(); else dlg.removeAttribute('open'); openResults(); return; }
   if(d.tgo){ nav = ['test', d.tgo]; FQ = null; top(); return; }
   if(d.fris){ nav = ['test','fris', d.fris]; FQ = null; top(); return; }
   if(d.frstart){ frisStart(d.frstart); renderModes(); shut(); next(true); return; }
