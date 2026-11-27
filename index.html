@@ -1554,6 +1554,8 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 
 
 
+/* v370: in de klassieke weergave geen extra vergroting van de tafel: kaarten op tafel even groot als in de hand */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ html.klas #game #gsq, html.klas #game > .tablewrap, html.klas #game > .tablewrap > #gsq{zoom:1!important} html.klas #game:not(.bidmode) #gsq{width:calc(var(--kh) * 1.75)!important;height:calc(var(--kh) * 1.75)!important;max-width:none!important;max-height:none!important;flex:none!important} }
 /* v368: uitleg met kaarten op de tafel zelf */
 .dmgo{display:block;margin:.4rem 0 .5rem;padding:.6rem 1rem;border-radius:12px;border:0;background:var(--felt, #2E6B4E);color:#fff;font:700 1.05rem/1.2 inherit;cursor:pointer}
 #game.demo > #gend{display:none!important} #game.demo > #gstatus{display:none!important}
@@ -8520,9 +8522,11 @@ const KLAS = () => state.lay!=='tafel' && LAPTOP();   // standaard klassiek; 'ta
 // kleurvolgorde zonder twee zwarte of twee rode kleuren naast elkaar (schoppen, harten, klaveren, ruiten)
 function klasOrder(list){
   const has = ['S','H','C','D'].filter(x=>list.some(c=>c.s===x)), red = x => x==='H' || x==='D';
+  const tr = typeof G!=='undefined' && G && !$('game').hidden && !BIDS && G.trump!=null && G.trump<4 ? SUITS[G.trump] : null;   // troef altijd links
   const perms = a => a.length<2 ? [a] : a.flatMap((x,i)=>perms(a.filter((_,j)=>j!==i)).map(p=>[x,...p]));
   const ok = p => p.every((x,i)=>i===0 || red(x)!==red(p[i-1]));
-  return perms(has).find(ok) || has; }
+  const all = perms(has), pick = tr && has.includes(tr) ? all.filter(p=>p[0]===tr) : all;
+  return pick.find(ok) || pick[0] || has; }
 function handRow(list, side, plan){
   if(KLAS()){ const su = klasOrder(list);
     list = su.flatMap(x=>list.filter(c=>c.s===x));
@@ -10119,7 +10123,11 @@ function brRespond(h, open){
     return {bid:'1N', why: t1 ? '1SA forcing: 6–11 punten zonder steun' : '6–10 punten zonder steun'};
   }
   // lage kleur geopend
-  if(L[1]>=4 || L[0]>=4){ const m = L[1]>=4 && L[0]>=4 ? (L[0]>L[1] ? 0 : 1) : L[1]>=4 ? 1 : 0; return {bid:'1'+SUITS[m], why:'vierkaart '+SNAME[SUITS[m]]}; }
+  if(L[1]>=4 || L[0]>=4){ const m = L[1]>=4 && L[0]>=4 ? (L[0]>L[1] ? 0 : 1) : L[1]>=4 ? 1 : 0;
+    // na 1♣ met ook (minstens) vier ruiten: ruiten eerst als die langer is, of met openingskracht (dan kun je de hoge kleur later nog bieden)
+    if(o==='1C' && L[2]>=4 && (L[2]>L[m] || p>=12)) return {bid:'1D', why: L[2]>L[m] ? 'ruiten is je langste kleur: die bied je eerst; je '+SNAME[SUITS[m]]+' kun je daarna nog bieden' : 'met openingskracht bied je je kleuren van laag naar hoog: eerst ruiten, je '+SNAME[SUITS[m]]+' volgt'};
+    const twee = L[1]===4 && L[0]===4 ? ' (met twee vierkaarten hoog bied je de laagste, harten)' : '';
+    return {bid:'1'+SUITS[m], why: o==='1C' && L[2]>=4 ? 'vierkaart '+SNAME[SUITS[m]]+'. Met minder dan een opening sla je ruiten over: bied je eerst 1'+SYM.D+', dan raak je een fit in de hoge kleur kwijt als partner 1SA of 2'+SYM.C+' rebiedt'+twee : 'vierkaart '+SNAME[SUITS[m]]+twee}; }
   if(o==='1C' && L[2]>=4) return {bid:'1D', why:'vier of meer ruiten'};
   { const up = [3,2].find(i=>i!==oi && brUpg(h, i) && bidRank('2'+SUITS[i])>bidRank(o)); if(BR.t1() && p>=10 && p<=11 && up!==undefined) return {bid:'2'+SUITS[up], why:'goede zeskaart en een korte kleur: opgewaardeerd tot mancheforcing'}; }
   if(bal || p<=10){ if(p<=10) return {bid:'1N', why:'6–10 punten'}; if(p<=12) return {bid:'2N', why:'11–12 punten'}; return {bid:'3N', why:'13–15 punten'}; }
