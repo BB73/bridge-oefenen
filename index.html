@@ -8395,7 +8395,7 @@ if(state.conv==='spelmix' && state.playSet.length<2) state.conv = state.playSet[
 if(state.conv==='spelmix') PLAY_SET = state.playSet.slice();
 tab = tabOf(state.conv);
 let CLUB_OVR = null;      // tijdens de analyse van een samen gespeeld spel staat hier de echte clubavond
-function kleurApply(){ try{ const h = document.documentElement; h.dataset.kleur = state.kleur==='4' ? '4' : '2'; h.classList.toggle('klas', state.lay==='klassiek'); h.classList.toggle('kimg', state.lay==='klassiek' && state.kaart!=='modern'); }catch(e){} }
+function kleurApply(){ try{ const h = document.documentElement; h.dataset.kleur = state.kleur==='4' ? '4' : '2'; h.classList.toggle('klas', state.lay!=='tafel'); h.classList.toggle('kimg', state.lay!=='tafel' && state.kaart!=='modern'); }catch(e){} }
 // klassiek bieden: de hand precies even breed als het blok met het biedverloop
 function klasFit(){ try{ const g = $('game'); if(!KLAS()){ g.style.removeProperty('--hw'); return; } const kb = document.querySelector('#gbid > .kbh .kbt') || $('gbid'), w = kb.getBoundingClientRect().width; if(w > 0) g.style.setProperty('--hw', w+'px');
   const n = document.querySelectorAll('#gsrow .rc').length, k = document.querySelectorAll('#gsrow .rc.g').length; if(n > 1) g.style.setProperty('--hd', ((n-1) + .3*k).toFixed(2)); }catch(e){} }
@@ -8480,7 +8480,7 @@ function handRows(list, plan){ plan = plan || rowPlan(list); const rows = [];
   return rows; }
 // Elke hand ligt zoals je eigen hand, meegedraaid met de plaats aan tafel: de eerste rij (met de troef) tegen de tafel, de troef rechts gezien vanaf het midden van de tafel.
 // side: 'l' of 'r' = dummy opzij (gedraaide kaarten in kolommen), 't' = bovenaan (een halve slag gedraaid), niets = je eigen hand onderaan.
-const KLAS = () => state.lay==='klassiek' && LAPTOP();
+const KLAS = () => state.lay!=='tafel' && LAPTOP();   // standaard klassiek; 'tafel' alleen als gekozen
 // kleurvolgorde zonder twee zwarte of twee rode kleuren naast elkaar (schoppen, harten, klaveren, ruiten)
 function klasOrder(list){
   const has = ['S','H','C','D'].filter(x=>list.some(c=>c.s===x)), red = x => x==='H' || x==='D';
@@ -13368,8 +13368,8 @@ function accHTML(){
       + '<input type="file" id="acfoto" accept="image/*" hidden><button class="gview alt" id="acfotobtn"'+(ACC.busy ? ' disabled' : '')+'>'+(f ? 'Andere foto kiezen' : 'Foto kiezen')+'</button>'
       + (f ? '<button class="gview alt" id="acfotodel"'+(ACC.busy ? ' disabled' : '')+'>Foto verwijderen</button>' : '')
       + '<p class="gdef ackleur">Kaartkleuren: <button data-kleur="4" aria-pressed="'+(state.kleur==='4')+'">Vier kleuren</button><button data-kleur="2" aria-pressed="'+(state.kleur!=='4')+'">Rood en zwart</button></p>'
-      + '<p class="gdef ackleur">Laptop: <button data-lay="tafel" aria-pressed="'+(state.lay!=='klassiek')+'">Tafel</button><button data-lay="klassiek" aria-pressed="'+(state.lay==='klassiek')+'">Klassiek</button></p>'
-      + (state.lay==='klassiek' ? '<p class="gdef ackleur">Kaarten op de laptop: <button data-kaart="klassiek" aria-pressed="'+(state.kaart!=='modern')+'">Met plaatjes</button><button data-kaart="modern" aria-pressed="'+(state.kaart==='modern')+'">Eenvoudig</button></p>' : '')
+      + '<p class="gdef ackleur">Laptop: <button data-lay="tafel" aria-pressed="'+(state.lay==='tafel')+'">Tafel</button><button data-lay="klassiek" aria-pressed="'+(state.lay!=='tafel')+'">Klassiek</button></p>'
+      + (state.lay!=='tafel' ? '<p class="gdef ackleur">Kaarten op de laptop: <button data-kaart="klassiek" aria-pressed="'+(state.kaart!=='modern')+'">Met plaatjes</button><button data-kaart="modern" aria-pressed="'+(state.kaart==='modern')+'">Eenvoudig</button></p>' : '')
       + '<button class="gview alt" data-acv="edit">Naam, e-mail of wachtwoord wijzigen</button>'
       + '<button class="gview alt" id="acout">Uitloggen</button>'
       + '<button class="gview" id="acdone">Klaar</button>'
@@ -13929,7 +13929,7 @@ document.addEventListener('click', e=>{ const x = e.target.closest && e.target.c
 document.addEventListener('click', e=>{ const x = e.target.closest && e.target.closest('[data-lay],[data-kaart]'); if(!x || x.tagName!=='BUTTON') return; const k = x.dataset.lay ? 'lay' : 'kaart'; state[k] = x.dataset[k]; save(); kleurApply(); layRerender();
   try{ const u = window.firebase && firebase.apps.length && firebase.auth().currentUser; if(u && !u.isAnonymous && state.acct) firebase.database().ref('users/'+u.uid+'/'+k).set(state[k]).catch(()=>{}); }catch(err){}
   if(k==='lay' && typeof samenDraw==='function'){ try{ samenDraw(); }catch(err){} } else x.parentElement.querySelectorAll('[data-'+k+']').forEach(b=>b.setAttribute('aria-pressed', b===x)); });
-matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').addEventListener('change', ()=>{ if(state.lay==='klassiek') layRerender(); });
+matchMedia('(min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px)').addEventListener('change', ()=>{ if(state.lay!=='tafel') layRerender(); });
 kleurApply();
 // ---------- Account op het hoofdscherm: silhouet = anoniem, naam (en foto) = ingelogd ----------
 const ACC_SVG = '<svg viewBox="0 0 38 34" aria-hidden="true"><rect x="3" y="2" width="32" height="30" rx="2"/><circle cx="19" cy="13" r="5.5"/><path d="M8 31.5c0-7 4.5-10.5 11-10.5s11 3.5 11 10.5"/></svg>';
