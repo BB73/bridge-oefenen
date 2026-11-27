@@ -1553,6 +1553,29 @@ table.trk td.gd b{color:var(--good)} table.trk td.bd2 b{color:var(--bad)}
 #cloudmsg{display:block;font-size:.78rem;color:var(--muted);margin:.2rem 0 0;text-align:center}
 
 
+
+/* v368: uitleg met kaarten op de tafel zelf */
+.dmgo{display:block;margin:.4rem 0 .5rem;padding:.6rem 1rem;border-radius:12px;border:0;background:var(--felt, #2E6B4E);color:#fff;font:700 1.05rem/1.2 inherit;cursor:pointer}
+#game.demo > #gend{display:none!important} #game.demo > #gstatus{display:none!important}
+.gdemo{display:none}
+#game.demo .gdemo{display:block;order:3;background:var(--surface, #fff);border:1px solid var(--line, #C9D4CD);border-radius:14px;padding:.8rem 1rem;font-size:1.05rem;line-height:1.4;box-sizing:border-box}
+.gdemo .dmst{color:var(--muted, #6B7570);font-size:.9rem} .gdemo h3{margin:.15rem 0 .35rem;font-size:1.2rem} .gdemo .dmt{margin:0}
+.gdemo .dmside{margin:.5rem 0 0;font-size:.95rem;display:grid;gap:.2rem}
+.gdemo .dmnav{display:flex;align-items:center;gap:.7rem;margin-top:.7rem} .gdemo .dmnav .prevb{width:2.6rem;height:2.6rem;border-radius:50%;border:1px solid var(--line, #C9D4CD);background:var(--surface, #fff);font:700 1.5rem/1 system-ui}
+.gdemo .dmnav .prevb:disabled{opacity:.35} .gdemo .dmdots{display:flex;gap:.35rem} .gdemo .dmdots i{width:.6rem;height:.6rem;border-radius:50%;background:var(--line, #C9D4CD)} .gdemo .dmdots i.on{background:var(--felt, #2E6B4E)}
+.gdemo .dmback{margin-left:auto;background:none;border:0;color:var(--felt, #2E6B4E);font:600 1rem inherit;text-decoration:underline;padding:0;cursor:pointer}
+.gdemo .dmsd summary{cursor:pointer;color:var(--felt, #2E6B4E);font-weight:600;margin-top:.3rem} .gdemo .dhlt{background:#FFE9A8;border-radius:4px;padding:0 .1em}
+#game .rc.dhl, #game .tc.dhl{box-shadow:0 0 0 3px #F4B400, 0 0 12px 3px rgba(244,180,0,.75)!important;z-index:2}
+html.kimg #game .rc.dhl .kf, html.kimg #game .tc.dhl .kf{box-shadow:inset 0 0 0 3px #F4B400}
+@media not all and (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+  #game.demo .gdemo{font-size:.92rem;line-height:1.3;padding:.5rem .7rem;margin-top:.3rem} #game.demo .gdemo h3{font-size:1rem;margin:.05rem 0 .2rem} #game.demo .gdemo .dmst{font-size:.78rem}
+  #game.demo .gdemo .dmside{font-size:.82rem;margin-top:.3rem;gap:.05rem} #game.demo .gdemo .dmnav{margin-top:.4rem} #game.demo .gdemo .dmnav .prevb{width:2.2rem;height:2.2rem;font-size:1.25rem} #game.demo .gdemo .dmback{font-size:.85rem}
+}
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+  html.klas #game.demo > .gdemo{position:absolute!important;left:var(--c3)!important;right:2%!important;width:auto!important;max-width:none!important;margin:0!important;top:calc(1.6vh + 3.2rem)!important;max-height:calc(100% - 3.2vh - 3.2rem);overflow:auto;z-index:20;font-size:1.2rem}
+  html.klas #game.demo > #gstatus{display:none!important}
+  html.klas #game.demo > #gnorth{display:block!important}
+}
 /* v367: biedkaartjes op tafel 20% groter op de laptop (tip) */
 @media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){ #game{--bw:2.4rem;--bh:2.58rem;--bf:1.08rem;--bstep:1.38rem} }
 /* v357: klassieke laptopweergave (profiel: Laptop = Klassiek) met kaarten met plaatjes (publiek domein, Byron Knoll) */
@@ -11825,6 +11848,7 @@ function gClubBack(){
 let gFlat = null;
 function gRender(){
   if(!G) return;
+  if(DEMO){ if(G.daily===DEMO.id && G.over) return demoRender(); DEMO = null; $('game').classList.remove('demo'); const dp = $('gdemo'); if(dp) dp.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>$(i).classList.remove('dmo')); }
   gClubBack();
   const def = G.role==='tegen';
   // als tegenspeler zit jij onderaan: de tafel draait mee, de dummy ligt links of rechts van je
@@ -12076,18 +12100,76 @@ function dailyLead(card){
   dailyOthers(date, su+(ok ? '1' : '0')).then(v=>{ const o = $('dothers'); if(!o || G!==g) return;
     o.innerHTML = v ? dailyBars(v, a=>a[0], DSYM, su) : '<p><small>De vergelijking met andere bezoekers is nog niet beschikbaar.</small></p>'; });
 }
+
+// ===== Uitleg met kaarten (probleem van de dag): de uitleg speelt zich af op de tafel zelf =====
+// Posities zoals in DAILY: 0 boven, 1 rechts, 2 onder (jij), 3 links. Kaarten als 'HQ' (kleur + rang, T = 10).
+const DEMO_DATA = {
+  inspelen: {play:'HQ HA H2 H4  SK S2 S7 S3  SQ C2 S8 S5  S4 D2 SA S6  D4 D3 DA D6  DK D8 D7 D9  D5 DT S9 DJ  HK H9 H6 H3  H5 HJ H7 H8', steps:[
+    {at:1, h:'Het probleem', t:'West komt uit met ♥V. Een hartenslag verlies je zeker. Zit <b>♣V</b> verkeerd, dan ook een klaverslag: snijden lukt maar in de helft van de gevallen. Er is een betere weg.', hl:'CA CJ C4 CK CT C3'},
+    {at:16, h:'Troef trekken', t:'Drie keer troef en de tegenspelers hebben geen troef meer. Oost gooit klaveren en ruiten weg.', hl:''},
+    {at:28, h:'Ruiten wegwerken', t:'♦A, ♦H en de derde ruiten troef je met <b>♠9</b>. Nu heeft niemand meer ruiten, behalve West.', hl:'S9'},
+    {at:36, h:'Harten afgeven', t:'♥H en dan de derde harten. West wint met <b>♥B</b>, maar daar wordt hij niet blij van.', hl:'HJ'},
+    {at:36, cl:1, h:'West is ingespeeld', t:'West moet nu zelf spelen.<br>• <b>♥ of ♦</b>: je troeft in de ene hand en gooit in de andere een klaveren weg.<br>• <b>♣</b>: je snijdt gratis.<br>Geen klaververliezer: <b>12 slagen</b>.', hl:'HT DQ C8 C6 CA CJ CK CT'} ]},
+  lightner: {play:'D5 DA S3 D2  HA H2 H3 H6', steps:[
+    {at:0, h:'Het Lightner-doublet', t:'Partner doubleert het slem. Dat vraagt om een <b>ongewone uitkomst</b>: meestal de eerstgeboden kleur van de dummy, hier ruiten.', hl:'DA DK DJ DT D7 D3'},
+    {at:4, h:'Partner troeft', t:'Je komt uit met ruiten. Partner heeft geen ruiten en troeft met <b>♠3</b>.', hl:'S3'},
+    {at:8, h:'En maakt ♥A', t:'Partner speelt <b>♥A</b>: één down. Na elke andere uitkomst trekt de leider troef en gooit hij zijn verliezers weg op de ruiten van de dummy.', hl:'HA'} ]},
+  stayman: {play:'C4 C2 CQ C6  CA C5 C3 C9  CK C8 S8 CJ', steps:[
+    {at:0, h:'Partner doubleerde Stayman', t:'Het doublet van 2♣ zegt: <b>kom uit met klaveren</b>. Partner heeft ♣A H V 10 7.', hl:'CA CK CQ CT C7'},
+    {at:4, h:'Je komt uit met ♣4', t:'Partner wint met ♣V en blijft klaveren spelen.', hl:'CQ'},
+    {at:12, h:'♣B valt', t:'In de derde ronde valt <b>♣B</b> van de leider. Partner maakt ook nog ♣10 en ♣7: vijf klaverslagen, <b>één down</b>. Na ♠V haalt de leider tien slagen.', hl:'CJ CT C7'} ]},
+  actief: {play:'D4 D3 DA D2  D6 D8 DK DQ', steps:[
+    {at:0, h:'Het gevaar', t:'De dummy heeft een lange, vaste klaverkleur. Daarop gooit de leider zijn ruitenverliezers weg. Niemand toonde een ruitencontrole.', hl:'CA CK CQ CT C6 C5 DJ D8 D2'},
+    {at:4, h:'Kom actief uit met ruiten', t:'Ook van je heer af: partner wint met <b>♦A</b>.', hl:'DA'},
+    {at:8, h:'Partner speelt ruiten terug', t:'Je <b>♦H</b> maakt de tweede slag: <b>één down</b>. Na ♠B gooit de leider zijn ruiten weg op de klaveren.', hl:'DK'} ]}
+};
+let DEMO = null;
+const dmCard = x => { const si = 'SHDC'.indexOf(x[0]), r = {A:14,K:13,Q:12,J:11,T:10}[x[1]] || +x[1]; return si*13 + r - 2; };
+function dmHands(id){ return DAILY[id].hands.map(h=>{ const out = []; h.split('.').forEach((cs, si)=>cs.split('').forEach(ch=>out.push(dmCard('SHDC'[si]+ch)))); return out; }); }
+function demoStart(){ if(!G || !G.daily || !DEMO_DATA[G.daily]) return; const id = G.daily, d = DEMO_DATA[id], start = dmHands(id);
+  const plays = d.play.split(/\s+/).filter(Boolean).map(x=>{ const c = dmCard(x); return {c, seat: start.findIndex(h=>h.includes(c))}; });
+  DEMO = {id, i:0, start, plays, steps:d.steps}; $('game').classList.add('demo'); demoRender(); }
+function demoStop(){ DEMO = null; $('game').classList.remove('demo'); const p = $('gdemo'); if(p) p.remove(); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ const e = $(i); if(e) e.classList.remove('dmo'); }); gRender(); }
+function demoRender(){
+  const D = DEMO, st = D.steps[D.i], at = st.at, hl = new Set((st.hl||'').split(/\s+/).filter(Boolean).map(dmCard));
+  const left = D.start.map(h=>h.slice()); D.plays.slice(0, at).forEach(p=>{ const h = left[p.seat]; h.splice(h.indexOf(p.c), 1); });
+  const t0 = at>0 && !st.cl ? Math.floor((at-1)/4)*4 : at, trick = D.plays.slice(t0, at);
+  const L = seat => { const out = []; SUITS.forEach((su, si)=>left[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)).forEach(c=>out.push({s:su, t:RANK[gRank(c)]||gRank(c), cls: hl.has(c) ? 'dhl' : ''}))); return out; };
+  const wide = LAPTOP();
+  $('gnorth').hidden = false; $('gnorth').classList.remove('gside','dhide'); $('gnorth').innerHTML = handRow(L(0), 't');
+  $('gsrow').innerHTML = handRow(L(2)); ['gnorth','gsrow','gdl','gdr'].forEach(i=>{ $(i).classList.remove('turn'); $(i).classList.add('dmo'); });
+  const tw = document.querySelector('#game .tablewrap'); tw.classList.toggle('sqrow', wide);
+  $('gdl').classList.remove('dhide'); $('gdr').classList.remove('dhide');
+  $('gdl').innerHTML = wide ? handRow(L(3), 'l') : ''; $('gdr').innerHTML = wide ? handRow(L(1), 'r') : '';
+  const TID = ['tN','tE','tS','tW'];
+  [0,1,2,3].forEach(seat=>{ const p = trick.find(x=>x.seat===seat), el = $(TID[seat]);
+    el.innerHTML = p ? playHTML(SUITS[gSuit(p.c)]+gRank(p.c)) : ''; el.classList.toggle('on', !!p); el.classList.toggle('dhl', !!p && hl.has(p.c)); });
+  const ct = c => '<span class="'+(hl.has(c) ? 'dhlt' : '')+'">'+cardHTML(SUITS[gSuit(c)]+gRank(c))+'</span>';
+  const small = innerHeight < 700;
+  const sideTxt = wide ? '' : (small ? '<details class="dmsd"><summary>Handen links en rechts</summary>' : '')+'<p class="dmside">'+[[3,'Links'],[1,'Rechts']].map(([seat, nm])=>'<span><b>'+nm+':</b> '+SUITS.map((su, si)=>{ const cs = left[seat].filter(c=>gSuit(c)===si).sort((a,b)=>gRank(b)-gRank(a)); return cs.length ? cs.map(ct).join(' ') : ''; }).filter(Boolean).join(' · ')+'</span>').join('')+'</p>'+(small ? '</details>' : '');
+  let p = $('gdemo'); if(!p){ p = document.createElement('div'); p.id = 'gdemo'; p.className = 'gdemo'; $('gend').insertAdjacentElement('beforebegin', p); }
+  const n = D.steps.length;
+  p.innerHTML = '<div class="dmst">Uitleg met kaarten · stap '+(D.i+1)+' van '+n+'</div><h3>'+st.h+'</h3><p class="dmt">'+st.t+'</p>'+sideTxt
+    + '<div class="dmnav"><button class="prevb" data-dm="-1" aria-label="Vorige stap"'+(D.i===0 ? ' disabled' : '')+'>‹</button><span class="dmdots">'+D.steps.map((_, k)=>'<i'+(k<=D.i ? ' class="on"' : '')+'></i>').join('')+'</span><button class="prevb" data-dm="1" aria-label="Volgende stap"'+(D.i===n-1 ? ' disabled' : '')+'>›</button><button class="dmback" data-dmstop="1">Terug naar de uitslag</button></div>';
+  $('gstatus').innerHTML = '';
+}
+document.addEventListener('click', e=>{
+  const go = e.target.closest && e.target.closest('[data-demo]'); if(go){ demoStart(); return; }
+  const st = e.target.closest && e.target.closest('[data-dmstop]'); if(st && DEMO){ demoStop(); return; }
+  const b = e.target.closest && e.target.closest('[data-dm]'); if(!b || !DEMO) return;
+  DEMO.i = Math.max(0, Math.min(DEMO.steps.length-1, DEMO.i + (+b.dataset.dm))); demoRender(); });
 let BIDS_LAST_DAILY = {};
 { const gd0 = gDo; gDo = function(seat, card){ const first = G && G.daily && DAILY[G.daily].type==='uitkomen' && !G.played.length && seat===G.me; const r = gd0.apply(this, arguments); if(first) dailyLead(card); return r; }; }
 { const gf1 = gFinish; gFinish = function(){ const r = gf1.apply(this, arguments); $('game').classList.toggle('dailyend', !!(G && G.daily));
   if(G && G.daily && DAILY[G.daily].type==='uitkomen' && G.dailyLead){
     const g = G, p = DAILY[g.daily], L = g.dailyLead, date = (BIDS_LAST_DAILY||{})[g.daily] || dailyToday().date;
-    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> je kwam uit met '+DSYM[L.su]+(L.ok ? ': goed gevonden.' : ': niet de goede uitkomst.')+'</p>'+dailyLeadTable(g.daily)+'<p>'+DAILY_DD[g.daily].par+'</p><div id="dothers2"></div></div>');
+    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> je kwam uit met '+DSYM[L.su]+(L.ok ? ': goed gevonden.' : ': niet de goede uitkomst.')+'</p><button class="dmgo" data-demo="1">Bekijk de uitleg op tafel</button>'+dailyLeadTable(g.daily)+'<p>'+DAILY_DD[g.daily].par+'</p><div id="dothers2"></div></div>');
     dailyOthers(date, L.su+(L.ok ? '1' : '0')).then(v=>{ const o = $('dothers2'); if(o && v && G===g) o.innerHTML = dailyBars(v, a=>a[0], DSYM, L.su); });
   }
   if(G && G.daily && DAILY[G.daily].type==='afspelen' && !G.dailyDone){
     const g = G, p = DAILY[g.daily], date = (BIDS_LAST_DAILY||{})[g.daily] || dailyToday().date, ok = g.ns>=g.need;
     g.dailyDone = true; dailyDone(g.daily, date, ok ? 'M' : 'D');
-    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> '+(ok ? 'gemaakt!' : 'net niet.')+' '+p.pointe+'</p><p>'+p.odds+'</p><p>'+DAILY_DD[g.daily].par+'</p><div id="dothers"></div></div>');
+    $('gresult').insertAdjacentHTML('afterbegin', '<div class="dverd"><p><b>Probleem van de dag:</b> '+(ok ? 'gemaakt!' : 'net niet.')+'</p><button class="dmgo" data-demo="1">Bekijk de uitleg op tafel</button><p>'+p.pointe+'</p><p>'+p.odds+'</p><p>'+DAILY_DD[g.daily].par+'</p><div id="dothers"></div></div>');
     dailyOthers(date, ok ? 'M' : 'D').then(v=>{ const o = $('dothers'); if(!o || G!==g) return;
       o.innerHTML = v ? dailyBars(v, a=>a[0], {M:'gemaakt', D:'down'}, ok ? 'M' : 'D') : '<p><small>De vergelijking met andere bezoekers is nog niet beschikbaar.</small></p>'; });
   }
