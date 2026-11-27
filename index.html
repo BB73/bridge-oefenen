@@ -1670,6 +1670,20 @@ html.klas main.table:is(.play,.lead,.kbid) .smsq #qN.on{top:calc(.55rem + var(--
 html.klas main.table:is(.play,.lead,.kbid) .smsq #qE.on{left:auto!important;right:calc(.55rem + var(--nh) + 5px)!important;transform:translateY(-50%)!important} html.klas main.table:is(.play,.lead,.kbid) .smsq #qW.on{left:calc(.55rem + var(--nh) + 5px)!important;transform:translateY(-50%)!important}
 /* bieden met plaatjes: tafel boven, hand onder, vraag en biedbox rechts */
 html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;left:2%!important;width:calc(var(--lc) - 4%)!important;top:2vh!important;bottom:calc(var(--kh) + 4vh)!important;height:auto!important;margin:0!important;display:flex!important;flex-direction:column;align-items:center!important;justify-content:center!important}
+
+/* v387: de trap */
+.trd{display:inline-flex;gap:5px;vertical-align:middle}.trd i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line,#CFD8D3);background:#fff;box-sizing:border-box}.trd i.on{background:var(--felt,#2E6B4E);border-color:var(--felt,#2E6B4E)}.trd i.miss{background:#F3D6D3;border-color:#C9665E}
+.trd.sm{gap:3px}.trd.sm i{width:11px;height:11px}
+.pgcd{display:flex;align-items:center;gap:8px;margin:4px 0 8px;font-size:.8rem;color:var(--muted,#5E6B65);line-height:1.2}
+.pglad{display:flex;gap:4px;margin:0 0 20px}.pglad b{flex:1;height:24px;border-radius:6px;border:2px solid var(--line,#CFD8D3);background:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700;color:var(--muted,#5E6B65);position:relative}
+.pglad b.d{background:var(--felt,#2E6B4E);border-color:var(--felt,#2E6B4E);color:#fff}.pglad b.cur{border-color:var(--felt,#2E6B4E);color:var(--felt,#2E6B4E);box-shadow:0 0 0 3px #CFE6DA}.pglad u{position:absolute;top:22px;left:50%;transform:translateX(-50%);text-decoration:none;font-size:.75rem;line-height:1.2}
+.pgtr{display:flex;align-items:center;gap:8px;width:100%;border:1px solid var(--line,#CFD8D3);border-radius:9px;background:var(--surface,#fff);padding:5px 10px;margin-bottom:5px;font:inherit;font-size:.86rem;color:inherit;text-align:left;cursor:pointer}
+.pgtr .n{flex:1;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pgtr .lv,.pgtr .td{color:var(--muted,#5E6B65);font-size:.78rem;white-space:nowrap}
+.pgchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.pgchips button{font:700 .78rem inherit;background:var(--surface,#fff);color:var(--felt,#2E6B4E);border:1.5px solid var(--felt,#2E6B4E);border-radius:14px;padding:3px 10px;cursor:pointer}.pgchips button.done{background:#EEF8F1}
+.lmsg.trm.up{background:#E3F3EA;color:#14211C}
+.pgr, .pgc{min-width:0;max-width:100%;box-sizing:border-box} .pgtr, .pglad b{min-width:0}
+@media (max-width:999px), (max-aspect-ratio:5/4){ .pgtr:nth-of-type(n+4){display:none} .pgcd{font-size:.75rem} .pgtr .td{display:none} .pgwrap > .pgr, .pgwrap > .pgl{width:100%} }
+@media (max-height:700px) and (max-width:999px){ .pgtr, .pgc .pgcth{display:none!important} .pglad{margin-bottom:18px} .pgcd > span{display:none} }
 /* v368: uitleg met kaarten op de tafel zelf */
 .dmgo{display:block;margin:.4rem 0 .5rem;padding:.6rem 1rem;border-radius:12px;border:0;background:var(--felt, #2E6B4E);color:#fff;font:700 1.05rem/1.2 inherit;cursor:pointer}
 #game.demo > #gend{display:none!important} #game.demo > #gstatus{display:none!important}
@@ -9411,7 +9425,7 @@ function answer(bid){
   const pickC = q.choices && !ok ? q.choices.find(c=>c.id===bid) : null;
   if(!ok && !q.isTest) $('verdict').insertAdjacentHTML('afterbegin', '<button class="bzbtn" id="bzopen" type="button">Niet mee eens?</button>');
   BZ.q = q; BZ.bid = bid;
-  $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+(ok ? '' : varNote(q.conv))+learnMsg;
+  $('why').innerHTML = (pickC && pickC.tip ? '<span class="acetip"><b>Niet meteen je aas.</b> '+pickC.tip+'</span>' : '')+explain(q)+(ok ? '' : varNote(q.conv))+learnMsg+trMsg(q.conv);
   if(q.partner){
     $('partnerlabel').textContent = 'Hand van partner (Noord), '+q.partner.hcp+' punten';
     $('partnerhand').innerHTML = handHTML(q.partner);
@@ -11695,6 +11709,7 @@ function progAnswer(qq, ok){ try{
   pgAdd(pgCat(k), 1, ok ? 1 : 0);
   const a = p.k[k] || (p.k[k] = []); a.push(ok ? 1 : 0); while(a.length>PG_K) a.shift();
   if(state.streak>p.best) p.best = state.streak;
+  trAnswer(k, ok);
   if(!ok && !qq.isHerk){ try{ const c = Object.assign({}, qq); delete c.isRep; delete c.isHerk; p.wrong.push({q:JSON.stringify(c), src:qSrc || k}); while(p.wrong.length>PG_WRONG) p.wrong.shift(); }catch(e){} }
   if(!ok && qq.isHerk){ try{ const c = Object.assign({}, qq); delete c.isHerk; p.wrong.push({q:JSON.stringify(c), src:qSrc || k}); }catch(e){} }
   save(); }catch(e){} }
@@ -11756,38 +11771,48 @@ function renderProg(){
   h += '</div></details><details class="pgd"'+op+'><summary>Per onderdeel</summary><div><h3 class="pgh2">Per onderdeel <span class="mut">laatste 20 vragen; pijl: vergeleken met de 20 daarvoor</span></h3>'
     + (recent.length ? recent.map(r=>'<button class="pgrow" data-res="'+r.k+'"><span class="n">'+pgName(r.k)+'</span><span class="bar"><i style="width:'+Math.round(r.pl*100)+'%;background:'+(r.pl>=.8 ? '#2E9E5B' : r.pl>=.6 ? '#C9A227' : '#C62828')+'"></i></span><span class="p">'+Math.round(r.pl*100)+'%</span><span class="t">'+(r.po==null ? '' : r.pl>r.po ? '<b class="up">▲</b>' : r.pl<r.po ? '<b class="dn">▼</b>' : '')+'</span></button>').join('') : '<p class="mut">Nog te weinig vragen per onderdeel.</p>')
     + '</div></details></div>';
-  // v384: begeleiding naar het volgende niveau — één volgende stap
+  // v387: de trap — per onderdeel treden van 5 vragen, met brons, zilver en goud als mijlpalen
   const wk = [0,0]; { const a = pgWeekStart(); ['b','s','t'].forEach(c=>{ const x = pgSum(c, a, now); wk[0] += x[0]; wk[1] += x[1]; }); }
   const wpct = wk[0] ? Math.round(100*wk[1]/wk[0]) : 0, wdone = wk[0]>=PG_GOAL.n && wpct>=PG_GOAL.pct;
-  const allLv = Object.keys(p.k).filter(k=>(PLAYABLE.includes(k) || BIDDABLE.includes(k)) && p.k[k].length>=5).map(pgLevel);
-  const focus = allLv.slice().sort((a,b)=>a.lv-b.lv || b.n-a.n)[0];
-  const LVN = ['Brons','Zilver','Goud'], MED = ['🥉','🥈','🥇'], nw = p.wrong.length, best = Math.max(p.best, state.streak);
-  const st = [];
-  const sHerk = {a:'data-pggo="herk"', t:'Herkansing', s:nw+' vra'+(nw===1 ? 'ag' : 'gen')+' die je fout had, met uitleg', w:'De snelste winst zit in de vragen die je al eens fout had.', b:'Start'};
-  if(nw>=5) st.push(sHerk);
-  if(focus && focus.lv<3) st.push({a:'data-res="'+focus.k+'"', t:pgName(focus.k)+' oefenen', s:focus.n<30 ? 'nog '+(30-focus.n)+' vragen tot je eerste niveau' : 'alleen dit onderdeel, tot je '+LVN[focus.lv].toLowerCase()+' haalt',
-    w:focus.n<30 ? 'Na 30 vragen in een onderdeel krijg je je niveau. Hier ben je het dichtst bij.' : 'In dit onderdeel ligt je volgende niveau het dichtst bij.', b:'Start'});
-  if(nw && nw<5) st.push(sHerk);
-  if(!wdone) st.push({a:'data-pggo="week"', t:'Weekdoel afmaken', s:wk[0]<PG_GOAL.n ? 'nog '+(PG_GOAL.n-wk[0])+' vragen · '+PG_GOAL.pct+'% goed nodig' : 'nu '+wpct+'% goed, doel '+PG_GOAL.pct+'%', w:'Wie elke week oefent, houdt zijn niveau vast.', b:'Verder'});
-  const sRij = {a:'data-pggo="rij"', t:'10 op een rij', s:'zonder fout · nu '+state.streak+' · record '+best, w:'Alles loopt op schema. Test je vastheid: tien goed achter elkaar.', b:'Start'};
-  st.push(sRij);
-  const main = st[0], then = st.slice(1, 3);
-  let head, sub;
-  if(!focus){ head = 'je eerste niveau'; sub = 'Oefen minstens 5 vragen in één onderdeel. Na 30 vragen krijg je een niveau.'; }
-  else if(focus.lv>=3){ head = '🥇 Goud in alles wat je oefent'; sub = 'Kies een nieuw onderdeel om ook daar goud te halen.'; }
-  else{ head = MED[focus.lv]+' '+LVN[focus.lv]+' — '+(focus.n<30 ? 'nog '+(30-focus.n)+' vragen' : 'nog '+Math.max(1, Math.ceil([.7,.8,.9][focus.lv]*30)-focus.ok)+' meer goed');
-    sub = pgName(focus.k)+': '+(focus.n<30 ? focus.ok+' van je '+focus.n+' vragen goed. Na 30 vragen telt je niveau.' : focus.ok+' van je laatste 30 vragen goed; voor '+LVN[focus.lv].toLowerCase()+' heb je er '+Math.ceil([.7,.8,.9][focus.lv]*30)+' nodig.'); }
-  const bp = v => Math.max(0, Math.min(100, (v-50)*2));
-  const bar = focus ? '<div class="pgcbar"><div class="f" style="width:'+bp(focus.pct*100)+'%"></div><div class="me" style="left:'+bp(focus.pct*100)+'%">jij '+Math.round(focus.pct*100)+'%</div>'
-    + [70,80,90].map((v,i)=>'<div class="tk t'+i+'" style="left:'+bp(v)+'%"><i>'+MED[i]+' '+v+'</i></div>').join('')+'</div>' : '';
-  h += '<div class="pgr"><div class="pgc"><div class="lab">Op weg naar</div><h3>'+head+'</h3>'+bar+'<p class="why">'+sub+' '+main.w+'</p>'
-    + '<button class="pgcgo" '+main.a+'><span><b>Volgende stap: '+main.t+'</b><small>'+main.s+'</small></span><i>›</i></button>'
-    + (then.length ? '<div class="pgcth">Daarna</div>'+then.map((x,i)=>'<div class="pgcst"><span class="n">'+(i+2)+'</span><span class="tx"><b>'+x.t+'</b><small>'+x.s+'</small></span><button '+x.a+'>'+x.b+'</button></div>').join('') : '')
-    + (st.slice(0,3).includes(sRij) ? '' : '<button class="pgcmore" data-pggo="rij">Of probeer 10 op een rij (record '+best+')</button>')
+  const nw = p.wrong.length, best = Math.max(p.best, state.streak), okK = k => !!k && (PLAYABLE.includes(k) || BIDDABLE.includes(k));
+  if(!p.tr) p.tr = {};
+  const cand = [...new Set([p.trLast].concat(Object.keys(p.tr), Object.keys(p.k).sort((a,b)=>p.k[b].length-p.k[a].length), (state.bidSet||[]).slice(0,3), (state.playSet||[]).slice(0,3)).filter(okK))];
+  const open = cand.filter(k=>trGet(k).lv<TR_N), focus = open[0];
+  const others = open.slice(1).sort((a,b)=>trGet(b).r.length-trGet(a).r.length || trGet(b).lv-trGet(a).lv).slice(0,3);
+  const vr = n => n===1 ? '1 vraag' : n+' vragen';
+  let card;
+  if(!focus) card = '<div class="lab">De trap</div><h3>🥇 Goud in alles wat je oefent</h3><p class="why">Kies een nieuw onderdeel om ook daar de trap op te gaan.</p>';
+  else{ const t = trGet(focus), L = trLeft(t), nm = pgName(focus);
+    card = '<div class="lab">'+nm+' · op weg naar</div><h3>Trede '+(t.lv+1)+' '+(trMile(t.lv+1)===t.lv+1 ? trMed(t.lv+1)+' ' : '')+'— nog '+L.todo+' goed</h3>'
+      + '<div class="pgcd">'+trDots(t)+'<span>'+(t.r.length ? L.g+' van de '+t.r.length+' goed · ' : '')+'rondje van '+TR_R+', met '+L.need+' goed ga je omhoog</span></div>'
+      + '<div class="pglad">'+Array.from({length:TR_N}, (_,i)=>'<b class="'+(i<t.lv ? 'd' : i===t.lv ? 'cur' : '')+'">'+(i+1)+(trMile(i+1)===i+1 ? '<u>'+trMed(i+1)+'</u>' : '')+'</b>').join('')+'</div>'
+      + '<button class="pgcgo" data-res="'+focus+'"><span><b>'+(t.r.length ? 'Verder: nog '+vr(L.left) : 'Start: '+TR_R+' vragen')+' '+nm+'</b><small>daarna sta je op trede '+(t.lv+1)+', als je er '+(t.r.length ? 'nog '+L.todo : L.need)+' goed hebt</small></span><i>›</i></button>'; }
+  const rows = others.map(k=>{ const t = trGet(k), L = trLeft(t); return '<button class="pgtr" data-res="'+k+'"><span class="n">'+pgName(k)+'</span><span class="lv">trede '+t.lv+(trMed(t.lv) ? ' '+trMed(t.lv) : '')+'</span>'+trDots(t, 'sm')+'<span class="td">nog '+L.todo+' goed</span></button>'; }).join('');
+  h += '<div class="pgr"><div class="pgc">'+card
+    + (rows ? '<div class="pgcth">Ook op de trap</div>'+rows : '')
+    + '<div class="pgchips">'+(nw ? '<button data-pggo="herk">Herkansing · '+nw+'</button>' : '')+'<button data-pggo="week"'+(wdone ? ' class="done"' : '')+'>Weekdoel · '+wk[0]+'/'+PG_GOAL.n+(wdone ? ' ✓' : '')+'</button><button data-pggo="rij">10 op een rij · record '+best+'</button></div>'
     + '</div></div></div>';
   $('resbody').innerHTML = h;
   $('resbody').innerHTML = h;
 }
+// ===== v387: de trap. Elk onderdeel heeft 9 treden; een trede is een rondje van 5 vragen. Tot brons zijn 3 goed genoeg, tot zilver 4, tot goud alle 5. Je zakt nooit. =====
+const TR_N = 9, TR_R = 5;
+const trNeed = lv => lv<3 ? 3 : lv<6 ? 4 : 5;
+const trMile = lv => lv<=3 ? 3 : lv<=6 ? 6 : 9;
+const trMed = lv => lv>=9 ? '🥇' : lv>=6 ? '🥈' : lv>=3 ? '🥉' : '';
+const TR_NAME = {3:'brons', 6:'zilver', 9:'goud'};
+function trGet(k){ const p = pg(); if(!p.tr) p.tr = {}; const t = p.tr[k] || (p.tr[k] = {lv:0, r:[]}); if(!Array.isArray(t.r)) t.r = []; return t; }
+function trLeft(t){ const g = t.r.reduce((a,b)=>a+b,0), need = trNeed(t.lv), left = TR_R - t.r.length; return {g, need, left, todo:Math.max(0, need-g), can:need-g<=left}; }
+function trDots(t, cls){ let h = '<span class="trd'+(cls ? ' '+cls : '')+'">'; for(let i=0;i<TR_R;i++) h += '<i class="'+(i<t.r.length ? (t.r[i] ? 'on' : 'miss') : '')+'"></i>'; return h+'</span>'; }
+let trEvt = null;
+function trAnswer(k, ok){ trEvt = null; const t = trGet(k); if(t.lv>=TR_N) return; t.r.push(ok ? 1 : 0); pg().trLast = k;
+  const L = trLeft(t);
+  if(t.r.length>=TR_R || !L.can){ if(L.g>=L.need && t.r.length>=TR_R){ t.lv++; trEvt = {k, up:true, lv:t.lv}; } else trEvt = {k, up:false, lv:t.lv, g:L.g, n:t.r.length, need:L.need}; t.r = []; } }
+function trMsg(k){ try{ if(!k || k==='fris' || !state.prog || !state.prog.tr || !state.prog.tr[k]) return ''; const t = trGet(k), nm = pgName(k), e = trEvt && trEvt.k===k ? trEvt : null;
+  if(e && e.up){ const m = trMile(t.lv), d = m - t.lv; return '<span class="lmsg trm up"><b>🎉 Trede '+t.lv+' gehaald</b> · '+nm+(d===0 ? ' · '+TR_NAME[m]+' '+trMed(m) : ' · nog '+d+' trede'+(d===1 ? '' : 'n')+' tot '+TR_NAME[m]+' '+trMed(m))+'</span>'; }
+  if(e) return '<span class="lmsg trm">'+nm+': dit rondje haalt trede '+(t.lv+1)+' niet ('+e.g+' van de '+e.n+' goed, nodig '+e.need+' van de '+TR_R+'). Je blijft op trede '+t.lv+' en begint een nieuw rondje.</span>';
+  if(t.lv>=TR_N) return '';
+  const L = trLeft(t); return '<span class="lmsg trm">'+nm+' · trede '+(t.lv+1)+' '+trDots(t, 'sm')+' nog '+L.todo+' goed</span>'; }catch(err){ return ''; } }
 // herkansing: de foute vragen één voor één opnieuw
 function herkOn(){ const p = state.prog; return !!(p && p.herk && p.herk.conv===state.conv && p.wrong && p.wrong.length); }
 function herkPick(){ const p = pg(); const r = p.wrong.shift(); if(!r) return null; try{ const x = JSON.parse(r.q); x.isHerk = 1; qSrc = r.src; p.herk.left = p.wrong.length; save(); return x; }catch(e){ return null; } }
@@ -11803,11 +11828,12 @@ function pgGo(kind){
 let pgT = null;
 function pgPushSoon(){ clearTimeout(pgT); pgT = setTimeout(pgPush, 4000); }
 function pgPush(){ try{ if(!state.acct || !FB_CONFIG || SAMEN_TEST || !window.firebase || !firebase.apps.length) return; const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return;
-  const p = pg(), j = JSON.stringify({d:p.d, k:p.k, best:p.best, bestDays:p.bestDays, t:Date.now()}); if(j.length<300000) firebase.database().ref('users/'+u.uid+'/prog').set(j).catch(()=>{}); }catch(e){} }
+  const p = pg(), j = JSON.stringify({d:p.d, k:p.k, tr:p.tr||{}, best:p.best, bestDays:p.bestDays, t:Date.now()}); if(j.length<300000) firebase.database().ref('users/'+u.uid+'/prog').set(j).catch(()=>{}); }catch(e){} }
 async function pgPull(){ try{ const u = firebase.auth().currentUser; if(!u || u.isAnonymous) return; const j = (await firebase.database().ref('users/'+u.uid+'/prog').once('value')).val(); if(typeof j!=='string') return pgPush();
   const R = JSON.parse(j), p = pg();
   Object.keys(R.d||{}).forEach(day=>{ const r = R.d[day], l = p.d[day] || (p.d[day] = {}); Object.keys(r).forEach(c=>{ if(!l[c] || r[c][0]>l[c][0]) l[c] = r[c]; }); });
   Object.keys(R.k||{}).forEach(k=>{ if(!p.k[k] || R.k[k].length>p.k[k].length) p.k[k] = R.k[k]; });
+  if(!p.tr) p.tr = {}; Object.keys(R.tr||{}).forEach(k=>{ const r = R.tr[k]; if(r && typeof r.lv==='number' && (!p.tr[k] || r.lv>p.tr[k].lv)) p.tr[k] = {lv:Math.min(TR_N, r.lv), r:Array.isArray(r.r) ? r.r.slice(0, TR_R-1) : []}; });
   p.best = Math.max(p.best, R.best||0); p.bestDays = Math.max(p.bestDays, R.bestDays||0); save(); pgPush(); }catch(e){} }
 { const accStart2 = accStart; accStart = async function(){ await accStart2(); try{ if(state.acct) pgPull(); }catch(e){} }; }
 { const bs0 = bidSummary; bidSummary = function(){ const r = bs0.apply(this, arguments); try{ progBids(BIDS); }catch(e){} return r; }; }
