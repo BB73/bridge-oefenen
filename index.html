@@ -8667,8 +8667,8 @@ function layRerender(){ try{ if(BIDS) bidRender(); else if(G) gRender(); }catch(
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(CLUB_OVR ? Object.assign({}, state, {club:CLUB_OVR.club, clubMe:CLUB_OVR.me}) : state)); }catch(e){} }
 
 let q = null, answered = false, qSrc = null;
-// ---------- Foutherhaling: een hand die je fout had komt een paar vragen later terug, tot hij goed gaat ----------
-const REP_GAP = [3, 6], REP_MAX = 20;
+// ---------- Foutherhaling: een hand die je fout had komt pas na minstens 10 andere vragen terug (v388), en bij een tweede fout na minstens 15 ----------
+const REP_GAP = [11, 16], REP_MAX = 20;
 function repList(){ if(!Array.isArray(state.rep)) state.rep = []; return state.rep; }
 function repFree(){ return !testOn() && !frisOn() && state.conv!=='spel'; }
 function repPick(card){
@@ -8686,7 +8686,7 @@ function repAfter(ok){
   if(n>=REP_GAP.length) return '<span class="lmsg">Deze blijft lastig. Lees de uitleg nog eens rustig door.</span>';
   try{ const c = Object.assign({}, q); delete c.isRep; L.push({q:JSON.stringify(c), src:qSrc, due:REP_GAP[n], n:n+1}); }catch(e){ return ''; }
   while(L.length>REP_MAX) L.shift();
-  return '<span class="lmsg">Deze hand komt over een paar vragen terug.</span>';
+  return '<span class="lmsg">Deze hand komt later terug, na minstens '+(REP_GAP[n]-1)+' andere vragen.</span>';
 }
 
 const SROW = [0,1,3,2];   // rijen van een hand: zwart, rood, zwart, rood (♠ ♥ ♣ ♦)
