@@ -2556,10 +2556,15 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Als zij 2<span class="H">♥︎</span> boden (vraag: 3<span class="D">♦︎</span>): 3<span class="H">♥︎</span> met een stop en vier schoppen (forcing), 3<span class="S">♠︎</span> met vier schoppen zonder stop, 4<span class="S">♠︎</span> met vier schoppen en een maximum, 3SA met een stop zonder vier schoppen.</li>
         <li>Als zij 2<span class="S">♠︎</span> boden (vraag: 3<span class="H">♥︎</span>): 3<span class="S">♠︎</span> met vier harten zonder stop, 4<span class="H">♥︎</span> met vier harten en een maximum, 3SA met een stop zonder vier harten.</li>
         <li>Na het afmaken van je transfer: pas met een zwakke hand, de manche in je zeskaart hoog, of 3SA met een vijfkaart en een stop.</li>
+        <li>Ook na de transfer: een nieuwe kleur is echt en mancheforcing (een tweekleurenspel, 5-5). De kleur van de tegenpartij op 4-niveau is een splinter: een zeskaart hoog, sleminteresse en hooguit één kaart in hun kleur.</li>
+        <li>Stayman na hun 2<span class="C">♣︎</span>: de vraag is 2SA, de transfer naar klaveren. De openaar antwoordt zoals na 2<span class="D">♦︎</span>, met 3<span class="C">♣︎</span> als hij geen stop en geen vierkaart hoog heeft.</li>
+        <li>De openaar met een superfit: is partners transfer naar een hoge kleur zeker manchekracht (zijn kleur is hoger dan die van de tegenpartij) en heb jij een maximum met vier kaarten mee, bied dan meteen de manche.</li>
+        <li>De openaar zonder stop na 3<span class="S">♠︎</span>: bied niet 3SA, maar je langste lage kleur op 4-niveau.</li>
+        <li>Na een conventioneel volgbod: is één kleur bekend (DONT 2<span class="C">♣︎</span> of 2<span class="D">♦︎</span>), dan geldt Rubensohl alsof die kleur gewoon geboden is. Na Multi 2<span class="D">♦︎</span> zijn 2<span class="H">♥︎</span> en 2<span class="S">♠︎</span> echt en zwak, met transfers vanaf 2SA. Na Landy 2<span class="C">♣︎</span> (beide hoge kleuren) toont een doublet punten, is 2<span class="D">♦︎</span> echt en zwak, 2SA de transfer naar klaveren en 3<span class="C">♣︎</span> de transfer naar ruiten.</li>
         <li>Doubleert de tegenpartij 1SA, dan is dat geen Rubensohl meer maar een aparte afspraak. Je kiest bij de variant: alles echt (een kleur op 2-niveau is om te spelen), of transfers vanaf het redoublet: redoublet toont klaveren, 2<span class="C">♣︎</span> ruiten, 2<span class="D">♦︎</span> harten, 2<span class="H">♥︎</span> schoppen.</li>
         <li>Na 1<span class="C">♣︎</span> van partner en een zwak sprongvolgbod (2<span class="D">♦︎</span>, 2<span class="H">♥︎</span> of 2<span class="S">♠︎</span>) gelden dezelfde transfers: 2SA klaveren, 3<span class="C">♣︎</span> ruiten, 3<span class="D">♦︎</span> harten, 3<span class="H">♥︎</span> schoppen, 3<span class="S">♠︎</span> naar SA zonder stop, 3SA met een stop.</li>
       </ul>
-      <p>Dit volgt de Rubensohl-pagina van pecona.nl. Pecona noemt geen punten. In de app is manchekracht na 1SA 9 of meer punten en zwak tot 7, een maximum is 17, en na 1<span class="C">♣︎</span> is manchekracht 12 of meer; die grenzen zijn een eigen invulling. Dat geldt ook voor het vervolg na de transfer, en voor de zwakke hand bij de transfers na een doublet. Situaties die Pecona niet beschrijft, zoals Stayman na 2<span class="C">♣︎</span> of de openaar zonder stop na 3<span class="S">♠︎</span>, komen niet voor.</p>
+      <p>Dit volgt de Rubensohl-pagina van pecona.nl. Pecona noemt geen punten. In de app is manchekracht na 1SA 9 of meer punten en zwak tot 7, een maximum is 17, en na 1<span class="C">♣︎</span> is manchekracht 12 of meer; die grenzen zijn een eigen invulling. Dat geldt ook voor het vervolg na de transfer, en voor de zwakke hand bij de transfers na een doublet. De laatste vijf punten hierboven (tweede kleur en splinter, Stayman na 2<span class="C">♣︎</span>, de superfit, de openaar zonder stop na 3<span class="S">♠︎</span> en de conventionele volgboden) beschrijft Pecona niet; die zijn een eigen, gangbare invulling. Spreek ze met je partner af.</p>
       <h3>DONT</h3>
       <ul>
         <li>De tegenpartij opent 1SA. DONT gaat om verdeling, niet om punten.</li>
@@ -5411,13 +5416,13 @@ function newTSQ(mode, stepKey){
 }
 // ---------- Rubensohl ----------
 // Partner opent 1SA, de tegenpartij biedt 2 in een kleur. Vanaf 2SA is elk bod een transfer naar de kleur erboven; een bod op 2-niveau is om te spelen.
-function newRUQ(){
+function newRUQ(opt){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   for(;;){
-    const X = SUITS[rnd(4)], xi = SI[X], over = '2'+X;            // tussenbod: 2 schoppen, harten, ruiten of klaveren
-    const want = ['spelen2','spelen2','transfer','transfer','transferzwak','stayman','stayman','pas','straf','sa','sa','nostop','nostop'][rnd(13)];
+    const X = opt ? opt.X : SUITS[rnd(4)], xi = SI[X], over = '2'+X;            // tussenbod: 2 schoppen, harten, ruiten of klaveren
+    const WL = opt ? opt.wants : ['spelen2','spelen2','transfer','transfer','transferzwak','stayman','stayman','pas','straf','sa','sa','nostop','nostop'], want = WL[rnd(WL.length)];
     if(want==='spelen2' && X==='S') continue;
-    if((want==='transferzwak' || want==='stayman') && X==='C') continue;      // na 2 klaveren: alles past nog op 2-niveau, en Pecona noemt daar geen Stayman
+    if(want==='transferzwak' && X==='C') continue;      // na 2 klaveren past elke zwakke kleur nog op 2-niveau
     const NEG = state.rubd==='neg', INV = state.rubm==='inv';
     const me = drawHand(fullDeck(), h=>{
       const p = h.hcp, long = [0,1,2,3].filter(i=>i!==xi && h.len[i]>=5);
@@ -5447,7 +5452,7 @@ function newRUQ(){
     else if(want==='straf'){ answer = 'X'; why = 'Je hebt '+pts(p)+' en '+NTAL[me.h.len[xi]]+' '+SNAME[X]+' met hoge kaarten erbij, achter de speler die ze bood. Bij Rubensohl is een doublet voor straf: partner past en de tegenpartij gaat down.'; }
     else if(want==='sa'){ answer = '3N'; why = 'Je hebt '+pts(p)+', genoeg voor de manche, een stop in '+SNAME[X]+' en geen vierkaart in een ongeboden hoge kleur. Bied '+B('3N')+': om te spelen. Dat belooft bij Rubensohl een stop in hun kleur.'; }
     else if(want==='nostop'){ answer = '3S'; why = 'Je hebt '+pts(p)+', genoeg voor de manche, maar geen stop in '+SNAME[X]+', geen vierkaart in een ongeboden hoge kleur en geen vijfkaart. Bied dan '+B('3S')+': bij Rubensohl is dat de transfer naar 3SA die een stop ontkent. Het zegt niets over schoppen. Partner biedt 3SA als hij zelf een stop heeft.'; }
-    else if(want==='stayman'){ answer = TR[X]; why = 'Je hebt '+pts(p)+', genoeg voor de manche, en een vierkaart '+SNAME[SUITS[r.m]]+'. Bij Rubensohl is de transfer naar de kleur van de tegenpartij de Stayman-vraag: bied '+B(answer)+', de kleur onder hun '+SNAME[X]+'.'; }
+    else if(want==='stayman'){ answer = TR[X]; why = 'Je hebt '+pts(p)+', genoeg voor de manche, en een vierkaart '+SNAME[SUITS[r.m]]+'. Bij Rubensohl is de transfer naar de kleur van de tegenpartij de Stayman-vraag: bied '+B(answer)+(X==='C' ? ': 2SA is de transfer naar klaveren, hun kleur.' : ', de kleur onder hun '+SNAME[X]+'.'); }
     else {
       const su = SUITS[r.si], nk = NKAART[me.h.len[r.si]];
       if(want==='spelen2'){ answer = '2'+su; why = 'Je hebt een '+nk+' '+SNAME[su]+' en maar '+pts(p)+'. Je kleur is hoger dan hun '+SNAME[X]+', dus je kunt hem nog op 2-niveau bieden: '+B(answer)+'. Bij Rubensohl is dat om te spelen; partner past.'; }
@@ -5455,6 +5460,7 @@ function newRUQ(){
       else if(want==='transfer'){ answer = TR[su]; why = 'Je hebt een '+nk+' '+SNAME[su]+' en '+pts(p)+', genoeg voor de manche. Bij Rubensohl is elk bod vanaf 2SA een transfer naar de kleur erboven: bied '+B(answer)+'. Partner biedt '+B('3'+su)+' en jij biedt daarna verder.'; }
       else { answer = TR[su]; why = 'Je hebt een zeskaart '+SNAME[su]+' en maar '+pts(p)+'. Je kleur is lager dan hun '+SNAME[X]+', dus op 2-niveau kan het niet meer. Bied de transfer '+B(answer)+': partner biedt '+B('3'+su)+' en jij past.'; }
     }
+    if(opt) return mkQ('rubensohl', 6, {why:opt.pre+why, kind:'c-'+opt.tag+'-'+want, prompt:'Jullie spelen Rubensohl. Partner opent 1SA en Oost biedt '+B(over)+' ('+opt.say+'). Wat doe je?'}, me.h, n.h, answer, 'dbl', over, {start:1, calls:['1N', over]});
     return mkQ('rubensohl', 1, {why, kind:want+(r && r.neg ? '-neg' : ''), prompt:'Jullie spelen Rubensohl. Partner opent 1SA en Oost biedt '+B(over)+'. Wat doe je?'}, me.h, n.h, answer, 'dbl', over, {start:1, calls:['1N', over]});
   }
 }
@@ -6489,9 +6495,9 @@ NEWCONV.puppet1 = sk => PUP1==='2c' ? newPU2C(sk) : newPUQ(sk, false);
 // Antwoord van de 1SA-openaar op de Stayman-vraag (de transfer naar hun kleur), volgens de tabellen van Pecona. null = staat er niet.
 function ruStayAnswer(h, X){
   const xi = SI[X], stop = stopIn(h, xi), max = h.hcp>=17, hH = h.len[1]>=4, hS = h.len[0]>=4;
-  if(X==='D'){
+  if(X==='D' || X==='C'){
     if(hH || hS){ const su = hH ? 'H' : 'S'; return max ? {a:'4'+su, kind:'sterk', su} : {a:'3'+su, kind:'fit', su}; }
-    return stop ? {a:'3N', kind:'sa'} : {a:'3D', kind:'niets'};
+    return stop ? {a:'3N', kind:'sa'} : {a:'3'+X, kind:'niets'};
   }
   if(X==='H'){
     if(hS) return max ? {a:'4S', kind:'sterk', su:'S'} : stop ? {a:'3H', kind:'stopfit', su:'S'} : {a:'3S', kind:'fit', su:'S'};
@@ -6506,16 +6512,19 @@ function ruStayAnswer(h, X){
 function newRUQ2(){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   for(;;){
-    const want = (state.rubm==='inv' ? ['afmaken','afmaken','acc','acc','pas2','stay','stay','stay','stay','o3s'] : ['afmaken','afmaken','afmaken','pas2','stay','stay','stay','stay','o3s','o3s'])[rnd(10)];
-    const X = SUITS[(want==='stay') ? rnd(3) : rnd(4)], xi = SI[X], over = '2'+X;
+    const want = (state.rubm==='inv' ? ['afmaken','afmaken','acc','acc','pas2','stay','stay','stay','stay','o3s','o3sgeen'] : ['afmaken','afmaken','super','super','pas2','stay','stay','stay','stay','o3s','o3sgeen'])[rnd(11)];
+    const X = SUITS[rnd(4)], xi = SI[X], over = '2'+X;
     if(want==='pas2' && X==='S') continue;
+    if(want==='super' && X==='S') continue;
     const um = [1,0].filter(i=>i!==xi);                               // ongeboden hoge kleuren, harten eerst
-    const kinds = X==='D' ? ['fit','sterk','sa','niets'] : X==='H' ? ['fit','stopfit','sterk','sa'] : ['kruis','sterk','sa'];
+    const kinds = (X==='D' || X==='C') ? ['fit','sterk','sa','niets'] : X==='H' ? ['fit','stopfit','sterk','sa'] : ['kruis','sterk','sa'];
     const kind = kinds[rnd(kinds.length)];
     const me = drawHand(fullDeck(), h=>{
       if(!isOpener(h) || h.len[xi]>3) return null;
       if(want==='stay'){ const a = ruStayAnswer(h, X); return a && a.kind===kind ? a : null; }
       if(want==='o3s') return stopIn(h,xi) ? {} : null;
+      if(want==='o3sgeen'){ const ms = [3,2].filter(i=>i!==xi && h.len[i]>=4); if(stopIn(h,xi) || !ms.length) return null; return {mi: ms.length===2 && h.len[2]>h.len[3] ? 2 : ms[0]}; }
+      if(want==='super') return (h.hcp===17 && [0,1].some(i=>i<xi && h.len[i]>=4)) ? {} : null;
       if(want==='acc') return h.hcp===17 ? {} : null;
       return {};
     }, 60000);
@@ -6524,9 +6533,10 @@ function newRUQ2(){
       const p = h.hcp, long = [0,1,2,3].filter(i=>i!==xi && h.len[i]>=5);
       if(Math.max(...h.len)>6 || h.len[xi]>3 || p>14) return null;
       if(want==='stay'){ const m = um.filter(i=>h.len[i]===4); return (p>=9 && !long.length && m.length) ? {} : null; }
-      if(want==='o3s') return (p>=9 && !long.length && !stopIn(h,xi) && Math.min(...h.len)>=2 && !um.some(i=>h.len[i]>=4)) ? {} : null;
+      if(want==='o3s' || want==='o3sgeen') return (p>=9 && !long.length && !stopIn(h,xi) && Math.min(...h.len)>=2 && !um.some(i=>h.len[i]>=4)) ? {} : null;
       if(long.length!==1) return null;
       const si = long[0], above = si<xi;
+      if(want==='super') return (si<=1 && above && p>=9 && me.h.len[si]>=4) ? {si} : null;
       if(want==='pas2') return (above && p<=7) ? {si} : null;
       if(want==='acc') return (si<=1 && p>=8) ? {si} : null;
       if(state.rubm==='inv' && si<=1) return p>=8 ? {si} : null;                 // hoge kleur: vanaf een uitnodiging, nooit zwak
@@ -6539,7 +6549,7 @@ function newRUQ2(){
     if(want==='pas2'){
       const su = SUITS[pa.r.si]; pb = '2'+su; answer = 'pas';
       why = 'Partners '+B(pb)+' is bij Rubensohl een gewone kleur en om te spelen. Je moet passen, ook met een maximum.';
-    }else if(want==='afmaken' || want==='acc'){
+    }else if(want==='afmaken' || want==='acc' || want==='super'){
       if(want==='acc' && me.h.len[pa.r.si]<3) continue;
       const su = SUITS[pa.r.si]; pb = TR[su]; answer = '3'+su; knd = 'afmaken';
       why = 'Bij Rubensohl is elk bod vanaf 2SA een transfer naar de kleur erboven. Partners '+B(pb)+' toont dus '+SNAME[su]+'. Maak de transfer af: '+B(answer)+'. Partner past met een zwakke hand en biedt verder met manchekracht.';
@@ -6547,7 +6557,13 @@ function newRUQ2(){
         const sup = me.h.len[pa.r.si], mx = me.h.hcp===17, intro = 'Partners '+B(pb)+' is de transfer naar '+SNAME[su]+'. Bij jullie belooft dat een vijfkaart en minstens een uitnodiging (8 punten of meer). ';
         if(mx && sup>=3){ answer = '4'+su; knd = 'accept'; why = intro+'Je hebt een maximum (17 punten) en '+NTAL[sup]+' '+SNAME[su]+' mee: neem de uitnodiging meteen aan met '+B(answer)+'.'; }
         else why = intro+(mx ? 'Je hebt wel een maximum, maar slechts twee '+SNAME[su]+' mee' : 'Met '+pts(me.h.hcp)+' heb je geen maximum')+': maak de transfer af met '+B(answer)+'. Partner past met een uitnodiging en biedt door met manchekracht.';
+      }else if(pa.r.si<=1 && pa.r.si<xi && pa.h.hcp>=9 && me.h.hcp===17 && me.h.len[pa.r.si]>=4){            // superfit: de transfer kan hier niet zwak zijn
+        answer = '4'+su; knd = 'superfit';
+        why = 'Partners '+B(pb)+' is de transfer naar '+SNAME[su]+'. Zijn kleur is hoger dan hun '+SNAME[X]+': met een zwakke hand had hij '+B('2'+su)+' geboden, dus hij heeft manchekracht. Jij hebt een maximum (17 punten) en '+NTAL[me.h.len[pa.r.si]]+' '+SNAME[su]+' mee: een superfit. Bied meteen '+B(answer)+' in plaats van alleen af te maken.';
       }
+    }else if(want==='o3sgeen'){
+      const ms = SUITS[me.r.mi]; pb = '3S'; answer = '4'+ms; knd = 'o3s-geen';
+      why = 'Partners '+B('3S')+' is de transfer naar 3SA: manchekracht, maar geen stop in '+SNAME[X]+'. Jij hebt ook geen stop in '+SNAME[X]+', dus 3SA is te gevaarlijk: zij rapen hun kleur op. Bied je langste lage kleur, '+B(answer)+'. Partner past, verhoogt of kiest een andere kleur.';
     }else if(want==='o3s'){
       pb = '3S'; answer = '3N';
       why = 'Partners '+B('3S')+' is geen schoppenkleur. Bij Rubensohl is het de transfer naar 3SA: partner heeft manchekracht, maar geen stop in '+SNAME[X]+' en geen vierkaart in een ongeboden hoge kleur. Jij hebt wel een stop in '+SNAME[X]+': bied 3SA.';
@@ -6557,11 +6573,11 @@ function newRUQ2(){
       answer = a.a; knd = 'stay-'+a.kind;
       const sn = a.su ? SNAME[a.su] : '';
       if(a.kind==='sterk') why = intro+'Jij hebt een vierkaart '+sn+' en een maximum ('+pts(me.h.hcp)+'): spring naar '+B(answer)+'. Een bod op 3-niveau zou partner mogen passen.';
-      else if(a.kind==='fit') why = intro+'Jij hebt een vierkaart '+sn+(X==='H' ? ', maar geen stop in harten' : '')+' en geen maximum: bied '+B(answer)+'. Dat is niet forcing'+(X==='D' && me.h.len[1]>=4 && me.h.len[0]>=4 ? '; met twee vierkaarten hoog bied je de harten eerst' : '')+'.';
+      else if(a.kind==='fit') why = intro+'Jij hebt een vierkaart '+sn+(X==='H' ? ', maar geen stop in harten' : '')+' en geen maximum: bied '+B(answer)+'. Dat is niet forcing'+((X==='D' || X==='C') && me.h.len[1]>=4 && me.h.len[0]>=4 ? '; met twee vierkaarten hoog bied je de harten eerst' : '')+'.';
       else if(a.kind==='stopfit') why = intro+'Jij hebt een vierkaart schoppen én een stop in harten. Dat toon je met '+B('3H')+', de kleur van de tegenpartij: het is forcing en partner kiest tussen 3SA en '+B('4S')+'. Met '+B('3S')+' zou je een stop ontkennen.';
       else if(a.kind==='kruis') why = intro+'Na hun schoppen kan partner alleen een vierkaart harten hebben. Jij hebt ook vier harten, maar geen stop in schoppen en geen maximum. Volgens de afspraak toon je dat met '+B('3S')+': een vierkaart harten zonder stop, niet forcing. Met een maximum had je '+B('4H')+' geboden.';
       else if(a.kind==='sa') why = intro+'Je hebt geen vierkaart in een ongeboden hoge kleur, maar wel een stop in '+SNAME[X]+': bied 3SA.';
-      else why = intro+'Je hebt geen vierkaart hoog en ook geen stop in ruiten. Dat zeg je met '+B('3D')+': het ontkent allebei. Partner zoekt dan een ander contract.';
+      else why = intro+'Je hebt geen vierkaart hoog en ook geen stop in '+SNAME[X]+'. Dat zeg je met '+B('3'+X)+': het ontkent allebei. Partner zoekt dan een ander contract.';
     }
     return mkQ('rubensohl', 2, {why, kind:'o-'+knd, prompt:'Jullie spelen Rubensohl. Je opende 1SA, West bood '+B(over)+' en partner biedt '+B(pb)+'. Wat doe je?'}, me.h, pa.h, answer, 'open', pb, {start:3, calls:['1N', over, pb, 'pas']});
   }
@@ -6572,19 +6588,21 @@ function newRUQ3(){
   for(;;){
     const X = SUITS[rnd(4)], xi = SI[X], over = '2'+X;
     const INV = state.rubm==='inv';
-    const want = (INV ? ['zwak','inv','inv','manche6','manche6','sa5','sa5'] : ['zwak','zwak','manche6','manche6','sa5','sa5'])[rnd(INV ? 7 : 6)];
+    const want = (INV ? ['zwak','inv','inv','manche6','manche6','sa5','sa5','tweede','tweede','splinter'] : ['zwak','zwak','manche6','manche6','sa5','sa5','tweede','tweede','splinter'])[rnd(INV ? 10 : 9)];
     if(want==='zwak' && X==='C') continue;
     const me = drawHand(fullDeck(), h=>{
       const p = h.hcp, long = [0,1,2,3].filter(i=>i!==xi && h.len[i]>=5);
+      if(want==='tweede'){ if(long.length!==2 || p<9 || p>14 || Math.max(...h.len)>6) return null; return {si:long[0], s2:long[1]}; }
       if(Math.max(...h.len)>6 || h.len[xi]>3 || p>14 || long.length!==1) return null;
-      const si = long[0], n = h.len[si];
+      const si = long[0], n = h.len[si], spl = si<=1 && n===6 && p>=12 && h.len[xi]<=1 && xi>si;
+      if(want==='splinter') return spl ? {si} : null;
       if(want==='zwak') return (si>xi && p<=7 && n===6 && !(INV && si<=1)) ? {si} : null;
       if(want==='inv') return (si<=1 && p===8) ? {si} : null;
-      if(want==='manche6') return (si<=1 && n===6 && p>=9) ? {si} : null;
+      if(want==='manche6') return (si<=1 && n===6 && p>=9 && !spl) ? {si} : null;
       return (n===5 && p>=9 && stopIn(h,xi) && Math.min(...h.len)>=2 && ![0,1].some(i=>i!==xi && i!==si && h.len[i]>=4)) ? {si} : null;
     }, 60000);
     if(!me) continue;
-    const n = drawHand(me.rest, h=>isOpener(h) && h.len[xi]<=3 && !(INV && me.r.si<=1 && h.hcp===17 && h.len[me.r.si]>=3), 8000);      // met een maximum en steun had partner de manche al geboden
+    const n = drawHand(me.rest, h=>isOpener(h) && h.len[xi]<=3 && !(INV && me.r.si<=1 && h.hcp===17 && h.len[me.r.si]>=3) && !(!INV && me.r.si<=1 && me.r.si<xi && h.hcp===17 && h.len[me.r.si]>=4), 8000);      // met een maximum en steun had partner de manche al geboden
     if(!n) continue;
     const e = drawHand(n.rest, h=>h.len[xi]>=5 && h.len[xi]<=6 && h.hcp>=8 && h.hcp<=14, 3000);
     if(!e) continue;
@@ -6592,6 +6610,8 @@ function newRUQ3(){
     let answer, why = 'Je bood de transfer '+B(tr)+' en partner maakte hem af met '+B(done)+'. ';
     if(want==='inv'){ answer = 'pas'; why += 'Jouw transfer was een uitnodiging: je hebt 8 punten. Partner bood de manche niet, dus hij heeft geen maximum met steun. Pas.'; }
     else if(want==='zwak'){ answer = 'pas'; why += 'Jij hebt een zeskaart '+SNAME[su]+' en maar '+pts(p)+'. Je wilde alleen in je eigen kleur spelen: pas.'; }
+    else if(want==='tweede'){ const s2 = SUITS[me.r.s2]; answer = '4'+s2; why += 'Jij hebt een tweekleurenspel: vijf '+SNAME[su]+' en vijf '+SNAME[s2]+', met '+pts(p)+'. De hoogste kleur heb je met de transfer getoond; bied nu je tweede kleur, '+B(answer)+'. Een nieuwe kleur na de transfer is echt en mancheforcing. Partner kiest de kleur die het beste past.'; }
+    else if(want==='splinter'){ answer = '4'+X; why += 'Jij hebt een zeskaart '+SNAME[su]+', '+pts(p)+' en '+(me.h.len[xi]===0 ? 'geen' : 'maar één')+' '+SNAME[X]+'. Dat is sleminteresse. Bied '+B(answer)+', de kleur van de tegenpartij: een splinter. Het toont kortheid in '+SNAME[X]+' met '+SNAME[su]+' als troef. Partner weet nu of zijn punten goed zitten.'; }
     else if(want==='manche6'){ answer = '4'+su; why += 'Jij hebt een zeskaart '+SNAME[su]+' en '+pts(p)+': genoeg voor de manche. Partner heeft voor zijn 1SA minstens twee '+SNAME[su]+', dus er is een fit: bied '+B(answer)+'.'; }
     else { answer = '3N'; why += 'Jij hebt '+pts(p)+', genoeg voor de manche, een '+nk+' '+SNAME[su]+' die partner nu kent, en een stop in '+SNAME[X]+'. Bied 3SA.'+(me.r.si<=1 ? ' Met drie of meer '+SNAME[su]+' mag partner nog verbeteren naar '+B('4'+su)+'.' : ''); }
     return mkQ('rubensohl', 3, {why, kind:'v-'+want, prompt:'Jullie spelen Rubensohl. Partner opende 1SA, Oost bood '+B(over)+', jij '+B(tr)+' en partner '+B(done)+'. Wat doe je nu?'}, me.h, n.h, answer, 'mid', done, {start:1, calls:['1N', over, tr, 'pas', done, 'pas']});
@@ -6664,7 +6684,44 @@ function newRUQ5(){
     return mkQ('rubensohl', 5, {why, kind:'s-'+want, prompt:'Jullie spelen Rubensohl, ook na een zwak sprongvolgbod. Partner opent '+B('1C')+' en Oost springt naar '+B(over)+' (zwak). Wat doe je?'}, me.h, n.h, answer, 'dbl', over, {start:1, calls:['1C', over]});
   }
 }
-NEWCONV.rubensohl = sk => { const s = [1,2,3,4,5].includes(+sk) ? +sk : [1,1,1,2,2,2,3,4,5][rnd(9)]; return s===1 ? newRUQ() : s===2 ? newRUQ2() : s===3 ? newRUQ3() : s===4 ? newRUQ4() : newRUQ5(); };
+// ---------- Rubensohl na een conventioneel volgbod (eigen invulling; Pecona beschrijft dit niet) ----------
+function newRUQ6(){
+  const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
+  const v = ['dont','dont','multi','multi','landy','landy'][rnd(6)];
+  if(v==='dont'){ const X = rnd(2) ? 'C' : 'D';
+    return newRUQ({X, tag:'dont'+X, wants:['spelen2','spelen2','transfer','transfer','sa','nostop','pas'].concat(X==='D' ? ['transferzwak'] : []), say: X==='C' ? 'DONT: klaveren en een hogere kleur' : 'DONT: ruiten en een hoge kleur',
+      pre:'Het volgbod is conventioneel, maar één kleur is bekend: '+SNAME[X]+'. Dan werkt Rubensohl precies alsof Oost gewoon '+B('2'+X)+' bood. '}); }
+  for(;;){
+    const multi = v==='multi', over = multi ? '2D' : '2C';
+    const want = (multi ? ['x','nat','nat','tr','tr','pas'] : ['x','ruit','klav','klavzw','trd','pas'])[rnd(6)];
+    const me = drawHand(fullDeck(), h=>{ const p = h.hcp, long = [0,1,2,3].filter(i=>h.len[i]>=5);
+      if(Math.max(...h.len)>6 || p>14 || long.length>1) return null;
+      if(want==='x') return (p>=9 && !long.length) ? {} : null;
+      if(want==='pas') return (p<=6 && !long.length) ? {} : null;
+      if(!long.length) return null; const si = long[0];
+      if(multi){ if(want==='nat') return (si<=1 && p<=7) ? {si} : null; return p>=9 ? {si} : null; }
+      if(want==='ruit') return (si===2 && p<=7) ? {si} : null;
+      if(want==='klav') return (si===3 && p>=9) ? {si} : null;
+      if(want==='klavzw') return (si===3 && p<=7 && h.len[3]===6) ? {si} : null;
+      return (si===2 && p>=9) ? {si} : null; }, 60000);
+    if(!me) continue;
+    const n = drawHand(me.rest, isOpener, 6000); if(!n) continue;
+    const p = me.h.hcp, su = me.r.si!=null ? SUITS[me.r.si] : null, nk = su ? NKAART[me.h.len[me.r.si]] : '';
+    const intro = multi ? 'Oosts '+B('2D')+' is Multi: een zeskaart harten of schoppen, je weet nog niet welke. Er is dus geen kleur bekend. Afspraak: '+B('2H')+' en '+B('2S')+' zijn echt en zwak, en vanaf 2SA zijn het de gewone transfers. '
+      : 'Oosts '+B('2C')+' toont beide hoge kleuren. Naar een vierkaart hoog zoeken heeft dan geen zin. Afspraak: doublet toont punten, '+B('2D')+' is echt en zwak, 2SA is de transfer naar klaveren en '+B('3C')+' de transfer naar ruiten. ';
+    let answer, why;
+    if(want==='x'){ answer = 'X'; why = intro+'Jij hebt '+pts(p)+' en geen vijfkaart: doubleer. Dat zegt dat jullie de meeste punten hebben; partner mag hun eindcontract voor straf doubleren.'; }
+    else if(want==='pas'){ answer = 'pas'; why = intro+'Met '+pts(p)+' en geen vijfkaart heb je niets te bieden. Pas.'; }
+    else if(want==='nat'){ answer = '2'+su; why = intro+'Jij hebt een '+nk+' '+SNAME[su]+' en maar '+pts(p)+': bied '+B(answer)+', om te spelen.'; }
+    else if(want==='tr'){ answer = TR[su]; why = intro+'Jij hebt een '+nk+' '+SNAME[su]+' en '+pts(p)+', genoeg voor de manche: bied de transfer '+B(answer)+'. Partner maakt af met '+B('3'+su)+' en jij biedt verder.'; }
+    else if(want==='ruit'){ answer = '2D'; why = intro+'Jij hebt een '+nk+' ruiten en maar '+pts(p)+': bied '+B('2D')+', om te spelen.'; }
+    else if(want==='klav'){ answer = '2N'; why = intro+'Jij hebt een '+nk+' klaveren en '+pts(p)+', genoeg voor de manche: bied 2SA, de transfer naar klaveren, en bied daarna verder.'; }
+    else if(want==='klavzw'){ answer = '2N'; why = intro+'Jij hebt een zeskaart klaveren en maar '+pts(p)+'. Klaveren kan niet meer op 2-niveau: bied 2SA, de transfer. Partner biedt '+B('3C')+' en jij past.'; }
+    else { answer = '3C'; why = intro+'Jij hebt een '+nk+' ruiten en '+pts(p)+', genoeg voor de manche: bied '+B('3C')+', de transfer naar ruiten, en bied daarna verder. Met een zwakke hand had je '+B('2D')+' geboden.'; }
+    return mkQ('rubensohl', 6, {why, kind:'c-'+v+'-'+want, prompt:'Jullie spelen Rubensohl. Partner opent 1SA en Oost biedt '+B(over)+' ('+(multi ? 'Multi: een zeskaart harten of schoppen' : 'Landy: beide hoge kleuren')+'). Wat doe je?'}, me.h, n.h, answer, 'dbl', over, {start:1, calls:['1N', over]});
+  }
+}
+NEWCONV.rubensohl = sk => { const s = [1,2,3,4,5,6].includes(+sk) ? +sk : [1,1,1,2,2,2,3,3,4,5,6,6][rnd(12)]; if(s===6) return newRUQ6(); return s===1 ? newRUQ() : s===2 ? newRUQ2() : s===3 ? newRUQ3() : s===4 ? newRUQ4() : newRUQ5(); };
 
 // ---------- Zwakke twee: de openaar na het 2SA-vraagbod ----------
 let W2 = 'ogust';
@@ -8543,7 +8600,7 @@ const STORE = 'bridge-na-1sa-v2';
 const CONVS = {puppet2:'Puppet Stayman na 2SA', puppet1:'Puppet Stayman na 1SA', 'o:1C':'1♣︎', 'o:1D':'1♦︎', 'o:1H':'1♥︎', 'o:1S':'1♠︎', 'o:1N':'1SA', 'o:pas':'Pas: te zwak om te openen', 'o:derde':'Derde hand', 'o:vierde':'Vierde hand', 'o:34':'Derde en vierde hand', 'o:2C':'2♣︎ sterk', 'o:2D':'2♦︎ openen', 'o:2N':'2SA', 'o:3x':'Preëmptief op 3-niveau', 'o:4x':'Preëmptief op 4-niveau', zwak2h:'Zwakke 2 in harten en schoppen', zwak2a:'Zwakke 2 in ruiten, harten en schoppen', openen:'Openen', bijbod:'Bijbod', twee1:'2 over 1 mancheforcing', antw2:'Antwoord op 2-opening', gambling:'Gambling 3SA', inverted:'Inverted minors', uppercue:'Upper cuebid', unusual:'Unusual 2SA', rubensohl:'Rubensohl', dont:'DONT', muiderberg:'Muiderberg', na2sa:'Na 2SA van partner', ballumer:'Ballumer Stayman', checkback:'Checkback Stayman', blackwood:'Blackwood', landy:'Landy', mlandy:'Multi-Landy', multi:'Multi 2♦\uFE0E', nmf:'New Minor Forcing', vierde:'Vierde kleur forcing', reverse:'Reverse', texas:'Texas en lage transfers', ophouden:'Ophouden', gevaar:'De gevaarlijke hand', entree:'Entrees en deblokkeren', veilig:'Veiligheidsspel', dekken:'Honneur op honneur', regel11:'Regel van 11', dsnit:'Dubbele snit', combi:'Kansen combineren', vrij:'Lange kleur vrijspelen', weggooi:'Weggooien of troef trekken', telhand:'De hand uittellen', lezen:'De tegenpartij lezen', biedlees:'Van bieding naar speelplan', terug:'Partners kleur terugspelen', lengte:'Lengtesignaal', ophoudt:'Aas ophouden (tegenspel)', actief:'Actief of passief', nadbl:'Na hun doublet', stayman:'Stayman', jacoby:'Jacoby', beide:'Stayman + Jacoby', doublet:'Doublet', volgbod:'Volgbod', negatief:'Negatief doublet', wet:'Wet van de troeven', steun:'Steunen: storend of uitnodigend', rkcb:'RKC', exclusion:'Exclusion RKC', gerber:'Gerber', acol2:'Acol-tweeën', benji:'Benjamin', leaping:'Wereldconventie', bergen:'Bergen-raises', jac2n:'Jacoby 2SA', splinter:'Splinters', montreal:'Montreal relay', walsh:'Walsh', twalsh:'Transfer Walsh', bart:'Bart', gazzilli:'Gazzilli', alles:'Alles (bieden)', tellen:'Slagen tellen', ontwikkel:'Slagen ontwikkelen', verliezers:'Verliezers tellen', troef:'Troef trekken', snijden:'Snijden', uitkomst:'Uitkomstkaart', doorsterk:'Door sterk, naar zwak', handen:'Tweede en derde hand', signaal:'Signaleren', spel:'Heel spel spelen', spelmix:'Spelen: mix', biedmix:'Bieden: mix'};
 const STEPS_A2 = {alles:'Alles door elkaar', 1:'Na een zwakke twee', 2:'Na de sterke 2♣\uFE0E', 3:'Openaar na 2SA (zwakke twee)', 4:'Openaar na 2♣\uFE0E – 2♦\uFE0E', 5:'Vrager na het antwoord op 2SA'};
 const STEPS_DO = {alles:'Alles door elkaar', 1:'Zelf bieden', 2:'Partner biedt DONT', 3:'Na je doublet'};
-const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA', 3:'Vervolg na de transfer', 4:'Na hun doublet op 1SA', 5:'Na 1♣\uFE0E en een zwak sprongvolgbod'};
+const STEPS_RU = {alles:'Alles door elkaar', 1:'Partner opent 1SA', 2:'Jij opende 1SA', 3:'Vervolg na de transfer', 4:'Na hun doublet op 1SA', 5:'Na 1♣\uFE0E en een zwak sprongvolgbod', 6:'Na een conventioneel volgbod'};
 const STEPS_21 = {alles:'Alles door elkaar', 1:'Je eerste antwoord', 2:'Openaar na 1SA', 3:'Openaar na 2 over 1'};
 const STEPS_TR = {alles:'Alles door elkaar', 1:'Eerst troef trekken', 2:'Eerst aftroeven'};
 const STEPS_HN = {alles:'Alles door elkaar', 1:'Tweede hand', 2:'Derde hand'};
@@ -8794,6 +8851,23 @@ function tblChips(x){ let el = $('tchips'); if(!el){ el = document.createElement
   el.innerHTML = ['w','n','e','s'].filter(k=>x.tbl[k]).map(k=>{ const c = x.tbl[k]; return '<span class="tchip '+k+(c.dg ? ' dg' : '')+'">'+c.t+(c.s ? '<small>'+c.s+'</small>' : '')+'</span>'; }).join(''); }
 // v400: de onderliggende menu's nemen de kleur van hun blok op het openingsscherm over
 { const rm0 = renderModes; renderModes = function(){ const r = rm0.apply(this, arguments); try{ const t = nav[0] || 'home'; $('settings').dataset.sec = (t==='bieden' || t==='spelen' || t==='heel' || t==='doel') ? 'doel' : t; }catch(e){} return r; }; }
+// v401: variatie binnen een onderdeel. Van een handvol kandidaten kiest de app de soort vraag die je het langst niet (of nog nooit) hebt gehad.
+function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? '' : x.answer);
+  if(d.kind!=null) return x.idx+':'+d.kind+':'+ans;
+  const t = String(d.prompt || '').replace(/<[^>]+>/g, ' ').replace(/[♠♥♦♣︎]\s*[AHVBT0-9]*/g, '#').replace(/\d+/g, 'n').replace(/\s+/g, ' ').slice(0, 90);
+  return x.idx+':'+ans+':'+t; }catch(e){ return ''; } }
+{ const nq0 = newQuestion; let busy = false;
+  newQuestion = function(conv, idx, stepKey){
+    if(busy || conv==='fris') return nq0.apply(this, arguments);
+    busy = true;
+    try{ if(!state.vary || typeof state.vary!=='object') state.vary = {};
+      const V = state.vary[conv] || (state.vary[conv] = {n:0, s:{}}); let best = null, bs = Infinity;
+      for(let i=0;i<8;i++){ const x = nq0.call(this, conv, stepKey==='alles' && i ? 1+Math.floor(Math.random()*4) : idx, stepKey); if(!x) continue;
+        const g = qVar(x), last = V.s[g], sc = last==null ? -1-Math.random() : last + Math.random()*.5; if(sc<bs){ bs = sc; best = x; best._sig = g; } if(last==null) break; }
+      if(best){ V.n++; V.s[best._sig] = V.n; const ks = Object.keys(V.s); if(ks.length>120){ ks.sort((a,b)=>V.s[a]-V.s[b]).slice(0, ks.length-100).forEach(k=>delete V.s[k]); } delete best._sig; return best; }
+      return nq0.apply(this, arguments);
+    }finally{ busy = false; } };
+}
 function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
   if(!m.classList.contains('kbid')){ m.style.setProperty('--kbt', '0px'); return; }
   if(answered || bx.hidden || !pr.getBoundingClientRect().height) return;
