@@ -1680,6 +1680,14 @@ html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;l
   html.klas main.table.kbid > #prompt{min-height:var(--kbt, 0px)!important;box-sizing:border-box;margin-top:0!important;margin-bottom:6px!important}
   html.klas main.table.kbid > #action{margin-top:0!important}
 }
+.tchips{position:absolute;inset:0;pointer-events:none}
+.tchip{position:absolute;background:#fff;color:#14211C;border-radius:8px;padding:4px 9px;font:700 .84rem/1.2 var(--body, inherit);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.3);border:1px solid #C9D4CD;width:max-content;max-width:8.6rem}
+.tchip small{display:block;font-weight:400;font-size:.74rem;color:#5B6560}
+.tchip.w{right:calc(100% + 8px);top:50%;transform:translateY(-50%)}.tchip.e{left:calc(100% + 8px);top:50%;transform:translateY(-50%)}
+.tchip.n{top:17cqw;left:50%;transform:translateX(-50%);max-width:92cqw}.tchip.s{bottom:17cqw;left:50%;transform:translateX(-50%);max-width:96cqw}
+.tchip.dg{color:#A61B1B;border-color:#C62828;box-shadow:0 0 0 2px #C62828, 0 1px 3px rgba(0,0,0,.3)}
+#qstrip:has(.tchip){overflow:visible!important}
+.tchips.haslead .tchip.s{left:auto;right:4cqw;transform:none;max-width:52cqw;bottom:15cqw}
 /* v390: uitdagingen */
 .chw{display:grid;grid-template-columns:minmax(0, 300px) minmax(0, 1fr);gap:10px 22px;align-items:start}
 .chw .lab{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--kC,#0F5237);font-weight:700;margin-bottom:6px}
@@ -8130,7 +8138,9 @@ function newOPH(){
   const total = 3+other.length, times = 7-total, lead = cardHTML(SUITS[si]+13);
   const opts = [{title:'Meteen', sub:'Neem de eerste slag met de aas', tip:'De aas is je enige stop. Neem je hem meteen, dan heeft Oost nog een kaart in de kleur om naar West terug te spelen. Wacht tot Oost er geen meer heeft.'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Regel van 7: tel je kaarten in deze kleur bij elkaar op en trek dat af van 7. Je hebt er samen '+total+', dus 7 − '+total+' = '+times+': zo vaak houd je de aas op. Heeft West een vijfkaart, dan heeft Oost daarna geen kaart meer in de kleur. Komt Oost later aan slag, dan kan hij partners vrije kaarten niet bereiken.';
-  return pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. West komt uit met '+lead+' en blijft de kleur spelen. De aas is je enige stop, en je moet later nog een keer van slag. Wanneer neem je de aas?', opts, times, why);
+  const sy = sySpan(SUITS[si]), q0 = pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. West blijft de kleur spelen. De aas is je enige stop, en je moet later nog een keer van slag. Wanneer neem je de aas?', opts, times, why,
+    {lead:SUITS[si]+13, tbl:{w:{t:'blijft '+sy+' spelen'}, [aceSouth ? 's' : 'n']:{t:sy+' A: enige stop', s:'samen '+total+' kaarten'}}});
+  q0.d.promptS = 'Je speelt 3SA en moet later nog een keer van slag. Wanneer neem je de aas?'; return q0;
 }
 // ---------- De gevaarlijke hand ----------
 function newGEV(sk){
@@ -8142,10 +8152,14 @@ function newGEV(sk){
                 {title:'De boer laten doorlopen', sub:'Speel de boer voor vanuit '+pName+' en leg klein in '+qName},
                 {title:'Aas en heer slaan', sub:'Hoop dat de vrouw valt', tip:'Aas en heer slaan werkt alleen als de vrouw toevallig valt. Valt ze niet, dan komt misschien de gevaarlijke hand aan slag. Met de snit naar de veilige kant kan er niets misgaan.'}];
   const good = loseA===safe ? 0 : 1;
-  const reden = dangerWest ? (rnd(2)===1 ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.' : 'De dummy (Noord) heeft schoppenheer en een kleintje; de aas zit bij Oost. Komt West aan slag, dan speelt hij schoppen door de heer van de dummy heen: West is de gevaarlijke hand.')
+  const v = dangerWest ? (rnd(2)===1 ? 'lead' : 'dummyK') : 'handK', sp = sySpan('S');
+  const reden = v==='lead' ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten. Komt West aan slag, dan ga je down: West is de gevaarlijke hand.' : v==='dummyK' ? 'De dummy (Noord) heeft schoppenheer en een kleintje; de aas zit bij Oost. Komt West aan slag, dan speelt hij schoppen door de heer van de dummy heen: West is de gevaarlijke hand.'
     : 'Je eigen hand (Zuid) heeft schoppenheer en een kleintje; de aas zit bij West. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
+  const tbl = v==='lead' ? {w:{t:'gevaarlijk', s:'heeft vrije '+sp, dg:1}, e:{t:'veilig'}} : v==='dummyK' ? {n:{t:sp+' H x'}, e:{t:sp+' A', s:'veilig'}, w:{t:'gevaarlijk', s:'speelt '+sp+' door de heer', dg:1}} : {s:{t:sp+' H x'}, w:{t:sp+' A', s:'veilig'}, e:{t:'gevaarlijk', s:'speelt '+sp+' door je heer', dg:1}};
   const why = 'Je kunt de vrouw naar twee kanten zoeken. Kies de kant waarbij een mislukte snit aan de ongevaarlijke hand verliest. "'+opts[good].title+'" verliest alleen aan '+(good===0 ? loseA : loseB)+', en dat is hier '+safe+', de veilige hand. De andere snit verliest aan '+(good===0 ? loseB : loseA)+'. Lukt de snit niet, dan staat je contract nog steeds.';
-  return pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why);
+  const q0 = pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why, {tbl});
+  q0.d.promptS = 'Je speelt 3SA. '+(dangerWest ? 'West' : 'Oost')+' is de gevaarlijke hand. In deze kleur moet je de vrouw zoeken. Hoe speel je?';
+  return q0;
 }
 // ---------- Entrees en deblokkeren ----------
 function newENT(sk){
@@ -8283,7 +8297,7 @@ function newTLH(){
 // ---------- v391: van bieding naar speelplan. De bieding (en wat West al liet zien) vertelt waar een plaatje zit. ----------
 function newBLZ(){
   const sh = a => { const p = a.slice(); for(let i=p.length-1;i>0;i--){ const j = rnd(i+1); const z = p[i]; p[i] = p[j]; p[j] = z; } return p; };
-  const hc = r => r>10 ? r-10 : 0, Sp = '<span class="S">'+SYM.S+'</span>', Hp = '<span class="S red">'+SYM.H+'</span>', C = (si, r) => cardHTML(SUITS[si]+r);
+  const hc = r => r>10 ? r-10 : 0, Sp = '<span class="S">'+SYM.S+'</span>', Hp = sySpan('H'), C = (si, r) => cardHTML(SUITS[si]+r);
   const want = ['West','West','West','Oost','Oost','Oost','both','both'][rnd(8)];
   for(let t=0;t<20000;t++){
     const missK = want==='Oost' ? true : rnd(2)===1, val = missK ? 3 : 2;
@@ -8300,11 +8314,12 @@ function newBLZ(){
     if([2,3].some(si=>N[si].length<2 || N[si].length>5 || S[si].length<2 || S[si].length>4)) continue;
     const hN = N.flat().reduce((a,r)=>a+hc(r),0), hS = S.flat().reduce((a,r)=>a+hc(r),0), T = hN+hS, opp = 40-T;
     if(hN<6 || hN>10 || hS<15 || hS>19) continue;
-    let why, sit, lead;
+    let why, sit, lead, tb, ps;
     const mName = missK ? 'heer' : 'vrouw', mCard = C(0, missK ? 13 : 12);
     if(dealer){
       if(opp<9+val+1 || opp>17) continue;
       sit = 'West was gever en paste. Jullie boden 1'+Sp+' – 2'+Sp+' – 4'+Sp+'. West speelde na de aas ook '+C(1,13)+' en '+C(1,12)+'; de derde ronde troefde je.'; lead = 'H14';
+      tb = {w:{t:'paste als gever', s:'liet '+sySpan('H')+' A H V zien: 9 punten'}}; ps = 'West speelde na de aas ook '+C(1,13)+' en '+C(1,12)+'; de derde ronde troefde je. Wie heeft '+mCard+'?';
       why = 'West paste als gever en heeft dus hooguit 11 punten. Hij liet al aas, heer en vrouw van harten zien: 9 punten. '
         + (missK ? 'Met schoppenheer erbij had hij er 12 gehad en had hij geopend. De heer zit dus bij Oost.' : 'Met schoppenvrouw erbij komt hij op 11: daarmee past hij ook. De vrouw kan dus bij West en bij Oost zitten.');
     }else{
@@ -8312,6 +8327,7 @@ function newBLZ(){
       if(opp<12+ (want==='both' ? val : 0) || opp>17) continue;
       if(want==='West' && eMax>=val) continue; if(want==='both' && eMax<val) continue; if(want==='Oost') continue;
       sit = 'West opende 1'+Hp+', Noord en Oost pasten. Jij bood 1'+Sp+', Noord 2'+Sp+' en jij 4'+Sp+'.'; lead = S[1].includes(13) ? 'H12' : 'H13';
+      tb = {w:{t:'opende 1'+sySpan('H'), s:'minstens 12 punten'}, e:{t:'paste', s:'hooguit 5 punten'}, n:{t:hN+' punten'}, s:{t:hS+' punten', s:'samen '+T+' · zij '+opp}}; ps = 'Wie heeft '+mCard+'?';
       why = 'Jullie hebben samen '+T+' punten ('+hS+' bij jou, '+hN+' bij de dummy), dus de tegenpartij heeft er '+opp+'. West opende en heeft er minstens 12. Voor Oost '+(opp-12===0 ? 'blijft er niets over' : opp-12===1 ? 'blijft er hooguit 1 over' : 'blijven er hooguit '+(opp-12)+' over')+(opp-12>5 ? ', en omdat hij paste heeft hij er hooguit 5' : '')+'. '
         + (want==='West' ? 'Schoppen'+mName+' is '+val+' punten waard en kan dus niet bij Oost zitten: West heeft hem.' : 'Schoppen'+mName+' is '+val+' punten waard en past dus bij allebei.').replace('heeft hem', missK ? 'heeft hem' : 'heeft haar');
     }
@@ -8319,7 +8335,7 @@ function newBLZ(){
       ? (want==='West' ? 'Snijden op de heer heeft geen zin: hij zit achter je aas-vrouw. Sla de aas en hoop dat de heer kaal zit.' : want==='Oost' ? 'Snijd: speel schoppen vanuit de dummy en leg de vrouw (of de tien) als Oost klein bijspeelt. De snit lukt zeker.' : 'De bieding geeft hier geen uitsluitsel. Speel de gewone kans: snijd vanuit de dummy naar je vrouw.')
       : (want==='West' ? 'Speel de aas en daarna klein naar de boer in de dummy: je snijdt over West.' : 'De bieding geeft hier geen uitsluitsel. Je kunt naar twee kanten snijden; zoek eerst verder naar aanwijzingen, bijvoorbeeld door andere kleuren te spelen en te tellen.');
     const opts = [{title:'West'}, {title:'Oost'}, {title:'Kan allebei', sub:'De bieding beslist het niet'}], good = want==='West' ? 0 : want==='Oost' ? 1 : 2;
-    const q0 = pxQ('biedlees', 0, N[0], S[0], sit+' Wie heeft '+mCard+'?', opts, good, why+' <b>Speelplan:</b> '+plan, {contract4S:true, lead});
+    const q0 = pxQ('biedlees', 0, N[0], S[0], sit+' Wie heeft '+mCard+'?', opts, good, why+' <b>Speelplan:</b> '+plan, {contract4S:true, lead, tbl:tb}); q0.d.promptS = ps;
     q0.me = handFrom(S); q0.dummy = handFrom(N); q0.only = null; q0.d.contract = '4S';
     q0.choices = opts.map((o,i)=>({id:'c'+i, text:o.title, title:o.title, sub:o.sub}));
     return q0;
@@ -8742,6 +8758,13 @@ function kleurApply(){ try{ const h = document.documentElement; h.dataset.kleur 
 function klasFit(){ try{ const g = $('game'); if(!KLAS()){ g.style.removeProperty('--hw'); return; } const kb = document.querySelector('#gbid > .kbh .kbt') || $('gbid'), w = kb.getBoundingClientRect().width; if(w > 0) g.style.setProperty('--hw', w+'px');
   const n = document.querySelectorAll('#gsrow .rc').length, k = document.querySelectorAll('#gsrow .rc.g').length; if(n > 1) g.style.setProperty('--hd', ((n-1) + .3*k).toFixed(2)); }catch(e){} }
 window.addEventListener('resize', ()=>klasFit());
+// v395: wat de vraag over een speler vertelt, ligt als kaartje bij die speler op tafel (laptop); de vraag zelf wordt korter
+function sySpan(s){ return '<span class="'+s+'">'+SYM[s]+'</span>'; }
+function tblOn(x){ return !!(x && x.tbl && x.d && x.d.promptS && x.dummy && !x.sideDummy && x.conv!=='doorsterk' && x.conv!=='handen' && LAPTOP()); }
+function tblChips(x){ let el = $('tchips'); if(!el){ el = document.createElement('span'); el.id = 'tchips'; el.className = 'tchips'; $('qstrip').appendChild(el); }
+  if(!tblOn(x)){ el.innerHTML = ''; return; }
+  el.className = 'tchips'+(x.lead ? ' haslead' : '');
+  el.innerHTML = ['w','n','e','s'].filter(k=>x.tbl[k]).map(k=>{ const c = x.tbl[k]; return '<span class="tchip '+k+(c.dg ? ' dg' : '')+'">'+c.t+(c.s ? '<small>'+c.s+'</small>' : '')+'</span>'; }).join(''); }
 function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
   if(!m.classList.contains('kbid')){ m.style.setProperty('--kbt', '0px'); return; }
   if(answered || bx.hidden || !pr.getBoundingClientRect().height) return;
@@ -9418,7 +9441,7 @@ function next(fresh){
   answered = false; try{ renderScore(); }catch(e){}
   setTimeout(kbAlign, 0); requestAnimationFrame(()=>requestAnimationFrame(kbAlign));
   if(q.dummy && !q.dummyLabel && q.only==null && !q.lead) q.lead = leadFor(q);     // jij bent leider: West is al uitgekomen
-  $('prompt').innerHTML = (q.isHerk ? '<span class="rept">Herkansing</span>' : q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
+  $('prompt').innerHTML = (q.isHerk ? '<span class="rept">Herkansing</span>' : q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+(tblOn(q) ? q.d.promptS : promptText(q));
   renderAuction(false);
   $('hand').className = 'hand';
   $('hand').innerHTML = q.only!=null && q.dummy && q.box!=='lead' ? '<li class="hrowli">'+handRowOf(q.me, q.only)+'</li>' : handHTML(q.me, q.only, q.box==='lead', qTr(q));      // één kleur: dezelfde kaartjes als de dummy
@@ -9440,6 +9463,7 @@ function next(fresh){
     // de uitkomst van West: een kaart die een kwartslag gedraaid links van de tafel ligt, zoals West hem neerlegt
     $('nW').innerHTML = q.lead ? playHTML(q.lead) : '';
     $('nW').className = 'tc'+(q.lead ? ' on k'+q.lead[0] : '');
+    tblChips(q);
     $('qstripnm').innerHTML = tblPills({N:{d:1}, Z:{l:1, turn:1, c:ctrBadge(state._nsC)}});
   }
   $('mylabel').hidden = !!q.auction;      // bij het bieden wijst het vraagteken op de tafel je plek al aan
