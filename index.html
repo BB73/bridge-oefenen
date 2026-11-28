@@ -1703,6 +1703,18 @@ html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;l
   .homegrid.homegrid{grid-template-columns:1fr 1fr;gap:.6rem}
   .homegrid.homegrid > .homebtn{grid-column:auto} .homegrid.homegrid > .homebtn.daily, .homegrid.homegrid > :not(.homebtn){grid-column:1 / -1}
 }
+/* v400: kleur en plaatjes in de onderliggende menu's */
+#settings[data-sec="doel"]{--sbg:#E7F0FB;--sbd:#2F6FB5;--sic:#C9DEF6;--stx:#24558C}
+#settings[data-sec="kaart"]{--sbg:#F1EBFB;--sbd:#7A55C2;--sic:#DED1F5;--stx:#58399A}
+#settings[data-sec="test"]{--sbg:#FBF4D6;--sbd:#B8921A;--sic:#F3E3A0;--stx:#735A0C}
+#settings[data-sec] .navrow:not([disabled]), #settings[data-sec] .homebtns:not(.homegrid) > .homebtn{background:var(--sbg, var(--surface));border-color:var(--sbd, var(--line))}
+#settings[data-sec] .navrow:not([disabled]):nth-of-type(even){background:color-mix(in srgb, var(--sbg, var(--surface)) 55%, #fff)}
+#settings[data-sec] .navrow small, #settings[data-sec] .homebtns:not(.homegrid) > .homebtn small{color:var(--stx, var(--felt))}
+.navrow[data-ic]::before, .homebtns:not(.homegrid) > .homebtn[data-ic]::before{content:attr(data-ic);flex:none;width:2rem;height:2rem;border-radius:10px;display:grid;place-items:center;font-size:1.15rem;line-height:1;background:var(--sic, #DCE9E2);font-weight:400}
+.homebtns:not(.homegrid) > .homebtn[data-ic]{position:relative;padding-left:4rem} .homebtns:not(.homegrid) > .homebtn[data-ic]::before{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:2.4rem;height:2.4rem;font-size:1.35rem}
+@media (min-width:1000px) and (min-aspect-ratio:5/4){ #settings[data-sec="doel"] .homebtns:not(.homegrid):not(.prebtns) > .homebtn{grid-column:auto} #settings[data-sec="doel"]:has(.homebtns:not(.homegrid):not(.prebtns)){width:min(900px, 94vw)!important;max-width:none!important} }
+@media (max-width:999px) and (max-height:700px){ .homebtns:not(.homegrid) > .homebtn[data-ic]{padding:.34rem .7rem .34rem 3.2rem} .homebtns:not(.homegrid) > .homebtn[data-ic]::before{left:.6rem;width:2rem;height:2rem;font-size:1.15rem} .homebtns:not(.homegrid) > .homebtn[data-ic] small{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .homebtns:not(.homegrid) > .homebtn[data-ic] b{font-size:1.08rem}
+  #settings[data-sec] .navrow{padding:.5rem .7rem;margin:.3rem 0} .navrow[data-ic]::before{width:1.8rem;height:1.8rem;font-size:1.05rem} }
 /* v390: uitdagingen */
 .chw{display:grid;grid-template-columns:minmax(0, 300px) minmax(0, 1fr);gap:10px 22px;align-items:start}
 .chw .lab{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--kC,#0F5237);font-weight:700;margin-bottom:6px}
@@ -8780,6 +8792,8 @@ function tblChips(x){ let el = $('tchips'); if(!el){ el = document.createElement
   if(!tblOn(x)){ el.innerHTML = ''; return; }
   el.className = 'tchips'+(x.lead ? ' haslead' : '');
   el.innerHTML = ['w','n','e','s'].filter(k=>x.tbl[k]).map(k=>{ const c = x.tbl[k]; return '<span class="tchip '+k+(c.dg ? ' dg' : '')+'">'+c.t+(c.s ? '<small>'+c.s+'</small>' : '')+'</span>'; }).join(''); }
+// v400: de onderliggende menu's nemen de kleur van hun blok op het openingsscherm over
+{ const rm0 = renderModes; renderModes = function(){ const r = rm0.apply(this, arguments); try{ const t = nav[0] || 'home'; $('settings').dataset.sec = (t==='bieden' || t==='spelen' || t==='heel' || t==='doel') ? 'doel' : t; }catch(e){} return r; }; }
 function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
   if(!m.classList.contains('kbid')){ m.style.setProperty('--kbt', '0px'); return; }
   if(answered || bx.hidden || !pr.getBoundingClientRect().height) return;
@@ -9214,41 +9228,41 @@ function renderModes(){
     pg = '<h3 class="pagetitle">De afspraken waarmee deze app rekent</h3><div class="rules">'+(src ? src.innerHTML : '')+'</div><p><button class="gview" data-home="1">‹ Terug naar de hoofdpagina</button></p>';
   }else if(T==='doel'){
     pg = state.learn.on
-      ? '<div class="homebtns"><button class="homebtn has" data-go="bieden"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
-        + '<button class="homebtn has" data-go="spelen"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button></div>'
+      ? '<div class="homebtns"><button class="homebtn has" data-go="bieden" data-ic="🗣️"><b>Bieden</b><small>Leerpad: stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
+        + '<button class="homebtn has" data-go="spelen" data-ic="🃏"><b>Spelen</b><small>Leerpad: stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button></div>'
       : '<p class="hint">Hier oefen je losse onderdelen: alleen de biedingen en spelsituaties die bij de afspraken op je systeemkaart horen.</p>'
-        + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
-        + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
-        + '<button class="homebtn'+(state.conv==='spel' ? ' has' : '')+'" data-go="heel"><b>Zelf een heel spel spelen</b><small>Tegen de computer: bieden, spelen als leider of tegenspelen</small></button>'
-        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Eerst inloggen of een account maken.</small></button>' : '')+'</div>';
+        + '<div class="homebtns"><button class="homebtn'+(nPrB ? ' has' : '')+'" data-go="bieden" data-ic="🗣️"><b>Bieden</b><small>'+(nPrB ? '✓ je oefent nu '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : 'Oefenen wat op je systeemkaart staat')+'</small></button>'
+        + '<button class="homebtn'+(nPrS ? ' has' : '')+'" data-go="spelen" data-ic="🃏"><b>Spelen</b><small>'+(nPrS ? '✓ je oefent nu '+nPrS+(nPrS===1 ? ' onderdeel' : ' onderdelen') : 'Afspelen als leider en tegenspelen')+'</small></button>'
+        + '<button class="homebtn'+(state.conv==='spel' ? ' has' : '')+'" data-go="heel" data-ic="♠️"><b>Zelf een heel spel spelen</b><small>Tegen de computer: bieden, spelen als leider of tegenspelen</small></button>'
+        + (FB_CONFIG || /samentest/.test(location.search) ? '<button class="homebtn" data-samen="1" data-ic="👥"><b>Samen met je partner</b><small>Ieder op je eigen telefoon, met chat. Eerst inloggen of een account maken.</small></button>' : '')+'</div>';
   }else if(T==='heel' && nav[1]==='opp'){
     const G2 = PRESET_GROUPS[nav[2]];
     pg = !G2 ? '<p class="hint">Welke standaardkaart spelen de tegenstanders? Kies eerst de groep.</p>'+Object.keys(PRESET_GROUPS).map(g=>'<button class="navrow'+(PRESET_GROUPS[g].ids.includes(String(state.oppSys||'').slice(2)) ? ' has' : '')+'" data-oppg="'+g+'"><span>'+PRESET_GROUPS[g].name+'</span><small>'+PRESET_GROUPS[g].ids.filter(id=>PRESETS[id]).map(id=>PRESETS[id].tag).join(', ')+'</small></button>').join('')
       : '<p class="hint">De tegenstanders bieden en spelen volgens deze kaart.</p>'+G2.ids.filter(id=>PRESETS[id]).map(id=>'<button class="navrow'+(state.oppSys==='p:'+id ? ' has' : '')+'" data-oppset="'+id+'"><span>'+PRESETS[id].tag+'</span><small>'+(PRESETS[id].short||'')+'</small></button>').join('');
   }else if(T==='heel'){
     const cur = state.conv==='spel' ? (state.gonlybid ? 'bied' : state.gbid==='ja' ? 'beide' : state.grole==='tegen' ? 'tegen' : 'leider') : null;
-    const row = (k, a, b) => '<button class="navrow'+(cur===k ? ' has' : '')+'" data-heel="'+k+'"><span>'+a+'</span><small>'+b+'</small></button>';
+    const row = (k, a, b) => '<button class="navrow'+(cur===k ? ' has' : '')+'" data-heel="'+k+'" data-ic="'+({beide:'🤝', bied:'🗣️', leider:'👑', tegen:'🛡️'}[k]||'')+'"><span>'+a+'</span><small>'+b+'</small></button>';
     pg = '<p class="hint">Je speelt alleen, tegen de computer. Je partner biedt en speelt volgens je systeemkaart.</p>'
        + row('beide', 'Bieden en daarna spelen', 'Pas na de bieding weet je of jullie het spel spelen of verdedigen')
        + row('bied', 'Alleen bieden', 'Je biedt met de computer als partner; daarna zie je wat er met open kaarten in zat')
        + row('leider', 'Alleen spelen als leider', 'Het contract ligt al vast; jij speelt het af')
        + row('tegen', 'Alleen tegenspelen', 'Het contract ligt al vast; jij verdedigt samen met de computer')
        + '<label class="oppline"><input type="checkbox" id="oppsame"'+(oppSysOf() ? '' : ' checked')+'> Tegenstanders spelen dezelfde systeemkaart</label>'
-       + (oppSysOf() ? '<button class="navrow has" data-oppgo="1"><span>Systeemkaart tegenstanders</span><small>'+oppName()+'</small></button>' : '');
+       + (oppSysOf() ? '<button class="navrow has" data-oppgo="1" data-ic="🆚"><span>Systeemkaart tegenstanders</span><small>'+oppName()+'</small></button>' : '');
   }else if(T==='test' && !mode){
     const TS = state.test;
     let vgTxt = 'Je ontwikkeling, niveaus, weekdoel en herkansing'; try{ const P = window.pg(), a = pgWeekStart(), nw = pgTomorrow(); let n = 0, ok = 0; ['b','s','t'].forEach(c=>{ const x = pgSum(c, a, nw); n += x[0]; ok += x[1]; }); vgTxt = 'Weekdoel: '+n+' van '+PG_GOAL.n+' vragen'+(n ? ', '+Math.round(100*ok/n)+'% goed' : '')+(P.wrong.length ? ' · '+P.wrong.length+' voor herkansing' : ''); }catch(e){}
     pg = '<p class="hint">Weet je genoeg om te spelen wat je hebt afgesproken? Test het, en oefen daarna gericht.</p>'
-       + '<button class="navrow has" data-tgo="vg"><span>Mijn voortgang</span><small>'+vgTxt+'</small></button>'
-       + '<button class="navrow has" data-tgo="uitd"><span>Kies een uitdaging</span><small>Bieden, spelen of beide · trap, 10 op een rij, toets van 20</small></button>'
-       + '<button class="navrow'+(TS ? ' has' : '')+'" data-tgo="toets"><span>Test je systeemkaart</span><small>'+(TS && TS.done ? '✓ Uitslag en oefenplan staan klaar' : TS ? TS.i+' van '+TS.q.length+' vragen gedaan' : 'Je sterke en zwakke punten, met een oefenplan')+'</small></button>'
-       + '<button class="navrow'+(state.fris.butler || state.fris.paren ? ' has' : '')+'" data-tgo="fris"><span>Opfrisser: butler of paren</span><small>Voor je aan een nieuwe serie begint</small></button>'
-       + '<button class="navrow'+(state.learn.on ? ' has' : '')+'" data-tgo="pad"><span>Leerpad basisregels</span><small>'+(state.learn.on ? '✓ Staat aan' : 'Voor beginners: stap voor stap, eerst uitleg en dan oefenen')+'</small></button>';
+       + '<button class="navrow has" data-tgo="vg" data-ic="📈"><span>Mijn voortgang</span><small>'+vgTxt+'</small></button>'
+       + '<button class="navrow has" data-tgo="uitd" data-ic="🎯"><span>Kies een uitdaging</span><small>Bieden, spelen of beide · trap, 10 op een rij, toets van 20</small></button>'
+       + '<button class="navrow'+(TS ? ' has' : '')+'" data-tgo="toets" data-ic="📝"><span>Test je systeemkaart</span><small>'+(TS && TS.done ? '✓ Uitslag en oefenplan staan klaar' : TS ? TS.i+' van '+TS.q.length+' vragen gedaan' : 'Je sterke en zwakke punten, met een oefenplan')+'</small></button>'
+       + '<button class="navrow'+(state.fris.butler || state.fris.paren ? ' has' : '')+'" data-tgo="fris" data-ic="🔄"><span>Opfrisser: butler of paren</span><small>Voor je aan een nieuwe serie begint</small></button>'
+       + '<button class="navrow'+(state.learn.on ? ' has' : '')+'" data-tgo="pad" data-ic="🧭"><span>Leerpad basisregels</span><small>'+(state.learn.on ? '✓ Staat aan' : 'Voor beginners: stap voor stap, eerst uitleg en dan oefenen')+'</small></button>';
   }else if(T==='test' && mode==='fris' && !nav[2]){
     const last = m => state.fris[m] ? 'Laatste keer: '+state.fris[m][0]+' van '+state.fris[m][1]+' goed' : 'De regels op een rij en acht situaties aan tafel';
     pg = '<p class="hint">Begin je aan een nieuwe serie? Je systeemkaart blijft dezelfde, maar de afwegingen veranderen. Fris ze hier op.</p>'
-       + '<button class="navrow'+(state.fris.butler ? ' has' : '')+'" data-fris="butler"><span>Ik ga butler spelen</span><small>'+last('butler')+'</small></button>'
-       + '<button class="navrow'+(state.fris.paren ? ' has' : '')+'" data-fris="paren"><span>Ik ga paren spelen</span><small>'+last('paren')+'</small></button>';
+       + '<button class="navrow'+(state.fris.butler ? ' has' : '')+'" data-fris="butler" data-ic="🧮"><span>Ik ga butler spelen</span><small>'+last('butler')+'</small></button>'
+       + '<button class="navrow'+(state.fris.paren ? ' has' : '')+'" data-fris="paren" data-ic="👫"><span>Ik ga paren spelen</span><small>'+last('paren')+'</small></button>';
   }else if(T==='test' && mode==='fris'){
     const m = nav[2]==='paren' ? 'paren' : 'butler', nm = m==='butler' ? 'butler' : 'paren', other = m==='butler' ? 'paren' : 'butler';
     if(!FQ || FQ.mode!==m){
@@ -9264,8 +9278,8 @@ function renderModes(){
     }
   }else if(T==='test' && mode==='pad'){
     pg = '<p class="hint">Voor wie de basisregels van bridge nog leert. Je gaat stap voor stap: eerst de uitleg, dan oefenen. Beheers je een stap, dan gaat de volgende open.</p>'
-       + '<button class="navrow has" data-lgo="bieden"><span>Leerpad bieden</span><small>Stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
-       + '<button class="navrow has" data-lgo="spelen"><span>Leerpad spelen</span><small>Stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
+       + '<button class="navrow has" data-lgo="bieden" data-ic="🗣️"><span>Leerpad bieden</span><small>Stap '+(state.learn.step.bieden+1)+' van '+LEARN.bieden.length+'</small></button>'
+       + '<button class="navrow has" data-lgo="spelen" data-ic="🃏"><span>Leerpad spelen</span><small>Stap '+(state.learn.step.spelen+1)+' van '+LEARN.spelen.length+'</small></button>'
        + (state.learn.on ? '<div class="navtools"><button class="navclear" data-loff="1">Leerpad uitzetten: ik kies zelf wat ik oefen</button></div>' : '');
   }else if(T==='test'){
     const TS = state.test, ks = testKeys(), nQ = (ks.length-1)*TEST_N+TEST_NOPEN;
@@ -9292,15 +9306,15 @@ function renderModes(){
     }
   }else if(T==='kaart' && !nav[1]){
     pg = '<p class="hint">Leg hier vast wat jullie spelen. Bij Bieden en Spelen oefen je ermee, en je kunt de kaart afdrukken.</p>'
-       + '<button class="navrow'+(presetMatch() ? ' has' : '')+'" data-kgo="std"><span>Standaardkaart</span><small>'+(presetMatch() ? '✓ '+PRESETS[presetMatch()].tag : 'Berry beginners of clubspelers')+'</small></button>'
-       + '<button class="navrow has" data-kgo="eigen"><span>Eigen specifieke systeemkaart</span><small>bieden en speelafspraken</small></button>'
-       + '<button class="navrow" data-cardview="1"><span>Bekijken en afdrukken</span><small>Vouwkaart, overzicht op één A4 of handboek</small></button>'
-       + '<button class="navrow" data-cardshare="1"><span>Delen met je partner</span><small id="sharemsg">Via een link</small></button>'
+       + '<button class="navrow'+(presetMatch() ? ' has' : '')+'" data-kgo="std" data-ic="📘"><span>Standaardkaart</span><small>'+(presetMatch() ? '✓ '+PRESETS[presetMatch()].tag : 'Berry beginners of clubspelers')+'</small></button>'
+       + '<button class="navrow has" data-kgo="eigen" data-ic="✏️"><span>Eigen specifieke systeemkaart</span><small>bieden en speelafspraken</small></button>'
+       + '<button class="navrow" data-cardview="1" data-ic="🖨️"><span>Bekijken en afdrukken</span><small>Vouwkaart, overzicht op één A4 of handboek</small></button>'
+       + '<button class="navrow" data-cardshare="1" data-ic="🔗"><span>Delen met je partner</span><small id="sharemsg">Via een link</small></button>'
        + (FB_CONFIG ? '<div class="navrow2"><button data-cardcloud="save">Opslaan in je account</button><button data-cardcloud="load">Ophalen uit je account</button></div><small id="cloudmsg">Bewaar je kaart en haal hem op een ander toestel weer op</small>' : '');
   }else if(T==='kaart' && nav[1]==='eigen'){
     pg = '<p class="hint">Stel zelf in wat jullie spelen, of pas een standaardkaart aan.</p>'
-       + '<button class="navrow has" data-kgo="bieden"><span>Bieden</span><small>'+state.card.length+' afspraken</small></button>'
-       + '<button class="navrow has" data-kgo="leads"><span>Speelafspraken</span><small>uitkomen: '+LEADN_[state.leadLen]+' · '+ATTN[ATT].toLowerCase()+'</small></button>';
+       + '<button class="navrow has" data-kgo="bieden" data-ic="🗣️"><span>Bieden</span><small>'+state.card.length+' afspraken</small></button>'
+       + '<button class="navrow has" data-kgo="leads" data-ic="🃏"><span>Speelafspraken</span><small>uitkomen: '+LEADN_[state.leadLen]+' · '+ATTN[ATT].toLowerCase()+'</small></button>';
   }else if(T==='kaart' && nav[1]==='std' && !PRESET_GROUPS[nav[2]]){
     const cur = presetMatch();
     pg = '<p class="hint">Kies een kaart om mee te beginnen. Daarna kun je zelf afspraken aan- of uitzetten en de biedingen ervan oefenen.</p>'
@@ -9318,8 +9332,8 @@ function renderModes(){
     pg = '';
   }else if(T==='bieden' && !mode){
     pg = '<p class="hint">Leg eerst vast wat jullie spelen. Bij Oefenen kies je daaruit wat je nu wilt trainen.</p>'
-       + '<button class="navrow has" data-mode="kaart"><span>Mijn systeemkaart</span><small>'+state.card.length+' afspraken</small></button>'
-       + '<button class="navrow'+(nPrB ? ' has' : '')+'" data-mode="oefen"><span>Oefenen</span><small>'+(nPrB ? '✓ '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : '')+'</small></button>';
+       + '<button class="navrow has" data-mode="kaart" data-ic="📋"><span>Mijn systeemkaart</span><small>'+state.card.length+' afspraken</small></button>'
+       + '<button class="navrow'+(nPrB ? ' has' : '')+'" data-mode="oefen" data-ic="🎓"><span>Oefenen</span><small>'+(nPrB ? '✓ '+nPrB+(nPrB===1 ? ' onderdeel' : ' onderdelen') : '')+'</small></button>';
   }else if(learnPage){
     const P = LEARN[T], cur = state.learn.step[T], total = P.length, view = (learnView==null || learnView>=total) ? cur : learnView;
     pg = '<p class="hint">Je leert het '+(T==='bieden' ? 'bieden' : 'spelen')+' stap voor stap: eerst de uitleg, dan oefenen. Heb je '+LEARN_OK+' van de laatste '+LEARN_MIN+' vragen goed, dan gaat de volgende stap open.</p>'
