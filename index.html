@@ -1715,6 +1715,7 @@ html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;l
 @media (min-width:1000px) and (min-aspect-ratio:5/4){ #settings[data-sec="doel"] .homebtns:not(.homegrid):not(.prebtns) > .homebtn{grid-column:auto} #settings[data-sec="doel"]:has(.homebtns:not(.homegrid):not(.prebtns)){width:min(900px, 94vw)!important;max-width:none!important} }
 @media (max-width:999px) and (max-height:700px){ .homebtns:not(.homegrid) > .homebtn[data-ic]{padding:.34rem .7rem .34rem 3.2rem} .homebtns:not(.homegrid) > .homebtn[data-ic]::before{left:.6rem;width:2rem;height:2rem;font-size:1.15rem} .homebtns:not(.homegrid) > .homebtn[data-ic] small{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .homebtns:not(.homegrid) > .homebtn[data-ic] b{font-size:1.08rem}
   #settings[data-sec] .navrow{padding:.5rem .7rem;margin:.3rem 0} .navrow[data-ic]::before{width:1.8rem;height:1.8rem;font-size:1.05rem} }
+main.table.tight #box .choice .ctext small{display:none} main.table.tight #box .choice{padding-top:.3rem!important;padding-bottom:.3rem!important;min-height:0!important}
 /* v390: uitdagingen */
 .chw{display:grid;grid-template-columns:minmax(0, 300px) minmax(0, 1fr);gap:10px 22px;align-items:start}
 .chw .lab{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--kC,#0F5237);font-weight:700;margin-bottom:6px}
@@ -2184,11 +2185,13 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Geen fit: 2SA met 8–9 punten, 3SA met 10–14.</li>
         <li>Antwoordde de openaar 2<span class="H">♥︎</span> en biedt partner daarna SA, dan heeft partner vier schoppen. Met ook vier schoppen biedt de openaar alsnog schoppen.</li>
         <li>Zwak (0–5 punten) met een vijfkaart en een vierkaart hoog: toch 2<span class="C">♣︎</span>, geen transfer. Pas als de openaar een hoge kleur biedt; bied na 2<span class="D">♦︎</span> je vijfkaart. De openaar past daarop altijd.</li>
+        <li>Biedt de tegenpartij 2<span class="C">♣︎</span> (echt) op jullie 1SA, dan blijft alles gelden: het doublet neemt de plaats in van jullie 2<span class="C">♣︎</span>, en alle andere biedingen houden hun betekenis.</li>
       </ul>
       <h3>Jacoby: je hebt een vijfkaart hoog of langer</h3>
       <ul>
         <li>Bied de kleur onder je lange kleur: 2<span class="D">♦︎</span> met harten, 2<span class="H">♥︎</span> met schoppen. Dat doe je met elke kracht, ook met 0 punten.</li>
         <li>De openaar biedt altijd de kleur erboven: 2<span class="H">♥︎</span> na 2<span class="D">♦︎</span>, 2<span class="S">♠︎</span> na 2<span class="H">♥︎</span>.</li>
+        <li>Biedt de tegenpartij 2<span class="C">♣︎</span> (echt) op jullie 1SA, dan blijft alles gelden: het doublet neemt de plaats in van jullie 2<span class="C">♣︎</span>, en alle andere biedingen houden hun betekenis.</li>
       </ul>
       <h3>Jacoby: je tweede bod</h3>
       <ul>
@@ -2542,7 +2545,7 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
       <p>Handen met 11 of meer punten (slemzone) en handen met een vijfkaart én een vierkaart hoog komen niet voor.</p>
       <h3>Rubensohl</h3>
       <ul>
-        <li>Partner opent 1SA en de tegenpartij biedt 2 in een kleur.</li>
+        <li>Partner opent 1SA en de tegenpartij biedt 2<span class="D">♦︎</span>, 2<span class="H">♥︎</span> of 2<span class="S">♠︎</span>.</li>
         <li>Een doublet is voor straf. Je kunt bij de variant ook kiezen voor een negatief doublet: dat toont de ongeboden hoge kleur(en) met te weinig voor de manche.</li>
         <li>Een eigen kleur op 2-niveau is om te spelen; partner moet passen.</li>
         <li>Vanaf 2SA is elk bod een transfer naar de kleur erboven: 2SA toont klaveren, 3<span class="C">♣︎</span> ruiten, 3<span class="D">♦︎</span> harten, 3<span class="H">♥︎</span> schoppen.</li>
@@ -2557,14 +2560,14 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Als zij 2<span class="S">♠︎</span> boden (vraag: 3<span class="H">♥︎</span>): 3<span class="S">♠︎</span> met vier harten zonder stop, 4<span class="H">♥︎</span> met vier harten en een maximum, 3SA met een stop zonder vier harten.</li>
         <li>Na het afmaken van je transfer: pas met een zwakke hand, de manche in je zeskaart hoog, of 3SA met een vijfkaart en een stop.</li>
         <li>Ook na de transfer: een nieuwe kleur is echt en mancheforcing (een tweekleurenspel, 5-5). De kleur van de tegenpartij op 4-niveau is een splinter: een zeskaart hoog, sleminteresse en hooguit één kaart in hun kleur.</li>
-        <li>Stayman na hun 2<span class="C">♣︎</span>: de vraag is 2SA, de transfer naar klaveren. De openaar antwoordt zoals na 2<span class="D">♦︎</span>, met 3<span class="C">♣︎</span> als hij geen stop en geen vierkaart hoog heeft.</li>
+        <li>Na hun 2<span class="C">♣︎</span> (echt) speel je geen Rubensohl: alles blijft gelden. Het doublet neemt de plaats in van jullie 2<span class="C">♣︎</span> (Stayman, of Puppet als jullie die via 2<span class="C">♣︎</span> spelen), 2<span class="D">♦︎</span> en 2<span class="H">♥︎</span> blijven Jacoby en Puppet via 3<span class="C">♣︎</span> blijft Puppet. Rubensohl geldt na 2<span class="D">♦︎</span>, 2<span class="H">♥︎</span> en 2<span class="S">♠︎</span>.</li>
         <li>De openaar met een superfit: is partners transfer naar een hoge kleur zeker manchekracht (zijn kleur is hoger dan die van de tegenpartij) en heb jij een maximum met vier kaarten mee, bied dan meteen de manche.</li>
         <li>De openaar zonder stop na 3<span class="S">♠︎</span>: bied niet 3SA, maar je langste lage kleur op 4-niveau.</li>
-        <li>Na een conventioneel volgbod: is één kleur bekend (DONT 2<span class="C">♣︎</span> of 2<span class="D">♦︎</span>), dan geldt Rubensohl alsof die kleur gewoon geboden is. Na Multi 2<span class="D">♦︎</span> zijn 2<span class="H">♥︎</span> en 2<span class="S">♠︎</span> echt en zwak, met transfers vanaf 2SA. Na Landy 2<span class="C">♣︎</span> (beide hoge kleuren) toont een doublet punten, is 2<span class="D">♦︎</span> echt en zwak, 2SA de transfer naar klaveren en 3<span class="C">♣︎</span> de transfer naar ruiten.</li>
+        <li>Na een conventioneel volgbod: is één kleur bekend (DONT 2<span class="D">♦︎</span>: ruiten en een hoge kleur), dan geldt Rubensohl alsof die kleur gewoon geboden is. Na Multi 2<span class="D">♦︎</span> zijn 2<span class="H">♥︎</span> en 2<span class="S">♠︎</span> echt en zwak, met transfers vanaf 2SA. Na Landy 2<span class="C">♣︎</span> (beide hoge kleuren) toont een doublet punten, is 2<span class="D">♦︎</span> echt en zwak, 2SA de transfer naar klaveren en 3<span class="C">♣︎</span> de transfer naar ruiten.</li>
         <li>Doubleert de tegenpartij 1SA, dan is dat geen Rubensohl meer maar een aparte afspraak. Je kiest bij de variant: alles echt (een kleur op 2-niveau is om te spelen), of transfers vanaf het redoublet: redoublet toont klaveren, 2<span class="C">♣︎</span> ruiten, 2<span class="D">♦︎</span> harten, 2<span class="H">♥︎</span> schoppen.</li>
         <li>Na 1<span class="C">♣︎</span> van partner en een zwak sprongvolgbod (2<span class="D">♦︎</span>, 2<span class="H">♥︎</span> of 2<span class="S">♠︎</span>) gelden dezelfde transfers: 2SA klaveren, 3<span class="C">♣︎</span> ruiten, 3<span class="D">♦︎</span> harten, 3<span class="H">♥︎</span> schoppen, 3<span class="S">♠︎</span> naar SA zonder stop, 3SA met een stop.</li>
       </ul>
-      <p>Dit volgt de Rubensohl-pagina van pecona.nl. Pecona noemt geen punten. In de app is manchekracht na 1SA 9 of meer punten en zwak tot 7, een maximum is 17, en na 1<span class="C">♣︎</span> is manchekracht 12 of meer; die grenzen zijn een eigen invulling. Dat geldt ook voor het vervolg na de transfer, en voor de zwakke hand bij de transfers na een doublet. De laatste vijf punten hierboven (tweede kleur en splinter, Stayman na 2<span class="C">♣︎</span>, de superfit, de openaar zonder stop na 3<span class="S">♠︎</span> en de conventionele volgboden) beschrijft Pecona niet; die zijn een eigen, gangbare invulling. Spreek ze met je partner af.</p>
+      <p>Dit volgt de Rubensohl-pagina van pecona.nl. Pecona noemt geen punten. In de app is manchekracht na 1SA 9 of meer punten en zwak tot 7, een maximum is 17, en na 1<span class="C">♣︎</span> is manchekracht 12 of meer; die grenzen zijn een eigen invulling. Dat geldt ook voor het vervolg na de transfer, en voor de zwakke hand bij de transfers na een doublet. De laatste vijf punten hierboven (tweede kleur en splinter, alles blijft gelden na 2<span class="C">♣︎</span>, de superfit, de openaar zonder stop na 3<span class="S">♠︎</span> en de conventionele volgboden) beschrijft Pecona niet; die zijn een eigen, gangbare invulling. Spreek ze met je partner af.</p>
       <h3>DONT</h3>
       <ul>
         <li>De tegenpartij opent 1SA. DONT gaat om verdeling, niet om punten.</li>
@@ -2598,6 +2601,7 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Na 3<span class="D">♦︎</span> biedt de vrager de hoge kleur die hij níet heeft: 3<span class="H">♥︎</span> met vier schoppen, 3<span class="S">♠︎</span> met vier harten. Zo speelt de sterke hand. 4<span class="D">♦︎</span> toont beide vierkaarten, 3SA geen van beide.</li>
         <li>Na 3<span class="H">♥︎</span> of 3<span class="S">♠︎</span> van de openaar: de manche in die kleur met drie of meer kaarten mee, anders 3SA.</li>
         <li>Variant na 1SA met 2<span class="C">♣︎</span> (in te stellen bij de opties): 2<span class="C">♣︎</span> is dan Puppet en vervangt de gewone Stayman, vanaf 8 punten. De openaar biedt 2<span class="H">♥︎</span> of 2<span class="S">♠︎</span> met een vijfkaart en anders 2<span class="D">♦︎</span>; dat ontkent geen vierkaart. Daarna biedt de vrager de hoge kleur die hij niet heeft (2<span class="H">♥︎</span> met vier schoppen, 2<span class="S">♠︎</span> met vier harten), 3<span class="D">♦︎</span> met beide en manchekracht, of 2SA/3SA zonder vierkaart. De openaar steunt met een vierkaart mee (zo laag mogelijk met 15, de manche met 16–17) en biedt anders 2SA of 3SA.</li>
+        <li>Biedt de tegenpartij 2<span class="C">♣︎</span> (echt) op jullie 1SA, dan blijft alles gelden: het doublet neemt de plaats in van jullie 2<span class="C">♣︎</span>, en alle andere biedingen houden hun betekenis.</li>
       </ul>
       <p>In de app is manchekracht 5–10 punten na 2SA en 10–14 na 1SA; slempogingen komen niet voor. Na 1SA heeft Puppet vooral zin als jullie 1SA ook met een vijfkaart hoog openen. Na 2SA sluit Puppet de gewone Stayman-oefening "Na 2SA van partner" uit.</p>
       <h3>Zwakke twee</h3>
@@ -2766,6 +2770,7 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Je maakt in een kleur nooit meer slagen dan je langste hand kaarten heeft. A H tegenover V B (twee tegenover twee) is twee slagen, niet vier.</li>
         <li>Heeft de tegenpartij niet meer kaarten in de kleur dan jij topkaarten hebt, dan is de hele kleur hoog.</li>
         <li>Vergelijk het totaal met je contract: 1SA is 7 slagen, 2SA is 8, 3SA is 9. Wat je tekortkomt, moet je ontwikkelen.</li>
+        <li>De app vraagt dit op verschillende manieren: alle vaste slagen tellen, één kleur apart, hoeveel je nog moet ontwikkelen, en of je je contract al binnen hebt.</li>
       </ul>
       <p>De app telt geen slagen mee waarvoor je eerst van slag moet, en let niet op blokkades of oversteken.</p>
       <h3>Spelen: slagen ontwikkelen</h3>
@@ -2813,7 +2818,9 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
         <li>Speel náár je honneur toe, niet ervandaan: klein vanuit de andere hand naar A V, naar de heer, of naar de vrouw. Zit de ontbrekende kaart vóór je honneur, dan maak je een extra slag.</li>
         <li>Een honneur zelf voorspelen doe je alleen als je de kaarten eronder ook hebt, zoals V B T tegenover de aas.</li>
         <li>Met twee honneurs naast elkaar (H V of A V B) speel je er twee keer naartoe.</li>
-        <li>Mis je alleen de vrouw: met acht kaarten samen of minder snijd je, met negen sla je aas en heer.</li>
+        <li>Mis je alleen de vrouw: met acht kaarten samen of minder snijd je, met negen sla je aas en heer. Sla eerst één hoge kaart als dat kan, voor het geval de vrouw kaal zit.</li>
+        <li>Mis je alleen de heer: met tien kaarten samen of minder snijd je, met elf sla je de aas.</li>
+        <li>Mis je de aas en de vrouw (H B T): speel twee keer naar de boer en de tien. Dat lukt drie van de vier keer.</li>
         <li>Kansen: een snit op één ontbrekende kaart lukt de helft van de keren. Aas en heer slaan in de hoop dat de vrouw valt lukt met negen kaarten samen in 53% van de gevallen, met acht kaarten in 33%. Hopen op een kale heer of aas lukt bijna nooit.</li>
       </ul>
       <h3>Tegenspel: uitkomen</h3>
@@ -2834,15 +2841,19 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
       <ul>
         <li>Heb je in SA maar één stop in de kleur waarin ze uitkomen, neem die dan niet meteen. Wacht tot één tegenstander geen kaart meer in de kleur heeft.</li>
         <li>Regel van 7: tel je kaarten in de kleur samen en trek dat af van 7. Zo vaak houd je de aas op.</li>
+        <li>Met zeven kaarten samen is de uitkomst nul: neem de aas dan meteen.</li>
+        <li>Na het ophouden heeft de partner van de uitkomer geen kaart meer in de kleur. Verlies een latere slag dus aan hem, en niet aan de uitkomer met zijn vrije kaarten.</li>
       </ul>
       <h3>Spelen: de gevaarlijke hand</h3>
       <ul>
         <li>De gevaarlijke hand is de tegenstander die je down kan spelen als hij aan slag komt: hij heeft vrije kaarten, of hij kan door je honneur heen spelen.</li>
+        <li>Een heer met een kleintje is alleen een stop als de tegenpartij er naartoe moet spelen. De tegenstander die er doorheen kan spelen, is de gevaarlijke hand.</li>
         <li>Kun je een snit naar twee kanten nemen, kies dan de kant die bij mislukken aan de veilige hand verliest.</li>
       </ul>
       <h3>Spelen: entrees en deblokkeren</h3>
       <ul>
         <li>Speel de hoge kaarten van de korte kant eerst, anders blokkeert de kleur.</li>
+        <li>Zit je met een honneur vast aan de korte kant, neem hem dan over met een hogere kaart van de lange kant. Dat kost een honneur, maar je bereikt de rest van de kleur.</li>
         <li>Moet je toch een slag afgeven en heeft de lange kant geen andere entree, geef die slag dan meteen af, zolang je nog een kleintje hebt om over te steken.</li>
       </ul>
       <h3>Spelen: veiligheidsspel</h3>
@@ -2871,6 +2882,8 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
       <h3>Spelen: lange kleur vrijspelen</h3>
       <ul>
         <li>Troef de lange kleur van de dummy net zo vaak tot de tegenpartij geen kaarten meer heeft. Tel vooraf je entrees: één voor elke keer dat je terug moet om te troeven, en één om de vrije kaarten te spelen.</li>
+        <li>Tel eerst de kaarten van de tegenpartij en reken op de waarschijnlijkste verdeling: zeven kaarten zitten meestal 4-3, zes kaarten vaker 4-2 dan 3-3.</li>
+        <li>De langste tegenstander bepaalt hoeveel rondes je nodig hebt. Wat de dummy daarna overhoudt, is vrij.</li>
       </ul>
       <h3>Spelen: weggooien of troef trekken</h3>
       <ul>
@@ -2905,6 +2918,8 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
       <h3>Tegenspel: lengtesignaal</h3>
       <ul>
         <li>Speelt de leider een kleur, dan toon je je aantal: hoog-laag met een even aantal, laag-hoog met een oneven aantal. In de app is dat de vaste afspraak.</li>
+        <li>Dat geldt voor elke lengte: met vier kaarten begin je net als met twee, met vijf net als met drie.</li>
+        <li>Lees ook partners signaal: tel zijn aantal op bij de dummy en je eigen kaarten. Wat overblijft, heeft de leider.</li>
       </ul>
       <h3>Tegenspel: je aas ophouden</h3>
       <ul>
@@ -3315,6 +3330,7 @@ function explainJacoby(q){
   return 'Partner heeft de manche geboden. Je hebt alles al verteld: pas.';
 }
 function explain(q){
+  if(q.d && q.d.c2x) return q.d.why;
   if((q.conv==='volgbod' || q.conv==='negatief' || q.conv==='doublet') && q.d && q.d.why) return q.d.why;
   if(q.conv==='doublet') return explainD(q);
   if(q.conv==='openen') return explainO(q);
@@ -3388,7 +3404,7 @@ function explain(q){
 }
 function promptText(q){ const t = promptText0(q); return q.vul ? vulTxt(q.vul)+' '+t : t; }
 function promptText0(q){
-  if(q.conv==='fris') return q.d.prompt;
+  if(q.conv==='fris' || (q.d && q.d.c2x)) return q.d.prompt;
   if((q.conv==='volgbod' || q.conv==='negatief' || q.conv==='doublet') && q.d.prompt) return q.d.prompt;
   if(q.conv==='doublet') return promptD(q);
   if(q.conv==='wet') return promptW(q);
@@ -3401,7 +3417,7 @@ function promptText0(q){
   if(q.conv==='verliezers') return q.d.prompt;
   if(q.conv==='troef') return q.d.prompt;
   if(q.conv==='ontwikkel') return 'Je speelt 3SA en hebt te weinig vaste slagen. Welke kleur speel je om er slagen bij te maken?';
-  if(q.conv==='tellen') return 'Je speelt '+q.d.contract+'. Hoeveel vaste slagen tel je in beide handen samen?';
+  if(q.conv==='tellen') return q.d.prompt || 'Je speelt '+q.d.contract+'. Hoeveel vaste slagen tel je in beide handen samen?';
   if(q.conv==='bijbod') return 'Partner opent '+bidHTML(q.d.open)+' en Oost past. Wat bied je?';
   if(q.conv==='rkcb') return promptR(q);
   if(q.conv==='negatief') return 'Partner opent '+bidHTML(q.d.open)+' en Oost biedt '+bidHTML(q.d.over)+'. Wat doe je?';
@@ -4317,7 +4333,11 @@ function topTricks(N, S){
   });
   return {suits, total: suits.reduce((a,s)=>a+s.tricks, 0)};
 }
+// v404: zes soorten vragen. gewoon: tel alles · kort: een kleur waarin je langste hand de rem is · run: een kleur die helemaal hoog is · tekort: hoeveel moet je nog ontwikkelen · binnen: heb je je contract al · kleur: één kleur apart
 function newTQ(){
+  const kind = ['gewoon','gewoon','kort','run','tekort','tekort','kleur','kleur','binnen','binnen'][rnd(10)];
+  if(kind==='kleur') return newTQ1();
+  const wantYes = rnd(5)<2;
   for(;;){
     const deck = Array.from({length:52},(_,i)=>i);
     for(let i=0;i<26;i++){ const j = i + rnd(52-i); const x = deck[i]; deck[i] = deck[j]; deck[j] = x; }
@@ -4326,12 +4346,43 @@ function newTQ(){
     if(pts<20 || pts>32 || Math.max(...N.len, ...S.len)>6) continue;
     const t = topTricks(N,S);
     if(t.total<2 || t.total>11) continue;
-    const level = pts>=25 ? 3 : pts>=23 ? 2 : 1;
-    return {conv:'tellen', idx:1, d:{suits:t.suits, total:t.total, contract:level+'SA', need:6+level}, me:S, dummy:N, partner:null,
+    if(kind==='kort' && !t.suits.some(x=>x.short)) continue;
+    if(kind==='run' && !t.suits.some(x=>x.run)) continue;
+    const level = pts>=25 ? 3 : pts>=23 ? 2 : 1, need = 6+level, d = {suits:t.suits, total:t.total, contract:level+'SA', need, kind};
+    if(kind==='tekort'){ if(need-t.total<0 || need-t.total>5) continue;
+      d.prompt = 'Je speelt '+d.contract+'. Hoeveel slagen moet je nog ontwikkelen?'; d.numlbl = 'Nog te ontwikkelen';
+      return {conv:'tellen', idx:1, d, me:S, dummy:N, partner:null, answer:String(need-t.total), box:'num', last:null, auction:null, hasNext:false}; }
+    if(kind==='binnen'){ const yes = t.total>=need; if(yes!==wantYes) continue;
+      d.prompt = 'Je speelt '+d.contract+'. Heb je je contract al binnen met alleen je vaste slagen?'; d.goodText = yes ? 'Ja' : 'Nee';
+      const q0 = {conv:'tellen', idx:1, d, me:S, dummy:N, partner:null, only:null, answer:yes ? 'c0' : 'c1', box:'choice', last:null, auction:null, hasNext:false,
+        choices:[{id:'c0', text:'Ja', title:'Ja', sub:'Ik heb genoeg vaste slagen'}, {id:'c1', text:'Nee', title:'Nee', sub:'Ik moet nog slagen ontwikkelen'}]};
+      d.why = explainT(q0); return q0; }
+    return {conv:'tellen', idx:1, d, me:S, dummy:N, partner:null,
             answer:String(t.total), box:'num', last:null, auction:null, hasNext:false};
   }
 }
+function newTQ1(){                                    // één kleur: hoeveel vaste slagen?
+  const NW = ['geen','één','twee','drie','vier','vijf','zes','zeven'], R = [14,13,12,11,10];
+  for(;;){
+    const si = rnd(4), k = 1+rnd(4), nN = 1+rnd(5), nS = 1+rnd(5);
+    if(nN+nS<Math.max(k+1, 4) || nN+nS>9) continue;
+    const tops = R.slice(0,k), gap = 14-k, pool = []; for(let r=2;r<gap && r<=9;r++) pool.push(r);
+    for(let i=pool.length-1;i>0;i--){ const j = rnd(i+1); const z = pool[i]; pool[i] = pool[j]; pool[j] = z; }
+    if(pool.length<nN+nS-k) continue;
+    const Nr = [], Sr = []; tops.forEach(r=>{ (rnd(2) ? Nr : Sr).push(r); });
+    if(Nr.length>nN || Sr.length>nS) continue;
+    while(Nr.length<nN) Nr.push(pool.pop()); while(Sr.length<nS) Sr.push(pool.pop());
+    Nr.sort((a,b)=>b-a); Sr.sort((a,b)=>b-a);
+    const t = topTricks(pxHand(si, Nr), pxHand(si, Sr)), x = t.suits[si], sn = SNAME[SUITS[si]], tp = tops.map(r=>RANK[r]||r).join(' ');
+    const why = x.run ? 'Jullie hebben samen '+tp+' en de tegenpartij heeft maar '+NW[x.opp]+' kaart'+(x.opp===1 ? '' : 'en')+' in '+sn+'. Na '+NW[Math.min(x.k, x.maxLen)]+' ronde'+(Math.min(x.k,x.maxLen)===1 ? '' : 'n')+' zijn die op: de hele kleur is hoog. Je langste hand heeft er '+NW[x.maxLen]+', dus '+x.tricks+' slagen.'
+      : x.short ? 'Jullie hebben samen '+tp+', maar je langste hand heeft maar '+NW[x.maxLen]+' kaarten in '+sn+'. Je maakt nooit meer slagen dan je langste hand kaarten heeft: '+x.tricks+', niet '+x.k+'.'
+      : 'Tel vanaf de aas naar beneden zonder gat: '+tp+'. De '+(RANK[gap]||gap)+' ontbreekt, dus daar stopt het. Dat '+(x.tricks===1 ? 'is 1 vaste slag' : 'zijn '+x.tricks+' vaste slagen')+'. Wat daarna komt moet je eerst ontwikkelen.';
+    const q0 = pxN('tellen', si, Nr, Sr, 'Je speelt SA. Dit is één kleur: boven de dummy, onder jouw hand. Hoeveel vaste slagen heb je in deze kleur?', x.tricks, why, '3SA');
+    q0.d.kind = 'kleur-'+(x.run ? 'run' : x.short ? 'kort' : 'gat'); return q0;
+  }
+}
 function explainT(q){
+  if(q.d.why) return q.d.why;
   const d = q.d, R = [14,13,12,11,10,9,8,7,6,5,4,3,2];
   const parts = SUITS.map((s,i)=>{
     const x = d.suits[i], sym = '<span class="'+s+'">'+SYM[s]+'</span> ';
@@ -4407,11 +4458,30 @@ const S_TEMPLATES = [
      'Speel de vrouw voor vanuit {Y} en laat haar doorlopen als de heer niet komt',
      'Speel klein vanuit {X} naar de vrouw in {Y}'],
    shorts:['aas slaan','vrouw voorspelen en laten lopen','naar de vrouw spelen'], tips:{0:'Een aas loopt niet weg. Sla je hem meteen, dan maakt de heer altijd een slag. Laat eerst de vrouw lopen: de aas ligt klaar als de heer verschijnt.'}, odds:n=>[pShort(n,1), 0.5, 0],
-   why:()=>'Hier mag je een honneur voorspelen, omdat je de boer en de 10 erachter hebt. Zit de heer vóór de aas, dan maak je alle drie de slagen: legt de tegenstander de heer, dan neem je de aas, en legt hij klein, dan loopt de vrouw door.'}
+   why:()=>'Hier mag je een honneur voorspelen, omdat je de boer en de 10 erachter hebt. Zit de heer vóór de aas, dan maak je alle drie de slagen: legt de tegenstander de heer, dan neem je de aas, en legt hij klein, dan loopt de vrouw door.'},
+  // v405: drie situaties erbij
+  {x:[14,12], y:[], xs:[4,4], ys:[5,5], good:0, goal:'alle slagen', opts:[
+     'Sla de aas en hoop dat de heer valt',
+     'Speel klein vanuit {Y} naar de vrouw in {X}',
+     'Speel de vrouw voor vanuit {X}'],
+   shorts:['aas slaan','naar de vrouw spelen','vrouw voorspelen'], tips:{1:'Met elf kaarten heeft de tegenpartij er maar twee. De heer zit dan iets vaker kaal dan goed voor de snit: slaan wint net.'}, odds:n=>[pShort(n,1), 0.48, 0],
+   why:()=>'Je hebt samen elf kaarten; de tegenpartij heeft er maar twee. Zitten die 1-1, dan valt de heer onder de aas, en dat gebeurt iets vaker dan dat de snit lukt. Vuistregel: met elf kaarten sla je de aas, met tien of minder snijd je.'},
+  {x:[13,11,10], y:[], xs:[0,1], ys:[3,3], good:1, goal:'twee slagen', opts:[
+     'Speel de heer voor vanuit {X}',
+     'Speel klein vanuit {Y} naar de boer in {X}, en doe dat later nog een keer',
+     'Speel klein vanuit {Y} naar de heer in {X}'],
+   shorts:['heer voorspelen','twee keer naar de boer spelen','naar de heer spelen'], tips:{2:'Naar de heer spelen lukt alleen als de aas goed zit. Speel je twee keer naar de boer en de tien, dan heb je twee kansen: de vrouw goed, of de aas goed.'}, odds:n=>[0.02, 0.75, 0.5],
+   why:()=>'Je mist de aas en de vrouw. Speel naar de boer toe, en later nog een keer naar de tien. Je maakt twee slagen als de vrouw goed zit, en ook als de aas goed zit: alleen als ze allebei verkeerd zitten gaat het mis. Dat is drie van de vier keer goed.'},
+  {x:[14,11], y:[13], xs:[1,1], ys:[2,2], good:1, goal:'drie slagen', opts:[
+     'Sla de aas en de heer en hoop dat de vrouw valt',
+     'Speel eerst de heer in {Y} en daarna klein naar de boer in {X}',
+     'Speel de boer voor vanuit {X}'],
+   shorts:['aas en heer slaan','heer, dan naar de boer','boer voorspelen'], tips:{2:'De boer voorspelen helpt niet: de vrouw gaat erop en je hebt de tien niet om daarvan te profiteren. Speel naar de boer toe.'}, odds:n=>[pShort(n,2), 0.5+pShort(n,1)/2, 0],
+   why:()=>'Je mist de vrouw en hebt samen zes kaarten. Speel eerst de heer, voor het geval de vrouw kaal zit, en daarna klein naar de boer. Zit de vrouw vóór de boer, dan maak je drie slagen. Aas en heer slaan lukt alleen als de vrouw met hooguit één kleintje zit.'}
 ];
 function newSQ(sk){
-  const pool = +sk===1 ? [0,3,4,6] : +sk===2 ? [1,5] : +sk===3 ? [2] : null;
-  const t = S_TEMPLATES[pool ? pool[rnd(pool.length)] : rnd(S_TEMPLATES.length)], si = rnd(4);
+  const pool = +sk===1 ? [0,3,4,6,7] : +sk===2 ? [1,5,8] : +sk===3 ? [2,9] : null;
+  const ti = pool ? pool[rnd(pool.length)] : rnd(S_TEMPLATES.length), t = S_TEMPLATES[ti], si = rnd(4);
   const nx = t.xs[0]+rnd(t.xs[1]-t.xs[0]+1), ny = t.ys[0]+rnd(t.ys[1]-t.ys[0]+1);
   const small = [2,3,4,5,6,7,8,9].filter(r=>!t.x.includes(r) && !t.y.includes(r));
   for(let i=small.length-1;i>0;i--){ const j = rnd(i+1); const z = small[i]; small[i] = small[j]; small[j] = z; }
@@ -4429,7 +4499,7 @@ function newSQ(sk){
   const ranked = [0,1,2].sort((a,b)=>odds[b]-odds[a]);
   const oddsText = 'Kans op '+t.goal+': '+ranked.map(i=>t.shorts[i]+' '+pct(odds[i])).join(', ')+'.';
   const hx = makeHand(X.map(r=>si*13+r-2)), hy = makeHand(Y.map(r=>si*13+r-2));
-  return {conv:'snijden', idx:1, d:{why:fill(t.why(total))+' <span class="odds">'+oddsText+'</span>', goodText:fill(t.opts[good]), total, odds, good}, me: xDummy ? hy : hx, dummy: xDummy ? hx : hy,
+  return {conv:'snijden', idx:1, d:{why:fill(t.why(total))+' <span class="odds">'+oddsText+'</span>', goodText:fill(t.opts[good]), total, odds, good, kind:'t'+ti+(typeof t.good==='function' ? (good===0 ? '-slaan' : '-snijden') : '')+(xDummy ? '-d' : '-h')}, me: xDummy ? hy : hx, dummy: xDummy ? hx : hy,
           partner:null, only:si, answer:'c'+good, choices, box:'choice', last:null, auction:null, hasNext:false};
 }
 // ---------- Spelen: de uitkomstkaart ----------
@@ -5419,7 +5489,7 @@ function newTSQ(mode, stepKey){
 function newRUQ(opt){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   for(;;){
-    const X = opt ? opt.X : SUITS[rnd(4)], xi = SI[X], over = '2'+X;            // tussenbod: 2 schoppen, harten, ruiten of klaveren
+    const X = opt ? opt.X : SUITS[rnd(3)], xi = SI[X], over = '2'+X;            // tussenbod: 2 schoppen, harten of ruiten; na 2 klaveren blijft alles gelden (geen Rubensohl)
     const WL = opt ? opt.wants : ['spelen2','spelen2','transfer','transfer','transferzwak','stayman','stayman','pas','straf','sa','sa','nostop','nostop'], want = WL[rnd(WL.length)];
     if(want==='spelen2' && X==='S') continue;
     if(want==='transferzwak' && X==='C') continue;      // na 2 klaveren past elke zwakke kleur nog op 2-niveau
@@ -6513,7 +6583,7 @@ function newRUQ2(){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   for(;;){
     const want = (state.rubm==='inv' ? ['afmaken','afmaken','acc','acc','pas2','stay','stay','stay','stay','o3s','o3sgeen'] : ['afmaken','afmaken','super','super','pas2','stay','stay','stay','stay','o3s','o3sgeen'])[rnd(11)];
-    const X = SUITS[rnd(4)], xi = SI[X], over = '2'+X;
+    const X = SUITS[rnd(3)], xi = SI[X], over = '2'+X;
     if(want==='pas2' && X==='S') continue;
     if(want==='super' && X==='S') continue;
     const um = [1,0].filter(i=>i!==xi);                               // ongeboden hoge kleuren, harten eerst
@@ -6586,7 +6656,7 @@ function newRUQ2(){
 function newRUQ3(){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   for(;;){
-    const X = SUITS[rnd(4)], xi = SI[X], over = '2'+X;
+    const X = SUITS[rnd(3)], xi = SI[X], over = '2'+X;
     const INV = state.rubm==='inv';
     const want = (INV ? ['zwak','inv','inv','manche6','manche6','sa5','sa5','tweede','tweede','splinter'] : ['zwak','zwak','manche6','manche6','sa5','sa5','tweede','tweede','splinter'])[rnd(INV ? 10 : 9)];
     if(want==='zwak' && X==='C') continue;
@@ -6688,7 +6758,7 @@ function newRUQ5(){
 function newRUQ6(){
   const B = bidHTML, TR = {C:'2N', D:'3C', H:'3D', S:'3H'};
   const v = ['dont','dont','multi','multi','landy','landy'][rnd(6)];
-  if(v==='dont'){ const X = rnd(2) ? 'C' : 'D';
+  if(v==='dont'){ const X = 'D';
     return newRUQ({X, tag:'dont'+X, wants:['spelen2','spelen2','transfer','transfer','sa','nostop','pas'].concat(X==='D' ? ['transferzwak'] : []), say: X==='C' ? 'DONT: klaveren en een hogere kleur' : 'DONT: ruiten en een hoge kleur',
       pre:'Het volgbod is conventioneel, maar één kleur is bekend: '+SNAME[X]+'. Dan werkt Rubensohl precies alsof Oost gewoon '+B('2'+X)+' bood. '}); }
   for(;;){
@@ -8217,13 +8287,20 @@ function pxQ(conv, si, north, south, prompt, opts, good, why, extra){
 const PXN = {14:'aas', 13:'heer', 12:'vrouw', 11:'boer', 10:'tien'};
 // ---------- Ophouden ----------
 function newOPH(){
-  const si = rnd(4), six = rnd(2)===1, aceSouth = rnd(3)>0;
-  const sm = pxSmall(5, []), withA = [14, sm[0], sm[1]], other = six ? [sm[2], sm[3], sm[4]] : [sm[2], sm[3]];
+  const si = rnd(4), mode = ['5','5','6','6','7','7','wie','wie'][rnd(8)], nOther = mode==='6' ? 3 : mode==='7' ? 4 : 2, aceSouth = rnd(3)>0;      // v406: ook zeven kaarten (meteen nemen) en de vervolgvraag: aan wie verlies je de slag?
+  const sm = pxSmall(6, []), withA = [14, sm[0], sm[1]], other = sm.slice(2, 2+nOther);
   const total = 3+other.length, times = 7-total, lead = cardHTML(SUITS[si]+13);
+  if(mode==='wie'){ const sy0 = sySpan(SUITS[si]);
+    const o2 = [{title:'Aan Oost', sub:'Oost mag aan slag komen'}, {title:'Aan West', sub:'West mag aan slag komen', tip:'West heeft nog twee vrije kaarten in zijn kleur. Komt hij aan slag, dan maakt hij die allebei.'}, {title:'Maakt niet uit', sub:'Beide tegenstanders zijn even gevaarlijk', tip:'Het maakt juist veel uit: West heeft nog vrije kaarten, Oost heeft geen kaart meer in de kleur.'}];
+    const w2 = 'Jullie hadden samen vijf kaarten, dus de tegenpartij acht. West kwam uit van zijn lange kleur: reken op vijf bij West en drie bij Oost. Na drie rondes heeft Oost er geen meer, en West nog twee die hoog zijn. Komt Oost aan slag, dan kan hij de kleur niet terugspelen. Komt West aan slag, dan ga je down. Daarvoor hield je de aas op: verlies de slag aan Oost.';
+    const q1 = pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. Je hield de aas twee keer op en nam de derde ronde. Nu moet je in een andere kleur een slag afgeven. Aan wie verlies je die het liefst?', o2, 0, w2, {lead:SUITS[si]+13});
+    q1.d.kind = 'wie-'+(aceSouth ? 'z' : 'n'); return q1; }
   const opts = [{title:'Meteen', sub:'Neem de eerste slag met de aas', tip:'De aas is je enige stop. Neem je hem meteen, dan heeft Oost nog een kaart in de kleur om naar West terug te spelen. Wacht tot Oost er geen meer heeft.'}, {title:'In de tweede ronde', sub:'Duik één keer'}, {title:'In de derde ronde', sub:'Duik twee keer'}];
   const why = 'Regel van 7: tel je kaarten in deze kleur bij elkaar op en trek dat af van 7. Je hebt er samen '+total+', dus 7 − '+total+' = '+times+': zo vaak houd je de aas op. Heeft West een vijfkaart, dan heeft Oost daarna geen kaart meer in de kleur. Komt Oost later aan slag, dan kan hij partners vrije kaarten niet bereiken.';
   const sy = sySpan(SUITS[si]), q0 = pxQ('ophouden', si, aceSouth ? other : withA, aceSouth ? withA : other, 'Je speelt 3SA. West blijft de kleur spelen. De aas is je enige stop, en je moet later nog een keer van slag. Wanneer neem je de aas?', opts, times, why,
     {lead:SUITS[si]+13, tbl:{w:{t:'blijft '+sy+' spelen'}, [aceSouth ? 's' : 'n']:{t:sy+' A: enige stop', s:'samen '+total+' kaarten'}}});
+  if(times===0) q0.d.why = 'Regel van 7: tel je kaarten in deze kleur bij elkaar op en trek dat af van 7. Je hebt er samen zeven, dus 7 − 7 = 0: ophouden hoeft niet. De tegenpartij heeft er samen zes. Heeft West er vijf, dan heeft Oost er maar één, en die is na de eerste slag al weg. Neem de aas meteen; ophouden geeft de tegenpartij alleen de kans om van kleur te wisselen.';
+  q0.d.kind = 'n'+total+'-'+(aceSouth ? 'z' : 'n');
   q0.d.promptS = 'Je speelt 3SA en moet later nog een keer van slag. Wanneer neem je de aas?'; return q0;
 }
 // ---------- De gevaarlijke hand ----------
@@ -8241,13 +8318,23 @@ function newGEV(sk){
     : 'Je eigen hand (Zuid) heeft schoppenheer en een kleintje; de aas zit bij West. Komt Oost aan slag, dan speelt hij schoppen door je heer heen: Oost is de gevaarlijke hand.';
   const tbl = v==='lead' ? {w:{t:'gevaarlijk', s:'heeft vrije '+sp, dg:1}, e:{t:'veilig'}} : v==='dummyK' ? {n:{t:sp+' H x'}, e:{t:sp+' A', s:'veilig'}, w:{t:'gevaarlijk', s:'speelt '+sp+' door de heer', dg:1}} : {s:{t:sp+' H x'}, w:{t:sp+' A', s:'veilig'}, e:{t:'gevaarlijk', s:'speelt '+sp+' door je heer', dg:1}};
   const why = 'Je kunt de vrouw naar twee kanten zoeken. Kies de kant waarbij een mislukte snit aan de ongevaarlijke hand verliest. "'+opts[good].title+'" verliest alleen aan '+(good===0 ? loseA : loseB)+', en dat is hier '+safe+', de veilige hand. De andere snit verliest aan '+(good===0 ? loseB : loseA)+'. Lukt de snit niet, dan staat je contract nog steeds.';
-  const q0 = pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why, {tbl});
+  if(+sk!==1 && +sk!==2 && rnd(5)<2){            // v410: eerst herkennen wie gevaarlijk is
+    const fact = v==='lead' ? 'West kwam uit in schoppen en heeft daar nog vrije kaarten.' : v==='dummyK' ? 'De dummy (Noord) heeft schoppenheer en een kleintje; de aas zit bij Oost.' : 'Je eigen hand (Zuid) heeft schoppenheer en een kleintje; de aas zit bij West.';
+    const o2 = [{title:'West', sub:'West mag niet aan slag komen'}, {title:'Oost', sub:'Oost mag niet aan slag komen'}, {title:'Allebei even gevaarlijk', sub:'Het maakt niet uit wie aan slag komt'}];
+    const w2 = v==='lead' ? 'West heeft vrije schoppen. Komt hij aan slag, dan maakt hij ze en ga je down. Oost kan alleen schade doen als hij nog een schoppen heeft om terug te spelen. West is de gevaarlijke hand: verlies een slag liever aan Oost.'
+      : v==='dummyK' ? 'Een heer met een kleintje is alleen een stop als de tegenpartij er náártoe moet spelen. Speelt West schoppen, dan speelt hij dóór de heer van de dummy heen: Oost wacht met de aas en de heer maakt niets. Speelt Oost zelf schoppen, dan maakt de heer een slag. West is dus de gevaarlijke hand.'
+      : 'Een heer met een kleintje is alleen een stop als de tegenpartij er náártoe moet spelen. Speelt Oost schoppen, dan speelt hij dóór jouw heer heen: West wacht met de aas en je heer maakt niets. Speelt West zelf schoppen, dan maakt je heer een slag. Oost is dus de gevaarlijke hand.';
+    const t2 = v==='lead' ? {w:{t:'heeft vrije '+sp}} : v==='dummyK' ? {n:{t:sp+' H x'}, e:{t:sp+' A'}} : {s:{t:sp+' H x'}, w:{t:sp+' A'}};
+    const q1 = pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+fact+' Wie is de gevaarlijke hand?', o2, dangerWest ? 0 : 1, w2, {tbl:t2});
+    q1.choices = o2.map((o,i)=>({id:'c'+i, text:o.title, title:o.title, sub:o.sub}));
+    q1.d.promptS = 'Je speelt 3SA. Wie is de gevaarlijke hand?'; q1.d.kind = 'wie-'+v; return q1; }
+  const q0 = pxQ('gevaar', si, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA. '+reden+' In deze kleur moet je de vrouw zoeken. Hoe speel je?', opts, good, why, {tbl}); q0.d.kind = 'snit-'+v+(pNorth ? '-d' : '-h');
   q0.d.promptS = 'Je speelt 3SA. '+(dangerWest ? 'West' : 'Oost')+' is de gevaarlijke hand. In deze kleur moet je de vrouw zoeken. Hoe speel je?';
   return q0;
 }
 // ---------- Entrees en deblokkeren ----------
 function newENT(sk){
-  const si = rnd(4), t = +sk===1 ? rnd(3) : +sk===2 ? 3 : rnd(4), longNorth = t===3 ? true : rnd(2)===1;
+  const si = rnd(4), t = +sk===1 ? [0,1,2,4,5][rnd(5)] : +sk===2 ? 3 : rnd(6), longNorth = t===3 ? true : rnd(2)===1;      // v409: t4 en t5 zijn overnemen
   const lName = longNorth ? 'de dummy' : 'je hand', sName = longNorth ? 'je hand' : 'de dummy';
   let L, S, opts, good = 0, why, prompt = 'Je speelt 3SA en wilt alle slagen in deze kleur maken. '+(longNorth ? 'De dummy' : 'Je hand')+' heeft geen andere entree. Welke kaart speel je eerst?';
   if(t===3){
@@ -8255,6 +8342,15 @@ function newENT(sk){
     prompt = 'Je speelt 3SA en hebt vier slagen in deze kleur nodig. De dummy heeft geen andere entree. Hoe begin je?';
     opts = [{title:'Eerst een slag afgeven', sub:'Speel de eerste ronde klein van beide kanten'}, {title:'Aas en heer slaan', sub:'En daarna een kleintje', tip:'Sla je de hoge kaarten eerst, dan heb je straks geen kleintje meer om naar de dummy over te steken. Geef eerst de slag af die je toch kwijt bent.'}, {title:'Aas slaan, dan klein', sub:'De heer bewaar je', tip:'Sla je de hoge kaarten eerst, dan heb je straks geen kleintje meer om naar de dummy over te steken. Geef eerst de slag af die je toch kwijt bent.'}];
     why = 'Je moet hoe dan ook één slag in de kleur afgeven. Doe dat meteen, nu je nog een kleintje in je hand hebt om terug te komen. Daarna speel je naar aas en heer, en bij een 3-3-verdeling zijn de laatste twee kaarten vrij. Sla je eerst aas en heer, dan heb je geen kaart meer om de dummy te bereiken.';
+  }else if(t===4){
+    const sm = pxSmall(2, []); S = [14,12]; L = [13,11,10,sm[0],sm[1]];
+    opts = [{title:'Aas, dan de vrouw overnemen', sub:'Speel de aas, daarna de vrouw en leg de heer erop'}, {title:'Aas, dan de vrouw laten houden', sub:'Speel aas en vrouw uit '+sName, tip:'Dan zit je met aas en vrouw aan de korte kant vast: de heer, boer en tien in '+lName+' kun je niet meer bereiken.'}, {title:'Klein uit '+lName, sub:'Naar de vrouw in '+sName, tip:'Zo maak je de vrouw, maar daarna blokkeert de kleur nog steeds op de aas.'}];
+    why = 'Aas en vrouw zitten samen aan de korte kant. Speel de aas, speel dan de vrouw en neem die over met de heer in '+lName+'. Dat kost niets, want je hebt de boer en de tien erachter. Nu ben je aan de lange kant en maak je de rest. Laat je de vrouw houden, dan is '+lName+' onbereikbaar.';
+  }else if(t===5){
+    const sm = pxSmall(2, []); S = [13]; L = [14,12,11,sm[0],sm[1]];
+    opts = [{title:'De heer overnemen met de aas', sub:'Speel de heer uit '+sName+' en leg de aas erop'}, {title:'De heer laten houden', sub:'Speel de heer en leg klein in '+lName, tip:'De heer maakt de slag, maar daarna heb je geen kaart meer om '+lName+' te bereiken: aas, vrouw en boer blijven liggen.'}, {title:'Klein uit '+lName, sub:'Naar de kale heer in '+sName, tip:'Dat is hetzelfde als de heer laten houden: je zit daarna aan de verkeerde kant.'}];
+    why = 'De heer zit kaal aan de korte kant en '+lName+' heeft geen andere entree. Neem de heer over met de aas: je geeft een honneur op, maar je bent aan de lange kant en maakt daarna de vrouw en de boer, en vaak ook de kleintjes. Laat je de heer houden, dan maak je maar één slag in de kleur.';
+    prompt = 'Je speelt 3SA en wilt zoveel mogelijk slagen in deze kleur maken. '+(longNorth ? 'De dummy' : 'Je hand')+' heeft geen andere entree. Hoe speel je?';
   }else{
     const sm = pxSmall(4, []);
     if(t===0){ S = [13,sm[0]]; L = [14,12,sm[1],sm[2],sm[3]]; }
@@ -8264,7 +8360,7 @@ function newENT(sk){
     opts = [{title:'De '+hi+' uit '+sName, sub:'De hoge kaart van de korte kant eerst'}, {title:'De '+lt+' uit '+lName, sub:'Begin bij de lange kant', tip: lt==='aas' ? 'Die aas heb je straks nodig om bij de lange kleur te komen. Speel eerst de hoge kaarten van de korte kant, anders blokkeert de kleur.' : undefined}, {title:'Klein uit '+sName, sub:'Naar de '+lt+' in '+lName}];
     why = 'Speel de hoge kaarten van de korte kant eerst. Begin met de '+hi+' uit '+sName+(t===2 ? ', daarna de vrouw' : '')+', en steek dan met je kleintje over naar '+lName+'. Begin je bij de lange kant, dan blijft de '+hi+' aan het eind alleen over: de kleur blokkeert en de rest van '+lName+' is onbereikbaar.';
   }
-  return pxQ('entree', si, longNorth ? L : S, longNorth ? S : L, prompt, opts, good, why);
+  const q0 = pxQ('entree', si, longNorth ? L : S, longNorth ? S : L, prompt, opts, good, why); q0.d.kind = 't'+t+(longNorth ? '-d' : '-h'); return q0;
 }
 // ---------- Veiligheidsspel ----------
 function newVEI(sk){
@@ -8342,18 +8438,38 @@ function newCMB(){
   return pxQ('combi', 2, pNorth ? P : Q, pNorth ? Q : P, 'Je speelt 3SA en hebt nog één slag nodig. Komt de tegenpartij aan slag, dan ga je down. In klaveren heb je '+other+'. Dit zijn je ruiten. Wat doe je eerst?', opts, 0, why);
 }
 // ---------- Lange kleur vrijspelen ----------
-function newVRY(sk){
-  const si = 1+rnd(3), t = +sk===1 ? 0 : +sk===2 ? 1+rnd(2) : rnd(3), sm = pxSmall(5, []);
-  let N, S, split, ans, why;
-  if(t===0){
-    N = [14,sm[0],sm[1],sm[2],sm[3]]; S = [sm[4]]; split = '4-3'; ans = 3;
-    why = 'De tegenpartij heeft zeven kaarten, 4-3 verdeeld. Na vier rondes heeft niemand er nog één, en is de vijfde kaart van de dummy vrij. Ronde één is de aas; daarna troef je drie keer in je hand. Voor de tweede en derde troever moet je telkens terug naar de dummy, en daarna nog een keer om de vrije kaart te spelen: drie entrees.';
-  }else{
-    N = [14,13,sm[0],sm[1],sm[2]]; S = [sm[3],sm[4]];
-    if(t===1){ split = '3-3'; ans = 1; why = 'De tegenpartij heeft zes kaarten, 3-3 verdeeld. Speel aas en heer en troef de derde ronde in je hand: nu zijn de laatste twee kaarten van de dummy vrij. Je hebt één entree nodig om ze te gaan halen.'; }
-    else { split = '4-2'; ans = 2; why = 'De tegenpartij heeft zes kaarten, 4-2 verdeeld. Speel aas en heer en troef de derde ronde. Eén tegenstander heeft dan nog een kaart: ga terug naar de dummy en troef nog een keer. Daarna heb je nog een entree nodig om de vrije vijfde kaart te spelen: twee entrees.'; }
+function newVRY(sk){      // v407: vijf holdings/verdelingen, en naast entrees ook: hoeveel rondes, hoeveel vrije kaarten, welke verdeling is het waarschijnlijkst
+  const si = 1+rnd(3), sm = pxSmall(5, []), SP = '<span class="S">'+SYM.S+'</span>';
+  const C = [
+    {N:[14,sm[0],sm[1],sm[2],sm[3]], S:[sm[4]], split:'4-3', ent:3, rounds:4, key:'a5-43', opp:7,
+     why:'De tegenpartij heeft zeven kaarten, 4-3 verdeeld. Na vier rondes heeft niemand er nog één, en is de vijfde kaart van de dummy vrij. Ronde één is de aas; daarna troef je drie keer in je hand. Voor de tweede en derde troever moet je telkens terug naar de dummy, en daarna nog een keer om de vrije kaart te spelen: drie entrees.'},
+    {N:[14,13,sm[0],sm[1],sm[2]], S:[sm[3],sm[4]], split:'3-3', ent:1, rounds:3, key:'ah5-33', opp:6,
+     why:'De tegenpartij heeft zes kaarten, 3-3 verdeeld. Speel aas en heer en troef de derde ronde in je hand: nu zijn de laatste twee kaarten van de dummy vrij. Je hebt één entree nodig om ze te gaan halen.'},
+    {N:[14,13,sm[0],sm[1],sm[2]], S:[sm[3],sm[4]], split:'4-2', ent:2, rounds:4, key:'ah5-42', opp:6,
+     why:'De tegenpartij heeft zes kaarten, 4-2 verdeeld. Speel aas en heer en troef de derde ronde. Eén tegenstander heeft dan nog een kaart: ga terug naar de dummy en troef nog een keer. Daarna heb je nog een entree nodig om de vrije vijfde kaart te spelen: twee entrees.'},
+    {N:[14,13,sm[0],sm[1],sm[2],sm[3]], S:[sm[4]], split:'3-3', ent:1, rounds:3, key:'ah6-33', opp:6,
+     why:'De tegenpartij heeft zes kaarten, 3-3 verdeeld. Speel aas en heer (op de heer gooi je iets weg) en troef de derde ronde in je hand. Nu zijn de laatste drie kaarten van de dummy vrij. Je hebt één entree nodig om ze te gaan halen.'},
+    {N:[14,13,sm[0],sm[1],sm[2],sm[3]], S:[sm[4]], split:'4-2', ent:2, rounds:4, key:'ah6-42', opp:6,
+     why:'De tegenpartij heeft zes kaarten, 4-2 verdeeld. Speel aas en heer en troef de derde ronde. Eén tegenstander heeft dan nog een kaart: ga terug naar de dummy en troef nog een keer. Daarna heb je nog een entree nodig om de twee vrije kaarten te spelen: twee entrees.'}];
+  const c = C[+sk===1 ? 0 : +sk===2 ? 1+rnd(2) : rnd(5)], mode = (+sk===1 || +sk===2) ? 'ent' : ['ent','ent','ent','rondes','vrij','kans'][rnd(6)];
+  const intro = 'Je speelt 4'+SP+' en wilt de lange kleur van de dummy vrijspelen door te troeven. ', nL = c.N.length, free = nL-c.rounds, NW = ['nul','één','twee','drie','vier','vijf','zes'];
+  let q0;
+  if(mode==='kans'){
+    const opts = c.opp===7 ? [{title:'4-3', sub:'Zo gelijk mogelijk'}, {title:'5-2', sub:'Eén tegenstander heeft er vijf'}, {title:'6-1', sub:'Bijna alles bij één tegenstander'}] : [{title:'3-3', sub:'Precies gelijk', tip:'Dat lijkt logisch, maar 3-3 komt maar in 36% van de gevallen voor. 4-2 is met 48% waarschijnlijker.'}, {title:'4-2', sub:'Eén tegenstander heeft er vier'}, {title:'5-1', sub:'Eén tegenstander heeft er vijf'}];
+    const good = c.opp===7 ? 0 : 1;
+    const why = c.opp===7 ? 'Zeven kaarten zitten in 62% van de gevallen 4-3, in 31% 5-2 en in 7% 6-1. Vuistregel: een oneven aantal kaarten zit meestal zo gelijk mogelijk verdeeld. Reken dus op 4-3 en tel daar je entrees op.'
+      : 'Zes kaarten zitten in 48% van de gevallen 4-2, in 36% 3-3 en in 15% 5-1. Vuistregel: een even aantal kaarten zit meestal níet precies gelijk. Reken dus op 4-2: dan moet je een keer extra troeven en heb je een entree meer nodig.';
+    q0 = pxQ('vrij', si, c.N, c.S, intro+'De tegenpartij heeft '+NW[c.opp]+' kaarten in deze kleur. Welke verdeling is het waarschijnlijkst?', opts, good, why, {contract4S:true});
+    q0.d.kind = 'kans-'+c.opp; return q0;
   }
-  return pxN('vrij', si, N, S, 'Je speelt 4'+'<span class="S">'+SYM.S+'</span> en wilt de lange kleur van de dummy vrijspelen door te troeven. De kleur zit '+split+'. Hoeveel entrees naar de dummy heb je nodig buiten deze kleur?', ans, why, '4S');
+  if(mode==='rondes'){
+    q0 = pxN('vrij', si, c.N, c.S, intro+'De kleur zit '+c.split+'. Na hoeveel rondes heeft de tegenpartij geen kaarten meer in deze kleur?', c.rounds, 'De kleur zit '+c.split+': de tegenstander met de meeste kaarten heeft er '+NW[c.rounds]+'. Pas na '+NW[c.rounds]+' rondes heeft hij er geen meer, en dan zijn de kaarten die de dummy overhoudt vrij.', '4S');
+    q0.d.numlbl = 'Aantal rondes';
+  }else if(mode==='vrij'){
+    q0 = pxN('vrij', si, c.N, c.S, intro+'De kleur zit '+c.split+'. Hoeveel vrije kaarten houdt de dummy over als de tegenpartij er geen meer heeft?', free, 'De dummy heeft '+NW[nL]+' kaarten. De kleur zit '+c.split+', dus na '+NW[c.rounds]+' rondes heeft de tegenpartij er geen meer. De dummy houdt dan '+nL+' − '+c.rounds+' = '+free+' vrije kaart'+(free===1 ? '' : 'en')+' over. Elke vrije kaart is een slag, of een plek om een verliezer op weg te gooien.', '4S');
+    q0.d.numlbl = 'Vrije kaarten';
+  }else q0 = pxN('vrij', si, c.N, c.S, intro+'De kleur zit '+c.split+'. Hoeveel entrees naar de dummy heb je nodig buiten deze kleur?', c.ent, c.why, '4S');
+  q0.d.kind = mode+'-'+c.key; return q0;
 }
 // ---------- Weggooien: voor of na troef trekken ----------
 function newWEG(){
@@ -8520,14 +8636,32 @@ function newSGQ34(step, rom0, pick, DE){
           box:'lead', last:null, auction:null, hasNext:false};
 }
 // ---------- Tegenspel: lengtesignaal ----------
-function newLEN(sk){
-  const si = rnd(4), three = rnd(2)===1, right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1);
+function newLEN(sk){      // v408: twee tot vijf kaarten, en ook partners signaal lezen
+  const si = rnd(4), right = (+sk===2 ? true : +sk===1 ? false : rnd(2)===1), mode = ['2','3','2','3','4','5','lees','lees'][rnd(8)];
   const pool = [9,8,7,6,5,4,3,2]; for(let i=pool.length-1;i>0;i--){ const j = rnd(i+1); const z = pool[i]; pool[i] = pool[j]; pool[j] = z; }
-  const mine = pool.slice(0, three ? 3 : 2).sort((a,b)=>b-a), dummy = [13,12,11,10].concat(pool.slice(3,4));
-  const opts = mine.map(r=>({title:pxCard(r), sub: r===mine[0] ? 'Je hoogste' : r===mine[mine.length-1] ? 'Je laagste' : 'Je middelste'}));
-  const rev = CNT==='rev', low1 = three!==rev;          // eerst de laagste: oneven bij gewoon lengtesignaal, even bij omgekeerd
-  const why = (three ? 'Je hebt drie kaarten: een oneven aantal. ' : 'Je hebt twee kaarten: een even aantal. ')+'Jullie spelen '+(rev ? 'laag-hoog is even' : 'hoog-laag is even')+', dus '+(low1 ? 'speel eerst je laagste, '+pxCard(mine[mine.length-1]).toLowerCase() : 'speel eerst je hoogste, '+pxCard(mine[0]).toLowerCase())+'. Partner kan nu uitrekenen hoeveel kaarten de leider heeft, en weet hoe lang hij zijn aas moet ophouden.';
-  return pxQ('lengte', si, dummy, mine, (right ? 'West' : 'Oost')+' speelt 3SA en speelt deze kleur naar de dummy. De leider kan de dummy alleen via deze kleur bereiken: in de andere kleuren heeft de dummy geen entree. Partner heeft waarschijnlijk de aas. Welke kaart speel je bij om je lengte te tonen?', opts, low1 ? mine.length-1 : 0, why, {sideDummy:true, dummyRight:right});
+  const rev = CNT==='rev', afs = 'Jullie spelen '+(rev ? 'laag-hoog is even' : 'hoog-laag is even'), who = (right ? 'West' : 'Oost');
+  const sit = who+' speelt 3SA en speelt deze kleur naar de dummy, die verder geen entree heeft. ';
+  if(mode==='lees'){
+    const mine = pool.slice(0,2).sort((a,b)=>b-a), dummy = [13,12,11,10].concat(pool.slice(2,3)), pc = pool.slice(3,5).sort((a,b)=>b-a), hiFirst = rnd(2)===1, even = hiFirst!==rev;
+    const c1 = hiFirst ? pc[0] : pc[1], c2 = hiFirst ? pc[1] : pc[0];
+    const opts = [{title:'Een even aantal', sub:'Twee of vier kaarten'}, {title:'Een oneven aantal', sub:'Drie of vijf kaarten'}];
+    const why = 'Partner speelde eerst '+pxCard(c1).toLowerCase()+' en daarna '+pxCard(c2).toLowerCase()+': '+(hiFirst ? 'hoog-laag' : 'laag-hoog')+'. '+afs+', dus partner toont een '+(even ? 'even' : 'oneven')+' aantal. Tel dat op bij de dummy en je eigen kaarten: de rest heeft de leider.';
+    const q0 = pxQ('lengte', si, dummy, mine, sit+'Partner heeft de aas. Hij speelt eerst '+pxCard(c1).toLowerCase()+' en daarna '+pxCard(c2).toLowerCase()+'. Wat toont partner?', opts, even ? 0 : 1, why, {sideDummy:true, dummyRight:right});
+    q0.d.kind = 'lees-'+(hiFirst ? 'hl' : 'lh'); q0.choices = opts.map((o,i)=>({id:'c'+i, text:o.title, title:o.title, sub:o.sub})); return q0;
+  }
+  const n = +mode, mine = pool.slice(0,n).sort((a,b)=>b-a), dummy = [13,12,11,10].concat(n<=3 ? pool.slice(3,4) : []), odd = n%2===1, low1 = odd!==rev;          // eerst de laagste: oneven bij gewoon lengtesignaal, even bij omgekeerd
+  const NW = ['','','twee','drie','vier','vijf'], base = 'Je hebt '+NW[n]+' kaarten: een '+(odd ? 'oneven' : 'even')+' aantal. '+afs+', dus ';
+  const tail = ' Partner kan nu uitrekenen hoeveel kaarten de leider heeft, en weet hoe lang hij zijn aas moet ophouden.';
+  let q0;
+  if(n<=3){
+    const opts = mine.map(r=>({title:pxCard(r), sub: r===mine[0] ? 'Je hoogste' : r===mine[mine.length-1] ? 'Je laagste' : 'Je middelste'}));
+    q0 = pxQ('lengte', si, dummy, mine, sit+'Partner heeft waarschijnlijk de aas. Welke kaart speel je bij om je lengte te tonen?', opts, low1 ? mine.length-1 : 0, base+(low1 ? 'speel eerst je laagste, '+pxCard(mine[mine.length-1]).toLowerCase() : 'speel eerst je hoogste, '+pxCard(mine[0]).toLowerCase())+'.'+tail, {sideDummy:true, dummyRight:right});
+  }else{
+    const opts = [{title:'Begin hoog', sub:'Eerst een hoge kaart, daarna een lagere'}, {title:'Begin laag', sub:'Eerst je laagste, daarna een hogere'}];
+    q0 = pxQ('lengte', si, dummy, mine, sit+'Partner heeft waarschijnlijk de aas. Hoe toon je je lengte?', opts, low1 ? 1 : 0, base+(low1 ? 'begin je laag: eerst je laagste, daarna een hogere.' : 'begin je hoog: eerst een hoge kaart die je kunt missen, daarna een lagere.')+' Met een lange kleur werkt het net zo als met twee of drie kaarten: alleen even of oneven telt.'+tail, {sideDummy:true, dummyRight:right});
+    q0.choices = opts.map((o,i)=>({id:'c'+i, text:o.title, title:o.title, sub:o.sub}));
+  }
+  q0.d.kind = 'n'+n; return q0;
 }
 // ---------- Tegenspel: je aas ophouden ----------
 function newOPT(sk){
@@ -8851,6 +8985,37 @@ function tblChips(x){ let el = $('tchips'); if(!el){ el = document.createElement
   el.innerHTML = ['w','n','e','s'].filter(k=>x.tbl[k]).map(k=>{ const c = x.tbl[k]; return '<span class="tchip '+k+(c.dg ? ' dg' : '')+'">'+c.t+(c.s ? '<small>'+c.s+'</small>' : '')+'</span>'; }).join(''); }
 // v400: de onderliggende menu's nemen de kleur van hun blok op het openingsscherm over
 { const rm0 = renderModes; renderModes = function(){ const r = rm0.apply(this, arguments); try{ const t = nav[0] || 'home'; $('settings').dataset.sec = (t==='bieden' || t==='spelen' || t==='heel' || t==='doel') ? 'doel' : t; }catch(e){} return r; }; }
+// v403: de tegenpartij biedt 2 klaveren op jullie 1SA. Afspraak: alles blijft gelden; het doublet neemt de plaats in van jullie 2 klaveren.
+function newC2X(conv){
+  const B = bidHTML;
+  for(let t=0;t<400;t++){
+    const pup2 = conv==='puppet1' && PUP1==='2c', pup3 = conv==='puppet1' && !pup2;
+    const want = conv==='jacoby' ? 'tr' : conv==='stayman' ? ['x','x','x','pas'][rnd(4)] : 'pup';
+    const me = drawHand(fullDeck(), h=>{ const p = h.hcp, m5 = [0,1].filter(i=>h.len[i]>=5), m4 = [0,1].filter(i=>h.len[i]===4);
+      if(Math.max(...h.len)>6 || p>15 || h.len[3]>4) return null;
+      if(want==='tr') return (m5.length===1 && !m4.length && h.len[2]<5) ? {si:m5[0]} : null;
+      if(m5.length || h.len[2]>=6) return null;
+      if(want==='x') return (p>=8 && m4.length) ? {m:m4[0]} : null;
+      if(want==='pas') return (p<=7 && h.len[2]<5) ? {} : null;
+      return (p>=10 && [0,1].some(i=>h.len[i]===3 || h.len[i]===4) && Math.min(...h.len)>=2) ? {} : null; }, 60000);
+    if(!me) continue;
+    const n = drawHand(me.rest, isOpener, 6000); if(!n) continue;
+    const p = me.h.hcp, base = 'Oost pakt met '+B('2C')+' jullie 2-klaverenbod af. Afspraak: na hun '+B('2C')+' blijft alles gelden, en het doublet neemt de plaats in van jullie '+B('2C')+'. ';
+    let answer, why, kind;
+    if(want==='tr'){ const su = SUITS[me.r.si]; answer = su==='H' ? '2D' : '2H'; kind = 'tr-'+su;
+      why = base+'Jij hebt een '+NKAART[me.h.len[me.r.si]]+' '+SNAME[su]+': bied gewoon je Jacoby-transfer, '+B(answer)+'. Hun volgbod verandert daar niets aan.'; }
+    else if(want==='x'){ answer = 'X'; kind = 'stay';
+      why = base+'Jij hebt '+pts(p)+' en een vierkaart '+SNAME[SUITS[me.r.m]]+': zonder volgbod had je '+B('2C')+' geboden, Stayman. Doubleer nu: dat is dezelfde vraag. Partner antwoordt zoals op Stayman.'; }
+    else if(want==='pas'){ answer = 'pas'; kind = 'pas';
+      why = base+'Voor Stayman heb je 8 punten nodig en jij hebt '+pts(p)+', zonder vijfkaart hoog. Pas.'; }
+    else if(pup2){ answer = 'X'; kind = 'pup2';
+      why = base+'Jullie spelen Puppet Stayman via '+B('2C')+'. Met '+pts(p)+' en een drie- of vierkaart hoog had je '+B('2C')+' geboden. Doubleer nu: dat is dezelfde Puppet-vraag.'; }
+    else { answer = '3C'; kind = 'pup3';
+      why = 'Jullie spelen Puppet Stayman via '+B('3C')+'. Na hun '+B('2C')+' blijft alles gelden, dus '+B('3C')+' is nog steeds Puppet. Met '+pts(p)+' en een drie- of vierkaart hoog bied je '+B('3C')+'.'; }
+    return mkQ(conv, 1, {why, kind:'c2x-'+kind, c2x:1, prompt:'Partner opent 1SA en Oost biedt '+B('2C')+' (echt: klaveren). Bij jullie blijft dan alles gelden. Wat doe je?'}, me.h, n.h, answer, 'dbl', '2C', {start:1, calls:['1N','2C']});
+  }
+  return null;
+}
 // v401: variatie binnen een onderdeel. Van een handvol kandidaten kiest de app de soort vraag die je het langst niet (of nog nooit) hebt gehad.
 function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? '' : x.answer);
   if(d.kind!=null) return x.idx+':'+d.kind+':'+ans;
@@ -8859,6 +9024,7 @@ function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? 
 { const nq0 = newQuestion; let busy = false;
   newQuestion = function(conv, idx, stepKey){
     if(busy || conv==='fris') return nq0.apply(this, arguments);
+    if((conv==='stayman' || conv==='jacoby' || conv==='puppet1') && (stepKey==='alles' || stepKey==null) && Math.random()<.14){ try{ const x = newC2X(conv); if(x) return x; }catch(e){} }
     busy = true;
     try{ if(!state.vary || typeof state.vary!=='object') state.vary = {};
       const V = state.vary[conv] || (state.vary[conv] = {n:0, s:{}}); let best = null, bs = Infinity;
@@ -8868,6 +9034,22 @@ function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? 
       return nq0.apply(this, arguments);
     }finally{ busy = false; } };
 }
+// v405: telefoon — past het speelscherm net niet, dan krimpt de tafel precies zoveel dat er niets meer scrolt
+function phFit(){ try{ const m = document.querySelector('main.table'), T = [$('qstrip'), $('qtable')]; if(!m || !T[0]) return;
+  const P = ['width','height','min-width','min-height','max-width','max-height'], clr = () => T.forEach(e=>{ if(e) P.forEach(k=>e.style.removeProperty(k)); });
+  const fbx = $('fbtext'); if(fbx) fbx.style.removeProperty('max-height');
+  clr(); m.classList.remove('tight');
+  const fbFit = () => { if(LAPTOP() || !fbx || m.hidden) return; const over = m.scrollHeight - m.clientHeight; if(over>0 && fbx.clientHeight>0) fbx.style.setProperty('max-height', Math.max(64, fbx.clientHeight - over - 1)+'px', 'important'); };      // lange uitleg: die schuift dan binnen zijn eigen vak
+  const t = !T[0].hidden ? T[0] : null;      // alleen de tafel met de dummy tegenover je; de tafel met de dummy opzij schaalt niet los
+  if(LAPTOP() || m.hidden) return;
+  if(!t){ fbFit(); return; }
+  const shrink = lo => { for(let i=0;i<4;i++){ const over = m.scrollHeight - m.clientHeight; if(over<=0) return true; const h = t.getBoundingClientRect().height, nh = Math.max(lo, Math.floor(h - over - 1)); if(nh>=h) return false;
+    P.forEach(k=>t.style.setProperty(k, nh+'px', 'important')); } return m.scrollHeight<=m.clientHeight; };
+  if(!shrink(140)){ clr(); m.classList.add('tight'); if(!shrink(140)){ fbFit(); if(m.scrollHeight>m.clientHeight) shrink(104); } }            // past het met een leesbare tafel niet: eerst vervalt de toelichting onder de keuzes, pas daarna krimpt de tafel verder
+  }catch(e){} }
+function phFitSoon(){ phFit(); setTimeout(phFit, 0); requestAnimationFrame(()=>requestAnimationFrame(phFit)); }
+window.addEventListener('resize', phFitSoon);
+{ const a0 = answer; answer = function(){ const r = a0.apply(this, arguments); try{ phFitSoon(); }catch(e){} return r; }; }
 function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
   if(!m.classList.contains('kbid')){ m.style.setProperty('--kbt', '0px'); return; }
   if(answered || bx.hidden || !pr.getBoundingClientRect().height) return;
@@ -9144,6 +9326,7 @@ function renderAuction(done){
   // De tafel van bovenaf: elk bod ligt voor de speler die het deed. Stoelen: 0 = West, 1 = Noord, 2 = Oost, 3 = Zuid (jij).
   const a = q.auction, seats = [[],[],[],[]];
   const full = done ? a.calls.concat([q.answer]) : a.calls, al = alertSet(full, q.conv), now = Date.now();
+  try{ if(q.d && (q.d.c2x || q.conv==='rubensohl') && a.calls[0]==='1N') al.delete(1); }catch(e){}      // het volgbod staat in de vraag zelf beschreven: geen alert van een andere conventie erop
   if(!q._alertT) q._alertT = {};
   // de alertkaart blijft liggen tot jij geboden hebt; wat het bod betekent staat onder de tafel
   const myLast = a.calls.map((b,i)=>(a.start+i)%4===3 ? i : -1).filter(i=>i>=0).pop(), alOn = i => !done && al.has(i) && (a.start+i)%4!==3 && (myLast===undefined || i>myLast);
@@ -9184,7 +9367,7 @@ function renderBox(){
   }
   if(q.box==='num'){
     const NUMLBL = {verliezers:'Verliezers in eigen hand', tellen:'Vaste slagen', regel11:'Hogere kaarten bij de leider', vrij:'Entrees naar de dummy', telhand:'Kaarten in deze kleur'};
-    let h = NUMLBL[q.conv] ? '<p class="numlbl">'+NUMLBL[q.conv]+'</p>' : '';
+    let h = NUMLBL[q.conv] ? '<p class="numlbl">'+((q.d && q.d.numlbl) || NUMLBL[q.conv])+'</p>' : '';
     for(let n=0;n<=13;n++) h += '<button class="bid" data-bid="'+n+'">'+n+'</button>';
     $('box').className = 'box nums';
     $('box').innerHTML = h;
@@ -9542,7 +9725,7 @@ function next(fresh){
     }else q = repPick(null) || (qSrc = state.conv, newQuestion(state.conv, idx, state.step));
   }
   answered = false; try{ renderScore(); }catch(e){}
-  setTimeout(kbAlign, 0); requestAnimationFrame(()=>requestAnimationFrame(kbAlign));
+  setTimeout(kbAlign, 0); requestAnimationFrame(()=>requestAnimationFrame(kbAlign)); setTimeout(phFitSoon, 0);
   if(q.dummy && !q.dummyLabel && q.only==null && !q.lead) q.lead = leadFor(q);     // jij bent leider: West is al uitgekomen
   $('prompt').innerHTML = (q.isHerk ? '<span class="rept">Herkansing</span>' : q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+(tblOn(q) ? q.d.promptS : promptText(q));
   renderAuction(false);
@@ -11608,7 +11791,8 @@ function cardSheetHTML(flat){
   if(on('o:3x') || on('o:4x')) o3.push([(on('o:3x') && on('o:4x')) ? '3 en 4 in een kleur' : on('o:3x') ? '3 in een kleur' : '4 in een kleur', 'Preëmptief: '+((on('o:3x') && on('o:4x')) ? '7- of 8-krt' : on('o:3x') ? '7-krt' : '8-krt')+', 5–9']);
   const tus = [];
   if(on('negatief')) tus.push(['Negatief doublet', 'Toont de ongeboden hoge kleur(en), 6+']);
-  if(on('rubensohl')) tus.push(['Na 1SA van partner', 'Rubensohl: vanaf 2SA transfers']);
+  tus.push(['Na 1SA – (2♣\uFE0E echt)', 'Alles blijft gelden; doublet = jullie 2♣\uFE0E']);
+  if(on('rubensohl')) tus.push(['Na 1SA – (2♦\uFE0E, 2♥\uFE0E, 2♠\uFE0E)', 'Rubensohl: vanaf 2SA transfers']);
   if(on('rubensohl') && state.rubd==='neg') tus.push(['Doublet na 1SA – (2x)', 'Negatief']);
   if(on('rubensohl') && state.rux==='tr') tus.push(['Na doublet op 1SA', 'Transfers vanaf redoublet']);
   if(on('nadbl')) tus.push(['Na hun doublet', 'Redoublet: 10+ pnt']);
