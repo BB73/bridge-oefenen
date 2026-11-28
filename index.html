@@ -2235,6 +2235,8 @@ html.klas #game.bidmode > #gstatus{position:absolute!important;right:calc(2% + 3
       <h3>Informatiedoublet: daarna</h3>
       <ul>
         <li>Na een minimumantwoord past de doubleerder met een gewoon doublet. Nog een keer bieden belooft 17 of meer punten.</li>
+        <li>Na een sprong van partner (9–11) past de doubleerder met 12–13 punten en biedt hij met 15–16 de manche.</li>
+        <li>Na 1SA van partner (8–10) past de doubleerder met 12–14 punten; met 16 nodigt hij uit met 2SA.</li>
         <li>Antwoorden na een opening op 2- of 3-niveau: met 0–8 punten je langste kleur zo laag mogelijk. Met 10 of meer en een vierkaart in een ongeboden hoge kleur spring je (na een zwakke twee, 10–12 punten) of bied je de manche. Zonder vierkaart hoog en met een stop in hun kleur: 3SA.</li>
       </ul>
       <p>De tegenpartij opent 1 in een kleur met 12–19 punten (vijfkaart hoog), 2<span class="H">♥︎</span> of 2<span class="S">♠︎</span> met een zeskaart en 6–10 punten, en op 3-niveau met een zevenkaart en 6–10 punten. Na het doublet past de tegenpartij.</p>
@@ -3534,7 +3536,10 @@ function dblAnswer(h, open){
   return {bid:cheap(best), kind:'min', suit:SUITS[best]};
 }
 // Tweede bod van de doubleerder na een minimumantwoord
-function dblRebid(act, ans){
+function dblRebid(act, ans, p){
+  // v420: ook na een sprong (9–11) en na 1SA (8–10) moet de doubleerder rekenen
+  if(act.kind==='klassiek' && p!=null && ans.kind==='sprong') return p<=13 ? 'pas' : p>=15 ? '4'+ans.suit : null;
+  if(act.kind==='klassiek' && p!=null && ans.kind==='1N') return p<=14 ? 'pas' : p===16 ? '2N' : null;
   if(ans.kind!=='min') return null;
   if(act.kind==='klassiek') return 'pas';
   if(act.suit===ans.suit) return null;
@@ -3556,7 +3561,7 @@ const D_TARGETS = {
   1:[['klassiek',1],['klassiek',1],['klassiek',1],['klassiek',2],['klassiek',3],['klassiek',3],['sterk',1],
      ['volgbod',1],['zwak',1],['zwak',2],['zwak',3],['lengte',1],['lengte',2]],
   2:['min','min','min','1N','sprong','sprong','2N','3N','cue'],
-  3:['klassiek','klassiek','sterk','sterk']
+  3:['klassiek','klassiek','klassiek','sterk']
 };
 function newDQ(step){
   for(;;){
@@ -3583,7 +3588,7 @@ function newDQ(step){
     const needFollow = step===3 || (answers && Math.random()<0.7);
     const a = drawHand(o.rest, h=>{
       if(!answers) return {};
-      const ans = dblAnswer(h,open), reb = ans ? dblRebid(dd.r,ans) : null;
+      const ans = dblAnswer(h,open), reb = ans ? dblRebid(dd.r,ans,dd.h.hcp) : null;
       if(needFollow && !reb) return null;
       return {ans, reb};
     }, 2000);
@@ -3633,6 +3638,13 @@ function explainD(q){
     if(a.kind==='3N') return 'Je hebt '+punten+' en een dubbele stop in '+opp+': 3SA (13–16 punten).';
     return 'Je hebt '+punten+' en een vierkaart in beide hoge kleuren. Bied de kleur van de tegenpartij: '+B(a.bid)+'. Dat is mancheforcing en partner kiest de hoge kleur.';
   }
+  if(d.ans.kind==='sprong'){ const M = SNAME[d.ans.suit];
+    return q.answer==='pas'
+      ? 'Partners sprong belooft 9–11 punten, aanmoedigend maar niet forcing. Jij hebt '+punten+': samen hooguit '+(p+11)+'. Dat is te weinig voor de manche: pas.'
+      : 'Partners sprong belooft 9–11 punten en jullie hebben een fit in '+M+'. Jij hebt '+punten+': samen minstens '+(p+9)+', en je korte '+opp+' is extra waard. Bied de manche: '+B(q.answer)+'.'; }
+  if(d.ans.kind==='1N') return q.answer==='pas'
+      ? 'Partners 1SA belooft 8–10 punten met een stop in '+opp+'. Jij hebt '+punten+': samen hooguit '+(p+10)+', te weinig voor 3SA. Pas.'
+      : 'Partners 1SA belooft 8–10 punten met een stop in '+opp+'. Jij hebt '+punten+': samen 24 tot 26. Nodig uit met '+B('2N')+'; partner biedt 3SA met een maximum.';
   if(q.answer==='pas') return 'Partner moest bieden en kan 0 punten hebben. Jij hebt een gewoon doublet met '+punten+': pas. Nog een keer bieden belooft 17 of meer.';
   return 'Nu laat je zien waarom je doubleerde: '+punten+' en een eigen '+SNAME[d.act.suit]+'kleur. Bied '+B(q.answer)+'; dat belooft 17 of meer.';
 }
@@ -9204,7 +9216,18 @@ function newC2X(conv){
   return null;
 }
 // v401: variatie binnen een onderdeel. Van een handvol kandidaten kiest de app de soort vraag die je het langst niet (of nog nooit) hebt gehad.
+// v420: doublet, RKC en de wet hadden geen soort-etiket; dat leiden we af uit de situatie zelf (niet uit het precieze bod)
+function qVk(x){ const d = x.d || {}, c = x.conv;
+  if(c==='doublet' && d.act){ const a = d.act.kind, n = d.ans && d.ans.kind;
+    if(x.idx===1) return 'doe:'+(d.reb!=null ? 'her' : a);
+    if(x.idx===2) return 'antw:'+n;
+    return 'verder:'+a+':'+n+':'+(d.reb==='pas' ? 'pas' : /N$/.test(String(d.reb)) ? 'sa' : 'bod'); }
+  if(c==='rkcb' && d.rk!=null){ if(x.idx===1) return 'antw:'+d.rk+(d.rq ? 'v' : '');
+    return 'slot:'+d.missing+(d.queen ? '' : ':geenV')+(d.slam ? ':slem' : ':stop'); }
+  if(c==='wet' && d.sc) return d.sc+':'+d.total+(d.sc==='A' ? ':'+String(d.over||'').charAt(0) : '');
+  return null; }
 function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? '' : x.answer);
+  if(d.kind==null){ const k = qVk(x); if(k!=null) return x.idx+':'+k; }
   if(d.kind!=null) return x.idx+':'+d.kind+':'+(/^[SHDC]\d*$/.test(ans) ? '' : ans);      // v419: bij een kaart of kleur als antwoord telt de soort vraag, niet de precieze kaart
   const t = String(d.prompt || '').replace(/<[^>]+>/g, ' ').replace(/[♠♥♦♣︎]\s*[AHVBT0-9]*/g, '#').replace(/\d+/g, 'n').replace(/\s+/g, ' ').slice(0, 90);
   return x.idx+':'+ans+':'+t; }catch(e){ return ''; } }
@@ -9234,7 +9257,15 @@ function phFit(){ try{ const m = document.querySelector('main.table'), T = [$('q
     P.forEach(k=>t.style.setProperty(k, nh+'px', 'important')); } return m.scrollHeight<=m.clientHeight; };
   if(!shrink(140)){ clr(); m.classList.add('tight'); if(!shrink(140)){ fbFit(); if(m.scrollHeight>m.clientHeight) shrink(104); } }            // past het met een leesbare tafel niet: eerst vervalt de toelichting onder de keuzes, pas daarna krimpt de tafel verder
   }catch(e){} }
-function phFitSoon(){ phFit(); setTimeout(phFit, 0); requestAnimationFrame(()=>requestAnimationFrame(phFit)); }
+// v420: dummy opzij met een lange kleur — valt de rij buiten het speelvlak, dan krimpt hij precies zoveel dat elke kaart zichtbaar is
+function sdFit(){ try{ const m = document.querySelector('main.table'); if(!m || m.hidden) return; const M = m.getBoundingClientRect();
+  ['qL','qR'].forEach(id=>{ const e = $(id); if(!e) return; e.style.removeProperty('zoom'); if(!m.classList.contains('sd')) return;
+    let b = e.getBoundingClientRect(); if(!b.width) return;
+    const over = id==='qL' ? (M.left + 8) - b.left : b.right - (M.right - 8); if(over<=0.5) return;
+    let z = Math.max(.45, (b.width - over)/b.width);
+    for(let i=0;i<3;i++){ e.style.setProperty('zoom', z.toFixed(3)); b = e.getBoundingClientRect();      // de afstand tot de tafel krimpt mee: reken na tot de rij de ruimte precies vult
+      const room = id==='qL' ? b.right - (M.left + 8) : (M.right - 8) - b.left; if(!b.width || Math.abs(room - b.width)<1.5) break; z = Math.max(.45, Math.min(1, z*room/b.width)); } }); }catch(e){} }
+function phFitSoon(){ phFit(); sdFit(); setTimeout(()=>{ phFit(); sdFit(); }, 0); requestAnimationFrame(()=>requestAnimationFrame(()=>{ phFit(); sdFit(); })); }
 window.addEventListener('resize', phFitSoon);
 { const a0 = answer; answer = function(){ const r = a0.apply(this, arguments); try{ phFitSoon(); }catch(e){} return r; }; }
 function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
