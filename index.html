@@ -1675,7 +1675,7 @@ html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;l
 .pgrow .h{width:6.2em;text-align:right;color:var(--muted,#5E6B65);font-size:.85rem;white-space:nowrap}
 /* v393: bieden met plaatjes op de laptop — vraag bovenaan, biedbox 10% groter en gelijk met de bovenkant van de tafel */
 @media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
-  html.klas main.table #box.box.grid7{--bbh:min(2.3vw, 41px);width:min(100%, 22vw, 387px)!important;max-width:min(22vw, 387px)!important}
+  html body main.table #box.box.grid7.grid7, html.klas body #game.bidmode #gbid > .box.grid7.grid7, html body #game #gbid > .box.grid7.grid7, html body .box.grid7.grid7{--bbh:min(2.3vw, 41px);width:min(100%, 22vw, 387px)!important;max-width:min(22vw, 387px)!important}
   html.klas main.table.kbid{justify-content:flex-start!important}
   html.klas main.table.kbid > #prompt{min-height:var(--kbt, 0px)!important;box-sizing:border-box;margin-top:0!important;margin-bottom:6px!important}
   html.klas main.table.kbid > #action{margin-top:0!important}
@@ -1688,6 +1688,21 @@ html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;l
 .tchip.dg{color:#A61B1B;border-color:#C62828;box-shadow:0 0 0 2px #C62828, 0 1px 3px rgba(0,0,0,.3)}
 #qstrip:has(.tchip){overflow:visible!important}
 .tchips.haslead .tchip.s{left:auto;right:4cqw;transform:none;max-width:52cqw;bottom:15cqw}
+/* v399: vrolijker openingsscherm — elk blok een eigen kleur en plaatje; op de laptop twee kolommen zodat alles past */
+.homegrid .homebtn.homebtn{position:relative;padding-left:4.3rem}
+.homegrid .homebtn::before{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);width:2.7rem;height:2.7rem;border-radius:13px;display:grid;place-items:center;font-size:1.55rem;line-height:1;background:var(--hic, #DCE9E2)}
+.homegrid .homebtn[data-daily]::before{content:'☀️';--hic:rgba(255,255,255,.22)}
+.homegrid .homebtn.homebtn[data-go="doel"]{background:#E7F0FB;border-color:#2F6FB5}.homegrid .homebtn[data-go="doel"]::before{content:'🃏';--hic:#C9DEF6}.homegrid .homebtn.homebtn[data-go="doel"] small{color:#24558C}
+.homegrid .homebtn.homebtn[data-clubopen]{background:#FDF0E1;border-color:#D07A22}.homegrid .homebtn[data-clubopen]::before{content:'🏆';--hic:#F9DDBD}.homegrid .homebtn.homebtn[data-clubopen] small{color:#8A4E12}
+.homegrid .homebtn.homebtn[data-go="kaart"]{background:#F1EBFB;border-color:#7A55C2}.homegrid .homebtn[data-go="kaart"]::before{content:'📋';--hic:#DED1F5}.homegrid .homebtn.homebtn[data-go="kaart"] small{color:#58399A}
+.homegrid .homebtn.homebtn[data-go="test"]{background:#FBF4D6;border-color:#B8921A}.homegrid .homebtn[data-go="test"]::before{content:'🎯';--hic:#F3E3A0}.homegrid .homebtn.homebtn[data-go="test"] small{color:#735A0C}
+@media (max-height:760px){ .homegrid .homebtn::before{width:2.2rem;height:2.2rem;font-size:1.25rem;border-radius:10px} .homegrid .homebtn.homebtn{padding-left:3.6rem} }
+@media (max-width:999px) and (max-height:700px){ .homegrid .homebtn.homebtn{padding:.34rem .7rem .34rem 3.2rem} .homegrid .homebtn::before{left:.6rem;width:2rem;height:2rem;font-size:1.15rem} .homegrid .homebtn small{display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .homegrid .homebtn b{font-size:1.08rem} }
+@media (min-width:1000px) and (min-aspect-ratio:5/4){
+  #settings:has(.homegrid){width:min(900px, 94vw)!important;max-width:none!important}
+  .homegrid.homegrid{grid-template-columns:1fr 1fr;gap:.6rem}
+  .homegrid.homegrid > .homebtn{grid-column:auto} .homegrid.homegrid > .homebtn.daily, .homegrid.homegrid > :not(.homebtn){grid-column:1 / -1}
+}
 /* v390: uitdagingen */
 .chw{display:grid;grid-template-columns:minmax(0, 300px) minmax(0, 1fr);gap:10px 22px;align-items:start}
 .chw .lab{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--kC,#0F5237);font-weight:700;margin-bottom:6px}
@@ -9415,7 +9430,7 @@ function next(fresh){
   const isGame = state.conv==='spel';
   $('game').hidden = !isGame;
   document.querySelector('main.table').hidden = isGame;
-  if(isGame){ $('feedback').hidden = true; if((!G && !BIDS) || fresh) gStart(); return; }
+  if(isGame){ $('feedback').hidden = true; try{ renderScore(); }catch(e){} if((!G && !BIDS) || fresh) gStart(); return; }
   if(!fresh && q && answered && q.hasNext){
     q = q.conv==='doublet' ? makeDQ(q.d, 3) : makeQ(q.d, q.idx+2);
   }else{
