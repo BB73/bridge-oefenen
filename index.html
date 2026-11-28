@@ -1671,6 +1671,15 @@ html.klas main.table:is(.play,.lead,.kbid) .smsq #qE.on{left:auto!important;righ
 /* bieden met plaatjes: tafel boven, hand onder, vraag en biedbox rechts */
 html.klas main.table.kbid > #auction:not([hidden]){position:absolute!important;left:2%!important;width:calc(var(--lc) - 4%)!important;top:2vh!important;bottom:calc(var(--kh) + 4vh)!important;height:auto!important;margin:0!important;display:flex!important;flex-direction:column;align-items:center!important;justify-content:center!important}
 
+#score .snm{display:inline-block;max-width:13em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.pgrow .h{width:6.2em;text-align:right;color:var(--muted,#5E6B65);font-size:.85rem;white-space:nowrap}
+/* v393: bieden met plaatjes op de laptop — vraag bovenaan, biedbox 10% groter en gelijk met de bovenkant van de tafel */
+@media (min-width:1000px) and (min-aspect-ratio:5/4) and (min-height:600px){
+  html.klas main.table #box.box.grid7{--bbh:min(2.3vw, 41px);width:min(100%, 22vw, 387px)!important;max-width:min(22vw, 387px)!important}
+  html.klas main.table.kbid{justify-content:flex-start!important}
+  html.klas main.table.kbid > #prompt{min-height:var(--kbt, 0px)!important;box-sizing:border-box;margin-top:0!important;margin-bottom:6px!important}
+  html.klas main.table.kbid > #action{margin-top:0!important}
+}
 /* v390: uitdagingen */
 .chw{display:grid;grid-template-columns:minmax(0, 300px) minmax(0, 1fr);gap:10px 22px;align-items:start}
 .chw .lab{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--kC,#0F5237);font-weight:700;margin-bottom:6px}
@@ -8733,6 +8742,15 @@ function kleurApply(){ try{ const h = document.documentElement; h.dataset.kleur 
 function klasFit(){ try{ const g = $('game'); if(!KLAS()){ g.style.removeProperty('--hw'); return; } const kb = document.querySelector('#gbid > .kbh .kbt') || $('gbid'), w = kb.getBoundingClientRect().width; if(w > 0) g.style.setProperty('--hw', w+'px');
   const n = document.querySelectorAll('#gsrow .rc').length, k = document.querySelectorAll('#gsrow .rc.g').length; if(n > 1) g.style.setProperty('--hd', ((n-1) + .3*k).toFixed(2)); }catch(e){} }
 window.addEventListener('resize', ()=>klasFit());
+function kbAlign(){ try{ const m = document.querySelector('main.table'), pr = $('prompt'), bx = $('box'); if(!m) return;
+  if(!m.classList.contains('kbid')){ m.style.setProperty('--kbt', '0px'); return; }
+  if(answered || bx.hidden || !pr.getBoundingClientRect().height) return;
+  m.style.setProperty('--kbt', '0px');
+  const sq = document.querySelector('#auction .smsq'); if(!sq) return;
+  const b = bx.getBoundingClientRect(), d = sq.getBoundingClientRect().bottom - b.bottom;      // de onderkant van de box gelijk met de onderkant van de tafel; een lange vraag duwt hem lager
+  if(d>0) m.style.setProperty('--kbt', Math.round(pr.getBoundingClientRect().height + d)+'px');
+  }catch(e){} }
+window.addEventListener('resize', ()=>{ kbAlign(); });
 try{ new MutationObserver(()=>klasFit()).observe(document.getElementById('gsrow'), {childList:true}); }catch(e){}
 function layRerender(){ try{ if(BIDS) bidRender(); else if(G) gRender(); }catch(e){} }
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(CLUB_OVR ? Object.assign({}, state, {club:CLUB_OVR.club, clubMe:CLUB_OVR.me}) : state)); }catch(e){} }
@@ -9070,7 +9088,9 @@ function renderScore(){
     good += s[0]; total += s[1];
     if(s[1]) parts.push(STAT_LABEL[k]+': '+s[0]+' van '+s[1]);
   }
-  $('score').innerHTML = '<span class="sico" aria-hidden="true"><i></i><i></i><i></i></span>'+(total ? '<b>'+good+'/'+total+'</b><span class="swide"> goed · reeks '+state.streak+'</span>' : 'Resultaten');
+  let cur = null; try{ const ck = typeof q!=='undefined' && q && state.conv!=='spel' && q.conv!=='fris' ? q.conv : null, cs = ck && state.stats[ck]; if(ck) cur = [pgName(ck), cs ? cs[0] : 0, cs ? cs[1] : 0]; }catch(e){}
+  $('score').innerHTML = '<span class="sico" aria-hidden="true"><i></i><i></i><i></i></span>'+(cur ? '<b>'+cur[1]+'/'+cur[2]+'</b><span class="swide"> <span class="snm">'+cur[0]+'</span> · totaal '+good+'/'+total+' · reeks '+state.streak+'</span>' : total ? '<b>'+good+'/'+total+'</b><span class="swide"> goed · reeks '+state.streak+'</span>' : 'Resultaten');
+  $('score').title = cur ? cur[0]+': '+cur[1]+' uit '+cur[2]+' goed. Alles samen: '+good+' uit '+total+'.' : '';
   $('detailscore').textContent = parts.length ? parts.join(' | ') : 'Nog geen handen gespeeld';
 }
 function chips(el, items, current, attr){
@@ -9395,7 +9415,8 @@ function next(fresh){
       q = repPick(card) || (qSrc = k, newQuestion(k, 1+Math.floor(Math.random()*4), 'alles'));
     }else q = repPick(null) || (qSrc = state.conv, newQuestion(state.conv, idx, state.step));
   }
-  answered = false;
+  answered = false; try{ renderScore(); }catch(e){}
+  setTimeout(kbAlign, 0); requestAnimationFrame(()=>requestAnimationFrame(kbAlign));
   if(q.dummy && !q.dummyLabel && q.only==null && !q.lead) q.lead = leadFor(q);     // jij bent leider: West is al uitgekomen
   $('prompt').innerHTML = (q.isHerk ? '<span class="rept">Herkansing</span>' : q.isRep ? '<span class="rept">Herhaling</span>' : '')+(q.lead ? 'West komt uit met '+cardHTML(q.lead)+'. ' : '')+promptText(q);
   renderAuction(false);
@@ -11827,7 +11848,7 @@ function renderProg(){
     return a===b ? '<span class="mut">gelijk aan de 4 weken ervoor</span>' : '<span class="'+(better ? 'up' : 'dn')+'">'+(a>b ? '▲' : '▼')+' was '+was+unit+'</span>'; };
   const ds = pgStreakDays();
   let h = '<div class="pgwrap"><div class="pgl"><div class="pgkpis">'
-    + kpi('Bieden goed|Bieden goed', pc(b1)==null ? null : pc(b1)+'%', trend(pc(b1), pc(b0), false, '%'))
+    + kpi('Bieden goed|Bieden goed', pc(b1)==null ? null : pc(b1)+'%', trend(pc(b1), pc(b0), false, '%')+(b1[0] ? '<span class="mut"> · '+b1[1]+' uit '+b1[0]+'</span>' : ''))
     + kpi('Afspelen: slagen gemist per spel|Afspelen: gemist/spel', per(a1), trend(per(a1), per(a0), true, ''))
     + kpi('Tegenspel: slagen gemist per spel|Tegenspel: gemist/spel', per(t1), trend(per(t1), per(t0), true, ''))
     + kpi('Dagen op rij geoefend|Dagen op rij', ds, '<span class="mut">record '+Math.max(ds, p.bestDays)+'</span>') + '</div>';
@@ -11848,8 +11869,8 @@ function renderProg(){
   const recent = Object.keys(p.k).filter(k=>p.k[k].length>=5 && (PLAYABLE.includes(k) || BIDDABLE.includes(k))).map(k=>{ const a = p.k[k], l = a.slice(-20), o = a.slice(-40, -20);
       const pl = l.reduce((x,y)=>x+y,0)/l.length, po = o.length>=5 ? o.reduce((x,y)=>x+y,0)/o.length : null; return {k, pl, po, n:a.length}; })
     .sort((x,y)=>y.n-x.n).slice(0,4).sort((x,y)=>y.pl-x.pl);
-  h += '</div></details><details class="pgd"'+op+'><summary>Per onderdeel</summary><div><h3 class="pgh2">Per onderdeel <span class="mut">laatste 20 vragen; pijl: vergeleken met de 20 daarvoor</span></h3>'
-    + (recent.length ? recent.map(r=>'<button class="pgrow" data-res="'+r.k+'"><span class="n">'+pgName(r.k)+'</span><span class="bar"><i style="width:'+Math.round(r.pl*100)+'%;background:'+(r.pl>=.8 ? '#2E9E5B' : r.pl>=.6 ? '#C9A227' : '#C62828')+'"></i></span><span class="p">'+Math.round(r.pl*100)+'%</span><span class="t">'+(r.po==null ? '' : r.pl>r.po ? '<b class="up">▲</b>' : r.pl<r.po ? '<b class="dn">▼</b>' : '')+'</span></button>').join('') : '<p class="mut">Nog te weinig vragen per onderdeel.</p>')
+  h += '</div></details><details class="pgd"'+op+'><summary>Per onderdeel</summary><div><h3 class="pgh2">Per onderdeel <span class="mut">balk: laatste 20 vragen · pijl: tegen de 20 daarvoor · rechts: alles tot nu toe</span></h3>'
+    + (recent.length ? recent.map(r=>'<button class="pgrow" data-res="'+r.k+'"><span class="n">'+pgName(r.k)+'</span><span class="bar"><i style="width:'+Math.round(r.pl*100)+'%;background:'+(r.pl>=.8 ? '#2E9E5B' : r.pl>=.6 ? '#C9A227' : '#C62828')+'"></i></span><span class="p">'+Math.round(r.pl*100)+'%</span><span class="t">'+(r.po==null ? '' : r.pl>r.po ? '<b class="up">▲</b>' : r.pl<r.po ? '<b class="dn">▼</b>' : '')+'</span><span class="h">'+(state.stats[r.k] && state.stats[r.k][1] ? state.stats[r.k][0]+' uit '+state.stats[r.k][1] : '')+'</span></button>').join('') : '<p class="mut">Nog te weinig vragen per onderdeel.</p>')
     + '</div></details></div>';
   // v387: de trap — per onderdeel treden van 5 vragen, met brons, zilver en goud als mijlpalen
   const wk = [0,0]; { const a = pgWeekStart(); ['b','s','t'].forEach(c=>{ const x = pgSum(c, a, now); wk[0] += x[0]; wk[1] += x[1]; }); }
@@ -11862,7 +11883,7 @@ function renderProg(){
   open.sort((a,b)=>(trGet(b).r.length>0)-(trGet(a).r.length>0) || trGet(b).r.length-trGet(a).r.length || rcN(a)-rcN(b) || trGet(a).lv-trGet(b).lv);
   const focus = open[0];
   const others = open.slice(1,4);
-  const sofar = k => { const st = state.stats && state.stats[k]; return st && st[1] ? ' · al '+st[0]+' van '+st[1]+' goed' : ''; };
+  const sofar = k => { const st = state.stats && state.stats[k]; return st && st[1] ? ' · '+st[0]+' uit '+st[1]+' goed' : ''; };
   const vr = n => n===1 ? '1 vraag' : n+' vragen';
   let card;
   if(!focus) card = '<div class="lab">De trap</div><h3>🥇 Goud in alles wat je oefent</h3><p class="why">Kies een nieuw onderdeel om ook daar de trap op te gaan.</p>';
