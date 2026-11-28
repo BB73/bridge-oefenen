@@ -8807,7 +8807,7 @@ const ordS = fn => SROW.map(i=>fn(SUITS[i], i));
 const qTr = q => { try{ const c = String((q.contract6 ? '6SA' : q.contract4S ? '4S' : (q.d && q.d.contract)) || (q.check && q.check.ti!=null ? '4'+SUITS[q.check.ti] : '')), m = /^\d([SHDC])$/.exec(c); return m ? m[1] : null; }catch(e){ return null; } };
 function handHTML(h, only, tap, tr){      // v340: de hand op één rij, dezelfde kaart als overal
   const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push(tap ? {s, t:RANK[r]||r, tag:'button', cls:'card', at:' data-card="'+s+r+'"'} : {s, t:RANK[r]||r})); });
-  return '<li class="hrowli">'+handRow(L, null, tr && only==null ? rowPlan(L, tr) : undefined)+'</li>';
+  return '<li class="hrowli">'+handRow(L, null, tr && only==null ? rowPlan(L, tr) : undefined, only==null ? tr : null)+'</li>';
 }
 function cardsHTML(h){
   return SUITS.map((s,i)=>h.suits[i].map(r=>'<li class="k'+s+'"><span>'+SYM[s]+'</span><span>'+(RANK[r]||r)+'</span></li>').join('')).join('');
@@ -8856,15 +8856,15 @@ function handRows(list, plan){ plan = plan || rowPlan(list); const rows = [];
 // side: 'l' of 'r' = dummy opzij (gedraaide kaarten in kolommen), 't' = bovenaan (een halve slag gedraaid), niets = je eigen hand onderaan.
 const KLAS = () => state.lay!=='tafel' && LAPTOP();   // standaard klassiek; 'tafel' alleen als gekozen
 // kleurvolgorde zonder twee zwarte of twee rode kleuren naast elkaar (schoppen, harten, klaveren, ruiten)
-function klasOrder(list){
+function klasOrder(list, trq){
   const has = ['S','H','C','D'].filter(x=>list.some(c=>c.s===x)), red = x => x==='H' || x==='D';
-  const tr = typeof G!=='undefined' && G && !$('game').hidden && !BIDS && G.trump!=null && G.trump<4 ? SUITS[G.trump] : null;   // troef altijd links
+  const tr = typeof G!=='undefined' && G && !$('game').hidden && !BIDS && G.trump!=null && G.trump<4 ? SUITS[G.trump] : (trq || null);   // troef altijd links, ook in de oefeningen
   const perms = a => a.length<2 ? [a] : a.flatMap((x,i)=>perms(a.filter((_,j)=>j!==i)).map(p=>[x,...p]));
   const ok = p => p.every((x,i)=>i===0 || red(x)!==red(p[i-1]));
   const all = perms(has), pick = tr && has.includes(tr) ? all.filter(p=>p[0]===tr) : all;
   return pick.find(ok) || pick[0] || has; }
-function handRow(list, side, plan){
-  if(KLAS()){ const su = klasOrder(list);
+function handRow(list, side, plan, trq){
+  if(KLAS()){ const su = klasOrder(list, trq);
     list = su.flatMap(x=>list.filter(c=>c.s===x));
     if(side!=='l' && side!=='r') return handRow1(list, null);
     return '<div class="kcols k'+side+'">'+su.map(x=>handRow1(list.filter(c=>c.s===x), null)).join('')+'</div>'; }
@@ -8877,7 +8877,7 @@ function handRow1(list, side){ let prev = null, g = 0;
   const h = list.map(c=>{ const gap = prev!==null && prev!==c.s; prev = c.s; if(gap) g++; const tag = c.tag || 'span';
     return '<'+tag+' class="rc k'+c.s+(gap ? ' g' : '')+(c.cls ? ' '+c.cls : '')+'"'+(c.at || '')+'><span class="rci"><b>'+glyph(''+c.t, 400)+'</b><i>'+glyph(SYM[c.s], 700)+'</i>'+kfHTML(c.s, KF_R[c.t] || +c.t)+'</span></'+tag+'>'; }).join('');
   return '<div class="hrow'+(side ? ' v'+side : '')+'" style="--n:'+Math.max(list.length, 2)+';--g:'+g+';--m:'+Math.max(1, list.length-1-g)+'">'+(h || '<span class="void">geen kaarten</span>')+'</div>'; }
-function handRowOf(h, only, side, tr){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L, side, tr && only==null ? rowPlan(L, tr) : undefined); }
+function handRowOf(h, only, side, tr){ const L = []; SUITS.forEach((s,i)=>{ if(only!=null && i!==only) return; h.suits[i].slice().sort((a,b)=>b-a).forEach(r=>L.push({s, t:RANK[r]||r})); }); return handRow(L, side, tr && only==null ? rowPlan(L, tr) : undefined, only==null ? tr : null); }
 // het contract: een rond bolletje in de troefkleur aan het naamplaatje van de leider
 function ctrBadge(c, dbl, btn){ const m = /^(\d)(SA|N|[SHDC])$/.exec(String(c || '')); if(!m) return '';
   const d = m[2]==='SA' ? 'N' : m[2], tag = btn ? 'button' : 'span';
