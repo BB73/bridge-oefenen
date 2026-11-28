@@ -3252,7 +3252,7 @@ function newQuestion(conv, idx, stepKey){
   if(NEWCONV[conv]) return NEWCONV[conv](stepKey);
   if(conv==='negatief') return (+stepKey===2 || (+stepKey!==1 && rnd(3)===0)) ? newNQ2() : newNQ();
   if(conv==='twee1') return (+stepKey===3 || (![1,2].includes(+stepKey) && rnd(3)===0)) ? new21Q3() : new21Q(stepKey);
-  if(conv==='antw2'){ const kd = D2, km = MULTI; D2 = 'zwak'; MULTI = false; try{ return newA2Q(stepKey); } finally{ D2 = kd; MULTI = km; } }      // deze oefening gaat uit van de standaard sterke 2 klaveren en de gewone zwakke twee
+  if(conv==='antw2'){ const kd = D2, km = MULTI; D2 = 'zwak'; MULTI = false; try{ const x = newA2Q(stepKey); if(x && x.d && x.d.kind==null && x.d.want) x.d.kind = x.d.want; return x; } finally{ D2 = kd; MULTI = km; } }      // deze oefening gaat uit van de standaard sterke 2 klaveren en de gewone zwakke twee
   if(conv==='bijbod') return newBQ(stepKey);
   if(conv==='rkcb'){ const s = [1,2,3,4].includes(+stepKey) ? +stepKey : 1+rnd(4); return s<=2 ? newRQ(s) : newRQ2(s); }
   if(conv==='wet') return newWQ(W_TARGETS[stepKey] ? stepKey : 'alles');
@@ -3431,7 +3431,7 @@ function promptText0(q){
   if(q.conv==='handen' || q.conv==='signaal') return q.d.prompt;
   if(q.conv==='verliezers') return q.d.prompt;
   if(q.conv==='troef') return q.d.prompt;
-  if(q.conv==='ontwikkel') return 'Je speelt 3SA en hebt te weinig vaste slagen. Welke kleur speel je om er slagen bij te maken?';
+  if(q.conv==='ontwikkel') return q.d.prompt || 'Je speelt 3SA en hebt te weinig vaste slagen. Welke kleur speel je om er slagen bij te maken?';
   if(q.conv==='tellen') return q.d.prompt || 'Je speelt '+q.d.contract+'. Hoeveel vaste slagen tel je in beide handen samen?';
   if(q.conv==='bijbod') return 'Partner opent '+bidHTML(q.d.open)+' en Oost past. Wat bied je?';
   if(q.conv==='rkcb') return promptR(q);
@@ -3988,7 +3988,7 @@ function newNQ(){
     if(!n) continue;
     const e = drawHand(n.rest, h=>{ const r = volgAction(h,open); return r && r.bid===over; }, 2000);
     if(!e) continue;
-    return {conv:'negatief', idx:1, d:{open, over, act:me.r}, me:me.h, partner:n.h, answer:me.r.bid, box:'dbl', last:over,
+    return {conv:'negatief', idx:1, d:{open, over, act:me.r, kind:me.r && me.r.kind}, me:me.h, partner:n.h, answer:me.r.bid, box:'dbl', last:over,
             auction:{start:1, calls:[open, over]}, hasNext:false};
   }
 }
@@ -4880,6 +4880,9 @@ function newOWQ(sk){
     else if(T.kind==='VB109') why += 'In '+suit+' heb je vrouw, boer, 10 en 9. Speel die kleur tot aas en heer weg zijn: daarna heb je daar twee slagen.';
     else why += 'In '+suit+' heb je heer, vrouw, boer en 10. Speel die kleur en jaag de aas eruit: daarna heb je daar drie slagen.';
     why += ' Doe dit meteen, nu je in de andere kleuren nog hoge kaarten hebt om weer aan slag te komen. Je vaste slagen lopen niet weg; speel je die eerst, dan maak je de kaarten van de tegenpartij hoog.';
+    const mode = (+sk===1 || +sk===2) ? 'kleur' : ['kleur','kleur','kleur','tekort','extra'][rnd(5)];      // v419: ook tellen hoeveel je tekortkomt en hoeveel de kleur oplevert
+    if(mode==='tekort') return {conv:'ontwikkel', idx:1, d:{why, kind:'tekort-'+need, total:tt.total, extra:T.extra, numlbl:'Nog te ontwikkelen', prompt:'Je speelt 3SA. Tel je vaste slagen. Hoeveel slagen moet je er nog bij maken?'}, me:S, dummy:N, partner:null, answer:String(need), box:'num', last:null, auction:null, hasNext:false};
+    if(mode==='extra') return {conv:'ontwikkel', idx:1, d:{why, kind:'extra-'+T.kind, total:tt.total, extra:T.extra, numlbl:'Extra slagen', prompt:'Je speelt 3SA en gaat de '+suit+' ontwikkelen. Hoeveel slagen levert die kleur je extra op, als de kaarten normaal verdeeld zitten?'}, me:S, dummy:N, partner:null, answer:String(T.extra), box:'num', last:null, auction:null, hasNext:false};
     return {conv:'ontwikkel', idx:1, d:{why, kind:T.kind, total:tt.total, extra:T.extra}, me:S, dummy:N, partner:null, answer:SUITS[ti], suitPick:true,
             box:'suit', last:null, auction:null, hasNext:false};
   }
@@ -9202,7 +9205,7 @@ function newC2X(conv){
 }
 // v401: variatie binnen een onderdeel. Van een handvol kandidaten kiest de app de soort vraag die je het langst niet (of nog nooit) hebt gehad.
 function qVar(x){ try{ const d = x.d || {}; const ans = String(x.answer==null ? '' : x.answer);
-  if(d.kind!=null) return x.idx+':'+d.kind+':'+ans;
+  if(d.kind!=null) return x.idx+':'+d.kind+':'+(/^[SHDC]\d*$/.test(ans) ? '' : ans);      // v419: bij een kaart of kleur als antwoord telt de soort vraag, niet de precieze kaart
   const t = String(d.prompt || '').replace(/<[^>]+>/g, ' ').replace(/[♠♥♦♣︎]\s*[AHVBT0-9]*/g, '#').replace(/\d+/g, 'n').replace(/\s+/g, ' ').slice(0, 90);
   return x.idx+':'+ans+':'+t; }catch(e){ return ''; } }
 { const nq0 = newQuestion; let busy = false;
